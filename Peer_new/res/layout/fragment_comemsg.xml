@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white"
+    >
+     <LinearLayout 
+        android:id="@+id/ll_head_come"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/title_backcolor"
+        >
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="来信"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large"
+            />
+        </LinearLayout>      
+	<ListView
+	    android:background="@color/white"
+	    android:id="@+id/lv_come"	    
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@+id/ll_head_come" 
+	    android:divider="@null"  
+	    >	    
+	</ListView>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.peer.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -20,7 +21,6 @@ public class WelComeActivity extends pBaseActivity {
 	class PageViewList {
 		// ∂©µ•≤È—Ø
 		public LinearLayout welLin;
-
 	}
 
 	private PageViewList pageViewaList;
@@ -31,8 +31,16 @@ public class WelComeActivity extends pBaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
-		animation.setDuration(2000);
+		animation.setDuration(4000);
 		pageViewaList.welLin.startAnimation(animation);
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		Intent intent=new Intent(this,LoginActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
@@ -65,7 +73,13 @@ public class WelComeActivity extends pBaseActivity {
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.welcome, null);
+		return getLayoutInflater().inflate(R.layout.activity_welcome, null);
+	}
+	
+	@Override
+	protected View loadBottomLayout() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

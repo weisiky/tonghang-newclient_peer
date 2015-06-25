@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bottomback"
+    android:orientation="vertical" >
+    
+    	<LinearLayout 
+    	    android:orientation="vertical"
+		   android:layout_width="match_parent"
+		    android:layout_height="match_parent" 
+		    > 
+		 <RelativeLayout 
+		     android:layout_marginTop="24dp"
+		     android:layout_width="match_parent"
+		    android:layout_height="match_parent" >        
+		<EditText
+		    android:id="@+id/et_feedback_content"
+		    android:paddingLeft="16dp"
+		    android:paddingTop="4dp"
+		    android:gravity="top"
+        	android:layout_marginLeft="8dp"
+	    	android:layout_marginRight="8dp"
+	    	android:layout_marginBottom="16dp"
+		    android:textColor="@color/black"    
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:background="@drawable/border"	
+		    android:layout_above="@+id/commite_feedback"    
+	    />
+
+		<Button
+		    android:id="@+id/commite_feedback"
+		    android:layout_width="match_parent"
+		    android:layout_height="40dp"
+		    android:layout_alignLeft="@+id/et_feedback_content"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignRight="@+id/et_feedback_content"
+		    android:layout_marginBottom="240dp"
+		    android:background="@drawable/selector_back"
+		    android:text="提交"
+		    android:textColor="@color/white"
+		    android:textSize="@dimen/textsize_middle" />
+
+		</RelativeLayout>
+		</LinearLayout>
+</LinearLayout>

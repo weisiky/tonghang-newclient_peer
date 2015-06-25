@@ -6,7 +6,7 @@
     <color name="loginred_nol">#f44444</color>
     <color name="loginred_press">#b41e23</color>
     <color name="title_backcolor">#2c5096</color>
-    
+    <color name="chatroom_bag">#A2ABB4</color>
     <color name="commitcolor_nol">#00cd00</color>
     <color name="commitcolor_press">#2b930c</color>
     
@@ -34,4 +34,8 @@
     <color name="personal_press">#3b83ff</color>
    <color name="disenable">#e4e6e5</color>
     <color name="midblue">#00ff00</color>
+    
+     <!-- 自定义颜色 -->
+    <drawable name="chatroom_button">#6E727B</drawable>
+    <drawable name="chatroom_button_press">#FFFFFF</drawable>
 </resources>

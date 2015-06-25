@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white"
+    >
+    <LinearLayout
+        android:id="@+id/ll_head_homepage"
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:orientation="horizontal"
+        android:background="@color/title_backcolor" >
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tag_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="同行"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textsize_large" />
+
+           <LinearLayout
+                android:id="@+id/ll_search"
+                android:orientation="horizontal"  
+                android:layout_width="@dimen/widgeheight"     
+                android:layout_height="match_parent"          
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:background="@drawable/selector_back"
+                >
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:src="@drawable/search38"
+                />
+            </LinearLayout>
+           
+        </RelativeLayout>
+
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/base_neterror_item"
+        android:layout_below="@+id/ll_head_homepage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+
+      <include layout="@layout/base_neterror_item"/>
+
+    </LinearLayout>
+     
+    
+     <!-- <com.handmark.pulltorefresh.library.PullToRefreshListView
+       android:background="@color/white"
+        android:id="@+id/pull_refresh_homepage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="0.5dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        android:layout_below="@+id/base_neterror_item"
+        />  -->
+        <ListView 
+            android:background="@color/white"
+        android:id="@+id/pull_refresh_homepage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:layout_below="@+id/base_neterror_item" />
+
+</RelativeLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    
+	<LinearLayout
+	    android:orientation="vertical" 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@color/white"
+	    >
+	<LinearLayout
+	android:layout_marginTop="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+            
+	    <LinearLayout
+	        android:layout_height="fill_parent"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:background="@drawable/border"
+	        >
+	    
+			        <LinearLayout 
+			            android:layout_width="40dp"
+			            android:layout_height="fill_parent"
+			            android:gravity="center"
+			             android:id="@+id/search_downview"
+			            >
+				    <ImageView 
+				       
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:background="@drawable/down"
+				        android:clickable="true"	        
+				        />
+				    </LinearLayout>
+			        <!-- 输入的搜索信息 -->
+			 	<LinearLayout 
+			           android:layout_height="fill_parent"
+			           android:layout_width="0dp"
+			           android:layout_weight="8"
+			           android:orientation="horizontal">
+			
+			       <EditText
+			           android:id="@+id/et_contentsearch"
+			           android:layout_width="fill_parent"
+			           android:layout_height="fill_parent"
+			           android:background="@null"
+			           android:gravity="center_vertical"
+			           android:imeOptions="actionSearch"
+			           android:lines="1"
+			           android:paddingLeft="4dp"
+			           android:singleLine="true"
+			           android:textColor="@color/black"
+			           android:textSize="@dimen/textsize_middle" />
+			
+			       <!-- 清空搜索文字按钮 -->
+			       <LinearLayout 
+			           android:id="@+id/layout_clear_search_text"
+			           android:layout_width="fill_parent"
+			           android:layout_height="fill_parent"
+			          android:visibility="gone"
+			           android:orientation="horizontal">
+			       <Button
+			           android:gravity="center" 
+			           android:id="@+id/btn_clear_search_text"
+			           android:layout_width="20dp"
+			           android:layout_height="20dp"
+			           android:layout_gravity="right|center_vertical"
+			           android:background="@drawable/selector_search_clear"
+			         />
+			        </LinearLayout>
+			        
+			        </LinearLayout>
+        </LinearLayout>
+        <LinearLayout 
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:gravity="center">
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/im_search_search"
+            android:clickable="true" 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/searchicon38"
+	        />  
+	       </LinearLayout>  
+    </LinearLayout>
+    <View 
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/lightgray"
+        />
+    </LinearLayout>
+    
+</LinearLayout>

@@ -18,7 +18,7 @@
         android:persistent="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name="com.peer.activity.WelComeActivity"
+            android:name="com.peer.activity.MainActivity"
             android:label="@string/app_name"
             >
             <intent-filter>
@@ -27,6 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.peer.activity.WelComeActivity" />
+        <activity android:name="com.peer.activity.LoginActivity" />
     </application>
 
 </manifest>

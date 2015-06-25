@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/white" >
+	<LinearLayout 
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:layout_weight="0"
+	    >
+    
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:layout_weight="0"
+	    >
+	
+<RelativeLayout
+    android:id="@+id/host_imfor"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/rl_layout"
+    android:background="@drawable/icon_chatroomback" >
+
+
+    <ImageView
+        android:id="@+id/host_image"
+        android:clickable="true"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/mini_avatar_shadow"
+        />
+
+    <TextView
+        android:id="@+id/tv_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="14dp"
+        android:clickable="true"
+        android:textSize="@dimen/textsize_large"
+        android:textColor="@color/white"
+        android:text="分享" />
+
+    <TextView
+        android:id="@+id/tv_nikename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/host_image"
+        android:layout_toRightOf="@+id/host_image"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textsize_middle"
+        android:text="xiao8" />
+
+    <TextView
+        android:id="@+id/theme_chat"
+        android:layout_width="206dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/tv_nikename"
+        android:layout_below="@+id/tv_nikename"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:layout_marginBottom="8dp"
+        android:text="dasdasdada"
+        android:textColor="@color/deepgray"
+        android:textSize="@dimen/textsize_smallmiddle" />
+
+</RelativeLayout>
+
+</LinearLayout>
+	
+    <LinearLayout 
+	    android:layout_height="0dp"
+	    android:layout_width="wrap_content"
+	    android:layout_weight="1">
+    <ScrollView  
+        android:id="@+id/scrollContent"  
+        android:layout_width="match_parent"  
+        android:layout_height="match_parent"  
+        android:layout_below="@+id/host_imfor"
+     	android:layout_above="@+id/rl_bottom"
+     	 android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:fadeScrollbars="true"  
+        android:fillViewport="true" >
+
+    <ListView
+        android:id="@+id/lv_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"        
+        android:background="@color/white"       
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="5dp"
+        android:scrollbars="none" />
+
+    </ScrollView>
+    </LinearLayout>  
+
+    
+</LinearLayout>

@@ -18,6 +18,14 @@
         android:layout_below="@id/topLayout" 
         android:visibility="gone">
     </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/contentLayout" 
+        android:visibility="gone">
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/loadingBg"

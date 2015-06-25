@@ -2,6 +2,7 @@ package com.peer.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,7 @@ import com.umeng.analytics.MobclickAgent;
  * 
  */
 
-public abstract class pBaseActivity extends Activity implements OnClickListener {
+public abstract class pBaseActivity extends FragmentActivity implements OnClickListener {
 
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
@@ -34,6 +35,8 @@ public abstract class pBaseActivity extends Activity implements OnClickListener 
 	private RelativeLayout contentLayout;
 	/** 顶部布局 **/
 	private RelativeLayout topLayout;
+	/** 底部布局 **/
+	private RelativeLayout bottomLayout;
 	/** 灰色布局 **/
 	private LinearLayout shadeBg;
 	/** 当前页面的名称 **/
@@ -79,12 +82,16 @@ public abstract class pBaseActivity extends Activity implements OnClickListener 
 	protected void findGlobalViewById() {
 		topLayout = (RelativeLayout) findViewById(R.id.topLayout);
 		contentLayout = (RelativeLayout) findViewById(R.id.contentLayout);
+		bottomLayout = (RelativeLayout) findViewById(R.id.bottomLayout);
 		shadeBg = (LinearLayout) findViewById(R.id.shadeBg);
 
 		RelativeLayout.LayoutParams layoutParamsContent = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.FILL_PARENT,
 				RelativeLayout.LayoutParams.FILL_PARENT);
 		RelativeLayout.LayoutParams layoutParamsTop = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams layoutParamsBottom = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.FILL_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		View topView = loadTopLayout();
@@ -100,6 +107,13 @@ public abstract class pBaseActivity extends Activity implements OnClickListener 
 		} else {
 			contentLayout.setVisibility(View.VISIBLE);
 			contentLayout.addView(contentView, layoutParamsContent);
+		}
+		View bottomView = loadBottomLayout();
+		if (topView == null) {
+			bottomLayout.setVisibility(View.GONE);
+		} else {
+			bottomLayout.setVisibility(View.VISIBLE);
+			bottomLayout.addView(topView, layoutParamsTop);
 		}
 	}
 
@@ -129,6 +143,13 @@ public abstract class pBaseActivity extends Activity implements OnClickListener 
 	 * @param requestBean
 	 */
 	protected abstract View loadContentLayout();
+	
+	/**
+	 * 获取底部布局
+	 * 
+	 * @param requestBean
+	 */
+	protected abstract View loadBottomLayout();
 
 	/**
 	 * 退出APP
