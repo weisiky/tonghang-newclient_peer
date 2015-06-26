@@ -14,13 +14,21 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
-public class LoginActivity extends pBaseActivity{
+/**
+ * µÇÂ¼Ò³Ãæ
+ * 
+ * @author zhangzg
+ * 
+ */
+
+public class LoginActivity extends pBaseActivity {
 	class PageViewList {
-		private EditText et_email_login,et_password_login;
+		private EditText et_email_login, et_password_login;
 		private Button bt_login_login;
-		private TextView tv_register_login,tv_forgetpasw_login,tv_remind_login;
+		private TextView tv_register_login, tv_forgetpasw_login,
+				tv_remind_login;
 		private RelativeLayout baseProgressBarLayout;
-		
+
 	}
 
 	private PageViewList pageViewaList;
@@ -29,10 +37,8 @@ public class LoginActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-	}
-	
 
+	}
 
 	@Override
 	protected void findViewById() {
@@ -67,7 +73,7 @@ public class LoginActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_login, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -78,18 +84,19 @@ public class LoginActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.bt_login_login:		
-			Intent Login = new Intent(LoginActivity.this,MainActivity.class);
-			startActivity(Login);			
+		case R.id.bt_login_login:
+			Intent Login = new Intent(LoginActivity.this, MainActivity.class);
+			startActivity(Login);
 			break;
-		case R.id.tv_register_login:		
-				Intent register = new Intent(LoginActivity.this,RegisterAcountActivity.class);
-				startActivity(register);			
+		case R.id.tv_register_login:
+			Intent register = new Intent(LoginActivity.this,
+					RegisterAcountActivity.class);
+			startActivity(register);
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 
 }

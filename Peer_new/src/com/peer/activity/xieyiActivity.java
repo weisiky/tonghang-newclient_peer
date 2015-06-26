@@ -12,6 +12,8 @@ import com.peer.activity.WelComeActivity.PageViewList;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+
 public class xieyiActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
