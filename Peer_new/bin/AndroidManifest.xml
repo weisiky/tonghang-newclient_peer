@@ -3,9 +3,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    
-    
-    
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="22" />
@@ -18,7 +16,7 @@
         android:persistent="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name="com.peer.activity.MainActivity"
+            android:name="com.peer.activity.WelComeActivity"
             android:label="@string/app_name"
             >
             <intent-filter>
@@ -27,8 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.peer.activity.WelComeActivity" />
+        <activity android:name="com.peer.activity.MainActivity" />
+        <activity android:name="com.peer.activity.RegisterAcountActivity" />
         <activity android:name="com.peer.activity.LoginActivity" />
+        <activity android:name="com.peer.activity.RegisterCompleteActivity" />
+        <activity android:name="com.peer.activity.RegisterTagActivity" />
+        <activity android:name="com.peer.activity.xieyiActivity" />
+        <activity android:name="com.peer.activity.GetAddressInfoActivity" />
     </application>
 
 </manifest>

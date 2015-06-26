@@ -109,11 +109,11 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 			contentLayout.addView(contentView, layoutParamsContent);
 		}
 		View bottomView = loadBottomLayout();
-		if (topView == null) {
+		if (bottomView == null) {
 			bottomLayout.setVisibility(View.GONE);
 		} else {
 			bottomLayout.setVisibility(View.VISIBLE);
-			bottomLayout.addView(topView, layoutParamsTop);
+			bottomLayout.addView(bottomView, layoutParamsTop);
 		}
 	}
 
@@ -203,5 +203,25 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 		}
 		return lClssName;
 	}
+	
+	
+	/*
+	 * 处理公共监听事件
+	 * */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId()){
+		case R.id.ll_back:
+			finish();
+		break;
+		default :
+		break;
+		
+		}
+	}
+	
+	
+	
 
 }

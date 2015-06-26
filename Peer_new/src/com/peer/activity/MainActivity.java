@@ -39,8 +39,8 @@ public class MainActivity extends pBaseActivity{
 	class PageViewList {
 		/* bottom layout*/
 		private LinearLayout find,come,my,friends;
-		private TextView tv_find,tv_come,tv_my,tv_friends,unreadmsgnum,tv_newfriendsnum;
-		private ImageView findback,comeback,friendsback,myback;
+		private TextView tv_find,tv_come,tv_my,tv_friends,tv_newfriendsnum,showmessgenum;
+		private ImageView iv_backfind,iv_backcome,iv_backfriends,iv_backmy;
 		
 		public LinearLayout ll_find,ll_come,ll_friends,ll_my;
 	}
@@ -128,31 +128,31 @@ public class MainActivity extends pBaseActivity{
 		pageViewaList.tv_friends.setTextColor(getResources().getColor(R.color.bottomtextgray));
 		pageViewaList.tv_my.setTextColor(getResources().getColor(R.color.bottomtextgray));		
 		
-		pageViewaList.findback.setImageResource(R.drawable.peer_nol);
-		pageViewaList.comeback.setImageResource(R.drawable.come_mess_nol);
-		pageViewaList.friendsback.setImageResource(R.drawable.find_label_nol);
-		pageViewaList.myback.setImageResource(R.drawable.mysetting_nol);
+		pageViewaList.iv_backfind.setImageResource(R.drawable.peer_nol);
+		pageViewaList.iv_backcome.setImageResource(R.drawable.come_mess_nol);
+		pageViewaList.iv_backfriends.setImageResource(R.drawable.find_label_nol);
+		pageViewaList.iv_backmy.setImageResource(R.drawable.mysetting_nol);
 		
 		switch (v.getId()) {
 		case R.id.ll_find:
 			index=0;			
 			pageViewaList.tv_find.setTextColor(getResources().getColor(R.color.bottomtextblue));			
-			pageViewaList.findback.setImageResource(R.drawable.peer_press);
+			pageViewaList.iv_backfind.setImageResource(R.drawable.peer_press);
 			break;
 		case R.id.ll_come:
 			index=1;			
 			pageViewaList.tv_come.setTextColor(getResources().getColor(R.color.bottomtextblue));					
-			pageViewaList.comeback.setImageResource(R.drawable.come_mess_press);	
+			pageViewaList.iv_backcome.setImageResource(R.drawable.come_mess_press);	
 			break;
 		case R.id.ll_friends:
 			index=2;	
 			pageViewaList.tv_friends.setTextColor(getResources().getColor(R.color.bottomtextblue));
-			pageViewaList.friendsback.setImageResource(R.drawable.find_label_press);
+			pageViewaList.iv_backfriends.setImageResource(R.drawable.find_label_press);
 			break;
 		case R.id.ll_my:
 			index=3;			
 			pageViewaList.tv_my.setTextColor(getResources().getColor(R.color.bottomtextblue));		
-			pageViewaList.myback.setImageResource(R.drawable.mysetting_press);
+			pageViewaList.iv_backmy.setImageResource(R.drawable.mysetting_press);
 			break;
 		default:
 			break;

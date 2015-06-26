@@ -52,7 +52,6 @@
                 android:layout_height="match_parent"          
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                
                 android:gravity="center"
                 android:clickable="true"
                 android:background="@drawable/selector_back"

@@ -2,6 +2,7 @@ package com.peer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
@@ -39,8 +40,19 @@ public class WelComeActivity extends pBaseActivity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Intent intent=new Intent(this,LoginActivity.class);
-		startActivity(intent);
+		new CountDownTimer(5000, 1000) {
+			public void onTick(long millisUntilFinished) {
+
+			}
+
+			public void onFinish() {
+				Intent intent=new Intent(WelComeActivity.this,LoginActivity.class);
+				startActivity(intent);
+			}
+
+			}.start();
+
+		
 	}
 
 	@Override

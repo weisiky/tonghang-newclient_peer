@@ -21,22 +21,15 @@ import com.peer.base.pBaseFragment;
 import com.peer.utils.pViewBox;
 
 public class HomeFragment extends pBaseFragment{
-	private PageViewList pageViewaList;
 	
-	class PageViewList {
+	
+	
 		private LinearLayout ll_search;
+		
 //		private PullToRefreshListView pull_refresh_homepage;
 		private ListView pull_refresh_homepage;
 		public LinearLayout base_neterror_item;
-		
-
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-	}
+		private TextView tv_connect_errormsg;
 	
 
 	@Override
@@ -50,7 +43,7 @@ public class HomeFragment extends pBaseFragment{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		
+		init();
 //		RecommendTask task=new RecommendTask();
 //		task.execute();
 	}
@@ -80,25 +73,8 @@ public class HomeFragment extends pBaseFragment{
 		}
 	}*/
 	
-	@Override
-	protected void findViewById() {
-		// TODO Auto-generated method stub
-		pageViewaList = new PageViewList();
-		pViewBox.viewBox(getActivity(), pageViewaList);
+	
 
-	}
-
-	@Override
-	protected void setListener() {
-		// TODO Auto-generated method stub
-		pageViewaList.ll_search.setOnClickListener(this);
-		
-		/*
-		 * 监听上拉下拉刷新
-		 * */
-//		RefreshListner();
-
-	}
 
 	/*private void RefreshListner() {
 		// TODO Auto-generated method stub
@@ -128,12 +104,23 @@ public class HomeFragment extends pBaseFragment{
 	}*/
 
 
-	@Override
-	protected void processBiz() {
+	private void init() {
 		// TODO Auto-generated method stub
-
+		base_neterror_item =  (LinearLayout) getView().findViewById(R.id.base_neterror_item);
+		tv_connect_errormsg = (TextView) base_neterror_item.findViewById(R.id.tv_connect_errormsg);
+		
+		ll_search=(LinearLayout)getView().findViewById(R.id.ll_search);		
+//		createtopic=(TextView)getView().findViewById(R.id.tv_createtopic);
+		
+//		createtopic.setOnClickListener(this);		
+		ll_search.setOnClickListener(this);
+			
+//		mPullrefreshlistview=(PullToRefreshListView)getView().findViewById(R.id.pull_refresh_homepage);
+		
+		
+//		RefreshListner();
+		
 	}
-
 
 	@Override
 	public void onClick(View v) {

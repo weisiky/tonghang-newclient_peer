@@ -382,12 +382,12 @@ containing a value of this type.
         public static final int base_neterror_item=0x7f0a0094;
         public static final int bottomLayout=0x7f0a007d;
         public static final int bt_changesubmite=0x7f0a0005;
-        public static final int bt_complete_registe=0x7f0a005c;
         public static final int bt_creattopic=0x7f0a0016;
         public static final int bt_findpassword=0x7f0a001b;
         public static final int bt_login_complete=0x7f0a0065;
         public static final int bt_login_login=0x7f0a0031;
         public static final int bt_nikename=0x7f0a0078;
+        public static final int bt_registe_next=0x7f0a005c;
         public static final int bt_registe_tag=0x7f0a006b;
         public static final int bt_relogin=0x7f0a0051;
         public static final int bt_todesk=0x7f0a0052;

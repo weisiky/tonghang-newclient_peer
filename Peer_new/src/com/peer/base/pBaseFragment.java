@@ -38,20 +38,8 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 				Constant.SHARE_NAME, 0);
 	}
 	
-	/**
-	 * 获取页面控件对象
-	 */
-	protected abstract void findViewById();
+	
 
-	/**
-	 * 绑定监听事件
-	 */
-	protected abstract void setListener();
-
-	/**
-	 * 处理业务
-	 */
-	protected abstract void processBiz();
 	
 	
 	/**

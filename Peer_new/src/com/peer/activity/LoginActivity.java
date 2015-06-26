@@ -46,6 +46,7 @@ public class LoginActivity extends pBaseActivity{
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.bt_login_login.setOnClickListener(this);
+		pageViewaList.tv_register_login.setOnClickListener(this);
 	}
 
 	@Override
@@ -77,26 +78,13 @@ public class LoginActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.bt_login_login:
-			pageViewaList.baseProgressBarLayout.setVisibility(View.VISIBLE);
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					try {
-						Thread.sleep(2000);
-						pageViewaList.baseProgressBarLayout.setVisibility(View.GONE);
-						Intent Login = new Intent(LoginActivity.this,MainActivity.class);
-						startActivity(Login);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
-				
-			
+		case R.id.bt_login_login:		
+			Intent Login = new Intent(LoginActivity.this,MainActivity.class);
+			startActivity(Login);			
+			break;
+		case R.id.tv_register_login:		
+				Intent register = new Intent(LoginActivity.this,RegisterAcountActivity.class);
+				startActivity(register);			
 			break;
 		default:
 			break;

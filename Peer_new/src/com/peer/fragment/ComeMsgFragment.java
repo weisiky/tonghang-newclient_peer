@@ -12,16 +12,15 @@ import android.widget.TextView;
 
 import com.peer.activity.R;
 import com.peer.base.pBaseFragment;
-import com.peer.fragment.HomeFragment.PageViewList;
+
 import com.peer.utils.pViewBox;
 
 public class ComeMsgFragment extends pBaseFragment{
-private PageViewList pageViewaList;
+
 	
-	class PageViewList {
+
 		private ListView lv_come;
 
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,31 +32,19 @@ private PageViewList pageViewaList;
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+			init();
+	}
+	
+	
+	
+
+
+	private void init() {
+		// TODO Auto-generated method stub	
+			
+		lv_come=(ListView)getView().findViewById(R.id.lv_come);	
 			
 	}
-	
-	
-	@Override
-	protected void findViewById() {
-		// TODO Auto-generated method stub
-		pageViewaList = new PageViewList();
-		pViewBox.viewBox(getActivity(), pageViewaList);
-
-	}
-
-	@Override
-	protected void setListener() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void processBiz() {
-		// TODO Auto-generated method stub
-
-	}
-
-
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub

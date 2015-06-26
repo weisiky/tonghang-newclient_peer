@@ -149,7 +149,7 @@
 	    android:gravity="center"
 	    >
 	    <Button
-	        android:id="@+id/bt_complete_registe"
+	        android:id="@+id/bt_registe_next"
 	        android:layout_width="fill_parent"
 	        android:layout_height="48dp"
 	        android:layout_marginLeft="8dp"
