@@ -17,11 +17,6 @@ import com.peer.utils.pViewBox;
 /**
  * µÇÂ¼Ò³Ãæ
  * 
- * 
- * 
- * 
- * 
- * 
  * @author zhangzg
  * 
  */
@@ -85,7 +80,6 @@ public class LoginActivity extends pBaseActivity {
 		return null;
 	}
 
-	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
