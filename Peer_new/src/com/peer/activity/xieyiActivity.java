@@ -1,17 +1,17 @@
 package com.peer.activity;
 
-import android.content.Intent;
+
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.peer.activity.WelComeActivity.PageViewList;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+/*
+ * –≠“È¿‡
+ * */
 public class xieyiActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

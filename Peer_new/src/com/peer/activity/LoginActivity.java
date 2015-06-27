@@ -14,6 +14,11 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+
+/*
+ * µ«»Î“≥¿‡
+ * */
 public class LoginActivity extends pBaseActivity{
 	class PageViewList {
 		private EditText et_email_login,et_password_login;

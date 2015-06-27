@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+/*
+ * ’“ªÿ√‹¬Î¿‡
+ * */
 public class FindPasswordActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

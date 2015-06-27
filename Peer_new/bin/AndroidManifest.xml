@@ -34,6 +34,17 @@
         <activity android:name="com.peer.activity.GetAddressInfoActivity" />
         <activity android:name="com.peer.activity.FindPasswordActivity" />
         <activity android:name="com.peer.activity.FindPasswordResultActivity" />
+        <activity android:name="com.peer.activity.FeedBackActivity" />
+        <activity android:name="com.peer.activity.MessageNotifyActivity" />
+        <activity android:name="com.peer.activity.MyAcountActivity" />
+        <activity android:name="com.peer.activity.MySkillActivity" />
+        <activity android:name="com.peer.activity.NewFunctionActivity" />
+        <activity android:name="com.peer.activity.PersonalMessageActivity" />
+        <activity android:name="com.peer.activity.SettingActivity" />
+        <activity android:name="com.peer.activity.UpdateNikeActivity" />
+        <activity android:name="com.peer.activity.UpdatePasswordActivity" />
+        
+        
     </application>
 
 </manifest>

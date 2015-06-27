@@ -17,6 +17,10 @@ import com.peer.fragment.HomeFragment;
 import com.peer.fragment.MyFragment;
 import com.peer.utils.pViewBox;
 
+
+/*
+ * Ö÷Ò³ÃæÀà
+ * */
 public class MainActivity extends pBaseActivity{
 	
 	/*

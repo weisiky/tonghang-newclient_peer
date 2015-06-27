@@ -10,6 +10,11 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+
+/*
+ * 找回密码的结果处理类
+ * */
 public class FindPasswordResultActivity extends pBaseActivity{
 	
 	class PageViewList {

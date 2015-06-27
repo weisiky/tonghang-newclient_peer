@@ -27,6 +27,11 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.Tools;
 import com.peer.utils.pViewBox;
 
+
+/*
+ * 注册信息完善类。
+ * 
+ * */
 public class RegisterCompleteActivity extends pBaseActivity{
 	
 	private String[] items;
