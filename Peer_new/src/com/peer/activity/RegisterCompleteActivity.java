@@ -138,6 +138,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 			img=getBitmapByte(photo);
 			Intent login_complete = new Intent(RegisterCompleteActivity.this,MainActivity.class);
 			startActivity(login_complete);
+			finish();
 			break;
 		}
 		

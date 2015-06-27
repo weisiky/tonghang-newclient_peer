@@ -48,6 +48,7 @@ public class WelComeActivity extends pBaseActivity {
 			public void onFinish() {
 				Intent intent=new Intent(WelComeActivity.this,LoginActivity.class);
 				startActivity(intent);
+				finish();
 			}
 
 			}.start();

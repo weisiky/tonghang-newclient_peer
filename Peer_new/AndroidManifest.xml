@@ -32,6 +32,8 @@
         <activity android:name="com.peer.activity.RegisterTagActivity" />
         <activity android:name="com.peer.activity.xieyiActivity" />
         <activity android:name="com.peer.activity.GetAddressInfoActivity" />
+        <activity android:name="com.peer.activity.FindPasswordActivity" />
+        <activity android:name="com.peer.activity.FindPasswordResultActivity" />
     </application>
 
 </manifest>
