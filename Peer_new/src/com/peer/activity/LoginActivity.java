@@ -5,6 +5,7 @@ import org.apache.tools.ant.taskdefs.Sleep;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,18 +84,33 @@ public class LoginActivity extends pBaseActivity {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.bt_login_login:
-			Intent Login = new Intent(LoginActivity.this, MainActivity.class);
-			startActivity(Login);
+			startActivityForLeft(MainActivity.class, intent, false);
 			break;
 		case R.id.tv_register_login:
-			Intent register = new Intent(LoginActivity.this,
-					RegisterAcountActivity.class);
-			startActivity(register);
+			startActivityForLeft(RegisterAcountActivity.class, intent, false);
 			break;
 		default:
 			break;
+		}
+
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			if (false) {
+				// 处理当前方法里面的返回按键事件
+			} else {
+				backPage();
+			}
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
 		}
 
 	}

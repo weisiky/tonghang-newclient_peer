@@ -139,6 +139,7 @@ public class pIOUitls {
 							items[j].delete();
 						}
 					}
+					display.delete();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

@@ -30,12 +30,12 @@ public class WelComeActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
 		animation.setDuration(4000);
 		pageViewaList.welLin.startAnimation(animation);
 	}
-	
+
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
@@ -46,13 +46,12 @@ public class WelComeActivity extends pBaseActivity {
 			}
 
 			public void onFinish() {
-				Intent intent=new Intent(WelComeActivity.this,LoginActivity.class);
-				startActivity(intent);
+				Intent intent = new Intent();
+				startActivityForLeft(LoginActivity.class, intent, false);
 			}
 
-			}.start();
+		}.start();
 
-		
 	}
 
 	@Override
@@ -87,7 +86,7 @@ public class WelComeActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_welcome, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -97,7 +96,7 @@ public class WelComeActivity extends pBaseActivity {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

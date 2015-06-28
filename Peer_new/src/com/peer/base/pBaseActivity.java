@@ -1,16 +1,22 @@
 package com.peer.base;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.peer.activity.LoginActivity;
 import com.peer.activity.R;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pSysInfoUtils;
 import com.umeng.analytics.AnalyticsConfig;
@@ -23,7 +29,8 @@ import com.umeng.analytics.MobclickAgent;
  * 
  */
 
-public abstract class pBaseActivity extends FragmentActivity implements OnClickListener {
+public abstract class pBaseActivity extends FragmentActivity implements
+		OnClickListener {
 
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
@@ -41,6 +48,10 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 	private LinearLayout shadeBg;
 	/** 当前页面的名称 **/
 	public String currentPageName = null;
+	/** 蒙板渐变动画 **/
+	public Animation alphaAnimation;
+	/** 首次进入页面的loading圈圈 **/
+	public RelativeLayout baseProgressBarLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +126,11 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 			bottomLayout.setVisibility(View.VISIBLE);
 			bottomLayout.addView(bottomView, layoutParamsTop);
 		}
+
+		baseProgressBarLayout = (RelativeLayout) findViewById(R.id.baseProgressBarLayout);
+
+		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
+
 	}
 
 	/**
@@ -143,13 +159,155 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 	 * @param requestBean
 	 */
 	protected abstract View loadContentLayout();
-	
+
 	/**
 	 * 获取底部布局
 	 * 
 	 * @param requestBean
 	 */
 	protected abstract View loadBottomLayout();
+
+	/**
+	 * 页面跳转
+	 * 
+	 * @param targetActivity
+	 *            目标页面
+	 * @param intent
+	 * @param isNewActivity
+	 *            是否需要一个新的页面
+	 */
+	public void startActivityForLeft(Class targetActivity, Intent intent,
+			boolean isNewActivity) {
+		if (!isNewActivity) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		}
+		if (targetActivity != null) {
+			intent.setClass(this, targetActivity);
+			startActivity(intent);
+			if (BussinessUtils.hasEclair()) {
+				overridePendingTransition(R.anim.push_left_in,
+						R.anim.push_left_out);
+			}
+		}
+		this.finish();
+	}
+
+	/**
+	 * 页面跳转从右侧进入
+	 * 
+	 * @param targetActivity
+	 *            目标页面
+	 * @param intent
+	 * @param isNewActivity
+	 *            是否需要一个新的页面
+	 */
+	@SuppressWarnings("rawtypes")
+	public void startActivityRight(Class targetActivity, Intent intent,
+			boolean isNewActivity) {
+		if (!isNewActivity) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		}
+		if (targetActivity != null) {
+			intent.setClass(this, targetActivity);
+			startActivity(intent);
+			if (BussinessUtils.hasEclair()) {
+				overridePendingTransition(R.anim.push_right_in,
+						R.anim.push_right_out);
+			}
+		}
+		this.finish();
+	}
+
+	/**
+	 * 页面跳转(垂直向下移动)
+	 * 
+	 * @param targetActivity
+	 *            目标页面
+	 * @param intent
+	 * @param isNewActivity
+	 *            是否需要一个新的页面
+	 */
+	public void startActivityForDown(Class targetActivity, Intent intent,
+			boolean isNewActivity) {
+		if (!isNewActivity) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		}
+		if (targetActivity != null) {
+			intent.setClass(this, targetActivity);
+			startActivity(intent);
+			if (BussinessUtils.hasEclair()) {
+				overridePendingTransition(R.anim.push_down_in,
+						R.anim.push_down_out);
+			}
+		}
+		this.finish();
+	}
+
+	/**
+	 * 页面跳转(垂直向上移动)
+	 * 
+	 * @param targetActivity
+	 *            目标页面
+	 * @param intent
+	 * @param isNewActivity
+	 *            是否需要一个新的页面
+	 */
+	public void startActivityForUp(Class targetActivity, Intent intent,
+			boolean isNewActivity) {
+		if (!isNewActivity) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		}
+		if (targetActivity != null) {
+			intent.setClass(this, targetActivity);
+			startActivity(intent);
+			if (BussinessUtils.hasEclair()) {
+				overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+			}
+		}
+
+		this.finish();
+	}
+
+	/**
+	 * 页面跳转
+	 * 
+	 * @param targetActivity
+	 *            目标页面
+	 * @param intent
+	 * @param requestCode
+	 *            请求状态码
+	 * @param isNewActivity
+	 *            是否需要一个新的页面
+	 */
+	public void startActivityForResult(Class targetActivity, Intent intent,
+			int requestCode, boolean isNewActivity) {
+		if (!isNewActivity) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		}
+		if (targetActivity != null) {
+			intent.setClass(this, targetActivity);
+			startActivityForResult(intent, requestCode);
+			if (BussinessUtils.hasEclair()) {
+				overridePendingTransition(R.anim.push_left_in,
+						R.anim.push_left_out);
+			}
+		}
+		this.finish();
+	}
+
+	/**
+	 * 返回上个页面
+	 */
+	public void backPage() {
+		Intent intent = new Intent();
+
+		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")) {
+			startActivityRight(LoginActivity.class, intent, true);
+		} else {
+			exitApp();
+		}
+
+	}
 
 	/**
 	 * 退出APP
@@ -203,25 +361,68 @@ public abstract class pBaseActivity extends FragmentActivity implements OnClickL
 		}
 		return lClssName;
 	}
-	
-	
+
+	/**
+	 * 显示loading圈圈
+	 */
+	public void showProgressBar() {
+		showAlphaBg();
+		baseProgressBarLayout.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * 隐藏dialog
+	 */
+	public void hideLoading() {
+		hidAlphaBg();
+		shadeBg.clearAnimation();
+		baseProgressBarLayout.setVisibility(View.GONE);
+	}
+
+	/**
+	 * 显示渐变背景
+	 */
+	public void showAlphaBg() {
+		shadeBg.setOnClickListener(this);
+		shadeBg.setVisibility(View.VISIBLE);
+		shadeBg.startAnimation(alphaAnimation);
+	}
+
+	/**
+	 * 隐藏渐变背景
+	 */
+	public void hidAlphaBg() {
+		shadeBg.setVisibility(View.GONE);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			// 返回上个页面
+			backPage();
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+
+	}
+
 	/*
 	 * 处理公共监听事件
-	 * */
+	 */
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		switch(v.getId()){
+		switch (v.getId()) {
 		case R.id.ll_back:
-			finish();
-		break;
-		default :
-		break;
-		
+			backPage();
+			break;
+		default:
+			break;
+
 		}
 	}
-	
-	
-	
 
 }

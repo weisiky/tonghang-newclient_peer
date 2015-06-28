@@ -32,5 +32,8 @@ public class Constant {
 	 * 项目存储根目录
 	 */
 	public static final String DEFAULT_MAIN_DIRECTORY = SDCARD_DIR + "/peer/";
+	
+	/** 文件在本地的缓存目录 **/
+	public static String C_FILE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY+"filecache/";
 
 }
