@@ -17,6 +17,10 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.GetAddressUtil;
 import com.peer.utils.pViewBox;
 
+
+/*
+ * ªÒµ√address¿‡
+ * */
 public class GetAddressInfoActivity extends pBaseActivity{
 	
 	List<String> addressList = null;

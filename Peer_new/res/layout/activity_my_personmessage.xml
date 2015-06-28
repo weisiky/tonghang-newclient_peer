@@ -33,7 +33,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
-            
+            android:background="@drawable/mini_avatar_shadow"
             android:layout_centerVertical="true"
             />
         </RelativeLayout>

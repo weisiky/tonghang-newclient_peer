@@ -6,7 +6,7 @@
     android:orientation="vertical" >
      
      <RelativeLayout
-            android:id="@+id/rl_newfriends"
+            android:id="@+id/rl_mytopic"
             android:background="@drawable/selector_presseffect"
             android:layout_width="match_parent"
             android:layout_height="48dp"           

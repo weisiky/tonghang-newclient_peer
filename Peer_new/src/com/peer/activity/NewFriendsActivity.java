@@ -1,22 +1,24 @@
 package com.peer.activity;
 
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
 /*
- * 协议类
+ * ‘新朋友’页
  * */
-public class xieyiActivity extends pBaseActivity{
+public class NewFriendsActivity extends pBaseActivity {
+
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
-		private LinearLayout back;
+		private ListView lv_newfriends;
 	}
 
 	private PageViewList pageViewaList;
@@ -33,7 +35,7 @@ public class xieyiActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.xieyi));
+		pageViewaList.tv_title.setText(getResources().getString(R.string.newfriends));
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class xieyiActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_xieyi, null);
+		return getLayoutInflater().inflate(R.layout.activity_newfriends, null);
 	}
 	
 	@Override

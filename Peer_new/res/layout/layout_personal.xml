@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+     <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"       
+        android:background="@drawable/border"
+        android:orientation="vertical" 
+        android:layout_margin="8dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5.0dip"
+            android:paddingLeft="5.0dip"
+            android:paddingRight="5.0dip"
+            android:paddingTop="5.0dip"             
+            >
+
+            <ImageView
+                android:id="@+id/personhead"
+                android:layout_width="60.0dip"
+                android:layout_height="60.0dip"
+                android:layout_gravity="center"
+                
+                 />
+
+            <TextView
+                android:id="@+id/personnike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"                    
+                android:textColor="@color/black"
+                android:textSize="@dimen/textsize_middle"                    
+                android:layout_alignTop="@+id/personhead"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/personhead"
+               
+                 />
+
+            <TextView
+                android:id="@+id/personcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/personhead"
+                android:layout_alignLeft="@+id/personnike"
+                android:layout_toRightOf="@+id/personhead"
+                android:textColor="@color/deepgray"
+                android:textSize="@dimen/textsize_middle" 
+               
+                 />
+
+        </RelativeLayout>
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="性别："
+                android:textSize="@dimen/textsize_middle"
+                 android:textColor="@color/deepgray"
+                />
+            <TextView 
+                android:id="@+id/sex"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/textsize_middle"  
+                android:textColor="@color/deepgray"
+                
+                />
+            
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="所在城市："
+                android:textSize="@dimen/textsize_middle"
+                 android:textColor="@color/deepgray"
+                 
+                />
+            <TextView 
+                android:id="@+id/city"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                
+                android:textColor="@color/deepgray"
+                android:textSize="@dimen/textsize_middle"  
+                />
+            
+        </LinearLayout>
+    </LinearLayout>
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="@dimen/textsize_middle"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="行业标签"
+        
+        android:layout_marginBottom="4dp"
+        />
+      <LinearLayout
+          android:id="@+id/contentauto"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:background="@color/white"
+          >   
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/deepgray"
+        />
+    
+    <com.peer.util.AutoWrapRadioGroup
+        android:layout_margin="8dp"
+     	android:id="@+id/tag_container"
+    	android:layout_width="match_parent"
+   		android:layout_height="wrap_content" 
+   		android:gravity="center_vertical"
+    >    
+	</com.peer.util.AutoWrapRadioGroup>
+	<View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/deepgray"
+        />
+ </LinearLayout>
+ <View 
+     android:layout_marginTop="16dp"
+		    android:layout_width="match_parent"
+		    android:layout_height="0.5dp"
+		    android:background="@color/deepgray"
+		    />
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="48.0dip"       
+        
+         
+        android:background="@color/white"  
+        android:orientation="vertical" >
+		
+        <RelativeLayout
+            android:id="@+id/rl_topic"                 
+            android:layout_width="match_parent"
+            android:layout_height="48.0dip" >
+            <TextView
+                android:id="@+id/tv_topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:text="我的话题"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textsize_middle" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/icon_enter" />
+        </RelativeLayout>
+       
+    </LinearLayout>
+	<View 
+	    android:layout_marginBottom="8dp"  
+		    android:layout_width="match_parent"
+		    android:layout_height="0.5dp"
+		    android:background="@color/deepgray"
+		    />
+
+</LinearLayout>

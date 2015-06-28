@@ -1,22 +1,26 @@
 package com.peer.activity;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
+
 /*
- * 协议类
+ * 找回密码的结果处理类
  * */
-public class xieyiActivity extends pBaseActivity{
+public class FindPasswordResultActivity extends pBaseActivity{
+	
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
-		private LinearLayout back;
+		private Button back;
 	}
 
 	private PageViewList pageViewaList;
@@ -33,13 +37,14 @@ public class xieyiActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.xieyi));
+		pageViewaList.tv_title.setText(getResources().getString(R.string.findpassword));
 	}
 
 	@Override
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
+		pageViewaList.back.setOnClickListener(this);
 	}
 
 	@Override
@@ -58,7 +63,7 @@ public class xieyiActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_xieyi, null);
+		return getLayoutInflater().inflate(R.layout.activity_findpasswordresult, null);
 	}
 	
 	@Override
@@ -71,6 +76,17 @@ public class xieyiActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.back:
+			Intent back = new Intent(FindPasswordResultActivity.this,LoginActivity.class);
+			startActivity(back);
+			finish();
+			break;
+
+		default:
+			break;
+		}
 		
 	}
+
 }

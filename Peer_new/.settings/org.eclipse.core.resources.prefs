@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+encoding//src/com/peer/Dao=UTF-8
+encoding//src/com/peer/titlepopwindow=UTF-8
+encoding//src/com/peer/utils/AutoWrapRadioGroup.java=UTF-8
 encoding//src/com/peer/utils/GetAddressUtil.java=UTF-8
 encoding//src/com/peer/utils/UniversalImageLoadTool.java=UTF-8
 encoding//src/com/peer/utils/pIOUitls.java=UTF-8

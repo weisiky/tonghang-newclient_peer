@@ -32,6 +32,29 @@
         <activity android:name="com.peer.activity.RegisterTagActivity" />
         <activity android:name="com.peer.activity.xieyiActivity" />
         <activity android:name="com.peer.activity.GetAddressInfoActivity" />
+        <activity android:name="com.peer.activity.FindPasswordActivity" />
+        <activity android:name="com.peer.activity.FindPasswordResultActivity" />
+        <activity android:name="com.peer.activity.FeedBackActivity" />
+        <activity android:name="com.peer.activity.MessageNotifyActivity" />
+        <activity android:name="com.peer.activity.MyAcountActivity" />
+        <activity android:name="com.peer.activity.MySkillActivity" />
+        <activity android:name="com.peer.activity.NewFunctionActivity" />
+        <activity android:name="com.peer.activity.PersonalMessageActivity" />
+        <activity android:name="com.peer.activity.SettingActivity" />
+        <activity android:name="com.peer.activity.UpdateNikeActivity" />
+        <activity android:name="com.peer.activity.UpdatePasswordActivity" />
+        <activity android:name="com.peer.activity.SearchResultActivity" />
+        <activity android:name="com.peer.activity.SearchTopicActivity" />
+        <activity android:name="com.peer.activity.SearchUserActivity" />
+        <activity android:name="com.peer.activity.NewFriendsActivity" />
+        <activity android:name="com.peer.activity.CreatTopicActivity" />
+        <activity android:name="com.peer.activity.PersonalPageActivity" />
+        <activity android:name="com.peer.activity.TopicActivity" />
+        <activity android:name="com.peer.activity.ChatRoomActivity" />
+        <activity android:name="com.peer.activity.ChatRoomListnikeActivity" />
+        <activity android:name="com.peer.activity.AddFriendsActivity" />
+        
+        
     </application>
 
 </manifest>

@@ -1,22 +1,28 @@
 package com.peer.activity;
 
-
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
 /*
- * 协议类
+ * 添加好友类
  * */
-public class xieyiActivity extends pBaseActivity{
+public class AddFriendsActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title;
-		private LinearLayout back;
+		private TextView tv_title,personnike,email;
+		private ImageView personhead;
+		private EditText add_reson;
+		private Button bt_send;
 	}
 
 	private PageViewList pageViewaList;
@@ -33,13 +39,14 @@ public class xieyiActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.xieyi));
+		pageViewaList.tv_title.setText(getResources().getString(R.string.checkfriends));
 	}
 
 	@Override
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
+		pageViewaList.bt_send.setOnClickListener(this);
 	}
 
 	@Override
@@ -58,7 +65,7 @@ public class xieyiActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_xieyi, null);
+		return getLayoutInflater().inflate(R.layout.activity_addfriends, null);
 	}
 	
 	@Override
@@ -71,6 +78,20 @@ public class xieyiActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.bt_send:
+//			if(checkNetworkState()){
+//				AddFriendsTask task=new AddFriendsTask();
+//				task.execute(id,reson.getText().toString().trim());
+			showToast("模拟添加好友成功", Toast.LENGTH_SHORT, false);
+//			}else{
+//				ShowMessage(getResources().getString(R.string.Broken_network_prompt));
+//			}		
+			break;
+
+		default:
+			break;
+		}
 		
 	}
 }

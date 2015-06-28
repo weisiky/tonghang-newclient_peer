@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
  */
 public class pShareFileUtils {
 
-	public SharedPreferences mPreference = null;// 共享文件
+	public static SharedPreferences mPreference = null;// 共享文件
 	
 	/**
 	 * 初始化SharedPreferences
@@ -32,7 +32,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public String getString(String key, String defValue) {
+    public static String getString(String key, String defValue) {
         return mPreference.getString(key, defValue);
     }
 
@@ -44,7 +44,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public int getInt(String key, int defValue) {
+    public static int getInt(String key, int defValue) {
         return mPreference.getInt(key, defValue);
     }
 
@@ -56,7 +56,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public boolean getBoolean(String key, boolean defValue) {
+    public static boolean getBoolean(String key, boolean defValue) {
         return mPreference.getBoolean(key, defValue);
     }
 
@@ -68,7 +68,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public void setString(String key, String defValue) {
+    public static void setString(String key, String defValue) {
     	mPreference.edit().putString(key, defValue).commit();
     }
 
@@ -80,7 +80,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public void setInt(String key, int defValue) {
+    public static void setInt(String key, int defValue) {
     	mPreference.edit().putInt(key, defValue).commit();
     }
 
@@ -92,7 +92,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public void setBoolean(String key, boolean defValue) {
+    public static void setBoolean(String key, boolean defValue) {
     	mPreference.edit().putBoolean(key, defValue).commit();
     }
 }

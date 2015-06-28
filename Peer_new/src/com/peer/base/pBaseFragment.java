@@ -65,7 +65,7 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 	 * @param isCenter
 	 *            提示条是否要居中
 	 */
-	public void showToast(String arg, int length, boolean isCenter) {
+	public  void showToast(String arg, int length, boolean isCenter) {
 		if (toast == null) {
 			toast = Toast.makeText(getActivity(), arg, length);
 

@@ -1,15 +1,16 @@
 package com.peer.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.peer.activity.NewFriendsActivity;
 import com.peer.activity.R;
 import com.peer.base.pBaseFragment;
 
@@ -43,13 +44,23 @@ public class FriendsFragment extends pBaseFragment{
 		lv_friends=(ListView)getView().findViewById(R.id.lv_friends);				
 		rl_newfriends=(RelativeLayout)getView().findViewById(R.id.rl_newfriends);
 		tv_newfriends=(TextView)getView().findViewById(R.id.tv_newfriends);
+		rl_newfriends.setOnClickListener(this);
+		
 		
 		
 	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+		switch (v.getId()) {
+		case R.id.rl_newfriends:
+			Intent newfriends = new Intent(getActivity(),NewFriendsActivity.class);
+			startActivity(newfriends);
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 }

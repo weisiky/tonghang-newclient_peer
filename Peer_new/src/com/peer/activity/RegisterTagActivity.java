@@ -17,6 +17,11 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+
+
+/*
+ * ×¢²á±êÇ©Àà
+ * */
 public class RegisterTagActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
