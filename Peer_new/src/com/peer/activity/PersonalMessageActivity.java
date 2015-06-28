@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -185,6 +187,22 @@ public class PersonalMessageActivity extends pBaseActivity{
 	        mMonth = 1;  
 	        mDay = 1; 
 	    }
+	    
+	    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {  
+	        public void onDateSet(DatePicker view, int year, int monthOfYear,  
+	               int dayOfMonth) {  
+	            mYear = year;  
+	            mMonth = monthOfYear;  
+	            mDay = dayOfMonth;  
+	            updateDateDisplay();
+	        }  
+	     };
+	     
+	     private void updateDateDisplay(){
+	    	 pageViewaList.tv_setbirthday_my.setText(new StringBuilder().append(mYear).append("-")
+	           .append((mMonth + 1) < 10 ? "0" + (mMonth + 1) : (mMonth + 1)).append("-")
+	                 .append((mDay < 10) ? "0" + mDay : mDay)); 
+	   }
 	    
 	    /*
 	     * ChangAddressÀà

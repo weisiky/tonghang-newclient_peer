@@ -16,12 +16,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peer.base.pBaseActivity;
 import com.peer.utils.Tools;
@@ -141,9 +143,17 @@ public class RegisterCompleteActivity extends pBaseActivity{
 		case R.id.bt_login_complete:				
 			photo=pageViewaList.iv_uploadepic_complete.getDrawingCache();
 			img=getBitmapByte(photo);
+			if(TextUtils.isEmpty(pageViewaList.tv_sex.getText().toString())){
+				pageViewaList.tv_remind.setText(getResources().getString(R.string.selectsex));
+				return;
+			}else if(TextUtils.isEmpty(pageViewaList.tv_setbirth.getText().toString())){
+				pageViewaList.tv_remind.setText(getResources().getString(R.string.selectbirthday));
+				return;
+			}else{
 			Intent login_complete = new Intent(RegisterCompleteActivity.this,MainActivity.class);
 			startActivity(login_complete);
 			finish();
+			}
 			break;
 		}
 		
@@ -299,4 +309,71 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 		Intent intent=new Intent(RegisterCompleteActivity.this, GetAddressInfoActivity.class);
 	 		startActivityForResult(intent,CYTYSELECT);
 	 	}
+	     
+	     
+	     @Override
+	 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	 		if (resultCode != RESULT_CANCELED) {
+	 			switch (requestCode) {
+	 			case CYTYSELECT:
+	 				if(data.getStringExtra("city")==null){
+	 					pageViewaList.tv_setaddress.setText(data.getStringExtra("province"));
+	 				}else{
+	 					pageViewaList.tv_setaddress.setText(data.getStringExtra("province") + "-" + data.getStringExtra("city"));
+	 				}				
+	 				break;
+	 			case IMAGE_REQUEST_CODE:
+	 				startPhotoZoom(data.getData());
+	 				break;
+	 			case CAMERA_REQUEST_CODE:
+	 				if (Tools.hasSdcard()) {
+	 					File tempFile = new File(
+	 							Environment.getExternalStorageDirectory()
+	 									+"/"+ IMAGE_FILE_NAME);
+	 					startPhotoZoom(Uri.fromFile(tempFile));
+	 				} else {
+	 					showToast(getResources().getString(R.string.sdcard), Toast.LENGTH_LONG, false);
+	 				}
+	 				break;
+	 			case RESULT_REQUEST_CODE:
+	 				if (data != null) {
+	 					Bitmap bt=getImageToView(data);
+	 					img=getBitmapByte(bt);
+	 				}
+	 				break;
+	 			}
+	 		}
+	 		}
+	 		
+	 		
+	 		public void startPhotoZoom(Uri uri) {
+	 			
+	 			Intent intent = new Intent("com.android.camera.action.CROP");
+	 			intent.setDataAndType(uri, "image/*");
+	 			intent.putExtra("crop", "true");
+	 			
+	 			intent.putExtra("aspectX", 1);
+	 			intent.putExtra("aspectY", 1);
+	 			
+	 			intent.putExtra("outputX", 250);
+	 			intent.putExtra("outputY", 250);
+	 			
+	 			intent.putExtra("outputFormat", "PNG");
+	 			intent.putExtra("noFaceDetection", true);
+	 			intent.putExtra("return-data", true);
+	 			startActivityForResult(intent, RESULT_REQUEST_CODE);
+	 		}
+	 		
+	 		public Bitmap getImageToView(Intent data) {
+	 			Bundle extras = data.getExtras();
+	 			if (extras != null) {
+	 				photo = extras.getParcelable("data");
+	 				
+	 				pageViewaList.iv_uploadepic_complete.setImageBitmap(photo);
+	 			}
+	 			return photo;
+
+	 		}
+	 		
+	 		
 }

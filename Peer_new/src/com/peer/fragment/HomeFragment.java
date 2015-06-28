@@ -2,6 +2,7 @@ package com.peer.fragment;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 //import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 //import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.peer.activity.R;
+import com.peer.activity.SearchUserActivity;
 import com.peer.base.pBaseFragment;
 import com.peer.utils.pViewBox;
 
@@ -125,6 +127,16 @@ public class HomeFragment extends pBaseFragment{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.ll_search:
+			Intent search = new Intent(getActivity(),SearchUserActivity.class);
+			startActivity(search);
+			
+			break;
+
+		default:
+			break;
+		}
 		
 	}
 	

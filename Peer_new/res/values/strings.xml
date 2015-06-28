@@ -10,6 +10,8 @@
     <string name="bytopic">按话题搜</string>
     <string name="bytag">按行业搜</string>    
     <string name="bynike">按昵称搜</string>
+    <string name="searchuser">搜用户</string>
+    <string name="searchtopic">搜话题</string>
     <!-- 聊天室下拉选择项 -->
     <string name="deletemes">删除聊天记录</string>
     <string name="exitroom">退出</string>

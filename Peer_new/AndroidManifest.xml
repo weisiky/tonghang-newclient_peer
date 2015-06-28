@@ -43,6 +43,16 @@
         <activity android:name="com.peer.activity.SettingActivity" />
         <activity android:name="com.peer.activity.UpdateNikeActivity" />
         <activity android:name="com.peer.activity.UpdatePasswordActivity" />
+        <activity android:name="com.peer.activity.SearchResultActivity" />
+        <activity android:name="com.peer.activity.SearchTopicActivity" />
+        <activity android:name="com.peer.activity.SearchUserActivity" />
+        <activity android:name="com.peer.activity.NewFriendsActivity" />
+        <activity android:name="com.peer.activity.CreatTopicActivity" />
+        <activity android:name="com.peer.activity.PersonalPageActivity" />
+        <activity android:name="com.peer.activity.TopicActivity" />
+        <activity android:name="com.peer.activity.ChatRoomActivity" />
+        <activity android:name="com.peer.activity.ChatRoomListnikeActivity" />
+        <activity android:name="com.peer.activity.AddFriendsActivity" />
         
         
     </application>

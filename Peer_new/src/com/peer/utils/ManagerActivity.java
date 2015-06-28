@@ -3,7 +3,7 @@ package com.peer.utils;
 import java.util.Stack;
 
 import com.peer.activity.LoginActivity;
-import com.peer.base.Constant;
+import com.peer.base.Constants;
 
 
 import android.app.Activity;
@@ -158,7 +158,7 @@ public class ManagerActivity {
 		Intent i = new Intent(context, LoginActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_NEW_TASK);
-		i.putExtra(Constant.RELOGIN, Constant.RELOGIN);
+		i.putExtra(Constants.RELOGIN, Constants.RELOGIN);
 		context.startActivity(i);
 	}
 }
