@@ -7,9 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.peer.Dao.SearchUtil;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.SearchBean;
 import com.peer.utils.pViewBox;
 
 
@@ -43,8 +43,8 @@ public class SearchResultActivity extends pBaseActivity{
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
 		
-		String searchname=SearchUtil.getInstance().getSearchname();
-		String searchaccuratetarget = SearchUtil.getInstance().getCallbacklabel();
+		String searchname=SearchBean.getInstance().getSearchname();
+		String searchaccuratetarget = SearchBean.getInstance().getCallbacklabel();
 		
 //		lv_searchresult=(PullToRefreshListView)findViewById(R.id.lv_searchresult);//自定义控件，自己find
 		pageViewaList.tv_title.setText(searchname);
@@ -63,19 +63,19 @@ public class SearchResultActivity extends pBaseActivity{
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		if(SearchUtil.getInstance().getSearchtype().equals(Constant.TOPICBYTOPIC)){
+		if(SearchBean.getInstance().getSearchtype().equals(Constant.TOPICBYTOPIC)){
 //			SearchTask task=new SearchTask();
 //			task.execute(searchaccuratetarget);		
 			showToast("搜索TOPICBYTOPIC", Toast.LENGTH_SHORT, false);
-		}else if(SearchUtil.getInstance().getSearchtype().equals(Constant.USERBYNIKE)){
+		}else if(SearchBean.getInstance().getSearchtype().equals(Constant.USERBYNIKE)){
 //			SearchTask task=new SearchTask();
 //			task.execute(searchaccuratetarget);		
 			showToast("搜索USERBYNIKE", Toast.LENGTH_SHORT, false);
-		}else if(SearchUtil.getInstance().getSearchtype().equals(Constant.TOPICBYLABEL)){
+		}else if(SearchBean.getInstance().getSearchtype().equals(Constant.TOPICBYLABEL)){
 //			SearchTask task=new SearchTask();
 //			task.execute(searchaccuratetarget);
 			showToast("搜索TOPICBYLABEL", Toast.LENGTH_SHORT, false);
-		}else if(SearchUtil.getInstance().getSearchtype().equals(Constant.USERBYLABEL)){
+		}else if(SearchBean.getInstance().getSearchtype().equals(Constant.USERBYLABEL)){
 //			SearchTask task=new SearchTask();
 //			task.execute(searchaccuratetarget);
 			showToast("搜索USERBYLABEL", Toast.LENGTH_SHORT, false);

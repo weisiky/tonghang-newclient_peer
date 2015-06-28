@@ -15,9 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.peer.Dao.SearchUtil;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.SearchBean;
 import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
@@ -59,10 +59,10 @@ public class SearchUserActivity extends pBaseActivity {
 		super.onResume();
 		switch (searchtype) {
 		case 1:
-			SearchUtil.getInstance().setSearchtype(Constant.USERBYLABEL);
+			SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
 			break;
 		case 2:
-			SearchUtil.getInstance().setSearchtype(Constant.USERBYNIKE);
+			SearchBean.getInstance().setSearchtype(Constant.USERBYNIKE);
 			break;
 		default:
 			break;
@@ -76,7 +76,7 @@ public class SearchUserActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(
 				R.string.searchuser));
-		SearchUtil.getInstance().setSearchtype(Constant.USERBYLABEL);
+		SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
 
 		pageViewaList.et_contentsearch.setHint(getResources().getString(
 				R.string.bytag));
@@ -169,9 +169,9 @@ public class SearchUserActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		imm.hideSoftInputFromWindow(
 				pageViewaList.et_contentsearch.getWindowToken(), 0);
-		SearchUtil.getInstance().setSearchname(tagetname);
+		SearchBean.getInstance().setSearchname(tagetname);
 		// if(SearchUtil.getInstance().equals("USERBYNIKE")){
-		SearchUtil.getInstance().setCallbacklabel(tagetname);
+		SearchBean.getInstance().setCallbacklabel(tagetname);
 		// }
 		Intent intent = new Intent(SearchUserActivity.this,
 				SearchResultActivity.class);
@@ -188,13 +188,13 @@ public class SearchUserActivity extends pBaseActivity {
 				if (item.mTitle
 						.equals(getResources().getString(R.string.bytag))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
-					SearchUtil.getInstance()
+					SearchBean.getInstance()
 							.setSearchtype(Constant.USERBYLABEL);
 					searchtype = USER_LABEL;// 按标签搜索用户
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bynike))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
-					SearchUtil.getInstance().setSearchtype(Constant.USERBYNIKE);
+					SearchBean.getInstance().setSearchtype(Constant.USERBYNIKE);
 					searchtype = USER_NICK;// 按昵称搜索用户
 				}
 			}

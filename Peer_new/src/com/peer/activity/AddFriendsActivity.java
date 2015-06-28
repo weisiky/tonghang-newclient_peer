@@ -13,7 +13,7 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
+/**
  * ÃÌº”∫√”—¿‡
  * */
 public class AddFriendsActivity extends pBaseActivity{

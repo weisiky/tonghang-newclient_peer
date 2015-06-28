@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.peer.Dao.SearchUtil;
 import com.peer.activity.SearchUserActivity.PageViewList;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.SearchBean;
 import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
@@ -60,10 +60,10 @@ public class SearchTopicActivity extends pBaseActivity {
 		super.onResume();
 		switch (searchtype) {
 		case 1:
-			SearchUtil.getInstance().setSearchtype(Constant.TOPICBYLABEL);
+			SearchBean.getInstance().setSearchtype(Constant.TOPICBYLABEL);
 			break;
 		case 2:
-			SearchUtil.getInstance().setSearchtype(Constant.TOPICBYTOPIC);
+			SearchBean.getInstance().setSearchtype(Constant.TOPICBYTOPIC);
 			break;
 		default:
 			break;
@@ -77,7 +77,7 @@ public class SearchTopicActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(
 				R.string.searchtopic));
-		SearchUtil.getInstance().setSearchtype(Constant.TOPICBYLABEL);
+		SearchBean.getInstance().setSearchtype(Constant.TOPICBYLABEL);
 
 		pageViewaList.et_contentsearch.setHint(getResources().getString(
 				R.string.bytag));
@@ -170,9 +170,9 @@ public class SearchTopicActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		imm.hideSoftInputFromWindow(
 				pageViewaList.et_contentsearch.getWindowToken(), 0);
-		SearchUtil.getInstance().setSearchname(tagetname);
+		SearchBean.getInstance().setSearchname(tagetname);
 		// if(SearchUtil.getInstance().equals("USERBYNIKE")){
-		SearchUtil.getInstance().setCallbacklabel(tagetname);
+		SearchBean.getInstance().setCallbacklabel(tagetname);
 		// }
 		Intent intent = new Intent(SearchTopicActivity.this,
 				SearchResultActivity.class);
@@ -188,13 +188,13 @@ public class SearchTopicActivity extends pBaseActivity {
 				if (item.mTitle
 						.equals(getResources().getString(R.string.bytag))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
-					SearchUtil.getInstance().setSearchtype(
+					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYLABEL);
 					searchtype = TOPIC_LABEL;// 按标签搜索话题
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bytopic))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
-					SearchUtil.getInstance().setSearchtype(
+					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYTOPIC);
 					searchtype = TOPIC_TOPICKEY;// 按话题关键字搜索话题
 				}
