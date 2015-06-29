@@ -84,7 +84,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * post 带参数，获取json对象或者数组
+	 * get 带参数，获取json对象或者数组
 	 * 
 	 * @param urlString
 	 * @param res

@@ -25,10 +25,12 @@ import com.peer.utils.pViewBox;
 
 
 
-/*
+/**
  * µÇÈëÒ³Àà
- * */
+ */
 public class LoginActivity extends pBaseActivity{
+	
+	
 	class PageViewList {
 		private EditText et_email_login,et_password_login;
 		private Button bt_login_login;
@@ -99,6 +101,10 @@ public class LoginActivity extends pBaseActivity{
 					.trim();
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
+			pLog.isDebug = true;
+			
+			pLog.i("email",email);
+			pLog.i("password",password);
 
 			if (email.length() > 0 && password.length() > 0) {
 				showProgressBar();
@@ -124,7 +130,6 @@ public class LoginActivity extends pBaseActivity{
 	 * @param email
 	 * @param password
 	 */
-
 	private void sendLoginRequest(String email, String password) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();

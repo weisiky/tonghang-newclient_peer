@@ -1,0 +1,60 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.peer.activity"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="22" />
+
+    <application
+        android:name="com.peer.base.pBaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:persistent="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        <activity
+            android:name="com.peer.activity.WelComeActivity"
+            android:label="@string/app_name"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.peer.activity.MainActivity" />
+        <activity android:name="com.peer.activity.RegisterAcountActivity" />
+        <activity android:name="com.peer.activity.LoginActivity" />
+        <activity android:name="com.peer.activity.RegisterCompleteActivity" />
+        <activity android:name="com.peer.activity.RegisterTagActivity" />
+        <activity android:name="com.peer.activity.xieyiActivity" />
+        <activity android:name="com.peer.activity.GetAddressInfoActivity" />
+        <activity android:name="com.peer.activity.FindPasswordActivity" />
+        <activity android:name="com.peer.activity.FindPasswordResultActivity" />
+        <activity android:name="com.peer.activity.FeedBackActivity" />
+        <activity android:name="com.peer.activity.MessageNotifyActivity" />
+        <activity android:name="com.peer.activity.MyAcountActivity" />
+        <activity android:name="com.peer.activity.MySkillActivity" />
+        <activity android:name="com.peer.activity.NewFunctionActivity" />
+        <activity android:name="com.peer.activity.PersonalMessageActivity" />
+        <activity android:name="com.peer.activity.SettingActivity" />
+        <activity android:name="com.peer.activity.UpdateNikeActivity" />
+        <activity android:name="com.peer.activity.UpdatePasswordActivity" />
+        <activity android:name="com.peer.activity.SearchResultActivity" />
+        <activity android:name="com.peer.activity.SearchTopicActivity" />
+        <activity android:name="com.peer.activity.SearchUserActivity" />
+        <activity android:name="com.peer.activity.NewFriendsActivity" />
+        <activity android:name="com.peer.activity.CreatTopicActivity" />
+        <activity android:name="com.peer.activity.PersonalPageActivity" />
+        <activity android:name="com.peer.activity.TopicActivity" />
+        <activity android:name="com.peer.activity.ChatRoomActivity" />
+        <activity android:name="com.peer.activity.ChatRoomListnikeActivity" />
+        <activity android:name="com.peer.activity.AddFriendsActivity" />
+        
+        
+    </application>
+
+</manifest>

@@ -1,11 +1,43 @@
 package com.peer.base;
 
+import com.peer.utils.SDCardScanner;
+
 
 /*
  * 定义全局属性接口
  * 有些属性是可能已作废。
  * */
-public interface Constants {
+public abstract class Constant {
+	
+	/**
+	 * SD卡路径
+	 */
+	public static final String SDCARD_DIR = SDCardScanner.getExtSDCardPath();
+	/**
+	 * SharedPreferences名称
+	 */
+	public static final String SHARE_NAME = "peer";
+	
+	/**
+	 * 手机屏幕的宽
+	 */
+	public static String S_SCREEN_WIDHT = "swidth";
+	public static String S_SCREEN_WIDHT_VALUE = "480";
+
+	/**
+	 * 项目存储根目录
+	 */
+	public static final String DEFAULT_MAIN_DIRECTORY = SDCARD_DIR + "/peer/";
+
+	/** 文件在本地的缓存目录 **/
+	public static String C_FILE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
+			+ "filecache/";
+	/** 服务器地址 **/
+	public static String SERVER_ADDRESS = "http://192.168.1.2:8080/tonghang-serverapi";
+	/** 登录请求地址 **/
+	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/login.json";
+
+	
 public static int REFRESHHANDLE=321;
 	
 	public static String AGREED="agreed";
@@ -54,7 +86,7 @@ public static int REFRESHHANDLE=321;
 	public static int USER_NICK=2;
 	
 	/*web server*/
-	public static String SERVER_ADDRESS = "192.168.23.1:8080/tonghang-web";
+//	public static String SERVER_ADDRESS = "192.168.23.1:8080/tonghang-web";
 //	public static String SERVER_ADDRESS = "www.tonghang1.com:3000";
 //	public static String SERVER_ADDRESS = "114.215.143.83:3000      192.168.23.1:8080/tonghang-web";
 	

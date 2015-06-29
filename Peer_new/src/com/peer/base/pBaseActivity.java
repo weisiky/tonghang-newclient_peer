@@ -409,7 +409,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 	}
 
-	/*
+	/**
 	 * 处理公共监听事件
 	 */
 	@Override
