@@ -301,7 +301,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	public void backPage() {
 		Intent intent = new Intent();
 
-		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")) {
+		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
+				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, true);
 		} else {
 			exitApp();
@@ -409,7 +410,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 	}
 
-	/**
+	/*
 	 * 处理公共监听事件
 	 */
 	@Override

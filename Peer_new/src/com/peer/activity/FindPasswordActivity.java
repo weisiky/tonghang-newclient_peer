@@ -115,12 +115,11 @@ public class FindPasswordActivity extends pBaseActivity{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent = new Intent();
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_findpassword:
-			Intent findpassword = new Intent(FindPasswordActivity.this,FindPasswordResultActivity.class);
-			startActivity(findpassword);
-			
+			startActivityForLeft(FindPasswordResultActivity.class, intent, false);
 			break;
 
 		default:

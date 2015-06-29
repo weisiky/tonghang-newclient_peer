@@ -91,6 +91,8 @@ public class HttpUtil {
 	 */
 	public static void get(String urlString, RequestParams params,
 			JsonHttpResponseHandler res) {
+		
+		
 		client.get(urlString, params, res);
 	}
 

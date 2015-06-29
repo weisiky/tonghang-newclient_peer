@@ -1,6 +1,5 @@
 package com.peer.activity;
 
-
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -17,15 +16,16 @@ import android.widget.TextView;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
-
-/*
+/**
+ * 
  * 注册基本必要信息类
- * */
-public class RegisterAcountActivity extends pBaseActivity{
+ */
+public class RegisterAcountActivity extends pBaseActivity {
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title,registe_remind;
-		private EditText et_email_regist,et_password_registe,et_repassword_registe,et_nike_registe;
+		private TextView tv_title, registe_remind;
+		private EditText et_email_regist, et_password_registe,
+				et_repassword_registe, et_nike_registe;
 		private Button bt_registe_next;
 	}
 
@@ -35,17 +35,16 @@ public class RegisterAcountActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		
+
 	}
-	
 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.register_acount));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.register_acount));
 		pageViewaList.bt_registe_next.setEnabled(false);
 		pageViewaList.et_email_regist.addTextChangedListener(textwatcher);
 		pageViewaList.et_nike_registe.addTextChangedListener(textwatcher);
@@ -76,9 +75,10 @@ public class RegisterAcountActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_register_acount, null);
+		return getLayoutInflater().inflate(R.layout.activity_register_acount,
+				null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -92,7 +92,7 @@ public class RegisterAcountActivity extends pBaseActivity{
 		switch (v.getId()) {
 		case R.id.bt_registe_next:
 			Registernext();
-			
+
 			break;
 
 		default:
@@ -100,48 +100,54 @@ public class RegisterAcountActivity extends pBaseActivity{
 		}
 	}
 
-
 	private void Registernext() {
 		// TODO Auto-generated method stub
-		/*String format = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
-		String email=pageViewaList.et_email_regist.getText().toString().trim();
-		String password=pageViewaList.et_password_registe.getText().toString().trim();
-		String repassword=pageViewaList.et_repassword_registe.getText().toString().trim();		
-		String nikename=pageViewaList.et_nike_registe.getText().toString().trim();
-		
-		if(!email.matches(format)){
-			pageViewaList.registe_remind.setText(getResources().getString(R.string.erroremail));
-			return ;
-		}else if(!password.matches("^[a-zA-Z0-9_]{5,17}$")){
-			pageViewaList.registe_remind.setText(getResources().getString(R.string.errorpswformat));
-			return ;
-		}else if(!password.equals(repassword)){
-			pageViewaList.registe_remind.setText(getResources().getString(R.string.notmatchpsw));
-			return ;
-		}else if(pageViewaList.et_nike_registe.length()>10){
-			pageViewaList.registe_remind.setText(getResources().getString(R.string.errornike));
-			return ;
-		}else{
+		/*
+		 * String format =
+		 * "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$"
+		 * ; String
+		 * email=pageViewaList.et_email_regist.getText().toString().trim();
+		 * String
+		 * password=pageViewaList.et_password_registe.getText().toString()
+		 * .trim(); String
+		 * repassword=pageViewaList.et_repassword_registe.getText
+		 * ().toString().trim(); String
+		 * nikename=pageViewaList.et_nike_registe.getText().toString().trim();
+		 * 
+		 * if(!email.matches(format)){
+		 * pageViewaList.registe_remind.setText(getResources
+		 * ().getString(R.string.erroremail)); return ; }else
+		 * if(!password.matches("^[a-zA-Z0-9_]{5,17}$")){
+		 * pageViewaList.registe_remind
+		 * .setText(getResources().getString(R.string.errorpswformat)); return ;
+		 * }else if(!password.equals(repassword)){
+		 * pageViewaList.registe_remind.setText
+		 * (getResources().getString(R.string.notmatchpsw)); return ; }else
+		 * if(pageViewaList.et_nike_registe.length()>10){
+		 * pageViewaList.registe_remind
+		 * .setText(getResources().getString(R.string.errornike)); return ;
+		 * }else{
+		 * 
+		 * ArrayList<String> baseregister_list=new ArrayList<String>();
+		 * 
+		 * baseregister_list.add(email); baseregister_list.add(password);
+		 * baseregister_list.add(nikename);
+		 */
 
-			ArrayList<String> baseregister_list=new ArrayList<String>();
+		Intent intent = new Intent(RegisterAcountActivity.this,
+				RegisterTagActivity.class);
+		// intent.putStringArrayListExtra("tags", baseregister_list);
+		pageViewaList.registe_remind.setText("");
+		startActivity(intent);
 
-			baseregister_list.add(email);
-			baseregister_list.add(password);
-			baseregister_list.add(nikename);*/
-			
-			Intent intent=new Intent(RegisterAcountActivity.this,RegisterTagActivity.class);
-//			intent.putStringArrayListExtra("tags", baseregister_list);
-			pageViewaList.registe_remind.setText("");
-			startActivity(intent);	
-					
-		}
-//	}
-	
-	
+	}
+
+	// }
+
 	/*
 	 * TextWatcher监听编辑框
-	 * */
-	TextWatcher textwatcher=new TextWatcher() {
+	 */
+	TextWatcher textwatcher = new TextWatcher() {
 
 		@Override
 		public void afterTextChanged(Editable arg0) {
@@ -149,35 +155,40 @@ public class RegisterAcountActivity extends pBaseActivity{
 			testnull();
 		}
 
-		
-
 		@Override
 		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 				int arg3) {
 			// TODO Auto-generated method stub
-			
+
 		}
+
 		@Override
 		public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 				int arg3) {
 			// TODO Auto-generated method stub
 			testnull();
-		}				
-		};
-		
-		/*
-		 * 判断botton是否可点击
-		 * */
-		private void testnull() {
-			// TODO Auto-generated method stub
-			String email=pageViewaList.et_email_regist.getText().toString().trim();
-			String password=pageViewaList.et_password_registe.getText().toString().trim();
-			String repassword=pageViewaList.et_repassword_registe.getText().toString().trim();		
-			String nikename=pageViewaList.et_nike_registe.getText().toString().trim();
-			if(!TextUtils.isEmpty(email)&&!TextUtils.isEmpty(password)&&!TextUtils.isEmpty(repassword)&&!TextUtils.isEmpty(nikename)){
-				pageViewaList.bt_registe_next.setEnabled(true);
-			}else{
-				pageViewaList.bt_registe_next.setEnabled(false);
-			}
 		}
+	};
+
+	/*
+	 * 判断botton是否可点击
+	 */
+	private void testnull() {
+		// TODO Auto-generated method stub
+		String email = pageViewaList.et_email_regist.getText().toString()
+				.trim();
+		String password = pageViewaList.et_password_registe.getText()
+				.toString().trim();
+		String repassword = pageViewaList.et_repassword_registe.getText()
+				.toString().trim();
+		String nikename = pageViewaList.et_nike_registe.getText().toString()
+				.trim();
+		if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)
+				&& !TextUtils.isEmpty(repassword)
+				&& !TextUtils.isEmpty(nikename)) {
+			pageViewaList.bt_registe_next.setEnabled(true);
+		} else {
+			pageViewaList.bt_registe_next.setEnabled(false);
+		}
+	}
 }

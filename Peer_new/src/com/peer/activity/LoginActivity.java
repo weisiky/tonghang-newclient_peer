@@ -23,20 +23,17 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-
-
-/**
+/*
  * 登入页类
- */
-public class LoginActivity extends pBaseActivity{
-	
-	
+ * */
+public class LoginActivity extends pBaseActivity {
 	class PageViewList {
-		private EditText et_email_login,et_password_login;
+		private EditText et_email_login, et_password_login;
 		private Button bt_login_login;
-		private TextView tv_register_login,tv_forgetpasw_login,tv_remind_login;
+		private TextView tv_register_login, tv_forgetpasw_login,
+				tv_remind_login;
 		private RelativeLayout baseProgressBarLayout;
-		
+
 	}
 
 	private PageViewList pageViewaList;
@@ -45,10 +42,8 @@ public class LoginActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-	}
-	
 
+	}
 
 	@Override
 	protected void findViewById() {
@@ -84,7 +79,7 @@ public class LoginActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_login, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -101,27 +96,26 @@ public class LoginActivity extends pBaseActivity{
 					.trim();
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
-			pLog.isDebug = true;
-			
-			pLog.i("email",email);
-			pLog.i("password",password);
 
-			if (email.length() > 0 && password.length() > 0) {
-				showProgressBar();
-				sendLoginRequest(email, password);
-			} else {
-				showToast("请输入用户名与密码", Toast.LENGTH_SHORT, false);
-			}
+			// if (email.length() > 0 && password.length() > 0) {
+			showProgressBar();
+			sendLoginRequest(email, password);
+			// } else {
+			// showToast("请输入用户名与密码", Toast.LENGTH_SHORT, false);
+			// }
+
+			break;
 		case R.id.tv_register_login:
 			startActivityForLeft(RegisterAcountActivity.class, intent, false);
-			
+			break;
+
 		case R.id.tv_forgetpasw_login:
 			startActivityForLeft(FindPasswordActivity.class, intent, false);
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 
 	/**
@@ -130,12 +124,13 @@ public class LoginActivity extends pBaseActivity{
 	 * @param email
 	 * @param password
 	 */
+
 	private void sendLoginRequest(String email, String password) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = PeerParamsUtils.getLoginParams(
 				LoginActivity.this, email, password);
-		HttpUtil.get(Constant.LONIN_IN_URL, params,
+		HttpUtil.post(Constant.LONIN_IN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -144,9 +139,10 @@ public class LoginActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						hideLoading();
-						pLog.i("test", "onFailure+statusCode:" + statusCode + "headers:"
-								+ headers.toString() + "responseString:"
-								+ responseString);
+						
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
 
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -157,9 +153,9 @@ public class LoginActivity extends pBaseActivity{
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure+statusCode:" + statusCode + "headers:"
-								+ headers.toString() + "errorResponse:"
-								+ errorResponse.toString());
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -170,6 +166,9 @@ public class LoginActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 						hideLoading();
 						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test", "errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -179,8 +178,8 @@ public class LoginActivity extends pBaseActivity{
 							JSONArray response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess+statusCode:" + statusCode + "headers:"
-								+ headers.toString() + "response:"
+						pLog.i("test", "onSuccess+statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
 						super.onSuccess(statusCode, headers, response);
 					}
@@ -190,8 +189,8 @@ public class LoginActivity extends pBaseActivity{
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode + "headers:"
-								+ headers.toString() + "response:"
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
 						super.onSuccess(statusCode, headers, response);
 					}
@@ -201,9 +200,9 @@ public class LoginActivity extends pBaseActivity{
 							String responseString) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode + "headers:"
-								+ headers.toString() + "responseString:"
-								+ responseString.toString());
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString.toString());
 						super.onSuccess(statusCode, headers, responseString);
 					}
 
