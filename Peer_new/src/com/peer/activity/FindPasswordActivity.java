@@ -1,5 +1,9 @@
 package com.peer.activity;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,7 +15,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 
@@ -115,11 +125,12 @@ public class FindPasswordActivity extends pBaseActivity{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent();
+		
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_findpassword:
-			startActivityForLeft(FindPasswordResultActivity.class, intent, false);
+			String email = pageViewaList.et_email_find.getText().toString().trim();
+			commitfindpasswd(email);
 			break;
 
 		default:
@@ -127,4 +138,99 @@ public class FindPasswordActivity extends pBaseActivity{
 		}
 		
 	}
+
+	/**
+	 *Ã·Ωª’“ªÿ√‹¬Î…Í«Î 
+	 * @param email
+	 * 
+	 */
+	private void commitfindpasswd(String email) {
+		// TODO Auto-generated method stub
+		showProgressBar();
+		RequestParams params = PeerParamsUtils.getFindpasswdParams(
+				FindPasswordActivity.this, email);
+
+        
+		HttpUtil.post(Constant.FORGET_IN_URL, params,
+						new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						hideLoading();
+						
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test", "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONArray response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess+statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
+								+ response.toString());
+						super.onSuccess(statusCode, headers, response);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
+								+ response.toString());
+						super.onSuccess(statusCode, headers, response);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							String responseString) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString.toString());
+						super.onSuccess(statusCode, headers, responseString);
+					}
+
+				});
+		Intent intent = new Intent();
+		startActivityForLeft(FindPasswordResultActivity.class, intent, false);
+		
+	}
+	
 }

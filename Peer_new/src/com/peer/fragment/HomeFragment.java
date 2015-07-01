@@ -1,35 +1,33 @@
 package com.peer.fragment;
 
-import java.util.List;
-
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-//import com.handmark.pulltorefresh.library.PullToRefreshBase;
-//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-//import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.peer.activity.R;
 import com.peer.activity.SearchUserActivity;
 import com.peer.base.pBaseFragment;
-import com.peer.utils.pViewBox;
+//import com.handmark.pulltorefresh.library.PullToRefreshBase;
+//import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+//import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+
+/**
+ *主fragment类（推荐用户） 
+ */
 public class HomeFragment extends pBaseFragment{
 	
 	
 	
 		private LinearLayout ll_search;
 		
-//		private PullToRefreshListView pull_refresh_homepage;
-		private ListView pull_refresh_homepage;
+		private PullToRefreshListView pull_refresh_homepage;
+//		private ListView pull_refresh_homepage;
 		public LinearLayout base_neterror_item;
 		private TextView tv_connect_errormsg;
 	
@@ -117,7 +115,7 @@ public class HomeFragment extends pBaseFragment{
 //		createtopic.setOnClickListener(this);		
 		ll_search.setOnClickListener(this);
 			
-//		mPullrefreshlistview=(PullToRefreshListView)getView().findViewById(R.id.pull_refresh_homepage);
+		pull_refresh_homepage=(PullToRefreshListView)getView().findViewById(R.id.pull_refresh_homepage);
 		
 		
 //		RefreshListner();
@@ -131,9 +129,7 @@ public class HomeFragment extends pBaseFragment{
 		case R.id.ll_search:
 			Intent search = new Intent(getActivity(),SearchUserActivity.class);
 			startActivity(search);
-			
 			break;
-
 		default:
 			break;
 		}

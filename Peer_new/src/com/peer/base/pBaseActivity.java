@@ -15,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peer.activity.LoginActivity;
+import com.peer.activity.MainActivity;
 import com.peer.activity.R;
+import com.peer.activity.RegisterAcountActivity;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pSysInfoUtils;
@@ -304,7 +306,23 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, true);
-		} else {
+		} else if(getLocalClassNameBySelf().contains("RegisterTagActivity")){
+			startActivityRight(RegisterAcountActivity.class, intent, true);
+		}else if(getLocalClassNameBySelf().contains("RegisterCompleteActivity")){
+			showToast("请完成注册！", Toast.LENGTH_SHORT, true);
+		}else if(getLocalClassNameBySelf().contains("SearchUserActivity")){
+			startActivityRight(MainActivity.class, intent, true);
+		}else if(getLocalClassNameBySelf().contains("xieyiActivity")
+				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
+				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")
+				|| getLocalClassNameBySelf().contains("NewFunctionActivity")
+				|| getLocalClassNameBySelf().contains("FeedBackActivity")
+				|| getLocalClassNameBySelf().contains("MyAcountActivity")
+				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf().contains("MySkillActivity")
+				|| getLocalClassNameBySelf().contains("SettingActivity")){
+			finish();
+		}else{
 			exitApp();
 		}
 
@@ -315,7 +333,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	 */
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("再按一次退出", Toast.LENGTH_SHORT, false);
+			showToast("再按一次退出", Toast.LENGTH_SHORT, true);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);

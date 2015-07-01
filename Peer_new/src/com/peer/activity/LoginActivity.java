@@ -1,7 +1,10 @@
 package com.peer.activity;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -23,9 +26,9 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-/*
+/**
  * 登入页类
- * */
+ */
 public class LoginActivity extends pBaseActivity {
 	class PageViewList {
 		private EditText et_email_login, et_password_login;
@@ -97,12 +100,12 @@ public class LoginActivity extends pBaseActivity {
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
 
-			// if (email.length() > 0 && password.length() > 0) {
+			 if (email.length() > 0 && password.length() > 0) {
 			showProgressBar();
 			sendLoginRequest(email, password);
-			// } else {
-			// showToast("请输入用户名与密码", Toast.LENGTH_SHORT, false);
-			// }
+			 } else {
+			 showToast("请输入用户名与密码", Toast.LENGTH_SHORT, false);
+			 }
 
 			break;
 		case R.id.tv_register_login:
@@ -123,15 +126,24 @@ public class LoginActivity extends pBaseActivity {
 	 * 
 	 * @param email
 	 * @param password
+	 * @throws Exception 
 	 */
 
-	private void sendLoginRequest(String email, String password) {
+	private void sendLoginRequest(String email, String password){
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = PeerParamsUtils.getLoginParams(
 				LoginActivity.this, email, password);
+//		String[] allowedContentTypes = new String[] { "image/png", "image/jpeg" };
+//		client.get("http://example.com/file.png", new BinaryHttpResponseHandler(allowedContentTypes) {
+//		    @Override
+//		    public void onSuccess(byte[] fileData) {
+//		        // Do something with the file
+//		    }
+//		};
+        
 		HttpUtil.post(Constant.LONIN_IN_URL, params,
-				new JsonHttpResponseHandler() {
+						new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,

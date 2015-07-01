@@ -32,8 +32,8 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public static String getString(String key, String defValue) {
-        return mPreference.getString(key, defValue);
+    public static String getString(String key ,String defValue) {
+        return mPreference.getString(key,defValue);
     }
 
     /**
@@ -56,7 +56,7 @@ public class pShareFileUtils {
      * @param defValue
      *            值
      */
-    public static boolean getBoolean(String key, boolean defValue) {
+    public static boolean getBoolean(String key , boolean defValue) {
         return mPreference.getBoolean(key, defValue);
     }
 

@@ -15,9 +15,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
-/*
+/**
  * 设置Message提醒方式类
- * */
+ */
 public class MessageNotifyActivity extends pBaseActivity{
 	
 	private final int START=1,END=2; 

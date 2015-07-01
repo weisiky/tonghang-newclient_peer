@@ -4,6 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
 
+import org.apache.http.Header;
+import org.apache.tools.ant.types.resources.comparators.Content;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,8 +30,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
 import com.peer.utils.Tools;
+import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 
@@ -150,14 +162,136 @@ public class RegisterCompleteActivity extends pBaseActivity{
 				pageViewaList.tv_remind.setText(getResources().getString(R.string.selectbirthday));
 				return;
 			}else{
-			Intent login_complete = new Intent(RegisterCompleteActivity.this,MainActivity.class);
-			startActivity(login_complete);
-			finish();
+				CommiteToServer();
 			}
 			break;
 		}
 		
 	}
+	
+	
+	/**
+	 * 完成注册方法
+	 * commit
+	 */
+	 private void CommiteToServer() {
+		 showProgressBar();
+		 sendUpdateRequest(Constant.CLIENT_ID , 
+				 pageViewaList.tv_setbirth.getText().toString().trim(),
+				 pageViewaList.tv_sex.getText().toString().trim(),
+				 pageViewaList.tv_setaddress.getText().toString().trim());	 
+		 
+	 }
+	 
+	 /**
+		 * 请求修改用户信息接口
+		 * 
+		 * @param email
+		 * @param password
+		 * @throws Exception 
+		 */
+
+		private void sendUpdateRequest(String client_id, String tv_setbirth , String tv_sex , String tv_setaddress){
+			// TODO Auto-generated method stub
+			final Intent intent = new Intent();
+			RequestParams params = PeerParamsUtils.getUpdateParams(
+					RegisterCompleteActivity.this, client_id, tv_setbirth,tv_sex,tv_setaddress);
+//			HttpEntity entity = null;
+//			JSONObject jsonObject = new JSONObject();   
+//	        try {
+//				jsonObject.put("email", email);
+//				jsonObject.put("password", password); 
+//				entity = new StringEntity(jsonObject.toString(), "UTF-8");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} 
+	        
+			HttpUtil.post(Constant.LONIN_IN_URL, params,
+							new JsonHttpResponseHandler() {
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								String responseString, Throwable throwable) {
+							// TODO Auto-generated method stub
+
+							hideLoading();
+							
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "responseString:" + responseString);
+
+							super.onFailure(statusCode, headers, responseString,
+									throwable);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONArray errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONObject errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure:statusCode:" + statusCode);
+							pLog.i("test", "throwable:" + throwable.toString());
+							pLog.i("test", "headers:" + headers.toString());
+							pLog.i("test", "errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								JSONArray response) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess+statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());
+							super.onSuccess(statusCode, headers, response);
+							Intent login_complete = new Intent();
+							startActivityForLeft(MainActivity.class, login_complete, false);
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								JSONObject response) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess:statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());
+							super.onSuccess(statusCode, headers, response);
+							Intent login_complete = new Intent();
+							startActivityForLeft(MainActivity.class, login_complete, false);
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								String responseString) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess:statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "responseString:" + responseString.toString());
+							super.onSuccess(statusCode, headers, responseString);
+							Intent login_complete = new Intent();
+							startActivityForLeft(MainActivity.class, login_complete, false);
+						}
+
+					});
+		}
+	 
 	
 	/*
 	 * 存bitmap

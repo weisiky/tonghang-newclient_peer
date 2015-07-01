@@ -11,7 +11,7 @@ import android.util.Log;
 public class pLog {
 
 	/** 是否打印日志 **/
-	public static boolean isDebug = false;
+	public static boolean isDebug = true;
 	/** 日志标签 **/
 	public static String LOG_TAG = "frame";
 

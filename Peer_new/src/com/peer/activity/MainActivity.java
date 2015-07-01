@@ -18,14 +18,14 @@ import com.peer.fragment.MyFragment;
 import com.peer.utils.pViewBox;
 
 
-/*
+/**
  * 主页面类
- * */
+ */
 public class MainActivity extends pBaseActivity{
 	
-	/*
+	/**
 	 * fragment申明
-	 * */
+	 */
 	private HomeFragment homefragment;
 	private ComeMsgFragment comemsgfragment;
 	private FriendsFragment friendsfragment;
@@ -53,8 +53,7 @@ public class MainActivity extends pBaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_frabottom);	
+		super.onCreate(savedInstanceState);	
 		init();
 	}
 	

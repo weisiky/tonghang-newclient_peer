@@ -63,7 +63,7 @@
     </LinearLayout>
      
     
-     <!-- <com.handmark.pulltorefresh.library.PullToRefreshListView
+     <com.handmark.pulltorefresh.library.PullToRefreshListView
        android:background="@color/white"
         android:id="@+id/pull_refresh_homepage"
         android:layout_width="fill_parent"
@@ -77,14 +77,14 @@
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true"
         android:layout_below="@+id/base_neterror_item"
-        />  -->
-        <ListView 
+        />  
+        <!-- <ListView 
             android:background="@color/white"
         android:id="@+id/pull_refresh_homepage"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
         android:divider="@null"
-        android:layout_below="@+id/base_neterror_item" />
+        android:layout_below="@+id/base_neterror_item" /> -->
 
 </RelativeLayout>

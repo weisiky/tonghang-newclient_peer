@@ -1,5 +1,9 @@
 package com.peer.net;
 
+import org.apache.http.HttpEntity;
+
+import android.content.Context;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
@@ -61,6 +65,11 @@ public class HttpUtil {
 	public static void post(String urlString, RequestParams params,
 			AsyncHttpResponseHandler res) {
 		client.post(urlString, params, res);
+	}
+	
+	public static void post(Context context,String urlString, HttpEntity entity ,
+			String contentType,AsyncHttpResponseHandler res){
+		client.post(context, urlString, entity, contentType, res);
 	}
 
 	/**

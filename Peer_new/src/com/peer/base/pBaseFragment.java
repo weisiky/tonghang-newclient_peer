@@ -51,7 +51,6 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);
-
 		}
 	}
 	

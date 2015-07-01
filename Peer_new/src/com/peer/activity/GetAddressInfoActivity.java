@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.peer.base.pBaseActivity;
 import com.peer.utils.GetAddressUtil;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 
@@ -33,7 +34,7 @@ public class GetAddressInfoActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
-		private ListView listView;
+		private ListView listview;
 		
 	}
 
@@ -58,9 +59,11 @@ public class GetAddressInfoActivity extends pBaseActivity{
 		addressList = location.getProvinceList();
 		
 		final ProvinceAdapter adapter = new ProvinceAdapter();
-		pageViewaList.listView.setAdapter(adapter);
+		pLog.i("adapter « ≤√¥£∫", ""+adapter);
+		pLog.i("listView", ""+pageViewaList.listview);
+		pageViewaList.listview.setAdapter(adapter);
 			
-		pageViewaList.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		pageViewaList.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -166,9 +169,10 @@ public class GetAddressInfoActivity extends pBaseActivity{
 				convertView = view;
 				convertView.setTag(view);
 			}else{
-				view = (View)convertView.getTag();
+				convertView = (View)convertView.getTag();
 			}
-			TextView text = (TextView)view.findViewById(R.id.item_address_city);
+			TextView text = (TextView)convertView.findViewById(R.id.item_address_city);
+			pLog.i("text", addressList.get(position));
 			text.setText(addressList.get(position));
 			return convertView;
 		}

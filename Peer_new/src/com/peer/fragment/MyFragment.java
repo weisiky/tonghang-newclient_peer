@@ -19,10 +19,10 @@ import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseFragment;
 
 
-/*
+/**
  * ¡®ÎÒµÄ¡¯Ò³ fragment
  * 
- * */
+ */
 public class MyFragment extends pBaseFragment{
 	private LinearLayout ll_top_my,linearLayout1,linearLayout2,ll_personmessage_my,ll_mytag_my,ll_setting_my;
 	private RelativeLayout rl_ponseralpage,rl_myacount_my;
