@@ -1,6 +1,7 @@
 package com.peer.net;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
 
 import android.content.Context;
 
@@ -51,9 +52,12 @@ public class HttpUtil {
 	 * @param urlString
 	 * @param res
 	 */
-	public static void get(String urlString, RequestParams params,
+	public static void get(Context context, String urlString,
+			HttpEntity entity, String contentType, RequestParams params,
 			AsyncHttpResponseHandler res) {
-		client.get(urlString, params, res);
+
+		client.get(context, urlString, entity, contentType, res);
+		// client.get(urlString, params, res);
 	}
 
 	/**
@@ -65,11 +69,6 @@ public class HttpUtil {
 	public static void post(String urlString, RequestParams params,
 			AsyncHttpResponseHandler res) {
 		client.post(urlString, params, res);
-	}
-	
-	public static void post(Context context,String urlString, HttpEntity entity ,
-			String contentType,AsyncHttpResponseHandler res){
-		client.post(context, urlString, entity, contentType, res);
 	}
 
 	/**
@@ -98,11 +97,10 @@ public class HttpUtil {
 	 * @param urlString
 	 * @param res
 	 */
-	public static void get(String urlString, RequestParams params,
+	public static void get(Context context , String urlString, HttpEntity entity,String contentType,
 			JsonHttpResponseHandler res) {
-		
-		
-		client.get(urlString, params, res);
+
+		client.get(context, urlString, entity,contentType,res);
 	}
 
 	/**
@@ -111,9 +109,10 @@ public class HttpUtil {
 	 * @param urlString
 	 * @param res
 	 */
-	public static void post(String urlString, RequestParams params,
-			JsonHttpResponseHandler res) {
-		client.post(urlString, params, res);
+	public static void post(Context context, String urlString,
+			HttpEntity entity, String contentType,JsonHttpResponseHandler res) {
+		client.post(context, urlString, entity, contentType, res);
+		
 	}
 
 	/**

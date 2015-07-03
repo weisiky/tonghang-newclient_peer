@@ -1,6 +1,13 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -130,7 +137,7 @@ public class FindPasswordActivity extends pBaseActivity{
 		switch (v.getId()) {
 		case R.id.bt_findpassword:
 			String email = pageViewaList.et_email_find.getText().toString().trim();
-			commitfindpasswd(email);
+//			commitfindpasswd(email);
 			break;
 
 		default:
@@ -144,14 +151,16 @@ public class FindPasswordActivity extends pBaseActivity{
 	 * @param email
 	 * 
 	 */
-	private void commitfindpasswd(String email) {
+	private void commitfindpasswd(String email) throws UnsupportedEncodingException{
 		// TODO Auto-generated method stub
 		showProgressBar();
-		RequestParams params = PeerParamsUtils.getFindpasswdParams(
-				FindPasswordActivity.this, email);
-
-        
-		HttpUtil.post(Constant.FORGET_IN_URL, params,
+		
+		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+		baseParams.add(new BasicNameValuePair("email", email));
+		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
+		
+		HttpEntity entity = new StringEntity(params, "utf-8");
+		HttpUtil.post(this,Constant.FORGET_IN_URL, entity,"application/json",
 						new JsonHttpResponseHandler() {
 
 					@Override

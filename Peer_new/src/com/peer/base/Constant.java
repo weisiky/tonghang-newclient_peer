@@ -161,6 +161,6 @@ public class Constant {
 	public static String FRIEND_GET_URL = SERVER_ADDRESS + "/friend/get/{client_id}.json";
 	
 	/** Ä£Äâclient_id **/
-	public static String CLIENT_ID = "4c36aba13d16f79ed79a29eec4bfbde0163e2d4f";
+	public static String CLIENT_ID = "44393c565b15e21df03336b8f4a82eff713c9a95";
 
 }

@@ -1,12 +1,19 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -21,15 +28,21 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.LoginResultBean;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-/**
- * µÇÈëÒ³Àà
- */
+/*
+ * ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
+ * */
 public class LoginActivity extends pBaseActivity {
+	
+	
+	LoginResultBean loginresult = new LoginResultBean();
+	
 	class PageViewList {
 		private EditText et_email_login, et_password_login;
 		private Button bt_login_login;
@@ -100,12 +113,17 @@ public class LoginActivity extends pBaseActivity {
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
 
-			 if (email.length() > 0 && password.length() > 0) {
+			// if (email.length() > 0 && password.length() > 0) {
 			showProgressBar();
-			sendLoginRequest(email, password);
-			 } else {
-			 showToast("ÇëÊäÈëÓÃ»§ÃûÓëÃÜÂë", Toast.LENGTH_SHORT, false);
-			 }
+			try {
+				sendLoginRequest(email, password);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// } else {
+			// showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_SHORT, false);
+			// }
 
 			break;
 		case R.id.tv_register_login:
@@ -122,28 +140,27 @@ public class LoginActivity extends pBaseActivity {
 	}
 
 	/**
-	 * ÇëÇóµÇÂ¼½Ó¿Ú
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ó¿ï¿½
 	 * 
 	 * @param email
 	 * @param password
-	 * @throws Exception 
+	 * @throws UnsupportedEncodingException
 	 */
 
-	private void sendLoginRequest(String email, String password){
+	private void sendLoginRequest(String email, String password)
+			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		RequestParams params = PeerParamsUtils.getLoginParams(
-				LoginActivity.this, email, password);
-//		String[] allowedContentTypes = new String[] { "image/png", "image/jpeg" };
-//		client.get("http://example.com/file.png", new BinaryHttpResponseHandler(allowedContentTypes) {
-//		    @Override
-//		    public void onSuccess(byte[] fileData) {
-//		        // Do something with the file
-//		    }
-//		};
-        
-		HttpUtil.post(Constant.LONIN_IN_URL, params,
-						new JsonHttpResponseHandler() {
+		
+		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+		baseParams.add(new BasicNameValuePair("email", email));
+		baseParams.add(new BasicNameValuePair("password", password));
+		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
+		
+		HttpEntity entity = new StringEntity(params, "utf-8");
+		
+		HttpUtil.post(this, Constant.LONIN_IN_URL, entity, "application/json",
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -151,7 +168,7 @@ public class LoginActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 
 						hideLoading();
-						
+
 						pLog.i("test", "onFailure+statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "responseString:" + responseString);
@@ -180,7 +197,8 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "onFailure:statusCode:" + statusCode);
 						pLog.i("test", "throwable:" + throwable.toString());
 						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test", "errorResponse:" + errorResponse.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -194,6 +212,16 @@ public class LoginActivity extends pBaseActivity {
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
 						super.onSuccess(statusCode, headers, response);
+						Map result;
+						try {
+							result = (Map) response.get(0);
+							String client_id = (String) result.get("client_id");
+							pLog.i("client_id", client_id);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 					}
 
 					@Override
@@ -201,10 +229,51 @@ public class LoginActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
+						pLog.i("test", "onSuccess:statusCode:" + statusCode);
+						pLog.i("test","headers:"+ headers.toString());
+						pLog.i("test","response:"+ response.toString());
+						
+						try {
+							JSONObject result = response.getJSONObject("success");
+							String pic_server = result.getString("pic_server");
+							String sys_time = result.getString("sys_time");
+							String code = result.getString("code");
+							JSONObject user = result.getJSONObject("user");
+							String sex = user.getString("sex");
+							String image = user.getString("image");
+							ArrayList<String> lab = new ArrayList<String>();
+							JSONArray labels = (JSONArray) user.get("labels");
+							for(int index=0;index<labels.length();index++)
+								lab.add(labels.getString(index));
+							
+							pLog.i("test", "lab"+lab);
+							String city = user.getString("city");
+							String username = user.getString("username");
+							String client_id = user.getString("client_id");
+							String created_at = user.getString("created_at");
+							String birth =  user.getString("birth");
+							
+							UserBean userbean = new UserBean();
+							userbean.setBirth(birth);
+							userbean.setCity(city);
+							userbean.setCreated_at(created_at);
+							userbean.setEmail(pageViewaList.et_email_login.getText().toString().trim());
+							userbean.setImage(image);
+							userbean.setLabels(lab);
+							userbean.setSex(sex);
+							userbean.setUsername(username);
+							
+							loginresult.setSys_time(sys_time);
+							loginresult.setPic_server(pic_server);
+							loginresult.setUserBean(userbean);
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						super.onSuccess(statusCode, headers, response);
+						
+						
 					}
 
 					@Override
@@ -212,10 +281,11 @@ public class LoginActivity extends pBaseActivity {
 							String responseString) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
+						pLog.i("test", "onSuccess/statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "responseString:" + responseString.toString());
 						super.onSuccess(statusCode, headers, responseString);
+						
 					}
 
 				});
@@ -227,7 +297,7 @@ public class LoginActivity extends pBaseActivity {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			if (false) {
-				// ´¦Àíµ±Ç°·½·¨ÀïÃæµÄ·µ»Ø°´¼üÊÂ¼þ
+				// ï¿½ï¿½ï¿½?Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½Ø°ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
 			} else {
 				backPage();
 			}

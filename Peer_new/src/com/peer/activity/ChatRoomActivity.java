@@ -1,5 +1,9 @@
 package com.peer.activity;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,11 +24,23 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.DateUtils;
+import com.peer.IMimplements.easemobchatImp;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.ChatMsgEntity;
+import com.peer.bean.ChatRoomBean;
+import com.peer.bean.User;
 import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.pViewBox;
+import com.umeng.analytics.MobclickAgent;
 
 
 /*
@@ -36,6 +52,12 @@ public class ChatRoomActivity extends pBaseActivity{
 	private TitlePopup titlePopup;
 	private boolean page = true;
 	private InputMethodManager manager;
+	private String mPageName="ChatRoom";
+	private List<ChatMsgEntity> msgList=new ArrayList<ChatMsgEntity>();
+	private String toChatUsername;
+	String theme = null;
+	private EMConversation conversation;
+//	private ChatMsgViewAdapter adapter;
 	
 	ScrollView mScrollView;
 	
@@ -57,6 +79,20 @@ public class ChatRoomActivity extends pBaseActivity{
 		super.onCreate(savedInstanceState);
 		
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onPageStart(mPageName);
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd(mPageName);
+	}
+	
 
 	@Override
 	protected void findViewById() {
@@ -118,6 +154,81 @@ public class ChatRoomActivity extends pBaseActivity{
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
+		
+		if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){			
+			toChatUsername=ChatRoomBean.getInstance().getTopic().getHuangxin_group_id();
+			pageViewaList.host_imfor.setVisibility(View.VISIBLE);
+			if(!ChatRoomBean.getInstance().isIsowner()){
+				titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.lookformember), R.color.white));			
+			}else{
+				titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.exitroom), R.color.white));
+				titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.lookformember), R.color.white));				
+			}
+			Intent intent=getIntent();
+			if(intent.getStringExtra(Constant.FROMFLOAT)!=null&&intent.getStringExtra(Constant.FROMFLOAT).equals(Constant.FROMFLOAT)){
+//				pageViewaList.tv_tagname.setText(intent.getStringExtra(Constant.TAGNAME));
+				
+				pageViewaList.tv_nikename.setText(intent.getStringExtra(Constant.OWNERNIKE));
+//				LoadImageUtil.imageLoader.displayImage(intent.getStringExtra(Constant.IMAGE), ownerimg,LoadImageUtil.options);	
+				pageViewaList.theme_chat.setText(intent.getStringExtra(Constant.THEME));
+//				topicId=intent.getStringExtra(Constant.TOPICID);				
+			}else{
+//				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance().getTopic().getLabel_name());
+				User u=ChatRoomBean.getInstance().getTopic().getUser();
+				pageViewaList.tv_nikename.setText(u.getUsername());
+//				LoadImageUtil.imageLoader.displayImage(u.getImage(), ownerimg,LoadImageUtil.options);
+				theme = ChatRoomBean.getInstance().getTopic().getSubject();
+				pageViewaList.theme_chat.setText(theme);
+				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+//				topicId=toChatUsername;
+			}
+			//将浮动窗口取消并保存在配置文件中
+//			Intent serviceintent = new Intent(ChatRoomActivity.this, FxService.class);
+//			stopService(serviceintent);			
+//			LocalStorage.saveBoolean(ChatRoomActivity.this, Constant.ISFLOAT, false);
+			//加入公开群聊
+			easemobchatImp.getInstance().joingroup(toChatUsername);
+			
+//			ReplieTask task=new ReplieTask();
+//			task.execute(ChatRoomTypeUtil.getInstance().getTopic().getTopicid());
+			conversation = EMChatManager.getInstance().getConversation(toChatUsername);
+			conversation.resetUnreadMsgCount();		
+		}else if(ChatRoomBean.getInstance().getChatroomtype()==Constant.SINGLECHAT){
+			toChatUsername=ChatRoomBean.getInstance().getUser().getClient_Id();
+			pageViewaList.host_imfor.setVisibility(View.GONE);
+//			pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance().getUser().getUsername());
+			titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.deletemes), R.color.white));
+			conversation = EMChatManager.getInstance().getConversation(toChatUsername);
+			for(int i=0;i<conversation.getMsgCount();i++){
+				EMMessage message =conversation.getMessage(i);				
+				
+				TextMessageBody body=(TextMessageBody) message.getBody();
+				String content=body.getMessage();			
+				String   time =DateUtils.getTimestampString(new Date(message.getMsgTime())) ; 
+					
+				ChatMsgEntity entity=new ChatMsgEntity();
+				entity.setMessage(content);
+				entity.setDate(time);
+				try {
+					entity.setImage(message.getStringAttribute(Constant.IMAGEURL));
+					entity.setUserId(message.getStringAttribute(Constant.USERID));
+				} catch (EaseMobException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(message.direct==EMMessage.Direct.SEND){
+					entity.setMsgType(Constant.SELF);
+				}else{
+					entity.setMsgType(Constant.OTHER);
+				}			
+				msgList.add(entity);
+			}	
+//			adapter=new ChatMsgViewAdapter(this, msgList);
+//			pageViewaList.lv_chat.setAdapter(adapter);
+			pageViewaList.lv_chat.setSelection(pageViewaList.lv_chat.getCount() - 1);	
+			// 把此会话的未读数置为0
+			conversation.resetUnreadMsgCount();				
+		}
 
 	}
 

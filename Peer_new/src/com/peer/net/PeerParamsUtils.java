@@ -1,8 +1,11 @@
 package com.peer.net;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import com.loopj.android.http.AsyncHttpClient;
@@ -44,133 +47,11 @@ public class PeerParamsUtils {
 	 */
 	public static RequestParams getLoginParams(Context context, String email,
 			String password) {
-		RequestParams params = getDefaultParams(context);
-		// 绑定参数
-		// params.put("client_v", "3.7");
-		// params.put("sign_method", "");
-		// params.put("ttid", "");
-		// params.put("platform", "01");
-		// params.put("model", "MI+2S");
-		// params.put("etag", "");
-		// params.put("accept", "aaaaaa");
-		// params.put("appkey", "0110010");
-		// params.put("format", "json");
-		// params.put("ver", "1.0");
-		// params.put("school_id", "");
-		// params.put("sign", "");
-		// params.put("source", "android_001");
-		// params.put("swidth", "720");
-		// params.put("user_pass", "e10adc3949ba59abbe56e057f20f883e");
-		// params.put("user_phone", "12121212121");
-		// params.put("client_id", "");
-		// params.put("usertoken", "");
-		params.put("email", email);
-		params.put("password", password);
-
-		pLog.i("sendMsg", "params:" + params);
-
-		return params;
-	}
-	
-	/**
-	 * 基本注册参数绑定
-	 * 
-	 * @param context
-	 * @param key1
-	 * @param key2
-	 * @param key3
-	 * @param list
-	 * @param methodName
-	 * @return
-	 */
-	public static RequestParams getRegisterTagParams(Context context, String email,
-			String password , String nikename , List list) {
-		RequestParams params = getDefaultParams(context);
-		// 绑定参数
-		// params.put("client_v", "3.7");
-		// params.put("sign_method", "");
-		// params.put("ttid", "");
-		// params.put("platform", "01");
-		// params.put("model", "MI+2S");
-		// params.put("etag", "");
-		// params.put("accept", "aaaaaa");
-		// params.put("appkey", "0110010");
-		// params.put("format", "json");
-		// params.put("ver", "1.0");
-		// params.put("school_id", "");
-		// params.put("sign", "");
-		// params.put("source", "android_001");
-		// params.put("swidth", "720");
-		// params.put("user_pass", "e10adc3949ba59abbe56e057f20f883e");
-		// params.put("user_phone", "12121212121");
-		// params.put("client_id", "");
-		// params.put("usertoken", "");
-		params.put("email", email);
-		params.put("password", password);
-		params.put("nikename", nikename);
-		params.put("list", list);
 		
-
-		pLog.i("sendMsg", "params:" + params);
-
-		return params;
-	}
-	
-	
-	/**
-	 * 修改用户信息参数绑定
-	 * 
-	 * @param context
-	 * @param key1
-	 * @param key2
-	 * @param key3
-	 * @param key4
-	 * @param methodName
-	 * @return
-	 */
-	public static RequestParams getUpdateParams(Context context, String client_id, String tv_setbirth, String tv_sex, String tv_setaddress) {
-		RequestParams params = getDefaultParams(context);
-		// 绑定参数
-		// params.put("client_v", "3.7");
-		// params.put("sign_method", "");
-		// params.put("ttid", "");
-		// params.put("platform", "01");
-		// params.put("model", "MI+2S");
-		// params.put("etag", "");
-		// params.put("accept", "aaaaaa");
-		// params.put("appkey", "0110010");
-		// params.put("format", "json");
-		// params.put("ver", "1.0");
-		// params.put("school_id", "");
-		// params.put("sign", "");
-		// params.put("source", "android_001");
-		// params.put("swidth", "720");
-		// params.put("user_pass", "e10adc3949ba59abbe56e057f20f883e");
-		// params.put("user_phone", "12121212121");
-		// params.put("client_id", "");
-		// params.put("usertoken", "");
-		params.put("client_id", client_id);
-		params.put("tv_setbirth", tv_setbirth);
-		params.put("tv_sex", tv_sex);
-		params.put("tv_setaddress", tv_setaddress);
-
-		pLog.i("sendMsg", "params:" + params);
-
-		return params;
-	}
-	
-	/**
-	 * 找回密码参数绑定
-	 * 
-	 * @param context
-	 * @param key1
-	 * @param key2
-	 * @param key3
-	 * @param key4
-	 * @param methodName
-	 * @return
-	 */
-	public static RequestParams getFindpasswdParams(Context context, String email) {
+		
+		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+		baseParams.add(new BasicNameValuePair("email", email));
+		baseParams.add(new BasicNameValuePair("password", password));
 		RequestParams params = getDefaultParams(context);
 		// 绑定参数
 		// params.put("client_v", "3.7");
@@ -192,9 +73,29 @@ public class PeerParamsUtils {
 		// params.put("client_id", "");
 		// params.put("usertoken", "");
 		params.put("email", email);
+		params.put("password", password);
 
 		pLog.i("sendMsg", "params:" + params);
 
 		return params;
+	}
+
+	public static String ParamsToJsonString(List<BasicNameValuePair> params) {
+		if (params != null && !params.isEmpty()) {
+			StringBuilder s = new StringBuilder();
+			if (params.size() > 0) {
+				s.append("{");
+			}
+			for (BasicNameValuePair bnv : params) {
+				s.append("\"" + bnv.getName()).append(
+						"\":\"" + bnv.getValue() + "\",");
+			}
+			if (s.length() > 0) {
+				s.deleteCharAt(s.length() - 1);
+				s.append("}");
+			}
+			return s.toString();
+		}
+		return null;
 	}
 }

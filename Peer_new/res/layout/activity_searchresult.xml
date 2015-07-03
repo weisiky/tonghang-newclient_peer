@@ -6,17 +6,17 @@
     android:background="@color/white"
     >
      
-   <!--  <com.handmark.pulltorefresh.library.PullToRefreshListView
+     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/lv_searchresult" 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         >        
-    </com.handmark.pulltorefresh.library.PullToRefreshListView>   -->
-    <ListView 
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>   
+   <!-- <ListView 
         android:id="@+id/abs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"></ListView>
+        android:divider="@null"></ListView>-->
 
 </LinearLayout>

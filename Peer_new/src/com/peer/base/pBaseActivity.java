@@ -14,10 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
 import com.peer.activity.R;
 import com.peer.activity.RegisterAcountActivity;
+import com.peer.activity.SearchUserActivity;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pSysInfoUtils;
@@ -79,6 +81,30 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		this.processBiz();
 
 	}
+	
+	@Override
+	protected void onResume() {    //app由暂停到运行
+		// TODO Auto-generated method stub
+		super.onResume();
+		EMChatManager.getInstance().activityResumed();
+		MobclickAgent.onResume(this);  //友盟统计代码 
+	}
+	
+	@Override
+	protected void onPause() {//暂停app
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPause(this);//友盟统计代码
+	}
+	
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+
+	}
+	
 
 	/**
 	 * 初始化共享工具类
@@ -320,8 +346,13 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
 				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
 				|| getLocalClassNameBySelf().contains("MySkillActivity")
-				|| getLocalClassNameBySelf().contains("SettingActivity")){
+				|| getLocalClassNameBySelf().contains("SettingActivity")
+				|| getLocalClassNameBySelf().contains("SearchUserActivity")
+				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
+				|| getLocalClassNameBySelf().contains("SearchTopicActivity")){
 			finish();
+		}else if(getLocalClassNameBySelf().contains("SearchResultActivity")){
+			startActivityRight(SearchUserActivity.class, intent, true);
 		}else{
 			exitApp();
 		}

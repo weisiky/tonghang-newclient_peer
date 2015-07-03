@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.ManagerActivity;
 import com.peer.utils.pViewBox;
@@ -162,7 +163,8 @@ public class SettingActivity extends pBaseActivity{
 		 .setPositiveButton(getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){ 
             	  ManagerActivity.getAppManager().restart(SettingActivity.this);
-	     	
+            	  //ÍË³ö»·ÐÅÕËºÅ
+     	     	 easemobchatImp.getInstance().logout();
              }
 		 }).show(); 
 	}

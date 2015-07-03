@@ -1,10 +1,16 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -25,8 +31,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
@@ -194,10 +202,15 @@ public class RegisterTagActivity extends pBaseActivity{
 			if(!sameTag&&!Tolong){	
 				pageViewaList.tv_remind.setText("");
 				showProgressBar();
-				sendRegisterTagRequest(pShareFileUtils.getString("email",""), 
-						pShareFileUtils.getString("password",""),
-						pShareFileUtils.getString("nikename",""),
-						list);
+				try {
+					sendRegisterTagRequest(pShareFileUtils.getString("email",""), 
+							pShareFileUtils.getString("password",""),
+							pShareFileUtils.getString("nikename",""),
+							list);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Intent register_tag=new Intent();
 				startActivityForLeft(RegisterCompleteActivity.class, register_tag, false);
 			}
@@ -218,13 +231,24 @@ public class RegisterTagActivity extends pBaseActivity{
 	 * @throws Exception 
 	 */
 
-	private void sendRegisterTagRequest(String email, String password ,String nikename , List list){
+	private void sendRegisterTagRequest(String email, String password ,String nikename , List labels)
+			throws Exception {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		RequestParams params = PeerParamsUtils.getRegisterTagParams(
-				RegisterTagActivity.this, email, password,nikename,list); 
+		pLog.i("sendMsg", "email:" + email);
+		pLog.i("sendMsg", "password:" + password);
+		pLog.i("sendMsg", "nikename:" + nikename);
+		pLog.i("sendMsg", "labels:" + labels);
+		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+		baseParams.add(new BasicNameValuePair("email", email));
+		baseParams.add(new BasicNameValuePair("password", password));
+		baseParams.add(new BasicNameValuePair("labels", JsonDocHelper.toJSONString(labels)));
+		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
+		
+		HttpEntity entity = new StringEntity(params, "utf-8");
+		 
         
-		HttpUtil.post(Constant.REGISTTAG_IN_URL, params,
+		HttpUtil.post(this,Constant.REGISTTAG_IN_URL, entity, "application/json",
 						new JsonHttpResponseHandler() {
 
 					@Override
@@ -287,6 +311,16 @@ public class RegisterTagActivity extends pBaseActivity{
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
 						super.onSuccess(statusCode, headers, response);
+						UserBean user = new UserBean();
+						try {
+							Map result = (Map) response.get("user");
+							String birth = (String) result.get("birth");
+							user.setBirth(birth);
+							pLog.i("birth:", birth);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override

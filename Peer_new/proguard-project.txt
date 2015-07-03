@@ -12,6 +12,16 @@
 
 # Add any project specific keep options here:
 
+-keep class com.easemob.** {*;}
+-keep class org.jivesoftware.** {*;}
+-keep class org.apache.** {*;}
+-dontwarn  com.easemob.**
+
+-keep class com.easemob.chatuidemo.utils.SmileUtils {*;}
+
+
+
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:

@@ -173,9 +173,8 @@ public class SearchUserActivity extends pBaseActivity {
 		// if(SearchUtil.getInstance().equals("USERBYNIKE")){
 		SearchBean.getInstance().setCallbacklabel(tagetname);
 		// }
-		Intent intent = new Intent(SearchUserActivity.this,
-				SearchResultActivity.class);
-		startActivity(intent);
+		Intent intent = new Intent();
+		startActivityForLeft(SearchResultActivity.class, intent, false);
 	}
 
 	private void popupwindow() {

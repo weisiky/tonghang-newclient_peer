@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.Calendar;
 
 import org.apache.http.Header;
-import org.apache.tools.ant.types.resources.comparators.Content;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,6 +31,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.net.HttpUtil;
@@ -176,10 +176,10 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 */
 	 private void CommiteToServer() {
 		 showProgressBar();
-		 sendUpdateRequest(Constant.CLIENT_ID , 
-				 pageViewaList.tv_setbirth.getText().toString().trim(),
-				 pageViewaList.tv_sex.getText().toString().trim(),
-				 pageViewaList.tv_setaddress.getText().toString().trim());	 
+//		 sendUpdateRequest(Constant.CLIENT_ID , 
+//				 pageViewaList.tv_setbirth.getText().toString().trim(),
+//				 pageViewaList.tv_sex.getText().toString().trim(),
+//				 pageViewaList.tv_setaddress.getText().toString().trim());	 
 		 
 	 }
 	 
@@ -189,7 +189,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 		 * @param email
 		 * @param password
 		 * @throws Exception 
-		 */
+		 
 
 		private void sendUpdateRequest(String client_id, String tv_setbirth , String tv_sex , String tv_setaddress){
 			// TODO Auto-generated method stub
@@ -272,6 +272,11 @@ public class RegisterCompleteActivity extends pBaseActivity{
 									+ "headers:" + headers.toString() + "response:"
 									+ response.toString());
 							super.onSuccess(statusCode, headers, response);
+					*/		
+							/** ª∑–≈µ«»Î 
+							easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
+							easemobchatImp.getInstance().loadConversationsandGroups();
+							
 							Intent login_complete = new Intent();
 							startActivityForLeft(MainActivity.class, login_complete, false);
 						}
@@ -291,7 +296,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 
 					});
 		}
-	 
+	 **/
 	
 	/*
 	 * ¥Êbitmap
