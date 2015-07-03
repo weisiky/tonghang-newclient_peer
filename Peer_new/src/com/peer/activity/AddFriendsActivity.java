@@ -14,7 +14,7 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * Ìí¼ÓºÃÓÑÀà
+ * æ·»åŠ å¥½å‹
  * */
 public class AddFriendsActivity extends pBaseActivity{
 	class PageViewList {
@@ -83,7 +83,7 @@ public class AddFriendsActivity extends pBaseActivity{
 //			if(checkNetworkState()){
 //				AddFriendsTask task=new AddFriendsTask();
 //				task.execute(id,reson.getText().toString().trim());
-			showToast("Ä£ÄâÌí¼ÓºÃÓÑ³É¹¦", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½ï¿½ï¿½ï¿½Óºï¿½ï¿½Ñ³É¹ï¿½", Toast.LENGTH_SHORT, false);
 //			}else{
 //				ShowMessage(getResources().getString(R.string.Broken_network_prompt));
 //			}		
@@ -92,6 +92,18 @@ public class AddFriendsActivity extends pBaseActivity{
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

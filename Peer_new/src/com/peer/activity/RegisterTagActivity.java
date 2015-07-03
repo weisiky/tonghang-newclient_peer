@@ -42,7 +42,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ×¢²á±êÇ©Àà
+ * ×¢ï¿½ï¿½ï¿½Ç©ï¿½ï¿½
  * */
 public class RegisterTagActivity extends pBaseActivity{
 	class PageViewList {
@@ -76,7 +76,7 @@ public class RegisterTagActivity extends pBaseActivity{
 		pageViewaList.bt_registe_tag.setEnabled(false);
 		
 		/*
-		 *ÎÄ×Ö¼Ó¸ßÁÁÉ«
+		 *ï¿½ï¿½ï¿½Ö¼Ó¸ï¿½ï¿½ï¿½É«
 		 * */
 		SpannableStringBuilder builder = new SpannableStringBuilder(pageViewaList.xieyi.getText().toString());
 		ForegroundColorSpan colorspan = new ForegroundColorSpan(getResources().getColor(R.color.backcolornol));
@@ -139,7 +139,7 @@ public class RegisterTagActivity extends pBaseActivity{
 	}
 	
 	/**
-	 * ×¢²á±êÇ©·½·¨
+	 * ×¢ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½
 	 */
 	private void RegisteTag() {
 		// TODO Auto-generated method stub
@@ -152,7 +152,7 @@ public class RegisterTagActivity extends pBaseActivity{
 		String [] arr={t1,t2,t3,t4,t5};
 		ArrayList<String> list=new ArrayList<String>();
 		
-		//¾Ö²¿±äÁ¿ 
+		//ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ 
 		boolean sameTag=true;
 		boolean Tolong=true;
 		boolean isbreak=true;
@@ -224,7 +224,7 @@ public class RegisterTagActivity extends pBaseActivity{
 	
 	
 	/**
-	 * ÇëÇóµÇÂ¼½Ó¿Ú
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ó¿ï¿½
 	 * 
 	 * @param email
 	 * @param password
@@ -339,7 +339,7 @@ public class RegisterTagActivity extends pBaseActivity{
 
 
 	/**
-	 * TextWatcher¼àÌý±à¼­¿ò
+	 * TextWatcherï¿½ï¿½ï¿½ï¿½ï¿½à¼­ï¿½ï¿½
 	 */
 TextWatcher watcher=new TextWatcher() {
 		
@@ -374,4 +374,17 @@ TextWatcher watcher=new TextWatcher() {
 			}
 		}
 	};
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
+	}
 }

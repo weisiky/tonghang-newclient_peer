@@ -33,7 +33,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ÕÒ»ØÃÜÂëÀà
+ * ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class FindPasswordActivity extends pBaseActivity{
 	class PageViewList {
@@ -147,7 +147,7 @@ public class FindPasswordActivity extends pBaseActivity{
 	}
 
 	/**
-	 *Ìá½»ÕÒ»ØÃÜÂëÉêÇë 
+	 *ï¿½á½»ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	 * @param email
 	 * 
 	 */
@@ -239,6 +239,18 @@ public class FindPasswordActivity extends pBaseActivity{
 				});
 		Intent intent = new Intent();
 		startActivityForLeft(FindPasswordResultActivity.class, intent, false);
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 	

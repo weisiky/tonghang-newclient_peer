@@ -27,7 +27,7 @@ import com.peer.utils.Tools;
 import com.peer.utils.pViewBox;
 
 /*
- * ÐÞ¸ÄÓÃ»§»ù±¾ÐÅÏ¢Àà
+ * ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
  **/
 public class PersonalMessageActivity extends pBaseActivity{
 	
@@ -75,9 +75,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.personalmessage));
 		items = getResources().getStringArray(R.array.pictrue);
-		pageViewaList.tv_sex.setText("ÄÐ");
+		pageViewaList.tv_sex.setText("ï¿½ï¿½");
 		pageViewaList.tv_setbirthday_my.setText("1993-01-18");
-		pageViewaList.tv_setaddress_my.setText("Ìì½ò");
+		pageViewaList.tv_setaddress_my.setText("ï¿½ï¿½ï¿½");
 		pageViewaList.et_nikename_personMSG.setText("weisiky");
 		setDateTime();
 	}
@@ -158,7 +158,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	}
 	
 	/*
-	 * ChangBirthdayÀà
+	 * ChangBirthdayï¿½ï¿½
 	 * */
 	private void ChangBirthday() {
 		// TODO Auto-generated method stub
@@ -179,7 +179,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * ³õÊ¼»¯Calendar¿Ø¼þÀà
+	     * ï¿½ï¿½Ê¼ï¿½ï¿½Calendarï¿½Ø¼ï¿½ï¿½ï¿½
 	     * */
 	    private void setDateTime(){
 	   	 final Calendar c = Calendar.getInstance();  
@@ -205,7 +205,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	   }
 	    
 	    /*
-	     * ChangAddressÀà
+	     * ChangAddressï¿½ï¿½
 	     * */
 	    private void ChangAddress() {
 			// TODO Auto-generated method st
@@ -215,7 +215,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * ¸ü»»Í·ÏñÀà
+	     * ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½
 	     * */
 	    private void showDialog() {
 
@@ -259,7 +259,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * ÊÂ¼þ´¦ÀíÍê³É£¬·µ»Ø¸üÐÂUIÀà
+	     * ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½UIï¿½ï¿½
 	     * */
 	    @Override
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -343,7 +343,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * ¸ü¸ÄÐÔ±ðÀà
+	     * ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½
 	     * */
 	    private void SexSelect() {
 			// TODO Auto-generated method stub
@@ -362,11 +362,23 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * CommiteToServerÀà
-	     * Ä£ÄâÍê³ÉÊ±£¬Ìø×ªÖÁmyfragment
+	     * CommiteToServerï¿½ï¿½
+	     * Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½myfragment
 	     * */
 	    private void CommiteToServer() {
 			// TODO Auto-generated method stub
 			finish();	
+		}
+
+		@Override
+		public void onNetworkOn() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onNetWorkOff() {
+			// TODO Auto-generated method stub
+			
 		}
 }

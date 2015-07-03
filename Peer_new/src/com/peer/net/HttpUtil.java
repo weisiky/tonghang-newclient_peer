@@ -1,7 +1,10 @@
 package com.peer.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.entity.StringEntity;
 
 import android.content.Context;
 
@@ -12,22 +15,23 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /**
- * HttpÍøÂçÇëÇó¹¤¾ßÀà
+ * 
+ * Httpç½‘ç»œè¯·æ±‚å·¥å…·ç±»
  * 
  * @author zhangzg
  * 
  */
 
 public class HttpUtil {
-	// ÊµÀı»°¶ÔÏó
+	// å®ä¾‹åŒ–ç½‘ç»œè¯·æ±‚å¯¹è±¡
 	private static AsyncHttpClient client = new AsyncHttpClient();
 	static {
-		// ÉèÖÃÁ´½Ó³¬Ê±£¬Èç¹û²»ÉèÖÃ£¬Ä¬ÈÏÎª10s
+		// è®¾ç½®é“¾æ¥è¶…æ—¶ï¼Œå¦‚æœä¸è®¾ç½®ï¼Œé»˜è®¤ä¸º10s
 		client.setTimeout(11000);
 	}
 
 	/**
-	 * getÓÃÒ»¸öÍêÕûurl»ñÈ¡Ò»¸östring¶ÔÏó
+	 * getç”¨ä¸€ä¸ªå®Œæ•´urlè·å–ä¸€ä¸ªstringå¯¹è±¡
 	 * 
 	 * @param urlString
 	 * @param res
@@ -37,7 +41,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * postÓÃÒ»¸öÍêÕûurl»ñÈ¡Ò»¸östring¶ÔÏó
+	 * postç”¨ä¸€ä¸ªå®Œæ•´urlè·å–ä¸€ä¸ªstringå¯¹è±¡
 	 * 
 	 * @param urlString
 	 * @param res
@@ -47,7 +51,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * get urlÀïÃæ´ø²ÎÊı
+	 * get urlé‡Œé¢å¸¦å‚æ•°
 	 * 
 	 * @param urlString
 	 * @param res
@@ -61,7 +65,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * post urlÀïÃæ´ø²ÎÊı
+	 * post urlé‡Œé¢å¸¦å‚æ•°
 	 * 
 	 * @param urlString
 	 * @param res
@@ -72,7 +76,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * get ²»´ø²ÎÊı£¬»ñÈ¡json¶ÔÏó»òÕßÊı×é
+	 * get ä¸å¸¦å‚æ•°ï¼Œè·å–jsonå¯¹è±¡æˆ–è€…æ•°ç»„
 	 * 
 	 * @param urlString
 	 * @param res
@@ -82,7 +86,7 @@ public class HttpUtil {
 	}
 
 	/**
-	 * post ²»´ø²ÎÊı£¬»ñÈ¡json¶ÔÏó»òÕßÊı×é
+	 * post ä¸å¸¦å‚æ•°ï¼Œè·å–jsonå¯¹è±¡æˆ–è€…æ•°ç»„
 	 * 
 	 * @param urlString
 	 * @param res
@@ -92,31 +96,49 @@ public class HttpUtil {
 	}
 
 	/**
-	 * get ´ø²ÎÊı£¬»ñÈ¡json¶ÔÏó»òÕßÊı×é
+	 * get å¸¦å‚æ•°ï¼Œè·å–jsonå¯¹è±¡æˆ–è€…æ•°ç»„
 	 * 
 	 * @param urlString
 	 * @param res
 	 */
-	public static void get(Context context , String urlString, HttpEntity entity,String contentType,
-			JsonHttpResponseHandler res) {
+	public static void get(Context context, String urlString,
+			HttpEntity entity, String contentType, JsonHttpResponseHandler res) {
 
-		client.get(context, urlString, entity,contentType,res);
+		client.get(context, urlString, entity, contentType, res);
 	}
 
 	/**
-	 * post ´ø²ÎÊı£¬»ñÈ¡json¶ÔÏó»òÕßÊı×é
+	 * post å¸¦å‚æ•°ï¼Œè·å–jsonå¯¹è±¡æˆ–è€…æ•°ç»„
 	 * 
 	 * @param urlString
 	 * @param res
 	 */
 	public static void post(Context context, String urlString,
-			HttpEntity entity, String contentType,JsonHttpResponseHandler res) {
+			HttpEntity entity, String contentType, JsonHttpResponseHandler res) {
 		client.post(context, urlString, entity, contentType, res);
-		
+
 	}
 
 	/**
-	 * get ÏÂÔØÊı¾İÊ¹ÓÃ£¬»á·µ»ØbyteÊı¾İ
+	 * postç½‘ç»œè¯·æ±‚ï¼Œè¿”å›JSONæ•°æ®
+	 * 
+	 * @param urlString
+	 * @param res
+	 * @param contentType
+	 *            application/x-jpg;charset=UTF-8
+	 * 
+	 */
+	public static void post(Context context, String urlString,
+			RequestParams params, String contentType,
+			JsonHttpResponseHandler res) {
+		List<Header> headersList = new ArrayList<Header>();
+		Header[] headers = headersList.toArray(new Header[headersList.size()]);
+		client.post(context, urlString, headers, params, contentType, res);
+
+	}
+
+	/**
+	 * get ä¸‹è½½æ•°æ®ä½¿ç”¨ï¼Œä¼šè¿”å›byteæ•°æ®
 	 * 
 	 * @param urlString
 	 * @param res

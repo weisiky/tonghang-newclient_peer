@@ -11,7 +11,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * 查看群成员类
+ * 锟介看群锟斤拷员锟斤拷
  * */
 public class ChatRoomListnikeActivity extends pBaseActivity{
 	class PageViewList {
@@ -72,6 +72,18 @@ public class ChatRoomListnikeActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

@@ -21,15 +21,15 @@ import com.umeng.analytics.f;
 
 
 /*
- * ²é¿´ÎÒµÄ±êÇ©Àà
- * ¿É¶Ô±êÇ©½øÐÐÌí¼ÓºÍÉ¾³ý
+ * ï¿½é¿´ï¿½ÒµÄ±ï¿½Ç©ï¿½ï¿½
+ * ï¿½É¶Ô±ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óºï¿½É¾ï¿½ï¿½
  * */
 public class MySkillActivity extends pBaseActivity{
 	
 	private PageViewList pageViewaList;
 	
-	private List<String> mlist;  //ÓÃÓÚ´æ´¢µ±Ç°ÓÃ»§±êÇ©¼¯ºÏ
-	private int Hadtag;		//¸ÃÊôÐÔÓÃÓÚÅÐ¶Ïµ±Ç°ÓÃ»§±êÇ©ÊýÁ¿
+	private List<String> mlist;  //ï¿½ï¿½ï¿½Ú´æ´¢ï¿½ï¿½Ç°ï¿½Ã»ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½
+	private int Hadtag;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ïµï¿½Ç°ï¿½Ã»ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½
 	
 	
 	
@@ -102,7 +102,7 @@ public class MySkillActivity extends pBaseActivity{
 		case R.id.ll_createTag_mytag:
 			Hadtag=mlist.size();
 			if(Hadtag>4){
-				showToast("ÄúÒÑ¾­ÓÐÎå¸ö±êÇ©£¬²»ÄÜÔÙ´´½¨ÁË", Toast.LENGTH_LONG, false);
+				showToast("ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_LONG, false);
 				break;
 			}else{
 				CreateTagDialog();					
@@ -117,12 +117,12 @@ public class MySkillActivity extends pBaseActivity{
 	
 	
 	/*
-	 * Ìí¼Ó±êÇ©Àà
+	 * ï¿½ï¿½Ó±ï¿½Ç©ï¿½ï¿½
 	 * 
 	 * */
 	private void CreateTagDialog() {
 		// TODO Auto-generated method stub		
-		//µ¯³ö±à¼­¿òDialog
+		//ï¿½ï¿½ï¿½ï¿½ï¿½à¼­ï¿½ï¿½Dialog
 		final EditText inputServer = new EditText(MySkillActivity.this);
 		inputServer.setFocusable(true);
 		AlertDialog.Builder builder = new AlertDialog.Builder(MySkillActivity.this);
@@ -172,7 +172,7 @@ public class MySkillActivity extends pBaseActivity{
                     	   }
                     	                     
                        }else{
-                    	   showToast("ÇëÊäÈëÐÐÒµ±êÇ©Ãû",Toast.LENGTH_LONG ,false);
+                    	   showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½Ç©ï¿½ï¿½",Toast.LENGTH_LONG ,false);
                        }                       
                     }
                 });
@@ -188,8 +188,8 @@ public class MySkillActivity extends pBaseActivity{
 	
 	
 	/*
-	 * ¿ªÏß³Ì¸üÐÂUI
-	 * ´´½¨³É¹¦Ê±£¬°ÑÊý¾ÝÌí¼Óµ½adapterÖÐ
+	 * ï¿½ï¿½ï¿½ß³Ì¸ï¿½ï¿½ï¿½UI
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½adapterï¿½ï¿½
 	 * 
 	 * */
 	public class changLabelsTask extends  AsyncTask<String, String, String>{
@@ -203,6 +203,20 @@ public class MySkillActivity extends pBaseActivity{
 			return null;
 		}
 				
+	}
+
+
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

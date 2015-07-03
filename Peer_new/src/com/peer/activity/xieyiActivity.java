@@ -10,7 +10,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * 协议类
+ * 协锟斤拷锟斤拷
  * */
 public class xieyiActivity extends pBaseActivity{
 	class PageViewList {
@@ -71,6 +71,18 @@ public class xieyiActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

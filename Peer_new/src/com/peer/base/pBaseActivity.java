@@ -1,5 +1,6 @@
 package com.peer.base;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,14 +21,16 @@ import com.peer.activity.MainActivity;
 import com.peer.activity.R;
 import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
+import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.pNetUitls;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pSysInfoUtils;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * »ù´¡Activity
+ * åŸºç¡€Activity
  * 
  * @author zhangzg
  * 
@@ -36,78 +39,98 @@ import com.umeng.analytics.MobclickAgent;
 public abstract class pBaseActivity extends FragmentActivity implements
 		OnClickListener {
 
-	/** ¹²ÏíÎÄ¼ş¹¤¾ßÀà **/
+	/** å…±äº«æ–‡ä»¶å·¥å…·ç±» **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
-	/** ÍË³öµ¹¼ÆÊ± **/
+	/** é€€å‡ºå€’è®¡æ—¶ **/
 	private long mExitTime;
-	/** ÌáÊ¾Ìõ **/
+	/** æç¤ºæ¡ **/
 	public Toast toast;
-	/** ÖĞ¼ä²¼¾Ö **/
+	/** ä¸­é—´å¸ƒå±€ **/
 	private RelativeLayout contentLayout;
-	/** ¶¥²¿²¼¾Ö **/
+	/** é¡¶éƒ¨å¸ƒå±€ **/
 	private RelativeLayout topLayout;
-	/** µ×²¿²¼¾Ö **/
+	/** åº•éƒ¨å¸ƒå±€ **/
 	private RelativeLayout bottomLayout;
-	/** »ÒÉ«²¼¾Ö **/
+	/** ç°è‰²å¸ƒå±€ **/
 	private LinearLayout shadeBg;
-	/** µ±Ç°Ò³ÃæµÄÃû³Æ **/
+	/** å½“å‰é¡µé¢çš„åç§° **/
 	public String currentPageName = null;
-	/** ÃÉ°å½¥±ä¶¯»­ **/
+	/** è’™æ¿æ¸å˜åŠ¨ç”» **/
 	public Animation alphaAnimation;
-	/** Ê×´Î½øÈëÒ³ÃæµÄloadingÈ¦È¦ **/
+	/** é¦–æ¬¡è¿›å…¥é¡µé¢çš„loadingåœˆåœˆ **/
 	public RelativeLayout baseProgressBarLayout;
 
+	protected boolean isNetworkAvailable;
+	protected pBaseApplication application;
+	
+	private ActivityManager activityManager ;
+	
+	private OnNetworkStatusListener onNetworkStatusListener;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.base);
-		// µ±Ç°Ò³ÃæÃû³Æ
+		// å½“å‰é¡µé¢åç§°
 		currentPageName = getLocalClassNameBySelf();
-		// »ñÈ¡ÊÖ»úÆÁÄ»¿ç¶È£¬Í¼Æ¬ÊÊÅäÊ¹ÓÃ
+		// è·å–æ‰‹æœºå±å¹•è·¨åº¦ï¼Œå›¾ç‰‡é€‚é…ä½¿ç”¨
 		Constant.S_SCREEN_WIDHT_VALUE = pSysInfoUtils.getDisplayMetrics(this).widthPixels
 				+ "";
 		findGlobalViewById();
-		// ³õÊ¼»¯ShareUtiles
+		// åˆå§‹åŒ–ShareUtiles
 		initShareUtils();
-		// ÓÑÃËÍ³¼Æ ·¢ËÍ²ßÂÔ
+		// å‹ç›Ÿç»Ÿè®¡ å‘é€ç­–ç•¥
 		MobclickAgent.updateOnlineConfig(this);
-		// ÓÑÃËÍ³¼Æ Êı¾İ¼ÓÃÜ
+		// å‹ç›Ÿç»Ÿè®¡ æ•°æ®åŠ å¯†
 		AnalyticsConfig.enableEncrypt(true);
 
 		this.findViewById();
 		this.setListener();
 		this.processBiz();
+		
+		application = (pBaseApplication) getApplication();
+		
+		onNetworkStatusListener = new OnNetworkStatusListener() {
+			public void networkOn() {
+				isNetworkAvailable = true;
+				onNetworkOn();
+			}
+			public void netWorkOff() {
+				isNetworkAvailable = false;
+				onNetWorkOff();
+			}
+		};
+		application.addNetworkStatusListener(onNetworkStatusListener);
+		
+		isNetworkAvailable = pNetUitls.isNetworkAvailable(this);
 
 	}
-	
+
 	@Override
-	protected void onResume() {    //appÓÉÔİÍ£µ½ÔËĞĞ
+	protected void onResume() { 
 		// TODO Auto-generated method stub
 		super.onResume();
 		EMChatManager.getInstance().activityResumed();
-		MobclickAgent.onResume(this);  //ÓÑÃËÍ³¼Æ´úÂë 
+		MobclickAgent.onResume(this); 
 	}
-	
+
 	@Override
-	protected void onPause() {//ÔİÍ£app
+	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		MobclickAgent.onPause(this);//ÓÑÃËÍ³¼Æ´úÂë
+		MobclickAgent.onPause(this);
 	}
-	
-	
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 
 	}
-	
 
 	/**
-	 * ³õÊ¼»¯¹²Ïí¹¤¾ßÀà
+	 * åˆå§‹åŒ–å…±äº«å·¥å…·ç±»
 	 */
 	public void initShareUtils() {
 		mShareFileUtils.initSharePre(getApplicationContext(),
@@ -115,7 +138,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * »ñÈ¡È«¾ÖÒ³Ãæ¿Ø¼ş¶ÔÏó
+	 * è·å–å…¨å±€é¡µé¢æ§ä»¶å¯¹è±¡
 	 */
 	@SuppressWarnings("deprecation")
 	protected void findGlobalViewById() {
@@ -160,49 +183,55 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
 
 	}
-
 	/**
-	 * »ñÈ¡Ò³Ãæ¿Ø¼ş¶ÔÏó
+	 * ç½‘ç»œè¿é€šåå›è°ƒè¯¥å‡½æ•°
+	 */
+	public abstract void onNetworkOn();
+	
+	/**
+	 * ç½‘ç»œæ–­å¼€åå›è°ƒè¯¥å‡½æ•°
+	 */
+	public abstract void onNetWorkOff();
+	/**
+	 * è·å–é¡µé¢æ§ä»¶å¯¹è±¡
 	 */
 	protected abstract void findViewById();
 
 	/**
-	 * °ó¶¨¼àÌıÊÂ¼ş
+	 * ç»‘å®šç›‘å¬äº‹ä»¶
 	 */
 	protected abstract void setListener();
 
 	/**
-	 * ´¦ÀíÒµÎñ
+	 * å¤„ç†ä¸šåŠ¡
 	 */
 	protected abstract void processBiz();
 
 	/**
-	 * »ñÈ¡¶¥²¿²¼¾Ö
+	 * è·å–é¡¶éƒ¨å¸ƒå±€
 	 */
 	protected abstract View loadTopLayout();
 
 	/**
-	 * »ñÈ¡ÄÚÈİ²¼¾Ö
+	 * è·å–ä¸­é—´å¸ƒå±€
 	 * 
-	 * @param requestBean
 	 */
 	protected abstract View loadContentLayout();
 
 	/**
-	 * »ñÈ¡µ×²¿²¼¾Ö
+	 * è·å–åº•éƒ¨å¸ƒå±€
 	 * 
-	 * @param requestBean
 	 */
 	protected abstract View loadBottomLayout();
 
 	/**
-	 * Ò³ÃæÌø×ª
+	 * é¡µé¢å·¦ä¾§è¿›å…¥
 	 * 
 	 * @param targetActivity
-	 *            Ä¿±êÒ³Ãæ
+	 *            ç›®æ ‡é¡µé¢
 	 * @param intent
 	 * @param isNewActivity
-	 *            ÊÇ·ñĞèÒªÒ»¸öĞÂµÄÒ³Ãæ
+	 *            æ˜¯å¦éœ€è¦ä¸€ä¸ªæ–°çš„é¡µé¢
 	 */
 	public void startActivityForLeft(Class targetActivity, Intent intent,
 			boolean isNewActivity) {
@@ -221,13 +250,13 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Ò³ÃæÌø×ª´ÓÓÒ²à½øÈë
+	 * é¡µé¢ä»å³ä¾§è¿›å…¥
 	 * 
 	 * @param targetActivity
-	 *            Ä¿±êÒ³Ãæ
+	 *            ç›®æ ‡é¡µé¢
 	 * @param intent
 	 * @param isNewActivity
-	 *            ÊÇ·ñĞèÒªÒ»¸öĞÂµÄÒ³Ãæ
+	 *            æ˜¯å¦éœ€è¦ä¸€ä¸ªæ–°çš„é¡µé¢
 	 */
 	@SuppressWarnings("rawtypes")
 	public void startActivityRight(Class targetActivity, Intent intent,
@@ -247,13 +276,13 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Ò³ÃæÌø×ª(´¹Ö±ÏòÏÂÒÆ¶¯)
+	 * é¡µé¢ä»ä¸Šåˆ°ä¸‹è¿›å…¥
 	 * 
 	 * @param targetActivity
-	 *            Ä¿±êÒ³Ãæ
+	 *            ç›®æ ‡é¡µé¢
 	 * @param intent
 	 * @param isNewActivity
-	 *            ÊÇ·ñĞèÒªÒ»¸öĞÂµÄÒ³Ãæ
+	 *            æ˜¯å¦éœ€è¦ä¸€ä¸ªæ–°çš„é¡µé¢
 	 */
 	public void startActivityForDown(Class targetActivity, Intent intent,
 			boolean isNewActivity) {
@@ -272,13 +301,13 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Ò³ÃæÌø×ª(´¹Ö±ÏòÉÏÒÆ¶¯)
+	 * é¡µé¢ä»ä¸Šåˆ°ä¸‹è¿›å…¥
 	 * 
 	 * @param targetActivity
-	 *            Ä¿±êÒ³Ãæ
+	 *            ç›®æ ‡é¡µé¢
 	 * @param intent
 	 * @param isNewActivity
-	 *            ÊÇ·ñĞèÒªÒ»¸öĞÂµÄÒ³Ãæ
+	 *            æ˜¯å¦éœ€è¦ä¸€ä¸ªæ–°çš„é¡µé¢
 	 */
 	public void startActivityForUp(Class targetActivity, Intent intent,
 			boolean isNewActivity) {
@@ -297,15 +326,15 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Ò³ÃæÌø×ª
+	 * å¾…è¿”å›ç»“æœé¡µé¢è·³è½¬
 	 * 
 	 * @param targetActivity
-	 *            Ä¿±êÒ³Ãæ
+	 *            ç›®æ ‡é¡µé¢
 	 * @param intent
 	 * @param requestCode
-	 *            ÇëÇó×´Ì¬Âë
+	 *            è·³è½¬ç 
 	 * @param isNewActivity
-	 *            ÊÇ·ñĞèÒªÒ»¸öĞÂµÄÒ³Ãæ
+	 *            æ˜¯å¦éœ€è¦ä¸€ä¸ªæ–°çš„é¡µé¢
 	 */
 	public void startActivityForResult(Class targetActivity, Intent intent,
 			int requestCode, boolean isNewActivity) {
@@ -324,7 +353,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ·µ»ØÉÏ¸öÒ³Ãæ
+	 * è¿”å›ä¸Šä¸€ä¸ªé¡µé¢
 	 */
 	public void backPage() {
 		Intent intent = new Intent();
@@ -332,39 +361,41 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, true);
-		} else if(getLocalClassNameBySelf().contains("RegisterTagActivity")){
+		} else if (getLocalClassNameBySelf().contains("RegisterTagActivity")) {
 			startActivityRight(RegisterAcountActivity.class, intent, true);
-		}else if(getLocalClassNameBySelf().contains("RegisterCompleteActivity")){
-			showToast("ÇëÍê³É×¢²á£¡", Toast.LENGTH_SHORT, true);
-		}else if(getLocalClassNameBySelf().contains("SearchUserActivity")){
+		} else if (getLocalClassNameBySelf().contains(
+				"RegisterCompleteActivity")) {
+			showToast("è¯·å®Œæˆæ³¨å†Œ", Toast.LENGTH_SHORT, true);
+		} else if (getLocalClassNameBySelf().contains("SearchUserActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
-		}else if(getLocalClassNameBySelf().contains("xieyiActivity")
+		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
 				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")
 				|| getLocalClassNameBySelf().contains("NewFunctionActivity")
 				|| getLocalClassNameBySelf().contains("FeedBackActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
-				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf()
+						.contains("PersonalMessageActivity")
 				|| getLocalClassNameBySelf().contains("MySkillActivity")
 				|| getLocalClassNameBySelf().contains("SettingActivity")
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
-				|| getLocalClassNameBySelf().contains("SearchTopicActivity")){
+				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
-		}else if(getLocalClassNameBySelf().contains("SearchResultActivity")){
+		} else if (getLocalClassNameBySelf().contains("SearchResultActivity")) {
 			startActivityRight(SearchUserActivity.class, intent, true);
-		}else{
+		} else {
 			exitApp();
 		}
 
 	}
 
 	/**
-	 * ÍË³öAPP
+	 * é€€å‡ºAPP
 	 */
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("ÔÙ°´Ò»´ÎÍË³ö", Toast.LENGTH_SHORT, true);
+			showToast("ï¿½Ù°ï¿½Ò»ï¿½ï¿½ï¿½Ë³ï¿½", Toast.LENGTH_SHORT, true);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);
@@ -373,14 +404,14 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ÏÔÊ¾toast£¬»áÅĞ¶Ïµ±Ç°ÊÇ·ñÔÚtoast£¬Èç¹ûÕıÔÚtoast£¬ÏÈÈ¡Ïû£¬ÔÙÏÔÊ¾×îĞÂµÄtoast£¬·ÀÖ¹toastÊ±¼ä¹ı³¤
+	 * æ˜¾ç¤ºtoastï¼Œä¼šåˆ¤æ–­å½“å‰æ˜¯å¦åœ¨toastï¼Œå¦‚æœæ­£åœ¨toastï¼Œå…ˆå–æ¶ˆï¼Œå†æ˜¾ç¤ºæœ€æ–°çš„toastï¼Œé˜²æ­¢toastæ—¶é—´è¿‡é•¿
 	 * 
 	 * @param arg
-	 *            toastÄÚÈİ
+	 *            toastå†…å®¹
 	 * @param length
-	 *            toastÏÔÊ¾³¤¶Ì£¨Toast.LENGTH_LONG,Toast.LENGTH_SHORT£©
+	 *            toastæ˜¾ç¤ºé•¿çŸ­ï¼ˆToast.LENGTH_LONG,Toast.LENGTH_SHORTï¼‰
 	 * @param isCenter
-	 *            ÌáÊ¾ÌõÊÇ·ñÒª¾ÓÖĞ
+	 *            æç¤ºæ¡æ˜¯å¦è¦å±…ä¸­
 	 */
 	public void showToast(String arg, int length, boolean isCenter) {
 		if (toast == null) {
@@ -398,7 +429,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ·µ»Øµ±Ç°ÀàÃû
+	 * è¿”å›å½“å‰ç±»å
 	 * 
 	 * @return
 	 */
@@ -413,7 +444,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ÏÔÊ¾loadingÈ¦È¦
+	 * æ˜¾ç¤ºloadingåœˆåœˆ
 	 */
 	public void showProgressBar() {
 		showAlphaBg();
@@ -421,7 +452,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Òş²Ødialog
+	 * éšè—dialog
 	 */
 	public void hideLoading() {
 		hidAlphaBg();
@@ -430,7 +461,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ÏÔÊ¾½¥±ä±³¾°
+	 * æ˜¾ç¤ºæ¸å˜èƒŒæ™¯
 	 */
 	public void showAlphaBg() {
 		shadeBg.setOnClickListener(this);
@@ -439,7 +470,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * Òş²Ø½¥±ä±³¾°
+	 * æ˜¾ç¤ºæ¸å˜èƒŒæ™¯
 	 */
 	public void hidAlphaBg() {
 		shadeBg.setVisibility(View.GONE);
@@ -450,7 +481,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// ·µ»ØÉÏ¸öÒ³Ãæ
+			// è¿”å›ä¸Šä¸ªé¡µé¢
 			backPage();
 			return true;
 		} else {
@@ -460,7 +491,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	}
 
 	/*
-	 * ´¦Àí¹«¹²¼àÌıÊÂ¼ş
+	 * å¤„ç†å…¬å…±ç›‘å¬äº‹ä»¶
 	 */
 	@Override
 	public void onClick(View v) {

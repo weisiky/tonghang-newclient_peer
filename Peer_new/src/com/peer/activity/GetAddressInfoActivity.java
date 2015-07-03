@@ -20,7 +20,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * »ñµÃaddressÀà
+ * ï¿½ï¿½ï¿½addressï¿½ï¿½
  * */
 public class GetAddressInfoActivity extends pBaseActivity{
 	
@@ -59,7 +59,7 @@ public class GetAddressInfoActivity extends pBaseActivity{
 		addressList = location.getProvinceList();
 		
 		final ProvinceAdapter adapter = new ProvinceAdapter();
-		pLog.i("adapterÊÇÊ²Ã´£º", ""+adapter);
+		pLog.i("adapterï¿½ï¿½Ê²Ã´ï¿½ï¿½", ""+adapter);
 		pLog.i("listView", ""+pageViewaList.listview);
 		pageViewaList.listview.setAdapter(adapter);
 			
@@ -176,6 +176,20 @@ public class GetAddressInfoActivity extends pBaseActivity{
 			text.setText(addressList.get(position));
 			return convertView;
 		}
+		
+	}
+
+
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

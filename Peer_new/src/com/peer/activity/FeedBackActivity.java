@@ -78,8 +78,8 @@ public class FeedBackActivity extends pBaseActivity{
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.commite_feedback:
-			//Ä£Äâ·¢ÇëÇó
-			showToast("·´À¡³É¹¦£¡", Toast.LENGTH_LONG, true);
+			//Ä£ï¿½â·¢ï¿½ï¿½ï¿½ï¿½
+			showToast("ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½", Toast.LENGTH_LONG, true);
 //			if(checkNetworkState()){
 //				FeedBackTask task=new FeedBackTask();
 //				task.execute(pageViewaList.et_feedback_content.getText().toString().trim());					
@@ -123,5 +123,17 @@ TextWatcher watcher=new TextWatcher() {
 			}
 		}
 	};
+
+@Override
+public void onNetworkOn() {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onNetWorkOff() {
+	// TODO Auto-generated method stub
+	
+}
 
 }

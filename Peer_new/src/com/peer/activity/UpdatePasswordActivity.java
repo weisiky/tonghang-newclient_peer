@@ -15,7 +15,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ¸ü¸ÄÓÃ»§ÃÜÂëÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class UpdatePasswordActivity extends pBaseActivity {
 	
@@ -101,7 +101,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	}
 	
 	/*
-	 * Ìá½»¸ü¸ÄÃÜÂëÇëÇóÀà
+	 * ï¿½á½»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * */
 	private void UpdatePassword() {
 		// TODO Auto-generated method stub		
@@ -109,7 +109,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		final String newpasws=pageViewaList.et_newpasw.getText().toString().trim();
 		String testnew=pageViewaList.et_repasw.getText().toString().trim();
 		
-		/*»ñÈ¡ÓÃ»§ÃûËù¶ÔÓ¦µÄÃÜÂë£¬±È½ÏÔ­Ê¼ÃÜÂë¡£ÔÝÎÞ£¡
+		/*ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½È½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ë¡£ï¿½ï¿½ï¿½Þ£ï¿½
 		final String email=LocalStorage.getString(UpdatePasswordActivity.this, Constant.EMAIL);
 		final UserDao udao=new UserDao(UpdatePasswordActivity.this);		
 		String password=udao.getPassord(email);
@@ -124,7 +124,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.oldnewnot));
 			return;
 		}else{
-			Toast.makeText(this,"Ä£Äâ²Ù×÷Íê³É£¡", Toast.LENGTH_LONG);
+			Toast.makeText(this,"Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½", Toast.LENGTH_LONG);
 			finish();
 		}
 	}
@@ -132,7 +132,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	
 	
 	/*
-	 * ÉèÖÃeditÎÄ±¾¼àÌý
+	 * ï¿½ï¿½ï¿½ï¿½editï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * */
 	private void CreateTextwatcher() {
 		// TODO Auto-generated method stub
@@ -171,6 +171,18 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		}else{
 			pageViewaList.bt_changesubmite.setEnabled(false);
 		}
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

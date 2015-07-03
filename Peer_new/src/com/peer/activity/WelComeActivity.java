@@ -11,7 +11,7 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 /**
- * »¶Ó­Ò³Activity
+ * ï¿½ï¿½Ó­Ò³Activity
  * 
  * @author zhangzg
  * 
@@ -20,7 +20,7 @@ import com.peer.utils.pViewBox;
 public class WelComeActivity extends pBaseActivity {
 
 	class PageViewList {
-		// ¶©µ¥²éÑ¯
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯
 		public LinearLayout welLin;
 	}
 
@@ -97,6 +97,18 @@ public class WelComeActivity extends pBaseActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

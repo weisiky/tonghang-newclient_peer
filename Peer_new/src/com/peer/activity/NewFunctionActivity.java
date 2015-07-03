@@ -11,7 +11,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ÐÂ¹¦ÄÜ½éÉÜÀà
+ * ï¿½Â¹ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½
  * 
  * */
 public class NewFunctionActivity extends pBaseActivity{
@@ -35,7 +35,7 @@ public class NewFunctionActivity extends pBaseActivity{
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.newfunction));
-		pageViewaList.introduce.setText("µ±Ç°µÄ°æ±¾ºÅÎª"+getInfo());
+		pageViewaList.introduce.setText("ï¿½ï¿½Ç°ï¿½Ä°æ±¾ï¿½ï¿½Îª"+getInfo());
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class NewFunctionActivity extends pBaseActivity{
 	
 	
 	/*
-	 * »ñÈ¡µ±Ç°apk°æ±¾ºÅ
+	 * ï¿½ï¿½È¡ï¿½ï¿½Ç°apkï¿½æ±¾ï¿½ï¿½
 	 * */
 	private String getInfo() {
 		// TODO Auto-generated method stub
@@ -92,5 +92,17 @@ public class NewFunctionActivity extends pBaseActivity{
 			e.printStackTrace();
 		}	
 		return versionName;
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 }

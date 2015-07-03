@@ -16,7 +16,7 @@ import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
- * ÉèÖÃMessageÌáÐÑ·½Ê½Àà
+ * ï¿½ï¿½ï¿½ï¿½Messageï¿½ï¿½ï¿½Ñ·ï¿½Ê½ï¿½ï¿½
  */
 public class MessageNotifyActivity extends pBaseActivity{
 	
@@ -178,5 +178,16 @@ public class MessageNotifyActivity extends pBaseActivity{
 		            pageViewaList.end.setText(new StringBuilder().append(endh).append(":").append(endm));
 //		            updateDisplay();  
 		        }    
-		    }; 
+		    };
+		@Override
+		public void onNetworkOn() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onNetWorkOff() {
+			// TODO Auto-generated method stub
+			
+		} 
 }

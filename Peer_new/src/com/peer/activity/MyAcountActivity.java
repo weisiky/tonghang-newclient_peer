@@ -11,7 +11,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ¡®ÎÒµÄÕË»§¡¯Ò³activity
+ * ï¿½ï¿½ï¿½Òµï¿½ï¿½Ë»ï¿½ï¿½ï¿½Ò³activity
  * */
 public class MyAcountActivity extends pBaseActivity {
 	
@@ -38,8 +38,8 @@ public class MyAcountActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.mycount));
 		/*
-		 * ÉèÖÃÏÔÊ¾µ±Ç°ÓÃ»§µÄÓÊÏä
-		 * ÔÝÊ±¾²Ì¬Ä¬ÈÏ
+		 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ç°ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		 * ï¿½ï¿½Ê±ï¿½ï¿½Ì¬Ä¬ï¿½ï¿½
 		 * */
 		pageViewaList.myeamil.setText("395296797@qq.com");
 	}
@@ -89,6 +89,18 @@ public class MyAcountActivity extends pBaseActivity {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

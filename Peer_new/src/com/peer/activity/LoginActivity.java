@@ -35,14 +35,16 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-/*
- * ����ҳ��
- * */
+/**
+ * 登录页面
+ * 
+ * @author zhangzg
+ * 
+ */
 public class LoginActivity extends pBaseActivity {
-	
-	
+
 	LoginResultBean loginresult = new LoginResultBean();
-	
+
 	class PageViewList {
 		private EditText et_email_login, et_password_login;
 		private Button bt_login_login;
@@ -122,7 +124,7 @@ public class LoginActivity extends pBaseActivity {
 				e.printStackTrace();
 			}
 			// } else {
-			// showToast("�������û���������", Toast.LENGTH_SHORT, false);
+			// showToast("请填写用户名与密码", Toast.LENGTH_SHORT, false);
 			// }
 
 			break;
@@ -140,7 +142,7 @@ public class LoginActivity extends pBaseActivity {
 	}
 
 	/**
-	 * �����¼�ӿ�
+	 * 请求登录接口
 	 * 
 	 * @param email
 	 * @param password
@@ -151,15 +153,20 @@ public class LoginActivity extends pBaseActivity {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		
-		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+
+		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
 		baseParams.add(new BasicNameValuePair("email", email));
 		baseParams.add(new BasicNameValuePair("password", password));
-		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
+		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
 		
+		 ArrayList<String> tags=new ArrayList<String>();
+		 
+		 tags.add("销售");
+		 tags.add("java");
+		 tags.add("美食");
 		HttpEntity entity = new StringEntity(params, "utf-8");
-		
-		HttpUtil.post(this, Constant.LONIN_IN_URL, entity, "application/json",
+
+		HttpUtil.post(this, Constant.LONIN_IN_URL, entity, "application/json;charset=UTF-8",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -221,7 +228,7 @@ public class LoginActivity extends pBaseActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 					}
 
 					@Override
@@ -230,11 +237,12 @@ public class LoginActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						hideLoading();
 						pLog.i("test", "onSuccess:statusCode:" + statusCode);
-						pLog.i("test","headers:"+ headers.toString());
-						pLog.i("test","response:"+ response.toString());
-						
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test", "response:" + response.toString());
+
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 							String pic_server = result.getString("pic_server");
 							String sys_time = result.getString("sys_time");
 							String code = result.getString("code");
@@ -243,37 +251,37 @@ public class LoginActivity extends pBaseActivity {
 							String image = user.getString("image");
 							ArrayList<String> lab = new ArrayList<String>();
 							JSONArray labels = (JSONArray) user.get("labels");
-							for(int index=0;index<labels.length();index++)
+							for (int index = 0; index < labels.length(); index++)
 								lab.add(labels.getString(index));
-							
-							pLog.i("test", "lab"+lab);
+
+							pLog.i("test", "lab" + lab);
 							String city = user.getString("city");
 							String username = user.getString("username");
 							String client_id = user.getString("client_id");
 							String created_at = user.getString("created_at");
-							String birth =  user.getString("birth");
-							
+							String birth = user.getString("birth");
+
 							UserBean userbean = new UserBean();
 							userbean.setBirth(birth);
 							userbean.setCity(city);
 							userbean.setCreated_at(created_at);
-							userbean.setEmail(pageViewaList.et_email_login.getText().toString().trim());
+							userbean.setEmail(pageViewaList.et_email_login
+									.getText().toString().trim());
 							userbean.setImage(image);
 							userbean.setLabels(lab);
 							userbean.setSex(sex);
 							userbean.setUsername(username);
-							
+
 							loginresult.setSys_time(sys_time);
 							loginresult.setPic_server(pic_server);
 							loginresult.setUserBean(userbean);
-							
+
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						super.onSuccess(statusCode, headers, response);
-						
-						
+
 					}
 
 					@Override
@@ -285,7 +293,7 @@ public class LoginActivity extends pBaseActivity {
 								+ "headers:" + headers.toString()
 								+ "responseString:" + responseString.toString());
 						super.onSuccess(statusCode, headers, responseString);
-						
+
 					}
 
 				});
@@ -297,7 +305,7 @@ public class LoginActivity extends pBaseActivity {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			if (false) {
-				// ���?ǰ��������ķ��ذ����¼�
+				// 监听返回按键
 			} else {
 				backPage();
 			}
@@ -305,6 +313,18 @@ public class LoginActivity extends pBaseActivity {
 		} else {
 			return super.onKeyDown(keyCode, event);
 		}
+
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 
 	}
 

@@ -19,12 +19,12 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * Ö÷Ò³ÃæÀà
+ * ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
  */
 public class MainActivity extends pBaseActivity{
 	
 	/**
-	 * fragmentÉêÃ÷
+	 * fragmentï¿½ï¿½ï¿½ï¿½
 	 */
 	private HomeFragment homefragment;
 	private ComeMsgFragment comemsgfragment;
@@ -33,7 +33,7 @@ public class MainActivity extends pBaseActivity{
 	private Fragment[] fragments;
 	
 	/*
-	 * ÅÐ¶ÏfragmentÌø×ª
+	 * ï¿½Ð¶ï¿½fragmentï¿½ï¿½×ª
 	 * */
 	private int index;
 	private int currentTabIndex;
@@ -169,6 +169,20 @@ public class MainActivity extends pBaseActivity{
 			trx.show(fragments[index]).commit();
 		}
 		currentTabIndex = index;
+	}
+
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

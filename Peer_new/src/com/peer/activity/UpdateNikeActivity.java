@@ -14,7 +14,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ¸ü¸ÄÓÃ»§êÇ³ÆÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ç³ï¿½ï¿½ï¿½
  * */
 public class UpdateNikeActivity extends pBaseActivity{
 	class PageViewList {
@@ -95,6 +95,18 @@ public class UpdateNikeActivity extends pBaseActivity{
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

@@ -20,7 +20,7 @@ import com.peer.utils.pViewBox;
 
 /**
  * 
- * ×¢²á»ù±¾±ØÒªÐÅÏ¢Àà
+ * ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ï¢ï¿½ï¿½
  */
 public class RegisterAcountActivity extends pBaseActivity {
 	
@@ -144,7 +144,7 @@ public class RegisterAcountActivity extends pBaseActivity {
  }
 
 	/*
-	 * TextWatcher¼àÌý±à¼­¿ò
+	 * TextWatcherï¿½ï¿½ï¿½ï¿½ï¿½à¼­ï¿½ï¿½
 	 */
 	TextWatcher textwatcher = new TextWatcher() {
 
@@ -170,7 +170,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 	};
 
 	/*
-	 * ÅÐ¶ÏbottonÊÇ·ñ¿Éµã»÷
+	 * ï¿½Ð¶ï¿½bottonï¿½Ç·ï¿½Éµï¿½ï¿½
 	 */
 	private void testnull() {
 		// TODO Auto-generated method stub
@@ -189,5 +189,17 @@ public class RegisterAcountActivity extends pBaseActivity {
 		} else {
 			pageViewaList.bt_registe_next.setEnabled(false);
 		}
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 }

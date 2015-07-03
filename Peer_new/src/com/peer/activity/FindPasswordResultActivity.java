@@ -13,7 +13,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ÕÒ»ØÃÜÂëµÄ½á¹û´¦ÀíÀà
+ * ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class FindPasswordResultActivity extends pBaseActivity{
 	
@@ -86,6 +86,18 @@ public class FindPasswordResultActivity extends pBaseActivity{
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 

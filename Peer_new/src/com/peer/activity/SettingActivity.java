@@ -20,7 +20,7 @@ import com.umeng.update.UmengUpdateAgent;
 
 
 /*
- * ÉèÖÃÒ³Àà
+ * ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
  * */
 public class SettingActivity extends pBaseActivity{
 	class PageViewList {
@@ -131,7 +131,7 @@ public class SettingActivity extends pBaseActivity{
 	
 	
 	/*
-	 * Çå³ý»º´æÀà
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * */
 	private void Clean(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.clean))  
@@ -154,8 +154,8 @@ public class SettingActivity extends pBaseActivity{
 	
 	
 	/*
-	 * ÍË³öµÇÈëÀà
-	 * Ä£Äâ¡£
+	 * ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * Ä£ï¿½â¡£
 	 * */
 	private void Relogin(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.exitlogin))  
@@ -163,14 +163,14 @@ public class SettingActivity extends pBaseActivity{
 		 .setPositiveButton(getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){ 
             	  ManagerActivity.getAppManager().restart(SettingActivity.this);
-            	  //ÍË³ö»·ÐÅÕËºÅ
+            	  //ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
      	     	 easemobchatImp.getInstance().logout();
              }
 		 }).show(); 
 	}
 	
 	/*
-	 * ÍË³öÓ¦ÓÃÀà
+	 * ï¿½Ë³ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
 	 * */
 	private void Todesk(){	
 		
@@ -182,6 +182,18 @@ public class SettingActivity extends pBaseActivity{
             	 ManagerActivity.getAppManager().AppExit(SettingActivity.this);       	
              }
 		 }).show();
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

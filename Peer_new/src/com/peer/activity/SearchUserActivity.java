@@ -24,7 +24,7 @@ import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.pViewBox;
 
 /*
- * ËÑË÷ÓÃ»§Àà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
  * */
 public class SearchUserActivity extends pBaseActivity {
 	private TitlePopup userPopup;
@@ -33,7 +33,7 @@ public class SearchUserActivity extends pBaseActivity {
 
 	private int USER_LABEL = 1;
 	private int USER_NICK = 2;
-	private int searchtype = USER_LABEL;// ËÑË÷ÀàÐÍ Ä¬ÈÏ°´±êÇ©ËÑË÷ÓÃ»§
+	private int searchtype = USER_LABEL;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¬ï¿½Ï°ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 
 	class PageViewList {
 		private LinearLayout ll_back, layout_clear_search_text,
@@ -151,7 +151,7 @@ public class SearchUserActivity extends pBaseActivity {
 			String searchtaget = pageViewaList.et_contentsearch.getText()
 					.toString().trim();
 			if (TextUtils.isEmpty(searchtaget)) {
-				showToast("ËÑË÷¿ò²»ÄÜÎª¿Õ", Toast.LENGTH_SHORT, false);
+				showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½", Toast.LENGTH_SHORT, false);
 			} else {
 				Search(searchtaget);
 			}
@@ -189,12 +189,12 @@ public class SearchUserActivity extends pBaseActivity {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance()
 							.setSearchtype(Constant.USERBYLABEL);
-					searchtype = USER_LABEL;// °´±êÇ©ËÑË÷ÓÃ»§
+					searchtype = USER_LABEL;// ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bynike))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(Constant.USERBYNIKE);
-					searchtype = USER_NICK;// °´êÇ³ÆËÑË÷ÓÃ»§
+					searchtype = USER_NICK;// ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 				}
 			}
 		});
@@ -227,5 +227,17 @@ public class SearchUserActivity extends pBaseActivity {
 			}
 		}
 	};
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

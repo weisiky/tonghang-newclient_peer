@@ -17,7 +17,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ÓÃ»§ÐÅÏ¢Àà
+ * ï¿½Ã»ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
  * */
 public class PersonalPageActivity extends pBaseActivity{
 	
@@ -103,16 +103,28 @@ public class PersonalPageActivity extends pBaseActivity{
 //			}						
 			break;
 		case R.id.send:
-			showToast("Ä£Äâ·¢ËÍÏûÏ¢", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½â·¢ï¿½ï¿½ï¿½ï¿½Ï¢", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.addfriends:
 			Intent addfriends=new Intent(PersonalPageActivity.this,AddFriendsActivity.class);
 			startActivity(addfriends);
-			showToast("Ä£ÄâÌí¼ÓºÃÓÑ", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½ï¿½ï¿½ï¿½Óºï¿½ï¿½ï¿½", Toast.LENGTH_SHORT, false);
 			break;
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

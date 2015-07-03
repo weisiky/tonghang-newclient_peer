@@ -44,7 +44,7 @@ import com.umeng.analytics.MobclickAgent;
 
 
 /*
- * ÁÄÌìÊÒÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class ChatRoomActivity extends pBaseActivity{
 	
@@ -108,7 +108,7 @@ public class ChatRoomActivity extends pBaseActivity{
 		mScrollView.setVerticalScrollBarEnabled(false);  
 		mScrollView.setHorizontalScrollBarEnabled(false);
 		
-		hideKeyboard();//Èí¼üÅÌ
+		hideKeyboard();//ï¿½ï¿½ï¿½ï¿½ï¿½
 		pageViewaList.btn_send.setEnabled(false);
 		pageViewaList.btn_send.addTextChangedListener(new TextWatcher() {
 			
@@ -182,11 +182,11 @@ public class ChatRoomActivity extends pBaseActivity{
 				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
 //				topicId=toChatUsername;
 			}
-			//½«¸¡¶¯´°¿ÚÈ¡Ïû²¢±£´æÔÚÅäÖÃÎÄ¼þÖÐ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 //			Intent serviceintent = new Intent(ChatRoomActivity.this, FxService.class);
 //			stopService(serviceintent);			
 //			LocalStorage.saveBoolean(ChatRoomActivity.this, Constant.ISFLOAT, false);
-			//¼ÓÈë¹«¿ªÈºÁÄ
+			//ï¿½ï¿½ï¿½ë¹«ï¿½ï¿½Èºï¿½ï¿½
 			easemobchatImp.getInstance().joingroup(toChatUsername);
 			
 //			ReplieTask task=new ReplieTask();
@@ -226,7 +226,7 @@ public class ChatRoomActivity extends pBaseActivity{
 //			adapter=new ChatMsgViewAdapter(this, msgList);
 //			pageViewaList.lv_chat.setAdapter(adapter);
 			pageViewaList.lv_chat.setSelection(pageViewaList.lv_chat.getCount() - 1);	
-			// °Ñ´Ë»á»°µÄÎ´¶ÁÊýÖÃÎª0
+			// ï¿½Ñ´Ë»á»°ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0
 			conversation.resetUnreadMsgCount();				
 		}
 
@@ -259,10 +259,10 @@ public class ChatRoomActivity extends pBaseActivity{
 		case R.id.theme_chat:		
 //			showtheme(num);
 //			num++;
-			showToast("Ä£Äâtheme_chat", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½ï¿½theme_chat", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.tv_share:
-			showToast("Ä£Äâ·ÖÏí", Toast.LENGTH_SHORT, false);			
+			showToast("Ä£ï¿½ï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_SHORT, false);			
 			break;
 
 		case R.id.im_downview:
@@ -271,7 +271,7 @@ public class ChatRoomActivity extends pBaseActivity{
 		case R.id.host_image:
 //			FriendsTask task=new FriendsTask();
 //			task.execute();
-			showToast("Ä£Äâhost_image", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½ï¿½host_image", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.btn_send:
 //			if(ChatRoomTypeUtil.getInstance().getChatroomtype()==Constant.MULTICHAT){
@@ -279,7 +279,7 @@ public class ChatRoomActivity extends pBaseActivity{
 //			}else{
 //				sendMessage();
 //			}		
-			showToast("Ä£Äâ·¢ËÍ", Toast.LENGTH_SHORT, false);
+			showToast("Ä£ï¿½â·¢ï¿½ï¿½", Toast.LENGTH_SHORT, false);
 			break;
 		default:
 			break;
@@ -289,7 +289,7 @@ public class ChatRoomActivity extends pBaseActivity{
 	
 	
 	/**
-	 * Òþ²ØÈí¼üÅÌ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private void hideKeyboard() {
 		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -300,10 +300,22 @@ public class ChatRoomActivity extends pBaseActivity{
 				manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	/*
-	 * ¶Ôpopupwindow½øÐÐ¼àÌý
+	 * ï¿½ï¿½popupwindowï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
 	 * 
 	private void popupwindow() {
 		// TODO Auto-generated method stub		

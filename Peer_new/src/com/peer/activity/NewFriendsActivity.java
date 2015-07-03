@@ -11,7 +11,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ¡®ÐÂÅóÓÑ¡¯Ò³
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ò³
  * */
 public class NewFriendsActivity extends pBaseActivity {
 
@@ -73,6 +73,18 @@ public class NewFriendsActivity extends pBaseActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

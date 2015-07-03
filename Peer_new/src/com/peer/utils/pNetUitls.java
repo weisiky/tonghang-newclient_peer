@@ -5,9 +5,10 @@ import org.apache.http.HttpHost;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 
 /**
- * ÍøÂç¹¤¾ßÀà£¬Ö÷Òª¶Ôµ±Ç°Éè±¸µÄÍøÂç×´Ì¬ºÍÀàĞÍ½øĞĞÅĞ¶Ï
+ * ï¿½ï¿½ï¿½ç¹¤ï¿½ï¿½ï¿½à£¬ï¿½ï¿½Òªï¿½Ôµï¿½Ç°ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Í½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
  * @author zhzhg
  * @version 1.0.0
  */
@@ -16,53 +17,81 @@ public class pNetUitls {
 	public static final int TYPE_MOBILE_CMWAP = 2;
 	public static final int TYPE_WIFI = 3;
 	public static final int TYPE_NO = 0;
-	public static final int TYPE_MOBILE_CTWAP = 4; // ÒÆ¶¯ÃÎÍø´úÀí
+	public static final int TYPE_MOBILE_CTWAP = 4; // ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	
+	
+	/**
+	 * æ£€æŸ¥å½“å‰ç½‘ç»œæ˜¯å¦å¯ç”¨
+	 * 
+	 * @param context
+	 * @return
+	 */
+
+	public static boolean isNetworkAvailable(Context context) {
+		
+		// è·å–æ‰‹æœºæ‰€æœ‰è¿æ¥ç®¡ç†å¯¹è±¡ï¼ˆåŒ…æ‹¬å¯¹wi-fi,netç­‰è¿æ¥çš„ç®¡ç†ï¼‰
+		ConnectivityManager connectivityManager = (ConnectivityManager) 
+				context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (connectivityManager != null) {
+			NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
+			if (networkInfo != null) {
+				for (NetworkInfo info : networkInfo) {
+					if (info.getState() == State.CONNECTED) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
 
 	/**
-	 * »ñµÃµ±Ç°ÍøÂçÀàĞÍ
-	 * @param mContext ÉÏÏÂÎÄ
-	 * @return TYPE_MOBILE_CMNET:1 TYPE_MOBILE_CMWAP:2 TYPE_WIFI:3 TYPE_NO:0(Î´ÖªÀàĞÍ)
+	 * ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param mContext ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return TYPE_MOBILE_CMNET:1 TYPE_MOBILE_CMWAP:2 TYPE_WIFI:3 TYPE_NO:0(Î´Öªï¿½ï¿½ï¿½ï¿½)
 	 */
 	public static int getNetWorkType(Context mContext) {
 		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-		// »ñµÃµ±Ç°ÍøÂçĞÅÏ¢
+		// ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isAvailable()) {
 			int currentNetWork = networkInfo.getType();
 			if (currentNetWork == ConnectivityManager.TYPE_MOBILE) {
 				if (networkInfo.getExtraInfo() != null && networkInfo.getExtraInfo().equals("cmwap")) {
-					// µ±Ç°ÍøÂçÎª:cmwapÍøÂç
+					// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:cmwapï¿½ï¿½ï¿½ï¿½
 					return TYPE_MOBILE_CMWAP;
 				} else if (networkInfo.getExtraInfo() != null && networkInfo.getExtraInfo().equals("uniwap")) {
-					// µ±Ç°ÍøÂçÎª:uniwapÍøÂç
+					// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:uniwapï¿½ï¿½ï¿½ï¿½
 					return TYPE_MOBILE_CMWAP;
 				} else if (networkInfo.getExtraInfo() != null && networkInfo.getExtraInfo().equals("3gwap")) {
-					// µ±Ç°ÍøÂçÎª:3gwapÍøÂç
+					// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:3gwapï¿½ï¿½ï¿½ï¿½
 					return TYPE_MOBILE_CMWAP;
 				} else if (networkInfo.getExtraInfo() != null && networkInfo.getExtraInfo().contains("ctwap")) {
-					// µ±Ç°ÍøÂçÎªctwapÍøÂç
+					// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îªctwapï¿½ï¿½ï¿½ï¿½
 					return TYPE_MOBILE_CTWAP;
 				} else {
-					// µ±Ç°ÍøÂçÎª:netÍøÂç
+					// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:netï¿½ï¿½ï¿½ï¿½
 					return TYPE_MOBILE_CMNET;
 				}
 
 			} else if (currentNetWork == ConnectivityManager.TYPE_WIFI) {
-				// µ±Ç°ÍøÂçÎª:WIFIÍøÂç
+				// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:WIFIï¿½ï¿½ï¿½ï¿½
 				return TYPE_WIFI;
 			} else{
-				// Î´ÖªµÄÒÆ¶¯ÍøÂç
+				// Î´Öªï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 				return TYPE_MOBILE_CMNET;
 			}
 		}
-		// µ±Ç°ÍøÂçÎª:²»ÊÇÎÒÃÇ¿¼ÂÇµÄÍøÂç
+		// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½
 		return TYPE_NO;
 	}
 
 	/**
-	 * »ñÈ¡´úÀíhost
-	 * @param context ÉÏÏÂÎÄ
-	 * @return ´úÀíhost
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½host
+	 * @param context ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½ï¿½ï¿½host
 	 */
 	public static HttpHost getProxyHost(Context context) {
 		HttpHost proxy = null;

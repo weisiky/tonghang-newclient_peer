@@ -13,7 +13,7 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * ÍÆ¼ö»°ÌâÀà
+ * ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * 
  */
 public class Recommend_topic extends pBaseActivity{
@@ -40,7 +40,7 @@ public class Recommend_topic extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText("»°Ìâ");
+		pageViewaList.tv_title.setText("ï¿½ï¿½ï¿½ï¿½");
 		pull_refresh_topic = (PullToRefreshListView) findViewById(R.id.pull_refresh_topic);
 		pageViewaList.ll_topic.setVisibility(View.VISIBLE);
 		pageViewaList.im_search.setVisibility(View.GONE);
@@ -96,6 +96,18 @@ public class Recommend_topic extends pBaseActivity{
 		default:
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

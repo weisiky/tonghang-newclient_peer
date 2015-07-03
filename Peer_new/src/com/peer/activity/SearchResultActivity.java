@@ -33,15 +33,15 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ËÑË÷½á¹ûÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class SearchResultActivity extends pBaseActivity{
 	
 	
 	private PullToRefreshListView lv_searchresult;
-	/** ·ÖÒ³²ÎÊý **/
+	/** ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ **/
 	private int page=1;
-	/** ÅÐ¶ÏÇëÇóÀàÐÍ **/
+	/** ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
 	String contanttype;
 	String searchname ;
 	
@@ -69,7 +69,7 @@ public class SearchResultActivity extends pBaseActivity{
 		searchname=SearchBean.getInstance().getSearchname();
 		String searchaccuratetarget = SearchBean.getInstance().getCallbacklabel();
 		
-		lv_searchresult=(PullToRefreshListView)findViewById(R.id.lv_searchresult);//×Ô¶¨Òå¿Ø¼þ£¬×Ô¼ºfind
+		lv_searchresult=(PullToRefreshListView)findViewById(R.id.lv_searchresult);//ï¿½Ô¶ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½find
 		pageViewaList.tv_title.setText(searchname);
 		
 		
@@ -80,7 +80,7 @@ public class SearchResultActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 		
-		RefreshListner();//ÉÏÀ­Ë¢ÐÂ¼àÌý
+		RefreshListner();//ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â¼ï¿½ï¿½ï¿½
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class SearchResultActivity extends pBaseActivity{
 	
 	
 	/**
-	 * ÉÏÀ­£¬ÏÂÀ­Ë¢ÐÂ·½·¨
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â·ï¿½ï¿½ï¿½
 	 * 
 	 */
 	private void RefreshListner() {
@@ -155,7 +155,7 @@ public class SearchResultActivity extends pBaseActivity{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				showToast("ÏÂÀ­Ë¢ÐÂ³É¹¦", Toast.LENGTH_SHORT, false);
+				showToast("ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â³É¹ï¿½", Toast.LENGTH_SHORT, false);
 			}
 			@Override
 			public void onPullUpToRefresh(
@@ -171,13 +171,13 @@ public class SearchResultActivity extends pBaseActivity{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				showToast("ÉÏÀ­Ë¢ÐÂ³É¹¦", Toast.LENGTH_SHORT, false);
+				showToast("ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â³É¹ï¿½", Toast.LENGTH_SHORT, false);
 			}			
 		});
 	}
 	
 	/**
-	 * ËÑË÷½Ó¿Ú
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 	 * 
 	 * @param label_name
 	 * @param page
@@ -187,7 +187,7 @@ public class SearchResultActivity extends pBaseActivity{
 	private void SearchResult(String name, int page , String contanttype)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-		/** ÇëÇóµØÖ· **/
+		/** ï¿½ï¿½ï¿½ï¿½ï¿½Ö· **/
 		String URL = null;
 		
 		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
@@ -289,5 +289,17 @@ public class SearchResultActivity extends pBaseActivity{
 					}
 
 				});
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 }

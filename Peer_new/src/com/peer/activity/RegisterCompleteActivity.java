@@ -43,7 +43,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ×¢²áÐÅÏ¢ÍêÉÆÀà¡£
+ * ×¢ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½à¡£
  * 
  * */
 public class RegisterCompleteActivity extends pBaseActivity{
@@ -171,7 +171,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	
 	
 	/**
-	 * Íê³É×¢²á·½·¨
+	 * ï¿½ï¿½ï¿½×¢ï¿½á·½ï¿½ï¿½
 	 * commit
 	 */
 	 private void CommiteToServer() {
@@ -184,7 +184,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 }
 	 
 	 /**
-		 * ÇëÇóÐÞ¸ÄÓÃ»§ÐÅÏ¢½Ó¿Ú
+		 * ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢ï¿½Ó¿ï¿½
 		 * 
 		 * @param email
 		 * @param password
@@ -273,7 +273,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 									+ response.toString());
 							super.onSuccess(statusCode, headers, response);
 					*/		
-							/** »·ÐÅµÇÈë 
+							/** ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ 
 							easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
 							easemobchatImp.getInstance().loadConversationsandGroups();
 							
@@ -299,7 +299,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 **/
 	
 	/*
-	 * ´æbitmap
+	 * ï¿½ï¿½bitmap
 	 * */
 	public byte[] getBitmapByte(Bitmap bitmap) {
 		if (bitmap == null) {  
@@ -313,7 +313,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	
 	
 	/*
-	 * ¸´Ñ¡¿ò£¬Ñ¡ÔñÐÔ±ð
+	 * ï¿½ï¿½Ñ¡ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ô±ï¿½
 	 * */
 	private void SexSelect() {
 		// TODO Auto-generated method stub
@@ -332,7 +332,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	
 	
 	/*
-	 * Í¼Æ¬´æ´¢
+	 * Í¼Æ¬ï¿½æ´¢
 	 * */
 	private void showDialog() {
 
@@ -375,7 +375,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	}
 	
 	/*
-	 * ÉúÈÕ
+	 * ï¿½ï¿½ï¿½ï¿½
 	 * */
 	private void ChangBirthday() {
 		// TODO Auto-generated method stub
@@ -398,7 +398,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	    };
 	    
 	    /*
-	     * Ä¬ÈÏ³öÉúÄêÔÂ
+	     * Ä¬ï¿½Ï³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	     * */
 	    private void setDateTime(){
 	        final Calendar c = Calendar.getInstance();  
@@ -513,6 +513,18 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 			return photo;
 
 	 		}
+
+			@Override
+			public void onNetworkOn() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onNetWorkOff() {
+				// TODO Auto-generated method stub
+				
+			}
 	 		
 	 		
 }

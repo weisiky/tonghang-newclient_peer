@@ -23,7 +23,7 @@ import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.pViewBox;
 
 /*
- * ´´½¨»°ÌâÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * 
  * */
 public class CreatTopicActivity extends pBaseActivity{
@@ -148,7 +148,7 @@ public class CreatTopicActivity extends pBaseActivity{
 	}
 	
 	/*
-	 * ´´½¨»°ÌâÊ±£¬ÊÇ·ñ·ÖÏí
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 	 * */
 	public void ShareDialog(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.sharedailog))  
@@ -160,17 +160,29 @@ public class CreatTopicActivity extends pBaseActivity{
 				// TODO Auto-generated method stub
 //				CreatTopicTask task=new CreatTopicTask();
 //				task.execute(selectlabel,topic.getText().toString().trim());
-				showToast("´´½¨»°Ìâ³É¹¦", Toast.LENGTH_SHORT, false);
+				showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½", Toast.LENGTH_SHORT, false);
 			}
 		}) 
 		 .setPositiveButton(getResources().getString(R.string.sharesure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){            	 
               
-           showToast("·ÖÏíÔÝÊ±²»Ìá¹©", Toast.LENGTH_SHORT, false);
+           showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½á¹©", Toast.LENGTH_SHORT, false);
       		
              }
 		 })
 		 .show();  
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

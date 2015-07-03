@@ -12,7 +12,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * °üÀ¨¡®ÎÒµÄ»°Ìâ¡¯£¬¡®ËûµÄ»°Ìâ¡¯£¬¡®ËýµÄ»°Ìâ¡¯£¬¡®ÒÑ´´½¨»°Ìâ¡¯Ò³
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ»ï¿½ï¿½â¡¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½â¡¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½â¡¯ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â¡¯Ò³
  * */
 public class TopicActivity extends pBaseActivity{
 	class PageViewList {
@@ -74,6 +74,18 @@ public class TopicActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		
+	}
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
 		
 	}
 }

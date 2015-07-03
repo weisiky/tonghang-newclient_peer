@@ -25,13 +25,13 @@ import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.pViewBox;
 
 /*
- * ËÑË÷»°ÌâÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class SearchTopicActivity extends pBaseActivity {
 
 	public static int TOPIC_LABEL = 1;
 	public static int TOPIC_TOPICKEY = 2;
-	private int searchtype = TOPIC_LABEL;// ËÑË÷ÀàÐÍ Ä¬ÈÏ°´±êÇ©ËÑË÷»°Ìâ
+	private int searchtype = TOPIC_LABEL;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¬ï¿½Ï°ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	private TitlePopup tagPopup;
 	private InputMethodManager imm;
 	boolean page = false;
@@ -152,7 +152,7 @@ public class SearchTopicActivity extends pBaseActivity {
 			String searchtaget = pageViewaList.et_contentsearch.getText()
 					.toString().trim();
 			if (TextUtils.isEmpty(searchtaget)) {
-				showToast("ËÑË÷¿ò²»ÄÜÎª¿Õ", Toast.LENGTH_SHORT, false);
+				showToast("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½", Toast.LENGTH_SHORT, false);
 			} else {
 				Search(searchtaget);
 			}
@@ -190,13 +190,13 @@ public class SearchTopicActivity extends pBaseActivity {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYLABEL);
-					searchtype = TOPIC_LABEL;// °´±êÇ©ËÑË÷»°Ìâ
+					searchtype = TOPIC_LABEL;// ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bytopic))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYTOPIC);
-					searchtype = TOPIC_TOPICKEY;// °´»°Ìâ¹Ø¼ü×ÖËÑË÷»°Ìâ
+					searchtype = TOPIC_TOPICKEY;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				}
 			}
 		});
@@ -229,4 +229,16 @@ public class SearchTopicActivity extends pBaseActivity {
 			}
 		}
 	};
+
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+		
+	}
 }
