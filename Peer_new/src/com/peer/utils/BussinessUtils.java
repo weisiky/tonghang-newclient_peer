@@ -10,7 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
-import com.peer.bean.success;
+import com.peer.bean.LoginBean;
 
 import android.app.Activity;
 import android.app.Service;
@@ -415,7 +415,7 @@ public class BussinessUtils {
 	/**
 	 * 保存用户数据
 	 */
-	public static void saveUserData(success loginBean,
+	public static void saveUserData(LoginBean loginBean,
 			pShareFileUtils pShareFileUtils) {
 
 //		pShareFileUtils.setString("", loginBean.getAge());

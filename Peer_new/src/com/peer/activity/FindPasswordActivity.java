@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,14 +33,16 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-
-/*
- * �һ�������
- * */
-public class FindPasswordActivity extends pBaseActivity{
+/**
+ * 找回密码
+ * 
+ * @author zhangzg
+ * 
+ */
+public class FindPasswordActivity extends pBaseActivity {
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title,email_test;
+		private TextView tv_title, email_test;
 		private EditText et_email_find;
 		private Button bt_findpassword;
 	}
@@ -50,7 +53,7 @@ public class FindPasswordActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -58,11 +61,12 @@ public class FindPasswordActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.findpassword));
-		
-		if(TextUtils.isEmpty(pageViewaList.et_email_find.getText().toString())){
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.findpassword));
+
+		if (TextUtils.isEmpty(pageViewaList.et_email_find.getText().toString())) {
 			pageViewaList.bt_findpassword.setEnabled(false);
-		}else{
+		} else {
 			pageViewaList.bt_findpassword.setEnabled(true);
 		}
 	}
@@ -72,37 +76,39 @@ public class FindPasswordActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.bt_findpassword.setOnClickListener(this);
-		
-		
+
 		pageViewaList.et_email_find.addTextChangedListener(new TextWatcher() {
-				
-				@Override
-				public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-					// TODO Auto-generated method stub
-					if(TextUtils.isEmpty(pageViewaList.et_email_find.getText().toString())){
-						pageViewaList.bt_findpassword.setEnabled(false);
-					}else{
-						pageViewaList.bt_findpassword.setEnabled(true);
-					}
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				// TODO Auto-generated method stub
+				if (TextUtils.isEmpty(pageViewaList.et_email_find.getText()
+						.toString())) {
+					pageViewaList.bt_findpassword.setEnabled(false);
+				} else {
+					pageViewaList.bt_findpassword.setEnabled(true);
 				}
-				
-				@Override
-				public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-						int arg3) {
-					// TODO Auto-generated method stub
-					
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				if (TextUtils.isEmpty(pageViewaList.et_email_find.getText()
+						.toString())) {
+					pageViewaList.bt_findpassword.setEnabled(false);
+				} else {
+					pageViewaList.bt_findpassword.setEnabled(true);
 				}
-				
-				@Override
-				public void afterTextChanged(Editable arg0) {
-					// TODO Auto-generated method stub
-					if(TextUtils.isEmpty(pageViewaList.et_email_find.getText().toString())){
-						pageViewaList.bt_findpassword.setEnabled(false);
-					}else{
-						pageViewaList.bt_findpassword.setEnabled(true);
-					}
-				}
-			});
+			}
+		});
 	}
 
 	@Override
@@ -121,9 +127,10 @@ public class FindPasswordActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_findpassword, null);
+		return getLayoutInflater()
+				.inflate(R.layout.activity_findpassword, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -133,36 +140,49 @@ public class FindPasswordActivity extends pBaseActivity{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_findpassword:
-			String email = pageViewaList.et_email_find.getText().toString().trim();
-//			commitfindpasswd(email);
+			String email = pageViewaList.et_email_find.getText().toString()
+					.trim();
+			if (isNetworkAvailable) {
+
+				if (email.length() > 0) {
+
+					commitfindpasswd(email);
+				} else {
+					showToast("请输入邮箱", Toast.LENGTH_SHORT, false);
+				}
+			} else {
+
+			}
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	/**
-	 *�ύ�һ��������� 
+	 * 请求找回密码接口
+	 * 
 	 * @param email
 	 * 
 	 */
-	private void commitfindpasswd(String email) throws UnsupportedEncodingException{
+	private void commitfindpasswd(String email) {
 		// TODO Auto-generated method stub
 		showProgressBar();
-		
-		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
-		baseParams.add(new BasicNameValuePair("email", email));
-		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
-		
-		HttpEntity entity = new StringEntity(params, "utf-8");
-		HttpUtil.post(this,HttpConfig.FORGET_IN_URL, entity,"application/json",
-						new JsonHttpResponseHandler() {
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getFindPassWordParams(this, email);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		HttpUtil.post(this, HttpConfig.FORGET_IN_URL, entity,
+				"application/json", new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -170,7 +190,7 @@ public class FindPasswordActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						hideLoading();
-						
+
 						pLog.i("test", "onFailure+statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "responseString:" + responseString);
@@ -199,7 +219,8 @@ public class FindPasswordActivity extends pBaseActivity{
 						pLog.i("test", "onFailure:statusCode:" + statusCode);
 						pLog.i("test", "throwable:" + throwable.toString());
 						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test", "errorResponse:" + errorResponse.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -240,19 +261,19 @@ public class FindPasswordActivity extends pBaseActivity{
 				});
 		Intent intent = new Intent();
 		startActivityForLeft(FindPasswordResultActivity.class, intent, false);
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

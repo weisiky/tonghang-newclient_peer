@@ -3,7 +3,7 @@ package com.peer.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Topic implements Parcelable{
+public class TopicBean implements Parcelable{
 	private String label_name;
 	private String create_time;
 	private String huangxin_group_id;
@@ -13,22 +13,22 @@ public class Topic implements Parcelable{
 	private String headpic;
 	private User user;
 	
-	public Topic(){}
+	public TopicBean(){}
 	
-	public  Topic(Parcel source) {
+	public  TopicBean(Parcel source) {
 		readFromParcel(source);
 	}
 	
-	public static final Parcelable.Creator<Topic> CREATOR = new Parcelable.Creator<Topic>() {  
+	public static final Parcelable.Creator<TopicBean> CREATOR = new Parcelable.Creator<TopicBean>() {  
 		  
         @Override  
-        public Topic createFromParcel(Parcel source) {  
-            return new Topic(source);  
+        public TopicBean createFromParcel(Parcel source) {  
+            return new TopicBean(source);  
         }  
   
         @Override  
-        public Topic[] newArray(int size) {  
-            return new Topic[size];  
+        public TopicBean[] newArray(int size) {  
+            return new TopicBean[size];  
         }  
     };  	
 	@Override

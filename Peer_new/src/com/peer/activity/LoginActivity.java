@@ -29,7 +29,7 @@ import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.utils.IoUtils;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.success;
+import com.peer.bean.LoginBean;
 import com.peer.bean.LoginResultBean;
 import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
@@ -66,6 +66,23 @@ public class LoginActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
+		String loginStr = pIOUitls.readFileByLines(
+				Constant.DEFAULT_MAIN_DIRECTORY, "login.txt");
+
+		pLog.i("test", "loginStr:" + loginStr);
+
+		try {
+			LoginBean loginBean = JsonDocHelper.toJSONObject(loginStr,
+					LoginBean.class);
+			pLog.i("test", "loginBean:" + loginBean.getPic_server());
+			pLog.i("test", "loginBean:" + loginBean.getUserBean().toString());
+			pLog.i("test", "loginBean:" + loginBean.getUserBean().getBirth());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			pLog.i("test", "Exception:" + e.toString());
+			e.printStackTrace();
+		}
 
 	}
 
@@ -165,40 +182,13 @@ public class LoginActivity extends pBaseActivity {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-
-		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
-		baseParams.add(new BasicNameValuePair("email", email));
-		baseParams.add(new BasicNameValuePair("password", password));
-
-		ArrayList<String> tags = new ArrayList<String>();
-
-		tags.add("销售");
-		tags.add("java");
-		tags.add("美食");
-
+		HttpEntity entity = null;
 		try {
-			baseParams.add(new BasicNameValuePair("labels", JsonDocHelper
-					.toJSONString(tags)));
-			pLog.i("test", "JsonDocHelper：" + JsonDocHelper.toJSONString(tags));
+			entity = PeerParamsUtils.getLoginParams(this, email, password);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-
-		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
-
-		// ArrayList<String> tags = new ArrayList<String>();
-		//
-		// tags.add("销售");
-		// tags.add("java");
-		// tags.add("美食");
-		HttpEntity entity = new StringEntity(params, "utf-8");
-
-		// RequestParams params = new RequestParams();
-
-		// params.put("email", email);
-		// params.put("password", password);
-
 		HttpUtil.post(this, HttpConfig.LONIN_IN_URL, entity,
 				"application/json;charset=utf-8",
 				new JsonHttpResponseHandler() {
@@ -274,10 +264,9 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "headers:" + headers.toString());
 						pLog.i("test", "response:" + response.toString());
 
-
 						try {
-							success loginBean = JsonDocHelper.toJSONObject(
-									response.toString(), success.class);
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.toString(), LoginBean.class);
 
 							// BussinessUtils.saveUserData(loginBean,
 							// mShareFileUtils);

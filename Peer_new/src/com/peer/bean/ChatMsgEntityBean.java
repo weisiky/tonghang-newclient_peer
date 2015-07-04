@@ -6,7 +6,7 @@ package com.peer.bean;
  * @author way
  * 
  */
-public class ChatMsgEntity {
+public class ChatMsgEntityBean {
 	private String userId;
 	private String image;
 	private String name;//消息来自
@@ -54,7 +54,7 @@ public class ChatMsgEntity {
 		isComMeg = isComMsg;
 	}
 
-	public ChatMsgEntity() {
+	public ChatMsgEntityBean() {
 	}
 
 	public String getImage() {
@@ -65,7 +65,7 @@ public class ChatMsgEntity {
 		this.image = image;
 	}
 
-	public ChatMsgEntity(String name, String date, String text, int isComMsg,String userId) {
+	public ChatMsgEntityBean(String name, String date, String text, int isComMsg,String userId) {
 		super();
 		this.name = name;
 		this.date = date;

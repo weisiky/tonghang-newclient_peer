@@ -2,6 +2,7 @@ package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -240,28 +241,29 @@ public class RegisterTagActivity extends pBaseActivity {
 	 * @throws Exception
 	 */
 
+	@SuppressWarnings("unchecked")
 	private void sendRegisterTagRequest(String email, String password,
-			String nikename, List labels) throws Exception {
+			String nikename, List labels) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		pLog.i("sendMsg", "email:" + email);
-		pLog.i("sendMsg", "password:" + password);
-		pLog.i("sendMsg", "nikename:" + nikename);
-		pLog.i("sendMsg", "labels:" + labels);
-		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
-		baseParams.add(new BasicNameValuePair("email", email));
-		baseParams.add(new BasicNameValuePair("password", password));
-		baseParams.add(new BasicNameValuePair("labels", JsonDocHelper
-				.toJSONString(labels)));
-		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
-		pLog.i("test", "params:" + params);
+		// Map<String, Object> paramsMap = new HashMap<String, Object>();
+		// paramsMap.put("email", email);
+		// paramsMap.put("password", password);
+		// paramsMap.put("username", nikename);
+		// paramsMap.put("labels",labels);
 
-		HttpEntity entity = new StringEntity(params, "utf-8");
-
-		pLog.i("test", "entity:" + entity.toString());
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getRegisterTagParams(this, email, password,
+					nikename, labels);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		HttpUtil.post(this, HttpConfig.REGISTTAG_IN_URL, entity,
-				"application/json", new JsonHttpResponseHandler() {
+				"application/json;charset=utf-8",
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,

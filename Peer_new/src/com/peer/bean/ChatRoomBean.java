@@ -18,7 +18,7 @@ public class ChatRoomBean {
 	private String nike;
 	
 	private User user;
-	private Topic topic;
+	private TopicBean topic;
 	private boolean isowner;
 	private static ChatRoomBean chatroomtypeutil;
 	private ChatRoomBean(){}
@@ -92,10 +92,10 @@ public class ChatRoomBean {
 	public void setIsowner(boolean isowner) {
 		this.isowner = isowner;
 	}
-	public Topic getTopic() {
+	public TopicBean getTopic() {
 		return topic;
 	}
-	public void setTopic(Topic topic) {
+	public void setTopic(TopicBean topic) {
 		this.topic = topic;
 	}
 

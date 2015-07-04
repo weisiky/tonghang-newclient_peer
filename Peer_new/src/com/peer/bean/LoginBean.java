@@ -9,13 +9,13 @@ import java.io.Serializable;
  * 
  */
 
-public class success implements Serializable {
+public class LoginBean implements Serializable {
 	
 	
 	private String pic_server;
 	private String sys_time;
 	private String code;
-	private User userBean;
+	private UserBean userBean;
 	public String getPic_server() {
 		return pic_server;
 	}
@@ -34,10 +34,10 @@ public class success implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public User getUserBean() {
+	public UserBean getUserBean() {
 		return userBean;
 	}
-	public void setUserBean(User userBean) {
+	public void setUserBean(UserBean userBean) {
 		this.userBean = userBean;
 	}
 }

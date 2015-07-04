@@ -1,101 +1,154 @@
 package com.peer.net;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
+import android.media.JetPlayer.OnJetEventListener;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.activity.R;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 
 /**
- * ÍøÂçÇëÇó²ÎÊı¹¤¾ßÀà
+ * ç½‘ç»œè¯·æ±‚å‚æ•°å·¥å…·ç±»
  * 
  * @author zhangzg
  * 
  */
 public class PeerParamsUtils {
-	// ÊµÀı»°¶ÔÏó
-	private static RequestParams params = new RequestParams();
 
 	/**
-	 * Ìí¼ÓÏµÍ³ÇëÇó²ÎÊı£¨Ã¿¸ö½Ó¿Ú¶¼±ØĞë´«µÄ²ÎÊı£©
+	 * æ·»åŠ ç³»ç»Ÿè¯·æ±‚å‚æ•°ï¼ˆæ¯ä¸ªæ¥å£éƒ½å¿…é¡»ä¼ çš„å‚æ•°ï¼‰
 	 * 
 	 * @param context
 	 * @return
 	 */
-	public static RequestParams getDefaultParams(Context context) {
-		RequestParams params = new RequestParams();
-
-		return params;
+	public static Map<String, Object> getDefaultParams(Context context) {
+		Map<String, Object> defaultParams = new HashMap<String, Object>();
+		return defaultParams;
 	}
 
 	/**
-	 * µÇÂ¼²ÎÊı°ó¶¨
+	 * ç™»å½•å‚æ•°ç»‘å®š
 	 * 
 	 * @param context
-	 * @param key1
-	 * @param key2
-	 * @param methodName
+	 * @param email
+	 * @param password
 	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
 	 */
-	public static RequestParams getLoginParams(Context context, String email,
-			String password) {
-		
-		
-		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
-		baseParams.add(new BasicNameValuePair("email", email));
-		baseParams.add(new BasicNameValuePair("password", password));
-		RequestParams params = getDefaultParams(context);
-		// °ó¶¨²ÎÊı
-		// params.put("client_v", "3.7");
-		// params.put("sign_method", "");
-		// params.put("ttid", "");
-		// params.put("platform", "01");
-		// params.put("model", "MI+2S");
-		// params.put("etag", "");
-		// params.put("accept", "aaaaaa");
-		// params.put("appkey", "0110010");
-		// params.put("format", "json");
-		// params.put("ver", "1.0");
-		// params.put("school_id", "");
-		// params.put("sign", "");
-		// params.put("source", "android_001");
-		// params.put("swidth", "720");
-		// params.put("user_pass", "e10adc3949ba59abbe56e057f20f883e");
-		// params.put("user_phone", "12121212121");
-		// params.put("client_id", "");
-		// params.put("usertoken", "");
-		params.put("email", email);
-		params.put("password", password);
-
-		pLog.i("sendMsg", "params:" + params);
-
-		return params;
+	public static HttpEntity getLoginParams(Context context, String email,
+			String password) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("email", email);
+		loginParams.put("password", password);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
 	}
 
-	public static String ParamsToJsonString(List<BasicNameValuePair> params) {
-		if (params != null && !params.isEmpty()) {
-			StringBuilder s = new StringBuilder();
-			if (params.size() > 0) {
-				s.append("{");
-			}
-			for (BasicNameValuePair bnv : params) {
-				s.append("\"" + bnv.getName()).append(
-						"\":\"" + bnv.getValue() + "\",");
-			}
-			if (s.length() > 0) {
-				s.deleteCharAt(s.length() - 1);
-				s.append("}");
-			}
-			return s.toString();
-		}
-		return null;
+	/**
+	 * æ‰¾å›å¯†ç å‚æ•°ç»‘å®š
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getFindPassWordParams(Context context, String email)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("email", email);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
 	}
+
+	/**
+	 * æ³¨å†Œæ ‡ç­¾å‚æ•°ç»‘å®š
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @param username
+	 * @param labels
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getRegisterTagParams(Context context,
+			String email, String password, String username, List labels)
+			throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		registerTagParams.put("email", email);
+		registerTagParams.put("password", password);
+		registerTagParams.put("username", username);
+		registerTagParams.put("labels", labels);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+
+	/**
+	 * è·å–é¦–é¡µå‚æ•°ç»‘å®š
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getHomeParams(Context context, String client_id,
+			int page) throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("page", page);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+
+	/**
+	 * æ³¨å†Œæ ‡ç­¾å‚æ•°ç»‘å®š
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @param username
+	 * @param labels
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getSearchResultParams(Context context,
+			String name, int page, String contanttype) throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		// registerTagParams.put("email", email);
+		// registerTagParams.put("password", password);
+		// registerTagParams.put("username", username);
+		// registerTagParams.put("labels", labels);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+
 }

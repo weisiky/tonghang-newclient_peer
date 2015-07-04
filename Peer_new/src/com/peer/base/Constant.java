@@ -78,30 +78,23 @@ public class Constant {
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";
-
-	/**
-	 * SD��·��
-	 */
+	/** 获取SD */
 	public static final String SDCARD_DIR = SDCardScanner.getExtSDCardPath();
-	/**
-	 * SharedPreferences����
-	 */
+	/** SharedPreferences文件名称 */
 	public static final String SHARE_NAME = "peer";
 
-	/**
-	 * �ֻ���Ļ�Ŀ�
-	 */
+	/** 屏幕跨度 */
 	public static String S_SCREEN_WIDHT = "swidth";
 	public static String S_SCREEN_WIDHT_VALUE = "480";
-	/**
-	 * ��Ŀ�洢��Ŀ¼
-	 */
+	/** 软件默认存储路径 */
 	public static final String DEFAULT_MAIN_DIRECTORY = SDCARD_DIR + "/peer/";
-	/** �ļ��ڱ��صĻ���Ŀ¼ **/
+	/** 文件缓存目录 **/
 	public static String C_FILE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
 			+ "filecache/";
-
-	/** ģ��client_id **/
+	/** 图片缓存目录 **/
+	public static String C_IMAGE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
+			+ "imagecache/";
+	/** 客户端client_id **/
 	public static String CLIENT_ID = "44393c565b15e21df03336b8f4a82eff713c9a95";
 
 }

@@ -18,7 +18,7 @@ import com.peer.activity.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
-import com.peer.bean.ChatMsgEntity;
+import com.peer.bean.ChatMsgEntityBean;
 import com.peer.bean.User;
 import com.peer.utils.ViewHolder;
 import com.peer.utils.pShareFileUtils;
@@ -41,10 +41,10 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 	}
 	private Context context;
 	private static final int ITEMCOUNT = 3;
-	private List<ChatMsgEntity> coll;
+	private List<ChatMsgEntityBean> coll;
 	private LayoutInflater mInflater;
 	
-	public ChatMsgViewAdapter(Context context, List<ChatMsgEntity> coll) {
+	public ChatMsgViewAdapter(Context context, List<ChatMsgEntityBean> coll) {
 		super(context);
 		this.coll = coll;
 		this.context=context;
@@ -65,7 +65,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 
 	
 	public int getItemViewType(int position) {
-		ChatMsgEntity entity = coll.get(position);
+		ChatMsgEntityBean entity = coll.get(position);
 
 		if (entity.getMsgType()==1) {
 			return IMsgViewType.IMVT_COM_MSG;
@@ -81,7 +81,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ChatMsgEntity entity = coll.get(position);
+		ChatMsgEntityBean entity = coll.get(position);
 		final int isComMsg = entity.getMsgType();
 		if (convertView == null) {
 			if (isComMsg==0) {

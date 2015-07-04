@@ -81,7 +81,7 @@ public class HomeFragment extends pBaseFragment {
 		init();
 		setListener();
 		try {
-			RecommendTask(Constant.CLIENT_ID, page);
+			sendRecommendTask(Constant.CLIENT_ID, page);
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -125,7 +125,7 @@ public class HomeFragment extends pBaseFragment {
 								.setLastUpdatedLabel(label);
 						try {
 							page = 1;
-							RecommendTask(Constant.CLIENT_ID, page);
+							sendRecommendTask(Constant.CLIENT_ID, page);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -145,7 +145,7 @@ public class HomeFragment extends pBaseFragment {
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
 						try {
-							RecommendTask(Constant.CLIENT_ID, ++page);
+							sendRecommendTask(Constant.CLIENT_ID, ++page);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -161,14 +161,18 @@ public class HomeFragment extends pBaseFragment {
 	 * @param page
 	 * @throws UnsupportedEncodingException
 	 */
-	private void RecommendTask(String client_id, int page)
+	private void sendRecommendTask(String client_id, int page)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
-		baseParams.add(new BasicNameValuePair("client_id", client_id));
-		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
 
-		HttpEntity entity = new StringEntity(params, "utf-8");
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getHomeParams(pbaseActivity, client_id,
+					page);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL
 				+ "?page=" + page, entity, "application/json",

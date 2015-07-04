@@ -7,13 +7,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
+	
 	private String email;
 	private String username;
 	private String userid;
 	private String password;
 	private String image;
 	private String sex;
-	private String birthday;
+	private String birth;
 	private String city;
 	private String client_id;
 	private boolean is_friends;
@@ -35,7 +36,7 @@ public class User implements Parcelable {
 		username = source.readString();
 		image = source.readString();
 		sex = source.readString();
-		birthday = source.readString();
+		birth = source.readString();
 		city = source.readString();
 		password=source.readString();
 		reason=source.readString();
@@ -71,7 +72,7 @@ public class User implements Parcelable {
 	        dest.writeString(username);
 	        dest.writeString(image);
 	        dest.writeString(sex);
-	        dest.writeString(birthday);
+	        dest.writeString(birth);
 	        dest.writeString(city);
 	        dest.writeList(labels);
 	        dest.writeString(reason);
@@ -113,12 +114,13 @@ public class User implements Parcelable {
 		this.sex = sex;
 	}
 
-	public String getBirthday() {
-		return birthday;
+
+	public String getBirth() {
+		return birth;
 	}
 
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 
 	public String getCity() {

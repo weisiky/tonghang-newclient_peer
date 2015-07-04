@@ -33,7 +33,7 @@ import com.easemob.util.DateUtils;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.ChatMsgEntity;
+import com.peer.bean.ChatMsgEntityBean;
 import com.peer.bean.ChatRoomBean;
 import com.peer.bean.User;
 import com.peer.titlepopwindow.ActionItem;
@@ -53,7 +53,7 @@ public class ChatRoomActivity extends pBaseActivity{
 	private boolean page = true;
 	private InputMethodManager manager;
 	private String mPageName="ChatRoom";
-	private List<ChatMsgEntity> msgList=new ArrayList<ChatMsgEntity>();
+	private List<ChatMsgEntityBean> msgList=new ArrayList<ChatMsgEntityBean>();
 	private String toChatUsername;
 	String theme = null;
 	private EMConversation conversation;
@@ -206,7 +206,7 @@ public class ChatRoomActivity extends pBaseActivity{
 				String content=body.getMessage();			
 				String   time =DateUtils.getTimestampString(new Date(message.getMsgTime())) ; 
 					
-				ChatMsgEntity entity=new ChatMsgEntity();
+				ChatMsgEntityBean entity=new ChatMsgEntityBean();
 				entity.setMessage(content);
 				entity.setDate(time);
 				try {

@@ -1,7 +1,9 @@
 package com.peer.base;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -33,6 +35,7 @@ public class pBaseApplication extends Application {
 	private static pBaseApplication instance;
 	private BroadcastReceiver netWorkReceiver;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -47,9 +50,13 @@ public class pBaseApplication extends Application {
 		// 注册网络监听器
 		registNetworkReceiver();
 
+		// 图片缓存路径
+		File cacheDir = new File(Constant.C_IMAGE_CACHE_PATH);
+
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				this).threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()
+				.discCache(new UnlimitedDiscCache(cacheDir))
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO).build();
 		ImageLoader.getInstance().init(config);

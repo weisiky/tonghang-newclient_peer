@@ -1,13 +1,12 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -28,28 +27,27 @@ import com.peer.base.pBaseActivity;
 import com.peer.bean.SearchBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
-import com.peer.net.PeerParamsUtils;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
+/**
+ * 查询结果
+ */
+public class SearchResultActivity extends pBaseActivity {
 
-/*
- * ���������
- * */
-public class SearchResultActivity extends pBaseActivity{
-	
-	
 	private PullToRefreshListView lv_searchresult;
-	/** ��ҳ���� **/
-	private int page=1;
-	/** �ж��������� **/
+	/** 分页 **/
+	private int page = 1;
+	/** 查询分类 **/
 	String contanttype;
-	String searchname ;
 	
+	String searchname;
+
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
-		
+
 	}
 
 	private PageViewList pageViewaList;
@@ -58,7 +56,7 @@ public class SearchResultActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -66,40 +64,44 @@ public class SearchResultActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		
-		searchname=SearchBean.getInstance().getSearchname();
-		String searchaccuratetarget = SearchBean.getInstance().getCallbacklabel();
-		
-		lv_searchresult=(PullToRefreshListView)findViewById(R.id.lv_searchresult);//�Զ���ؼ����Լ�find
+
+		searchname = SearchBean.getInstance().getSearchname();
+		String searchaccuratetarget = SearchBean.getInstance()
+				.getCallbacklabel();
+
+		lv_searchresult = (PullToRefreshListView) findViewById(R.id.lv_searchresult);// �Զ���ؼ����Լ�find
 		pageViewaList.tv_title.setText(searchname);
-		
-		
+
 	}
 
 	@Override
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
-		
-		RefreshListner();//����ˢ�¼���
+
+		RefreshListner();// ����ˢ�¼���
 	}
 
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 		try {
-			if(SearchBean.getInstance().getSearchtype().equals(Constant.TOPICBYTOPIC)){
+			if (SearchBean.getInstance().getSearchtype()
+					.equals(Constant.TOPICBYTOPIC)) {
 				contanttype = Constant.TOPICBYTOPIC;
-				SearchResult(searchname,page,contanttype);
-			}else if(SearchBean.getInstance().getSearchtype().equals(Constant.USERBYNIKE)){
+				SearchResult(searchname, page, contanttype);
+			} else if (SearchBean.getInstance().getSearchtype()
+					.equals(Constant.USERBYNIKE)) {
 				contanttype = Constant.USERBYNIKE;
-				SearchResult(searchname,page,contanttype);
-			}else if(SearchBean.getInstance().getSearchtype().equals(Constant.TOPICBYLABEL)){
+				SearchResult(searchname, page, contanttype);
+			} else if (SearchBean.getInstance().getSearchtype()
+					.equals(Constant.TOPICBYLABEL)) {
 				contanttype = Constant.TOPICBYLABEL;
-				SearchResult(searchname,page,contanttype);
-			}else if(SearchBean.getInstance().getSearchtype().equals(Constant.USERBYLABEL)){
+				SearchResult(searchname, page, contanttype);
+			} else if (SearchBean.getInstance().getSearchtype()
+					.equals(Constant.USERBYLABEL)) {
 				contanttype = Constant.USERBYLABEL;
-				SearchResult(searchname,page,contanttype);
+				SearchResult(searchname, page, contanttype);
 			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -118,9 +120,10 @@ public class SearchResultActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_searchresult, null);
+		return getLayoutInflater()
+				.inflate(R.layout.activity_searchresult, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -131,52 +134,65 @@ public class SearchResultActivity extends pBaseActivity{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
-		
+
 	}
-	
-	
+
 	/**
 	 * ����������ˢ�·���
 	 * 
 	 */
 	private void RefreshListner() {
 		// TODO Auto-generated method stub
-		lv_searchresult.setOnRefreshListener(new OnRefreshListener2<ListView>() {
-			@Override
-			public void onPullDownToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub					
-				String label = DateUtils.formatDateTime(SearchResultActivity.this.getApplicationContext(), System.currentTimeMillis(),
-						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);				
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				try {
-					page = 1;
-					SearchResult(searchname,page,contanttype);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
-			}
-			@Override
-			public void onPullUpToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub				
-				String label = DateUtils.formatDateTime(SearchResultActivity.this.getApplicationContext(), System.currentTimeMillis(),
-						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);				
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				page=+1;
-				try {
-					SearchResult(searchname,++page,contanttype);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
-			}			
-		});
+		lv_searchresult
+				.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+					@Override
+					public void onPullDownToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(
+								SearchResultActivity.this
+										.getApplicationContext(), System
+										.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						try {
+							page = 1;
+							SearchResult(searchname, page, contanttype);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
+					}
+
+					@Override
+					public void onPullUpToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(
+								SearchResultActivity.this
+										.getApplicationContext(), System
+										.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						page = +1;
+						try {
+							SearchResult(searchname, ++page, contanttype);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
+					}
+				});
 	}
-	
+
 	/**
 	 * �����ӿ�
 	 * 
@@ -185,33 +201,46 @@ public class SearchResultActivity extends pBaseActivity{
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void SearchResult(String name, int page , String contanttype)
+	private void SearchResult(String name, int page, String contanttype)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		/** �����ַ **/
 		String URL = null;
-		
-		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
-		if(contanttype.equals(Constant.USERBYLABEL)){
-			baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = HttpConfig.SEARCH_USER_LABEL_URL+"?page="+page;
-		}else if(contanttype.equals(Constant.USERBYNIKE)){
-			baseParams.add(new BasicNameValuePair("username", name));
-			URL = HttpConfig.SEARCH_USER_NICK_URL+"?page="+page;
-		}else if(contanttype.equals(Constant.TOPICBYLABEL)){
-			baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = HttpConfig.SEARCH_TOPIC_LABEL_URL+"?page="+page;
-		}else{
-			baseParams.add(new BasicNameValuePair("Subject", name));
-			URL = HttpConfig.SEARCH_TOPIC_SUBJECT_URL+"?page="+page;
+
+		Map<String, Object> searchParams = new HashMap<String, Object>();
+
+		// List<BasicNameValuePair> baseParams = new
+		// ArrayList<BasicNameValuePair>();
+		if (contanttype.equals(Constant.USERBYLABEL)) {
+			searchParams.put("label_name", name);
+			// baseParams.add(new BasicNameValuePair("label_name", name));
+			URL = HttpConfig.SEARCH_USER_LABEL_URL + "?page=" + page;
+		} else if (contanttype.equals(Constant.USERBYNIKE)) {
+			searchParams.put("username", name);
+			// baseParams.add(new BasicNameValuePair("username", name));
+			URL = HttpConfig.SEARCH_USER_NICK_URL + "?page=" + page;
+		} else if (contanttype.equals(Constant.TOPICBYLABEL)) {
+			searchParams.put("label_name", name);
+			// baseParams.add(new BasicNameValuePair("label_name", name));
+			URL = HttpConfig.SEARCH_TOPIC_LABEL_URL + "?page=" + page;
+		} else {
+			searchParams.put("Subject", name);
+			// baseParams.add(new BasicNameValuePair("Subject", name));
+			URL = HttpConfig.SEARCH_TOPIC_SUBJECT_URL + "?page=" + page;
 		}
-		
+
 		pLog.i("URL", URL);
-		
-		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
-		
+
+		String params = null;
+		try {
+			params = JsonDocHelper.toJSONString(searchParams);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		HttpEntity entity = new StringEntity(params, "utf-8");
-		
+
 		HttpUtil.post(this, URL, entity, "application/json",
 				new JsonHttpResponseHandler() {
 
@@ -295,12 +324,12 @@ public class SearchResultActivity extends pBaseActivity{
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -9,7 +9,7 @@ public class UserBean {
 	private String username;
 	private String birth;
 	private String email;
-	
+
 	private String image;
 	private String created_at;
 	private String city;
@@ -38,7 +38,6 @@ public class UserBean {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 
 	public String getBirth() {
 		return birth;
@@ -87,7 +86,5 @@ public class UserBean {
 	public void setLabels(ArrayList<String> labels) {
 		this.labels = labels;
 	}
-
-	
 
 }
