@@ -9,7 +9,7 @@ package com.peer.net;
 public interface HttpConfig {
 
 	/** ��������ַ **/
-	public static String SERVER_ADDRESS = "http://192.168.1.2:8080/tonghang-serverapi";
+	public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
 	// http://www.tonghang1.com:3000
 	// http://192.168.23.1:8080/tonghang-serverapi
 	// http://192.168.1.2:8080/tonghang-serverapi
