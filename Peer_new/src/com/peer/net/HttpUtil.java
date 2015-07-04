@@ -13,6 +13,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.utils.pLog;
 
 /**
  * 
@@ -131,6 +132,12 @@ public class HttpUtil {
 	public static void post(Context context, String urlString,
 			RequestParams params, String contentType,
 			JsonHttpResponseHandler res) {
+		
+//		RequestParams params=new RequestParams();
+//		params.p
+
+		pLog.i("test", "params:" + params);
+
 		List<Header> headersList = new ArrayList<Header>();
 		Header[] headers = headersList.toArray(new Header[headersList.size()]);
 		client.post(context, urlString, headers, params, contentType, res);

@@ -10,10 +10,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
+import com.peer.bean.success;
+
 import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -31,7 +34,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 /**
- * ÒµÎñµÄ¹¤¾ßÀà
+ * å·¥å…·ç±»
  * 
  * @author zhzhg
  * @version 1.0.0
@@ -39,7 +42,7 @@ import android.util.DisplayMetrics;
 public class BussinessUtils {
 
 	/**
-	 * ¶ÁÈ¡ displayMetrics ¶ÔÏó
+	 * ï¿½ï¿½È¡ displayMetrics ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param context
 	 * @return
@@ -51,7 +54,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * Ëõ·ÅÍ¼Æ¬
+	 * ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
 	 * 
 	 * @param bitmap
 	 * @param w
@@ -79,13 +82,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ´Ó±¾µØ×°ÊÎÒ»ÕÅÍ¼Æ¬
+	 * ï¿½Ó±ï¿½ï¿½ï¿½×°ï¿½ï¿½Ò»ï¿½ï¿½Í¼Æ¬
 	 * 
 	 * @param filePath
-	 *            ÎÄ¼şÂ·¾¶
+	 *            ï¿½Ä¼ï¿½Â·ï¿½ï¿½
 	 * @param maxSize
-	 *            Ñ¹Ëõ³É×î´óµÄ×Ö½ÚÊı Ä¿Ç°µ¥Î»ÊÇk
-	 * @return Bitmap Ñ¹ËõºóµÄbitmap
+	 *            Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ Ä¿Ç°ï¿½ï¿½Î»ï¿½ï¿½k
+	 * @return Bitmap Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½bitmap
 	 */
 	public static Bitmap decodeFile(String filePath, int maxSize) {
 		if (filePath != null && filePath.length() > 0) {
@@ -106,13 +109,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ÒÔĞĞÎªµ¥Î»¶ÁÈ¡ÎÄ¼ş£¬³£ÓÃÓÚ¶ÁÃæÏòĞĞµÄ¸ñÊ½»¯ÎÄ¼ş
+	 * ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Î»ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ĞµÄ¸ï¿½Ê½ï¿½ï¿½ï¿½Ä¼ï¿½
 	 * 
 	 * @param filePath
-	 *            ÎÄ¼şÂ·¾¶
+	 *            ï¿½Ä¼ï¿½Â·ï¿½ï¿½
 	 * @param fileName
-	 *            ÎÄ¼şÃû
-	 * @return String ´¦ÀíµÄ½á¹û×Ö·û´®¶ÔÏó£¬µ±½á¹ûÎª¿ÕÊ±£¬·µ»Ønull
+	 *            ï¿½Ä¼ï¿½ï¿½ï¿½
+	 * @return String ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬µï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½null
 	 */
 	public static String readFileByLines(String filePath, String fileName) {
 		if (android.os.Environment.getExternalStorageState().equals(
@@ -149,10 +152,10 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ¶ÁÈ¡Éè±¸µÄÍø¿¨µØÖ·
+	 * ï¿½ï¿½È¡ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
 	 * 
 	 * @param context
-	 * @return macµØÖ·
+	 * @return macï¿½ï¿½Ö·
 	 */
 	public static String getMacAddress(Context context) {
 		WifiManager wifi = (WifiManager) context
@@ -167,7 +170,8 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ÊÇ²»ÊÇÓÊÏäµØÖ· just if the passed email address is syntactically valid or not
+	 * ï¿½Ç²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö· just if the passed email address is syntactically valid or
+	 * not
 	 * 
 	 * @param email
 	 * @return
@@ -187,13 +191,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ¶ÁÈ¡Òì³£ĞÅÏ¢
+	 * ï¿½ï¿½È¡ï¿½ì³£ï¿½ï¿½Ï¢
 	 * 
 	 * @param ex
 	 * @return
 	 */
 	public static String getExceptionStr(Exception ex) {
-		String errorInfo = null; // ´íÎóĞÅÏ¢
+		String errorInfo = null; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		ByteArrayOutputStream baos = null;
 		PrintStream printStream = null;
 		try {
@@ -220,7 +224,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ±£´æÒì³£ĞÅÏ¢
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Ï¢
 	 * 
 	 * @param context
 	 * @param buzType
@@ -234,15 +238,15 @@ public class BussinessUtils {
 		if (netIntType == pNetUitls.TYPE_WIFI) {
 			netType = "wifi";
 		} else if (netIntType == pNetUitls.TYPE_NO) {
-			netType = "Ã»ÓĞÍøÂç";
+			netType = "Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 		} else {
-			netType = "2G»ò3GÍøÂç";
+			netType = "2Gï¿½ï¿½3Gï¿½ï¿½ï¿½ï¿½";
 		}
 		// NewsDbHelper.insertExpLog(netType, buzType, expType, expContent);
 	}
 
 	/**
-	 * »ñÈ¡ÏµÍ³Ê±¼ä
+	 * ï¿½ï¿½È¡ÏµÍ³Ê±ï¿½ï¿½
 	 * 
 	 * @return
 	 */
@@ -253,7 +257,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ÊÇ·ñ´æÔÚsim¿¨
+	 * ï¿½Ç·ï¿½ï¿½ï¿½ï¿½simï¿½ï¿½
 	 * 
 	 * @param context
 	 * @return
@@ -261,7 +265,7 @@ public class BussinessUtils {
 	public static boolean isExistSim(Context context) {
 		TelephonyManager mTelephonyManager = (TelephonyManager) context
 				.getSystemService(Service.TELEPHONY_SERVICE);
-		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIM¿¨Ã»ÓĞ¾ÍĞ÷
+		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIMï¿½ï¿½Ã»ï¿½Ğ¾ï¿½ï¿½ï¿½
 		{
 			return false;
 		}
@@ -282,15 +286,15 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ±£´æÍ¼Æ¬µ½Ïà²á
+	 * ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param mContext
-	 *            ÉÏÏÂÎÄ
+	 *            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param bitmap
 	 *            Í¼Æ¬
 	 * @param imageName
-	 *            Í¼Æ¬Ãû³Æ
-	 * @return ±£´æ½á¹û
+	 *            Í¼Æ¬ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public static Uri saveImageToMediaStore(Context mContext, Bitmap bitmap,
 			String imageName) {
@@ -308,13 +312,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ¸ù¾İ×Ö·û´®ºÍÎÄ×Ö×ÖºÅ ¼ÆËã×Ö·û´®Õ¼¾İÆÁÄ»µÄ¿í¶È
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ä¿ï¿½ï¿½
 	 * 
 	 * @param content
-	 *            ×Ö·û´®ÄÚÈİ
+	 *            ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param wordSize
-	 *            ÎÄ×Ö´óĞ¡
-	 * @return ×Ö·û´®Õ¼¾İÆÁÄ»µÄ¿í¶È
+	 *            ï¿½ï¿½ï¿½Ö´ï¿½Ğ¡
+	 * @return ï¿½Ö·ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ä¿ï¿½ï¿½
 	 */
 	public static float getStrWidth(String content, int wordSize) {
 		Paint pFont = new Paint();
@@ -323,15 +327,15 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * »ñµÃµ±Ç°ÍøÂçÃû³Æ
+	 * ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param mContext
-	 *            ÉÏÏÂÎÄ
+	 *            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public static String getNetWorkName(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		// »ñµÃµ±Ç°ÍøÂçĞÅÏ¢
+		// ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isAvailable()) {
 			if (networkInfo.getExtraInfo() != null) {
@@ -342,38 +346,38 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ÅĞ¶ÏÊÇ·ñÎªÊÖ»úºÅ
+	 * ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½Îªï¿½Ö»ï¿½ï¿½ï¿½
 	 */
 	public static boolean telNumMatch(String phoneNum) {
 		/*
-		 * ÒÆ¶¯: 2GºÅ¶Î(GSMÍøÂç)ÓĞ139,138,137,136,135,134,159,158,152,151,150,
-		 * 3GºÅ¶Î(TD-SCDMAÍøÂç)ÓĞ157,182,183,188,187 147ÊÇÒÆ¶¯TDÉÏÍø¿¨×¨ÓÃºÅ¶Î. ÁªÍ¨:
-		 * 2GºÅ¶Î(GSMÍøÂç)ÓĞ130,131,132,155,156 3GºÅ¶Î(WCDMAÍøÂç)ÓĞ186,185 µçĞÅ:
-		 * 2GºÅ¶Î(CDMAÍøÂç)ÓĞ133,153 3GºÅ¶Î(CDMAÍøÂç)ÓĞ189,180,181
+		 * ï¿½Æ¶ï¿½: 2Gï¿½Å¶ï¿½(GSMï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½139,138,137,136,135,134,159,158,152,151,150,
+		 * 3Gï¿½Å¶ï¿½(TD-SCDMAï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½157,182,183,188,187 147ï¿½ï¿½ï¿½Æ¶ï¿½TDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¨ï¿½ÃºÅ¶ï¿½. ï¿½ï¿½Í¨:
+		 * 2Gï¿½Å¶ï¿½(GSMï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½130,131,132,155,156 3Gï¿½Å¶ï¿½(WCDMAï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½186,185 ï¿½ï¿½ï¿½ï¿½:
+		 * 2Gï¿½Å¶ï¿½(CDMAï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½133,153 3Gï¿½Å¶ï¿½(CDMAï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½189,180,181
 		 */
 		String YD = "^[1]{1}(([3]{1}[4-9]{1})|([5]{1}[012789]{1})|([8]{1}[2378]{1})|([4]{1}[7]{1}))[0-9]{8}$";
 		String LT = "^[1]{1}(([3]{1}[0-2]{1})|([5]{1}[56]{1})|([8]{1}[56]{1}))[0-9]{8}$";
 		String DX = "^[1]{1}(([3]{1}[3]{1})|([5]{1}[3]{1})|([8]{1}[0-9]{1}))[0-9]{8}$";
-		// ÅĞ¶ÏÊÖ»úºÅÂëÊÇ·ñÊÇ11Î»
+		// ï¿½Ğ¶ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½11Î»
 		if (phoneNum.length() == 11) {
-			// ÅĞ¶ÏÊÖ»úºÅÂëÊÇ·ñ·ûºÏÖĞ¹úÒÆ¶¯µÄºÅÂë¹æÔò
+			// ï¿½Ğ¶ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½Æ¶ï¿½ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if (phoneNum.matches(YD)) {
 				return true;
 			}
-			// ÅĞ¶ÏÊÖ»úºÅÂëÊÇ·ñ·ûºÏÖĞ¹úÁªÍ¨µÄºÅÂë¹æÔò
+			// ï¿½Ğ¶ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½Í¨ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			else if (phoneNum.matches(LT)) {
 				return true;
 			}
-			// ÅĞ¶ÏÊÖ»úºÅÂëÊÇ·ñ·ûºÏÖĞ¹úµçĞÅµÄºÅÂë¹æÔò
+			// ï¿½Ğ¶ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ÅµÄºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			else if (phoneNum.matches(DX)) {
 				return true;
 			}
-			// ¶¼²»ºÏÊÊ Î´Öª
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Î´Öª
 			else {
 				return false;
 			}
 		}
-		// ²»ÊÇ11Î»
+		// ï¿½ï¿½ï¿½ï¿½11Î»
 		else {
 			return false;
 		}
@@ -397,8 +401,8 @@ public class BussinessUtils {
 				buf.append(Integer.toHexString(i));
 			}
 			str = buf.toString();
-			System.out.println("result: " + buf.toString());// 32Î»µÄ¼ÓÃÜ
-			System.out.println("result: " + buf.toString().substring(8, 24));// 16Î»µÄ¼ÓÃÜ
+			System.out.println("result: " + buf.toString());// 32Î»ï¿½Ä¼ï¿½ï¿½ï¿½
+			System.out.println("result: " + buf.toString().substring(8, 24));// 16Î»ï¿½Ä¼ï¿½ï¿½ï¿½
 
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -406,6 +410,16 @@ public class BussinessUtils {
 
 		}
 		return buf.toString();
+	}
+
+	/**
+	 * ä¿å­˜ç”¨æˆ·æ•°æ®
+	 */
+	public static void saveUserData(success loginBean,
+			pShareFileUtils pShareFileUtils) {
+
+//		pShareFileUtils.setString("", loginBean.getAge());
+
 	}
 
 }

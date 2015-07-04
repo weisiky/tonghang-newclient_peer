@@ -14,12 +14,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,28 +35,30 @@ import com.peer.activity.R;
 import com.peer.activity.SearchUserActivity;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 
-
-
 /**
- *Ö÷fragmentÀà£¨ÍÆ¼öÓÃ»§£© 
+ * ï¿½ï¿½fragmentï¿½à£¨ï¿½Æ¼ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
  */
-public class HomeFragment extends pBaseFragment{
-	
+public class HomeFragment extends pBaseFragment {
+
 	HomepageAdapter adapter;
-	
-		private LinearLayout ll_search;
-		List<Object> list = new ArrayList<Object>();
-		private PullToRefreshListView pull_refresh_homepage;
-		public LinearLayout base_neterror_item;
-		private TextView tv_connect_errormsg;
-		/** ·ÖÒ³²ÎÊý **/
-		int page = 1;
-	
+
+	private LinearLayout ll_search;
+	List<Object> list = new ArrayList<Object>();
+	private PullToRefreshListView pull_refresh_homepage;
+	public LinearLayout base_neterror_item;
+	private TextView tv_connect_errormsg;
+	/** ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ **/
+	int page = 1;
+
+	private pBaseActivity pbaseActivity;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,75 +66,112 @@ public class HomeFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.fragment_home, container, false);
 	}
-	
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		pbaseActivity = (pBaseActivity) activity;
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		init();
+		setListener();
 		try {
-			RecommendTask(Constant.CLIENT_ID,page);
-			
+			RecommendTask(Constant.CLIENT_ID, page);
+
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
 
-	private void RefreshListner() {
+	private void setListener() {
 		// TODO Auto-generated method stub
-		pull_refresh_homepage.setOnRefreshListener(new OnRefreshListener2<ListView>() {
-			@Override
-			public void onPullDownToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub					
-					String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(),
-							DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-					refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-					try {
-						page = 1;
-						RecommendTask(Constant.CLIENT_ID, page);
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			}
+		pull_refresh_homepage.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onPullUpToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub				
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(),
-						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);				
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				try {
-					RecommendTask(Constant.CLIENT_ID, ++page);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if (position == 0) {
+
+				} else {
+
 				}
-			}			
+
+			}
 		});
 	}
 
+	private void RefreshListner() {
+		// TODO Auto-generated method stub
+		pull_refresh_homepage
+				.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+					@Override
+					public void onPullDownToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(getActivity()
+								.getApplicationContext(), System
+								.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						try {
+							page = 1;
+							RecommendTask(Constant.CLIENT_ID, page);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onPullUpToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(getActivity()
+								.getApplicationContext(), System
+								.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						try {
+							RecommendTask(Constant.CLIENT_ID, ++page);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+
 	/**
-	 * Ê×Ò³ÓÃ»§ÍÆ¼öÇëÇó½Ó¿Ú
+	 * ï¿½ï¿½Ò³ï¿½Ã»ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 	 * 
 	 * @param client_id
 	 * @param page
 	 * @throws UnsupportedEncodingException
 	 */
-	private void RecommendTask(String client_id , int page) throws UnsupportedEncodingException {
+	private void RecommendTask(String client_id, int page)
+			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
+		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
 		baseParams.add(new BasicNameValuePair("client_id", client_id));
-		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
-		
+		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
+
 		HttpEntity entity = new StringEntity(params, "utf-8");
-		
-		HttpUtil.post(getActivity(), Constant.USER_RECOMMEND_IN_URL+"?page="+page, entity, "application/json",
+
+		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL
+				+ "?page=" + page, entity, "application/json",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -149,7 +191,7 @@ public class HomeFragment extends pBaseFragment{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-				
+
 						pLog.i("test", "onFailure+statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "errorResponse:" + errorResponse.toString());
@@ -161,7 +203,7 @@ public class HomeFragment extends pBaseFragment{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						
+
 						pLog.i("test", "onFailure:statusCode:" + statusCode);
 						pLog.i("test", "throwable:" + throwable.toString());
 						pLog.i("test", "headers:" + headers.toString());
@@ -175,7 +217,7 @@ public class HomeFragment extends pBaseFragment{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONArray response) {
 						// TODO Auto-generated method stub
-						
+
 						pLog.i("test", "onSuccess+statusCode:" + statusCode
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
@@ -186,43 +228,58 @@ public class HomeFragment extends pBaseFragment{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						
+
 						pLog.i("test", "onSuccess:statusCode:" + statusCode
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
-						
+
+						pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+								"home.etag", false, response.toString());
+
 						try {
-						JSONObject success = response.getJSONObject("success");	
-						JSONArray user = (JSONArray) success.get("user");
-						for(int index=0;index<user.length();index++){
-							ArrayList<Object> userlist = new ArrayList<Object>();
-							JSONObject person = user.getJSONObject(index);
-							List<String> labelnames = new ArrayList<String>();
-							Map<String,Object> userMsg = new HashMap<String, Object>();
-							userMsg.put("email", person.getString("email"));
-							userMsg.put("sex", person.getString("sex"));
-							userMsg.put("city", person.getString("city"));
-							userMsg.put("username", person.getString("username"));
-							userMsg.put("client_id", person.getString("client_id"));
-							userMsg.put("image", person.getString("image"));
-							userMsg.put("created_at", person.getString("created_at"));
-							userMsg.put("birth", person.getString("birth"));
-							userlist.add(userMsg);
-							JSONArray lab = (JSONArray) person.get("labels");
-							for(int i=0;i<lab.length();i++){
-								labelnames.add(lab.getString(i));
+							JSONObject success = response
+									.getJSONObject("success");
+							JSONArray user = (JSONArray) success.get("user");
+							for (int index = 0; index < user.length(); index++) {
+								ArrayList<Object> userlist = new ArrayList<Object>();
+								JSONObject person = user.getJSONObject(index);
+								List<String> labelnames = new ArrayList<String>();
+								Map<String, Object> userMsg = new HashMap<String, Object>();
+								userMsg.put("email", person.getString("email"));
+								userMsg.put("sex", person.getString("sex"));
+								userMsg.put("city", person.getString("city"));
+								userMsg.put("username",
+										person.getString("username"));
+								userMsg.put("client_id",
+										person.getString("client_id"));
+								userMsg.put("image", person.getString("image"));
+								userMsg.put("created_at",
+										person.getString("created_at"));
+								userMsg.put("birth", person.getString("birth"));
+								userlist.add(userMsg);
+								JSONArray lab = (JSONArray) person
+										.get("labels");
+								for (int i = 0; i < lab.length(); i++) {
+									labelnames.add(lab.getString(i));
+								}
+								userlist.add(labelnames);
+								list.add(userlist);
 							}
-							userlist.add(labelnames);
-							list.add(userlist);
-						}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						adapter=new HomepageAdapter(getActivity(),list);
-						pull_refresh_homepage.setAdapter(adapter);
-						
+
+						if (adapter == null) {
+							adapter = new HomepageAdapter(getActivity(), list);
+							pull_refresh_homepage.setAdapter(adapter);
+						}
+
+						refresh();
+						// adapter.setBaseFragment(HomeFragment.this);
+
+						adapter.notifyDataSetChanged();
+
 						super.onSuccess(statusCode, headers, response);
 					}
 
@@ -230,7 +287,7 @@ public class HomeFragment extends pBaseFragment{
 					public void onSuccess(int statusCode, Header[] headers,
 							String responseString) {
 						// TODO Auto-generated method stub
-						
+
 						pLog.i("test", "onSuccess:statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "responseString:" + responseString.toString());
@@ -238,25 +295,49 @@ public class HomeFragment extends pBaseFragment{
 					}
 
 				});
-		
+
+	}
+
+	private void refresh() {
+
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
+		}
+
 	}
 
 	private void init() {
 		// TODO Auto-generated method stub
-		base_neterror_item =  (LinearLayout) getView().findViewById(R.id.base_neterror_item);
-		tv_connect_errormsg = (TextView) base_neterror_item.findViewById(R.id.tv_connect_errormsg);
-		
-		ll_search=(LinearLayout)getView().findViewById(R.id.ll_search);		
-//		createtopic=(TextView)getView().findViewById(R.id.tv_createtopic);
-		
-//		createtopic.setOnClickListener(this);		
+		base_neterror_item = (LinearLayout) getView().findViewById(
+				R.id.base_neterror_item);
+		tv_connect_errormsg = (TextView) base_neterror_item
+				.findViewById(R.id.tv_connect_errormsg);
+
+		ll_search = (LinearLayout) getView().findViewById(R.id.ll_search);
+		// createtopic=(TextView)getView().findViewById(R.id.tv_createtopic);
+
+		// createtopic.setOnClickListener(this);
 		ll_search.setOnClickListener(this);
-			
-		pull_refresh_homepage=(PullToRefreshListView)getView().findViewById(R.id.pull_refresh_homepage);
-		
-		
+
+		String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
+				"home.etag");
+		if (homeCount != null) {
+
+			if (adapter == null) {
+				adapter = new HomepageAdapter(getActivity(), list);
+			}
+			// adapter.setBaseFragment(HomeFragment.this);
+			pull_refresh_homepage.setAdapter(adapter);
+
+		}
+
+		refresh();
+
+		pull_refresh_homepage = (PullToRefreshListView) getView().findViewById(
+				R.id.pull_refresh_homepage);
+
 		RefreshListner();
-		
+
 	}
 
 	@Override
@@ -264,13 +345,17 @@ public class HomeFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.ll_search:
-			Intent search = new Intent(getActivity(),SearchUserActivity.class);
+			Intent search = new Intent(getActivity(), SearchUserActivity.class);
 			startActivity(search);
+			break;
+
+		case R.id.im_headpic:
+
 			break;
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 }

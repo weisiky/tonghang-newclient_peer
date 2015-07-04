@@ -44,8 +44,9 @@ public class pBaseApplication extends Application {
 		CrashHandler.instance(this).init();
 		// 初始化图片加载程序
 		ImageLoaderUtil.getInstance();
-
+		// 注册网络监听器
 		registNetworkReceiver();
+
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				this).threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()

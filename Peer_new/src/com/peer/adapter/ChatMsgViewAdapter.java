@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
 import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.ChatMsgEntity;
 import com.peer.bean.User;

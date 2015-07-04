@@ -26,12 +26,18 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.utils.IoUtils;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.success;
 import com.peer.bean.LoginResultBean;
 import com.peer.bean.UserBean;
+import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -115,17 +121,23 @@ public class LoginActivity extends pBaseActivity {
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
 
-			// if (email.length() > 0 && password.length() > 0) {
-			showProgressBar();
-			try {
-				sendLoginRequest(email, password);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (email.length() > 0 && password.length() > 0) {
+
+				if (isNetworkAvailable) {
+
+					showProgressBar();
+					try {
+						sendLoginRequest(email, password);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+
+				}
+			} else {
+				showToast("请填写用户名与密码", Toast.LENGTH_SHORT, false);
 			}
-			// } else {
-			// showToast("请填写用户名与密码", Toast.LENGTH_SHORT, false);
-			// }
 
 			break;
 		case R.id.tv_register_login:
@@ -157,16 +169,38 @@ public class LoginActivity extends pBaseActivity {
 		List<BasicNameValuePair> baseParams = new ArrayList<BasicNameValuePair>();
 		baseParams.add(new BasicNameValuePair("email", email));
 		baseParams.add(new BasicNameValuePair("password", password));
+
+		ArrayList<String> tags = new ArrayList<String>();
+
+		tags.add("销售");
+		tags.add("java");
+		tags.add("美食");
+
+		try {
+			baseParams.add(new BasicNameValuePair("labels", JsonDocHelper
+					.toJSONString(tags)));
+			pLog.i("test", "JsonDocHelper：" + JsonDocHelper.toJSONString(tags));
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
 		String params = PeerParamsUtils.ParamsToJsonString(baseParams);
-		
-		 ArrayList<String> tags=new ArrayList<String>();
-		 
-		 tags.add("销售");
-		 tags.add("java");
-		 tags.add("美食");
+
+		// ArrayList<String> tags = new ArrayList<String>();
+		//
+		// tags.add("销售");
+		// tags.add("java");
+		// tags.add("美食");
 		HttpEntity entity = new StringEntity(params, "utf-8");
 
-		HttpUtil.post(this, Constant.LONIN_IN_URL, entity, "application/json;charset=UTF-8",
+		// RequestParams params = new RequestParams();
+
+		// params.put("email", email);
+		// params.put("password", password);
+
+		HttpUtil.post(this, HttpConfig.LONIN_IN_URL, entity,
+				"application/json;charset=utf-8",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -239,6 +273,25 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "onSuccess:statusCode:" + statusCode);
 						pLog.i("test", "headers:" + headers.toString());
 						pLog.i("test", "response:" + response.toString());
+
+
+						try {
+							success loginBean = JsonDocHelper.toJSONObject(
+									response.toString(), success.class);
+
+							// BussinessUtils.saveUserData(loginBean,
+							// mShareFileUtils);
+
+							pLog.i("test",
+									"getSys_time:" + loginBean.getSys_time());
+							pLog.i("test",
+									"getUserBean:" + loginBean.getUserBean());
+
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 						try {
 							JSONObject result = response

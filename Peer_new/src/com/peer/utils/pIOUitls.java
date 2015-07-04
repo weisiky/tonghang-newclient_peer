@@ -57,6 +57,52 @@ public class pIOUitls {
 	}
 
 	/**
+	 * 以行为单位读取文件，常用于读面向行的格式化文件
+	 * 
+	 * @param filePath
+	 *            文件路径
+	 * @param fileName
+	 *            文件名
+	 * @return String 处理的结果字符串对象，当结果为空时，返回null
+	 */
+	public static String readFileByLines(String filePath, String fileName) {
+
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			BufferedReader reader = null;
+			StringBuffer data = new StringBuffer();
+			try {
+
+				File file = new File(filePath + fileName);
+				if (file.exists()) {
+					reader = new BufferedReader(new FileReader(filePath
+							+ fileName));
+					String tempString = null;
+					while ((tempString = reader.readLine()) != null) {
+						data.append(tempString);
+					}
+					reader.close();
+					return data.toString().trim();
+				} else {
+					return null;
+				}
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			} finally {
+				if (reader != null) {
+					try {
+						reader.close();
+					} catch (IOException e1) {
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * 保存字符串到SD卡
 	 * 
 	 * @param filePath

@@ -60,8 +60,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	/** 首次进入页面的loading圈圈 **/
 	public RelativeLayout baseProgressBarLayout;
 
-	protected boolean isNetworkAvailable;
-	protected pBaseApplication application;
+	public boolean isNetworkAvailable;
+	public pBaseApplication application;
 	
 	private ActivityManager activityManager ;
 	

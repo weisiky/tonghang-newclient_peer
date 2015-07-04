@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
 public class JsonDocHelper {
 	static Gson gson = null;
 
 	/***
 	 * 
-	 * ½«¶ÔÏóÐòÁÐ»¯ÎªJSONÎÄ±¾
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ÎªJSONï¿½Ä±ï¿½
 	 * 
 	 * @param object
 	 * 
@@ -36,11 +35,13 @@ public class JsonDocHelper {
 			if (gson == null) {
 				gson = new Gson();
 			}
+			pLog.i("test", "json:"+json);
 			Object obj = gson.fromJson(json, cls);
 
 			return (T) obj;
 
 		} catch (Exception ex) {
+			pLog.i("test", "Exception:"+ex.toString());
 			throw new Exception("Convert Process in Exception");
 		}
 	}

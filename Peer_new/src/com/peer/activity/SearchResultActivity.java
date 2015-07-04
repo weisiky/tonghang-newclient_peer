@@ -26,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.SearchBean;
+import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
@@ -193,16 +194,16 @@ public class SearchResultActivity extends pBaseActivity{
 		List<BasicNameValuePair> baseParams=new ArrayList<BasicNameValuePair>();
 		if(contanttype.equals(Constant.USERBYLABEL)){
 			baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = Constant.SEARCH_USER_LABEL_URL+"?page="+page;
+			URL = HttpConfig.SEARCH_USER_LABEL_URL+"?page="+page;
 		}else if(contanttype.equals(Constant.USERBYNIKE)){
 			baseParams.add(new BasicNameValuePair("username", name));
-			URL = Constant.SEARCH_USER_NICK_URL+"?page="+page;
+			URL = HttpConfig.SEARCH_USER_NICK_URL+"?page="+page;
 		}else if(contanttype.equals(Constant.TOPICBYLABEL)){
 			baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = Constant.SEARCH_TOPIC_LABEL_URL+"?page="+page;
+			URL = HttpConfig.SEARCH_TOPIC_LABEL_URL+"?page="+page;
 		}else{
 			baseParams.add(new BasicNameValuePair("Subject", name));
-			URL = Constant.SEARCH_TOPIC_SUBJECT_URL+"?page="+page;
+			URL = HttpConfig.SEARCH_TOPIC_SUBJECT_URL+"?page="+page;
 		}
 		
 		pLog.i("URL", URL);

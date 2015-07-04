@@ -38,7 +38,7 @@ public class ImageLoaderUtil {
 				.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
 				.bitmapConfig(Config.RGB_565).build();
 	}
-
+	
 	public void showImage(String filePath, ImageView imageView) {
 		String iUrl = Scheme.FILE.wrap(filePath);
 		imageLoader.displayImage(iUrl, imageView, options);
@@ -46,6 +46,16 @@ public class ImageLoaderUtil {
 
 	public void showAssetImage(String filePath, ImageView imageView) {
 		String iUrl = Scheme.ASSETS.wrap(filePath);
+		imageLoader.displayImage(iUrl, imageView, options);
+	}
+
+	public void showHttpImage(String filePath, ImageView imageView) {
+		String iUrl = Scheme.HTTP.wrap(filePath);
+		imageLoader.displayImage(iUrl, imageView, options);
+	}
+
+	public void showHttpsImage(String filePath, ImageView imageView) {
+		String iUrl = Scheme.HTTPS.wrap(filePath);
 		imageLoader.displayImage(iUrl, imageView, options);
 	}
 

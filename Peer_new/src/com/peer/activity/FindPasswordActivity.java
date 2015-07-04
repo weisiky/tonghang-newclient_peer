@@ -26,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.pLog;
@@ -160,7 +161,7 @@ public class FindPasswordActivity extends pBaseActivity{
 		String params=PeerParamsUtils.ParamsToJsonString(baseParams);
 		
 		HttpEntity entity = new StringEntity(params, "utf-8");
-		HttpUtil.post(this,Constant.FORGET_IN_URL, entity,"application/json",
+		HttpUtil.post(this,HttpConfig.FORGET_IN_URL, entity,"application/json",
 						new JsonHttpResponseHandler() {
 
 					@Override

@@ -7,7 +7,9 @@ import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
 import com.peer.activity.Recommend_topic;
 import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
+import com.peer.base.pBaseFragment;
 import com.peer.bean.UserBean;
 import com.peer.utils.ViewHolder;
 
@@ -33,26 +35,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomepageAdapter extends pBaseAdapter {
-	ViewHolder viewHolder=null;
+	ViewHolder viewHolder = null;
 	private boolean hasMesure = false;
 	private int maxLines;
 	private Context mContext;
 	private List<Object> mList;
 	int i;
-//	List<String> pre_labels ;   //获取登陆者label
-	public HomepageAdapter( Context mContext,List<Object> mList){
-		
+	private pBaseFragment baseFragment;
+
+	// List<String> pre_labels ; //获取登陆者label
+	public HomepageAdapter(Context mContext, List<Object> mList) {
+
 		super(mContext);
 
-		this.mContext=mContext;
-		this.mList=mList;
+		this.mContext = mContext;
+		this.mList = mList;
 
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return mList.size()+1;
+		return mList.size() + 1;
 	}
 
 	@Override
@@ -65,64 +69,92 @@ public class HomepageAdapter extends pBaseAdapter {
 	public long getItemId(int arg0) {
 		// TODO Auto-generated method stub
 		return arg0;
-	}	
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parentgroup) {
 		// TODO Auto-generated method stub
-	 if(position==0){
-			
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_top_topic,null,false);
+		if (position == 0) {
+
+			convertView = LayoutInflater.from(mContext).inflate(
+					R.layout.adapter_top_topic, null, false);
 			LinearLayout click = ViewHolder.get(convertView, R.id.ll_clike);
-			click.setOnClickListener(new View.OnClickListener(){
+			click.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if(!checkNetworkState()){
-						Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
-					}else{
-						mContext.startActivity(new Intent(mContext,Recommend_topic.class));	
+					if (!checkNetworkState()) {
+						Toast.makeText(
+								mContext,
+								mContext.getResources().getString(
+										R.string.Broken_network_prompt), 0)
+								.show();
+					} else {
+						mContext.startActivity(new Intent(mContext,
+								Recommend_topic.class));
 					}
-					}
+				}
 			});
-			
-		}else{	
-				position=position-1;
-					convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_recommend_person,null,false);				
-					ImageView headpic=ViewHolder.get(convertView, R.id.im_headpic);
-					TextView nikename=ViewHolder.get(convertView, R.id.tv_nikename);
-					TextView descripe=ViewHolder.get(convertView, R.id.tv_descripe);
-					LinearLayout click=ViewHolder.get(convertView, R.id.ll_clike);
-					List plist = (List)mList.get(position);
-					Map pmap = (Map) plist.get(0);
-					nikename.setText((String)pmap.get("username"));
-					List<String> plabels=(List<String>) plist.get(1);
-					String labels="";
-					for(String s:plabels){	
-						if(labels.equals("")){			
-							labels=s;	
-						}else{
-							labels=labels+" | "+s;
-						}
+
+		} else {
+			position = position - 1;
+			convertView = LayoutInflater.from(mContext).inflate(
+					R.layout.adapter_recommend_person, null, false);
+			ImageView headpic = ViewHolder.get(convertView, R.id.im_headpic);
+			TextView nikename = ViewHolder.get(convertView, R.id.tv_nikename);
+			TextView descripe = ViewHolder.get(convertView, R.id.tv_descripe);
+			LinearLayout click = ViewHolder.get(convertView, R.id.ll_clike);
+			List plist = (List) mList.get(position);
+			Map pmap = (Map) plist.get(0);
+			nikename.setText((String) pmap.get("username"));
+			List<String> plabels = (List<String>) plist.get(1);
+			String labels = "";
+
+//			if (baseFragment != null) {
+//				headpic.setOnClickListener((OnClickListener) baseFragment);
+//			} else {
+//				headpic.setOnClickListener((OnClickListener) mContext);
+//			}
+
+			for (String s : plabels) {
+				if (labels.equals("")) {
+					labels = s;
+				} else {
+					labels = labels + " | " + s;
+				}
+			}
+			descripe.setText(labels);
+			click.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					if (!checkNetworkState()) {
+						Toast.makeText(
+								mContext,
+								mContext.getResources().getString(
+										R.string.Broken_network_prompt), 0)
+								.show();
+					} else {
+
+						Intent intent = new Intent(mContext,
+								PersonalPageActivity.class);
+						mContext.startActivity(intent);
 					}
-					descripe.setText(labels);
-					click.setOnClickListener(new View.OnClickListener() {
-						
-						@Override
-						public void onClick(View arg0) {
-							// TODO Auto-generated method stub	
-							if(!checkNetworkState()){
-								Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
-							}else{
-								
-								Intent intent=new Intent(mContext,PersonalPageActivity.class);
-								mContext.startActivity(intent);	
-							}
-						}
-					});
+				}
+			});
 		}
-		
+
 		return convertView;
 	}
-	
-	
+
+	/**
+	 * 设置页面fragment
+	 * 
+	 * @param baseFragment
+	 */
+	public void setBaseFragment(pBaseFragment baseFragment) {
+		this.baseFragment = baseFragment;
+	}
+
 }

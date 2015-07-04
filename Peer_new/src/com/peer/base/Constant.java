@@ -3,7 +3,7 @@ package com.peer.base;
 import com.peer.utils.SDCardScanner;
 
 /**
- * ¶¨ÒåÈ«¾ÖÊôĞÔ½Ó¿Ú ÓĞĞ©ÊôĞÔÊÇ¿ÉÄÜÒÑ×÷·Ï¡£
+ * ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ó¿ï¿½ ï¿½ï¿½Ğ©ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¡ï¿½
  */
 public class Constant {
 	public static int REFRESHHANDLE = 321;
@@ -38,10 +38,10 @@ public class Constant {
 	public static String LOGINSUCCESS = "success";
 	public static String LOGINFAIL = "fail";
 	/* search type */
-	public static String LABELUSER = "labeluser"; // ±êÇ©²é±êÇ©£¨Ä£ºı²éÑ¯£©
+	public static String LABELUSER = "labeluser"; // ï¿½ï¿½Ç©ï¿½ï¿½ï¿½Ç©ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½
 	public static String LABELTOPIC = "topicuser";
 
-	public static String TOPICBYLABEL = "topiclist"; // ¾«È·²éÑ¯
+	public static String TOPICBYLABEL = "topiclist"; // ï¿½ï¿½È·ï¿½ï¿½Ñ¯
 	public static String TOPICBYTOPIC = "topicbytopic";
 	public static String USERBYNIKE = "userbynike";
 	public static String USERBYLABEL = "userbylabel";
@@ -66,7 +66,7 @@ public class Constant {
 	/* restart app */
 	public static String RELOGIN = "relogin";
 
-	// ÓÃÓÚ½øÈëÁÄÌìÊÒintent.putExtrasµÄ¼ü
+	// ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½intent.putExtrasï¿½Ä¼ï¿½
 	public static String IMAGE = "image";
 	public static String OWNERNIKE = "ownernike";
 	public static String THEME = "theme";
@@ -74,93 +74,34 @@ public class Constant {
 	public static String ROOMID = "roomid";
 	public static String TOPICID = "topicid";
 	public static String FROMFLOAT = "float";
-	// È«¾ÖÅäÖÃ
+	// È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";
 
 	/**
-	 * SD¿¨Â·¾¶
+	 * SDï¿½ï¿½Â·ï¿½ï¿½
 	 */
 	public static final String SDCARD_DIR = SDCardScanner.getExtSDCardPath();
 	/**
-	 * SharedPreferencesÃû³Æ
+	 * SharedPreferencesï¿½ï¿½ï¿½ï¿½
 	 */
 	public static final String SHARE_NAME = "peer";
 
 	/**
-	 * ÊÖ»úÆÁÄ»µÄ¿í
+	 * ï¿½Ö»ï¿½ï¿½ï¿½Ä»ï¿½Ä¿ï¿½
 	 */
 	public static String S_SCREEN_WIDHT = "swidth";
 	public static String S_SCREEN_WIDHT_VALUE = "480";
-
 	/**
-	 * ÏîÄ¿´æ´¢¸ùÄ¿Â¼
+	 * ï¿½ï¿½Ä¿ï¿½æ´¢ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String DEFAULT_MAIN_DIRECTORY = SDCARD_DIR + "/peer/";
-
-	/** ÎÄ¼şÔÚ±¾µØµÄ»º´æÄ¿Â¼ **/
+	/** ï¿½Ä¼ï¿½ï¿½Ú±ï¿½ï¿½ØµÄ»ï¿½ï¿½ï¿½Ä¿Â¼ **/
 	public static String C_FILE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
 			+ "filecache/";
-	/** ·şÎñÆ÷µØÖ· **/
-	public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
-	//http://www.tonghang1.com:3000
-	//http://192.168.23.1:8080/tonghang-serverapi
-	//http://192.168.1.2:8080/tonghang-serverapi
-	/** µÇÂ¼ÇëÇóµØÖ· **/
-	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/login.json";
-	/** »ù±¾×¢²áÇëÇóµØÖ· **/
-	public static String REGISTTAG_IN_URL = SERVER_ADDRESS + "/user/regist.json";
-	/** ĞŞ¸ÄÓÃ»§ĞÅÏ¢ÇëÇóµØÖ· **/
-	public static String UPDATE_IN_URL = SERVER_ADDRESS + "/user/update/{client_id}.json";
-	/** Íü¼ÇÃÜÂëÇëÇóµØÖ· **/
-	public static String FORGET_IN_URL = SERVER_ADDRESS + "/user/forget_password.json";
-	/** Ê×Ò³ÓÃ»§ÍÆ¼öÇëÇóµØÖ· **/
-	public static String USER_RECOMMEND_IN_URL = SERVER_ADDRESS + "/user/recommend.json";
-	/** ÏàÓ¦±êÇ©ÏÂµÄÓÃ»§ÇëÇóµØÖ· **/
-	public static String LABEL_IN_URL = SERVER_ADDRESS + "/user/search/label.json";
-	/** ²ÎÓë»°ÌâµÄÓÃ»§ÇëÇóµØÖ· **/
-	public static String NUMBER_IN_URL = SERVER_ADDRESS + "/topic/number.json";
-	/** °´ĞĞÒµËÑÓÃ»§ÇëÇóµØÖ· **/
-	public static String SEARCH_USER_LABEL_URL = SERVER_ADDRESS + "/user/search/label.json";
-	/** °´êÇ³ÆËÑÓÃ»§ÇëÇóµØÖ· **/
-	public static String SEARCH_USER_NICK_URL = SERVER_ADDRESS + "/user/search/nick.json";
-	/** ĞŞ¸ÄÓÃ»§ÃÜÂëÇëÇóµØÖ· **/
-	public static String UPDATE_PWD_IN_URL = SERVER_ADDRESS + "/user/update_pwd/{client_id}.json";
-	/** ²é¿´ÓÃ»§ĞÅÏ¢ÇëÇóµØÖ· **/
-	public static String USER_IN_URL = SERVER_ADDRESS + "/user/{client_id}.json";
-	/** ÉèÖÃÖ¸¶¨ÓÃ»§±êÇ©ÇëÇóµØÖ· **/
-	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS + "/user/update_label/{client_id}.json";
-	/** »°ÌâÍÆ¼öÇëÇóµØÖ· **/
-	public static String TOPIC_RECOMMEND_IN_URL = SERVER_ADDRESS + "/topic/recommend.json";
-	/** °´ĞĞÒµËÑ»°ÌâÇëÇóµØÖ· **/
-	public static String SEARCH_TOPIC_LABEL_URL = SERVER_ADDRESS + "/topic/search/label.json";
-	/** °´»°Ìâ¹Ø¼ü×ÖËÑ»°ÌâÇëÇóµØÖ· **/
-	public static String SEARCH_TOPIC_SUBJECT_URL = SERVER_ADDRESS + "/topic/search/subject.json";
-	/** ²é¿´Ö¸¶¨ÓÃ»§µÄ»°ÌâÁĞ±íÇëÇóµØÖ· **/
-	public static String USER_TOPIC_IN_URL = SERVER_ADDRESS + "/user/topic.json";
-	/** ¼ÓÈë»°ÌâÈºÁÄÇëÇóµØÖ· **/
-	public static String JOIN_TOPIC_IN_URL = SERVER_ADDRESS + "/topic/join.json";
-	/** ÍË³ö»°ÌâÈºÁÄÇëÇóµØÖ· **/
-	public static String LEAVE_TOPIC_IN_URL = SERVER_ADDRESS + "/topic/leave.json";
-	/** ·¢±í»°ÌâÇëÇóµØÖ· **/
-	public static String TOPIC_CREATE_URL = SERVER_ADDRESS + "/topic/create.json";
-	/** Ìá½»·´À¡ĞÅÏ¢ÇëÇóµØÖ· **/
-	public static String SYSTEM_FEEDBACK_URL = SERVER_ADDRESS + "/system/feedback.json";
-	/** »ñÈ¡·şÎñÆ÷¶ËÏµÍ³Ê±¼äºÍÏàÓ¦²ÎÊıÇëÇóµØÖ· **/
-	public static String SYSTEM_CONFIG_URL = SERVER_ADDRESS + "/system/system_config.json";
-	/** µÃµ½Ä³ÈËµÄºÃÓÑÉêÇëÁĞ±íÇëÇóµØÖ· **/
-	public static String FRIEND_INVITATION_URL = SERVER_ADDRESS + "/friend/invitation/{client_id}.json";
-	/** ÇëÇó¼ÓºÃÓÑµØÖ· **/
-	public static String FRIEND_ADD_URL = SERVER_ADDRESS + "/friend/add/{client_id}.json";
-	/** Í¬Òâ/¾Ü¾ø¼ÓºÃÓÑÇëÇóµØÖ· **/
-	public static String FRIEND_STATUS_URL = SERVER_ADDRESS + "/friend/{status}/{inviter_id}.json";
-	/** É¾³ıºÃÓÑÇëÇóµØÖ· **/
-	public static String FRIEND_DELETE_URL = SERVER_ADDRESS + "/friend/delete/{client_id}.json";
-	/** µÃµ½Ä³ÈËµÄºÃÓÑÁĞ±íÇëÇóµØÖ· **/
-	public static String FRIEND_GET_URL = SERVER_ADDRESS + "/friend/get/{client_id}.json";
-	
-	/** Ä£Äâclient_id **/
+
+	/** Ä£ï¿½ï¿½client_id **/
 	public static String CLIENT_ID = "44393c565b15e21df03336b8f4a82eff713c9a95";
 
 }
