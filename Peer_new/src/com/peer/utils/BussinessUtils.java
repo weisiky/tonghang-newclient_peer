@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
+import com.peer.base.Constant;
 import com.peer.bean.LoginBean;
 
 import android.app.Activity;
@@ -401,8 +402,8 @@ public class BussinessUtils {
 				buf.append(Integer.toHexString(i));
 			}
 			str = buf.toString();
-			System.out.println("result: " + buf.toString());// 32λ�ļ���
-			System.out.println("result: " + buf.toString().substring(8, 24));// 16λ�ļ���
+			System.out.println("result: " + buf.toString());// 32位加密
+			System.out.println("result: " + buf.toString().substring(8, 24));// 16位加密
 
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -416,9 +417,44 @@ public class BussinessUtils {
 	 * 保存用户数据
 	 */
 	public static void saveUserData(LoginBean loginBean,
-			pShareFileUtils pShareFileUtils) {
+			pShareFileUtils mShareFileUtils) {
+		pShareFileUtils.setString(Constant.PIC_SERVER,
+				loginBean.getPic_server());
+		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
+		pShareFileUtils.setString(Constant.ID, loginBean.user.getId());
+		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
+		pShareFileUtils.setString(Constant.USERNAME,
+				loginBean.user.getUsername());
+		pShareFileUtils.setString(Constant.PHONE, loginBean.user.getPhone());
+		pShareFileUtils.setString(Constant.BIRTH, loginBean.user.getBirth());
+		pShareFileUtils.setString(Constant.USER_IMAGE,
+				loginBean.user.getImage());
+		pShareFileUtils.setString(Constant.CREATED_AT,
+				loginBean.user.getCreated_at());
+		pShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
+		pShareFileUtils.setString(Constant.CLIENT_ID,
+				loginBean.user.getClient_id());
+		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
+				.toString());
 
-//		pShareFileUtils.setString("", loginBean.getAge());
+	}
+
+	/**
+	 * 清楚用户数据
+	 */
+	public static void clearUserData(pShareFileUtils mShareFileUtils) {
+		pShareFileUtils.setString(Constant.PIC_SERVER, "");
+		pShareFileUtils.setString(Constant.SYS_TIME, "");
+		pShareFileUtils.setString(Constant.ID, "");
+		pShareFileUtils.setString(Constant.SEX, "");
+		pShareFileUtils.setString(Constant.USERNAME, "");
+		pShareFileUtils.setString(Constant.PHONE, "");
+		pShareFileUtils.setString(Constant.BIRTH, "");
+		pShareFileUtils.setString(Constant.USER_IMAGE, "");
+		pShareFileUtils.setString(Constant.CREATED_AT, "");
+		pShareFileUtils.setString(Constant.CITY, "");
+		pShareFileUtils.setString(Constant.CLIENT_ID, "");
+		pShareFileUtils.setString(Constant.LABELS, "");
 
 	}
 

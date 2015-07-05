@@ -3,7 +3,7 @@ package com.peer.base;
 import com.peer.utils.SDCardScanner;
 
 /**
- * ����ȫ�����Խӿ� ��Щ�����ǿ��������ϡ�
+ * 系统静态变量
  */
 public class Constant {
 	public static int REFRESHHANDLE = 321;
@@ -24,9 +24,6 @@ public class Constant {
 	public static String WX_APP_ID = "wxe2461f1b754deb94";
 
 	/* homepage recommend user or topic */
-	public static String USER = "user";
-	public static String TOPIC = "topic";
-	public static String TIME = "time";
 
 	/* chatroom type */
 	public static int SINGLECHAT = 1;
@@ -94,6 +91,22 @@ public class Constant {
 	/** 图片缓存目录 **/
 	public static String C_IMAGE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
 			+ "imagecache/";
+
+	/** 用户信息 **/
+	public static String USER = "user";
+	public static String ID = "id";
+	public static String SEX = "sex";
+	public static String USERNAME = "username";
+	public static String PHONE = "phone";
+	public static String BIRTH = "birth";
+	public static String USER_IMAGE = "image";
+	public static String CREATED_AT = "created_at";
+	public static String CITY = "city";
+	public static String TOPIC = "topic";
+	public static String TIME = "time";
+	public static String PIC_SERVER = "pic_server";
+	public static String SYS_TIME = "sys_time";
+	public static String LABELS = "Labels";
 	/** 客户端client_id **/
 	public static String CLIENT_ID = "44393c565b15e21df03336b8f4a82eff713c9a95";
 

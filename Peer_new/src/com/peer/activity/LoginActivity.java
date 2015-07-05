@@ -67,23 +67,6 @@ public class LoginActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
-		String loginStr = pIOUitls.readFileByLines(
-				Constant.DEFAULT_MAIN_DIRECTORY, "login.txt");
-
-		pLog.i("test", "loginStr:" + loginStr);
-
-		try {
-			LoginBean loginBean = JsonDocHelper.toJSONObject(loginStr,
-					LoginBean.class);
-			pLog.i("test", "loginBean:" + loginBean.getPic_server());
-			pLog.i("test", "loginBean:" + loginBean.getUserBean().toString());
-			pLog.i("test", "loginBean:" + loginBean.getUserBean().getBirth());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			pLog.i("test", "Exception:" + e.toString());
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override
@@ -260,21 +243,21 @@ public class LoginActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode);
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test", "response:" + response.toString());
-
 						try {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.toString(), LoginBean.class);
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							if (loginBean != null) {
 
-							// BussinessUtils.saveUserData(loginBean,
-							// mShareFileUtils);
+								pLog.i("test", "getLabels:"
+										+ loginBean.user.getLabels().toString());
+								
+								BussinessUtils.saveUserData(loginBean,
+										mShareFileUtils);
 
-							pLog.i("test",
-									"getSys_time:" + loginBean.getSys_time());
-							pLog.i("test",
-									"getUserBean:" + loginBean.getUserBean());
+								pLog.i("test", mShareFileUtils.getString(
+										Constant.LABELS, ""));
+							}
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
@@ -295,8 +278,6 @@ public class LoginActivity extends pBaseActivity {
 							JSONArray labels = (JSONArray) user.get("labels");
 							for (int index = 0; index < labels.length(); index++)
 								lab.add(labels.getString(index));
-
-							pLog.i("test", "lab" + lab);
 							String city = user.getString("city");
 							String username = user.getString("username");
 							String client_id = user.getString("client_id");
