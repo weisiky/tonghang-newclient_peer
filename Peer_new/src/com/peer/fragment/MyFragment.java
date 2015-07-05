@@ -20,7 +20,7 @@ import com.peer.base.pBaseFragment;
 
 
 /**
- * ‘我的’页 fragment
+ *  鈥樻垜鐨勨�檉ragment
  * 
  */
 public class MyFragment extends pBaseFragment{
@@ -52,9 +52,7 @@ public class MyFragment extends pBaseFragment{
 	private void init() {
 		// TODO Auto-generated method stub	
 			
-		/*
-		 * 初始化控件
-		 * */
+	
 		rl_ponseralpage=(RelativeLayout)getView().findViewById(R.id.rl_ponseralpage);		
 		rl_myacount_my=(RelativeLayout)getView().findViewById(R.id.rl_myacount_my);
 		ll_personmessage_my=(LinearLayout)getView().findViewById(R.id.ll_personmessage_my);
@@ -64,9 +62,7 @@ public class MyFragment extends pBaseFragment{
 		tv_nikename=(TextView)getView().findViewById(R.id.tv_nikename);
 		tv_email=(TextView)getView().findViewById(R.id.tv_email);
 		
-		/*
-		 * 设置控件监听
-		 * */
+		
 		rl_ponseralpage.setOnClickListener(this);
 		rl_myacount_my.setOnClickListener(this);
 		ll_personmessage_my.setOnClickListener(this);
@@ -84,11 +80,7 @@ public class MyFragment extends pBaseFragment{
 		getlocalMsg();
 	}
 	
-	/*
-	 * 自定义方法
-	 * 设置显示当前用户的头像，昵称，邮箱。
-	 * 测试阶段，使用静态默认值。
-	 * */
+	
 	public void getlocalMsg(){
 		im_headpic.setBackgroundDrawable(getResources().getDrawable(R.drawable.mini_avatar_shadow));
 		tv_nikename.setText("weisiky");
@@ -117,10 +109,7 @@ public class MyFragment extends pBaseFragment{
 			startActivity(setting);
 			break;
 		case R.id.rl_ponseralpage:
-			/*
-			 * 跳转至个人主页
-			 * 暂无
-			 * */
+			
 //			ToMypersonalpage();	
 		
 			break;

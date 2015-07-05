@@ -20,43 +20,43 @@ import android.util.DisplayMetrics;
 
 
 /**
- * »ñÈ¡ÊÖ»úÏµÍ³ºÍsim¿¨Ïà¹ØĞÅÏ¢
+ * è·å–æ‰‹æœºç³»ç»Ÿå’Œsimå¡ç›¸å…³ä¿¡æ¯
  * 
  * @version 1.0.0
  */
 @SuppressLint("NewApi")
 public class pSysInfoUtils {
-	private static TelephonyManager telephonyManager = null;// µç»°·şÎñ
+	private static TelephonyManager telephonyManager = null;// ç”µè¯æœåŠ¡
 
 	/**
-	 * »ñÈ¡µ±Ç°²Ù×÷ÏµÍ³µÄÓïÑÔ
+	 * è·å–å½“å‰æ“ä½œç³»ç»Ÿçš„è¯­è¨€
 	 * 
-	 * @return String ÏµÍ³ÓïÑÔ
+	 * @return String ç³»ç»Ÿè¯­è¨€
 	 */
 	public static String getSysLanguage() {
 		return Locale.getDefault().getLanguage();
 	}
 
 	/**
-	 * »ñÈ¡ÊÖ»úĞÍºÅ
+	 * è·å–æ‰‹æœºå‹å·
 	 * 
-	 * @return String ÊÖ»úĞÍºÅ
+	 * @return String æ‰‹æœºå‹å·
 	 */
 	public static String getModel() {
 		return android.os.Build.MODEL;
 	}
 
 	/**
-	 * »ñÈ¡²Ù×÷ÏµÍ³µÄ°æ±¾ºÅ
+	 * è·å–æ“ä½œç³»ç»Ÿçš„ç‰ˆæœ¬å·
 	 * 
-	 * @return String ÏµÍ³°æ±¾ºÅ
+	 * @return String ç³»ç»Ÿç‰ˆæœ¬å·
 	 */
 	public static String getSysRelease() {
 		return android.os.Build.VERSION.RELEASE;
 	}
 
 	/**
-	 * ¶ÁÈ¡sim¿¨ĞòÁĞºÅ
+	 * è¯»å–simå¡åºåˆ—å·
 	 */
 	public static String readSimSerialNum(Context con) {
 		String number = getTelephonyManager(con).getSimSerialNumber();
@@ -64,11 +64,11 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñµÃµç»°¹ÜÀíÊµÀı¶ÔÏó
+	 * è·å¾—ç”µè¯ç®¡ç†å®ä¾‹å¯¹è±¡
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return ÊµÀı¶ÔÏó
+	 *            ä¸Šä¸‹æ–‡
+	 * @return å®ä¾‹å¯¹è±¡
 	 */
 	private static TelephonyManager getTelephonyManager(Context con) {
 		if (telephonyManager == null) {
@@ -80,11 +80,11 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * ¶ÁÎ¨Ò»µÄÉè±¸ID
+	 * è¯»å”¯ä¸€çš„è®¾å¤‡ID
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return Î¨Ò»µÄÉè±¸ID IMEI GSMÊÖ»úµÄ IMEI ºÍ CDMAÊÖ»úµÄ MEID. Èç¹û»ñÈ¡²»µ½·µ»ØÒ»¸öÄ¬ÈÏ×Ö·û´®
+	 *            ä¸Šä¸‹æ–‡
+	 * @return å”¯ä¸€çš„è®¾å¤‡ID IMEI GSMæ‰‹æœºçš„ IMEI å’Œ CDMAæ‰‹æœºçš„ MEID. å¦‚æœè·å–ä¸åˆ°è¿”å›ä¸€ä¸ªé»˜è®¤å­—ç¬¦ä¸²
 	 */
 	public static String readTelephoneSerialNum(Context con) {
 		String telephoneSerialNumber = getTelephonyManager(con).getDeviceId();
@@ -92,9 +92,9 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÏµÍ³µ±Ç°Ê±¼ä£¬¾«È·µ½Ãë
+	 * è·å–ç³»ç»Ÿå½“å‰æ—¶é—´ï¼Œç²¾ç¡®åˆ°ç§’
 	 * 
-	 * @return ·µ»Øµ±Ç°Ê±¼ä×Ö·û´®
+	 * @return è¿”å›å½“å‰æ—¶é—´å­—ç¬¦ä¸²
 	 */
 	public static String getNowTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -102,7 +102,7 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÏµÍ³µ±Ç°Ê±¼ä´Á
+	 * è·å–ç³»ç»Ÿå½“å‰æ—¶é—´æˆ³
 	 * 
 	 * @return
 	 */
@@ -111,17 +111,17 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÔËÓªÉÌĞÅÏ¢
+	 * è·å–è¿è¥å•†ä¿¡æ¯
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return String ÔËÓªÉÌĞÅÏ¢
+	 *            ä¸Šä¸‹æ–‡
+	 * @return String è¿è¥å•†ä¿¡æ¯
 	 */
 	public static String getCarrier(Context con) {
 		TelephonyManager telManager = (TelephonyManager) con.getSystemService(Context.TELEPHONY_SERVICE);
 		String imsi = telManager.getSubscriberId();
 		if (imsi != null && imsi.length() > 0) {
-			// ÒòÎªÒÆ¶¯ÍøÂç±àºÅ46000ÏÂµÄIMSIÒÑ¾­ÓÃÍê£¬ËùÒÔĞéÄâÁËÒ»¸ö46002±àºÅ£¬134/159ºÅ¶ÎÊ¹ÓÃÁË´Ë±àºÅ
+			// å› ä¸ºç§»åŠ¨ç½‘ç»œç¼–å·46000ä¸‹çš„IMSIå·²ç»ç”¨å®Œï¼Œæ‰€ä»¥è™šæ‹Ÿäº†ä¸€ä¸ª46002ç¼–å·ï¼Œ134/159å·æ®µä½¿ç”¨äº†æ­¤ç¼–å·
 			if (imsi.startsWith("46000") || imsi.startsWith("46002")) {
 				return "China Mobile";
 			} else if (imsi.startsWith("46001")) {
@@ -130,13 +130,13 @@ public class pSysInfoUtils {
 				return "China Telecom";
 			}
 		}
-		return "Î´ÄÜÊ¶±ğ";
+		return "æœªèƒ½è¯†åˆ«";
 	}
 
 	/**
-	 * ÊÇ·ñ´æÔÚSd¿¨
+	 * æ˜¯å¦å­˜åœ¨Sdå¡
 	 * 
-	 * @return true ´æÔÚ £»false ²»´æÔÚ
+	 * @return true å­˜åœ¨ ï¼›false ä¸å­˜åœ¨
 	 */
 	public static boolean getSDState() {
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -146,9 +146,9 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡SD¿¨Ê£Óà¿Õ¼äµÄ´óĞ¡
+	 * è·å–SDå¡å‰©ä½™ç©ºé—´çš„å¤§å°
 	 * 
-	 * @return long SD¿¨Ê£Óà¿Õ¼äµÄ´óĞ¡£¨µ¥Î»£ºbyte£©
+	 * @return long SDå¡å‰©ä½™ç©ºé—´çš„å¤§å°ï¼ˆå•ä½ï¼šbyteï¼‰
 	 */
 	public static long getSDSize() {
 		String str = Environment.getExternalStorageDirectory().getPath();
@@ -158,7 +158,7 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡SDµÄÂ·¾¶
+	 * è·å–SDçš„è·¯å¾„
 	 * 
 	 * @return
 	 */
@@ -170,22 +170,22 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * µç»°×´Ì¬
+	 * ç”µè¯çŠ¶æ€
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return 0£ºÎŞ»î¶¯ 1£ºÏìÁå 2£º´ı»ú
+	 *            ä¸Šä¸‹æ–‡
+	 * @return 0ï¼šæ— æ´»åŠ¨ 1ï¼šå“é“ƒ 2ï¼šå¾…æœº
 	 */
 	public static int getPhoneState(Context con) {
 		return getTelephonyManager(con).getCallState();
 	}
 
 	/**
-	 * »ñµÃµç»°·½Î»
+	 * è·å¾—ç”µè¯æ–¹ä½
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return ·½Î»¶ÔÏó
+	 *            ä¸Šä¸‹æ–‡
+	 * @return æ–¹ä½å¯¹è±¡
 	 */
 	public static CellLocation getPhoneLoaction(Context con) {
 		CellLocation cellLocation = getTelephonyManager(con).getCellLocation();
@@ -193,11 +193,11 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * Éè±¸µÄÈí¼ş°æ±¾ºÅ£º the IMEI/SV(software version) for GSM phones.
+	 * è®¾å¤‡çš„è½¯ä»¶ç‰ˆæœ¬å·ï¼š the IMEI/SV(software version) for GSM phones.
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return ²»Ö§³Ö·µ»Ø¡°not available¡±
+	 *            ä¸Šä¸‹æ–‡
+	 * @return ä¸æ”¯æŒè¿”å›â€œnot availableâ€
 	 */
 	public static String getDeviceSoftVersion(Context con) {
 		String version = getTelephonyManager(con).getDeviceSoftwareVersion();
@@ -205,11 +205,11 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñµÃÊÖ»úºÅ
+	 * è·å¾—æ‰‹æœºå·
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return ÊÖ»úºÅ ²»Ö§³Ö¾Í·µ»Ø¡°12322344345¡±
+	 *            ä¸Šä¸‹æ–‡
+	 * @return æ‰‹æœºå· ä¸æ”¯æŒå°±è¿”å›â€œ12322344345â€
 	 */
 	public static String getPhoneNumber(Context con) {
 		String number = getTelephonyManager(con).getLine1Number();
@@ -217,12 +217,12 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñµÃSIM¿¨Ìá¹©µÄÒÆ¶¯¹ú¼ÒÂëºÍÒÆ¶¯ÍøÂçÂë.5»ò6Î»µÄÊ®½øÖÆÊı×Ö. SIM¿¨µÄ×´Ì¬±ØĞëÊÇ
-	 * SIM_STATE_READY(Ê¹ÓÃgetSimState()ÅĞ¶Ï).
+	 * è·å¾—SIMå¡æä¾›çš„ç§»åŠ¨å›½å®¶ç å’Œç§»åŠ¨ç½‘ç»œç .5æˆ–6ä½çš„åè¿›åˆ¶æ•°å­—. SIMå¡çš„çŠ¶æ€å¿…é¡»æ˜¯
+	 * SIM_STATE_READY(ä½¿ç”¨getSimState()åˆ¤æ–­).
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return Àı£º46002
+	 *            ä¸Šä¸‹æ–‡
+	 * @return ä¾‹ï¼š46002
 	 */
 	public static String getSimCode(Context con) {
 		if (getTelephonyManager(con).getSimState() == 5) {
@@ -234,11 +234,11 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * ·şÎñÉÌÃû³Æ£ºÀıÈç£ºÖĞ¹úÒÆ¶¯¡¢ÁªÍ¨ SIM¿¨µÄ×´Ì¬±ØĞëÊÇ SIM_STATE_READY(Ê¹ÓÃgetSimState()ÅĞ¶Ï).
+	 * æœåŠ¡å•†åç§°ï¼šä¾‹å¦‚ï¼šä¸­å›½ç§»åŠ¨ã€è”é€š SIMå¡çš„çŠ¶æ€å¿…é¡»æ˜¯ SIM_STATE_READY(ä½¿ç”¨getSimState()åˆ¤æ–­).
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
-	 * @return ·şÎñÉÌÃû³Æ
+	 *            ä¸Šä¸‹æ–‡
+	 * @return æœåŠ¡å•†åç§°
 	 */
 	public static String getSimPrivatorName(Context con) {
 		if (getTelephonyManager(con).getSimState() == 5) {
@@ -250,10 +250,10 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * Î¨Ò»µÄÓÃ»§ID ÀıÈç£ºIMSI(¹ú¼ÊÒÆ¶¯ÓÃ»§Ê¶±ğÂë) for a GSM phone. ĞèÒªÈ¨ÏŞ£ºREAD_PHONE_STATE
+	 * å”¯ä¸€çš„ç”¨æˆ·ID ä¾‹å¦‚ï¼šIMSI(å›½é™…ç§»åŠ¨ç”¨æˆ·è¯†åˆ«ç ) for a GSM phone. éœ€è¦æƒé™ï¼šREAD_PHONE_STATE
 	 * 
 	 * @param con
-	 *            ÉÏÏÂÎÄ
+	 *            ä¸Šä¸‹æ–‡
 	 * @return
 	 */
 	public static String getUserPhoneId(Context con) {
@@ -261,9 +261,9 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÆÁÄ»¹ÜÀíÀà
+	 * è·å–å±å¹•ç®¡ç†ç±»
 	 * 
-	 * @return DisplayMetrics ÆÁÄ»¹ÜÀí¶ÔÏó
+	 * @return DisplayMetrics å±å¹•ç®¡ç†å¯¹è±¡
 	 */
 	public static DisplayMetrics getDisplayMetrics(Activity context) {
 		DisplayMetrics displayMetrics = null;
@@ -275,14 +275,14 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÆÁÄ»ÃÜ¶È
+	 * è·å–å±å¹•å¯†åº¦
 	 * 
 	 * 
-	 * @return DisplayMetrics ÆÁÄ»¹ÜÀí¶ÔÏó
+	 * @return DisplayMetrics å±å¹•ç®¡ç†å¯¹è±¡
 	 */
 	public static float getScaledDensity(Activity context) {
 		DisplayMetrics displayMetrics = getDisplayMetrics(context);
-		// »ñÈ¡Ê§°ÜÔò·µ»ØÖĞ320x480·Ö±æÂÊÃÜ¶È
+		// è·å–å¤±è´¥åˆ™è¿”å›ä¸­320x480åˆ†è¾¨ç‡å¯†åº¦
 		if (displayMetrics == null) {
 			return 1.0f;
 		}
@@ -290,10 +290,10 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * ¶ÁÈ¡Éè±¸µÄÍø¿¨µØÖ·
+	 * è¯»å–è®¾å¤‡çš„ç½‘å¡åœ°å€
 	 * 
 	 * @param context
-	 * @return macµØÖ·
+	 * @return macåœ°å€
 	 */
 	public static String getMacAddress(Context context) {
 		WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -307,9 +307,9 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * ¶ÁÈ¡Éè±¸µÄÀ¶ÑÀµØÖ·
+	 * è¯»å–è®¾å¤‡çš„è“ç‰™åœ°å€
 	 * 
-	 * @return À¶ÑÀµØÖ·
+	 * @return è“ç‰™åœ°å€
 	 */
 	@SuppressLint("NewApi")
 	public static String getBluetoothAddress() {
@@ -318,14 +318,14 @@ public class pSysInfoUtils {
 
 
 	/**
-	 * ÊÇ·ñ´æÔÚsim¿¨
+	 * æ˜¯å¦å­˜åœ¨simå¡
 	 * 
 	 * @param context
 	 * @return
 	 */
 	public static boolean isExistSim(Context context) {
 		TelephonyManager mTelephonyManager = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
-		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIM¿¨Ã»ÓĞ¾ÍĞ÷
+		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIMï¿½ï¿½Ã»ï¿½Ğ¾ï¿½ï¿½ï¿½
 		{
 			return false;
 		}
@@ -333,21 +333,21 @@ public class pSysInfoUtils {
 	}
 
 	/**
-	 * ÅĞ¶Ïµ±Ç°ÔËĞĞ»·¾³ÊÇ·ñÎªÄ£ÄâÆ÷
+	 * åˆ¤æ–­å½“å‰è¿è¡Œç¯å¢ƒæ˜¯å¦ä¸ºæ¨¡æ‹Ÿå™¨
 	 * 
-	 * @return true µ±Ç°Éè±¸ÎªÄ£ÄâÆ÷ false µ±Ç°Éè±¸ÎªÕæ»ú
+	 * @return true å½“å‰è®¾å¤‡ä¸ºæ¨¡æ‹Ÿå™¨ false å½“å‰è®¾å¤‡ä¸ºçœŸæœº
 	 */
 	public static boolean isEmulator() {
 		return ("unknown".equals(Build.BOARD)) && ("generic".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND));
 	}
 
 	/**
-	 * ÅĞ¶Ï»ñÈ¡µ±Ç°ÆÁÄ»µÄÃÜ¶È
+	 * åˆ¤æ–­è·å–å½“å‰å±å¹•çš„å¯†åº¦
 	 * 
-	 * @return ÆÁÄ»ÃÜ¶È
+	 * @return å±å¹•å¯†åº¦
 	 */
 	public static float getDensity(Activity activity) {
-		/** ³õÊ¼»¯Éè±¸ÆÁÄ»²ÎÊı */
+		/** åˆå§‹åŒ–è®¾å¤‡å±å¹•å‚æ•° **/
 		DisplayMetrics mDisplayMetrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
 		return mDisplayMetrics.density;

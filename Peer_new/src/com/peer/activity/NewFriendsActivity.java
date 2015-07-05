@@ -10,9 +10,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �������ѡ�ҳ
- * */
+/**
+ * ‘新朋友’页
+ */
 public class NewFriendsActivity extends pBaseActivity {
 
 	class PageViewList {

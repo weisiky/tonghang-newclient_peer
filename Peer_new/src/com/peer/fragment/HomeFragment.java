@@ -44,7 +44,7 @@ import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 
 /**
- * ��fragment�ࣨ�Ƽ��û���
+ * 主Fragment
  */
 public class HomeFragment extends pBaseFragment {
 
@@ -55,7 +55,7 @@ public class HomeFragment extends pBaseFragment {
 	private PullToRefreshListView pull_refresh_homepage;
 	public LinearLayout base_neterror_item;
 	private TextView tv_connect_errormsg;
-	/** ��ҳ���� **/
+	/** 分页参数 **/
 	int page = 1;
 
 	private pBaseActivity pbaseActivity;
@@ -155,7 +155,7 @@ public class HomeFragment extends pBaseFragment {
 	}
 
 	/**
-	 * ��ҳ�û��Ƽ�����ӿ�
+	 * 推荐用户请求
 	 * 
 	 * @param client_id
 	 * @param page

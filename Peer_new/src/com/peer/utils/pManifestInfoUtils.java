@@ -8,7 +8,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
 /**
- * Ö÷Òª¶ÁÈ¡AndroidManifest.xmlÅäÖÃĞÅÏ¢
+ * ä¸»è¦è¯»å–AndroidManifest.xmlé…ç½®ä¿¡æ¯
  * 
  * @author zhzhg
  * @version 1.0.0
@@ -21,7 +21,7 @@ public class pManifestInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡appµÄÃû³Æ
+	 * è·å–appçš„åç§°
 	 * 
 	 * @return
 	 */
@@ -39,7 +39,7 @@ public class pManifestInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡icon drawableÖĞid
+	 * è·å–icon drawableä¸­id
 	 * 
 	 * @return
 	 */
@@ -57,7 +57,7 @@ public class pManifestInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡versioncode
+	 * è·å–versioncode
 	 * 
 	 * @return
 	 */
@@ -75,7 +75,7 @@ public class pManifestInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡versionName
+	 * è·å–versionName
 	 * 
 	 * @return
 	 */
@@ -93,10 +93,10 @@ public class pManifestInfoUtils {
 	}
 
 	/**
-	 * »ñÈ¡manifestÅäÖÃÎÄ¼şÀïµÄmetaÖµ
+	 * è·å–manifesté…ç½®æ–‡ä»¶é‡Œçš„metaå€¼
 	 * 
 	 * @param key
-	 *            metaµÄname
+	 *            metaçš„name
 	 * @return
 	 */
 	public String getMetaData(String key) {

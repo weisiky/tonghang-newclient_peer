@@ -15,7 +15,7 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * �����û�������
+ * 更改密码（发请求）
  * */
 public class UpdatePasswordActivity extends pBaseActivity {
 	
@@ -100,16 +100,14 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		
 	}
 	
-	/*
-	 * �ύ��������������
-	 * */
+	
 	private void UpdatePassword() {
 		// TODO Auto-generated method stub		
 		String old=pageViewaList.et_oldpasw.getText().toString().trim();
 		final String newpasws=pageViewaList.et_newpasw.getText().toString().trim();
 		String testnew=pageViewaList.et_repasw.getText().toString().trim();
 		
-		/*��ȡ�û�������Ӧ�����룬�Ƚ�ԭʼ���롣���ޣ�
+		/*
 		final String email=LocalStorage.getString(UpdatePasswordActivity.this, Constant.EMAIL);
 		final UserDao udao=new UserDao(UpdatePasswordActivity.this);		
 		String password=udao.getPassord(email);
@@ -124,16 +122,14 @@ public class UpdatePasswordActivity extends pBaseActivity {
 			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.oldnewnot));
 			return;
 		}else{
-			Toast.makeText(this,"ģ�������ɣ�", Toast.LENGTH_LONG);
+			showToast("模拟完成更改", Toast.LENGTH_SHORT, false);
 			finish();
 		}
 	}
 	
 	
 	
-	/*
-	 * ����edit�ı�����
-	 * */
+	
 	private void CreateTextwatcher() {
 		// TODO Auto-generated method stub
 		textwatcher=new TextWatcher() {

@@ -78,9 +78,7 @@ public class RegisterTagActivity extends pBaseActivity {
 		pageViewaList.et_tagname_2.addTextChangedListener(watcher);
 		pageViewaList.bt_registe_tag.setEnabled(false);
 
-		/*
-		 * ���ּӸ���ɫ
-		 */
+		/** 文字加高亮色 **/
 		SpannableStringBuilder builder = new SpannableStringBuilder(
 				pageViewaList.xieyi.getText().toString());
 		ForegroundColorSpan colorspan = new ForegroundColorSpan(getResources()
@@ -145,9 +143,7 @@ public class RegisterTagActivity extends pBaseActivity {
 
 	}
 
-	/**
-	 * ע���ǩ����
-	 */
+	
 	private void RegisteTag() {
 		// TODO Auto-generated method stub
 
@@ -159,7 +155,7 @@ public class RegisterTagActivity extends pBaseActivity {
 		String[] arr = { t1, t2, t3, t4, t5 };
 		ArrayList<String> list = new ArrayList<String>();
 
-		// �ֲ�����
+		
 		boolean sameTag = true;
 		boolean Tolong = true;
 		boolean isbreak = true;
@@ -234,7 +230,7 @@ public class RegisterTagActivity extends pBaseActivity {
 	}
 
 	/**
-	 * �����¼�ӿ�
+	 * 注册基本信息请求
 	 * 
 	 * @param email
 	 * @param password
@@ -352,9 +348,7 @@ public class RegisterTagActivity extends pBaseActivity {
 				});
 	}
 
-	/**
-	 * TextWatcher�����༭��
-	 */
+	
 	TextWatcher watcher = new TextWatcher() {
 
 		@Override

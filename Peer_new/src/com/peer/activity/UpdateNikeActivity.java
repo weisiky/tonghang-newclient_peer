@@ -13,9 +13,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �����û��ǳ���
- * */
+/**
+ * 更改昵称
+ */
 public class UpdateNikeActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

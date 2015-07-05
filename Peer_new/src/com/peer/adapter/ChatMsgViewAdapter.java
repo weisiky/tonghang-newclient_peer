@@ -127,7 +127,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if(checkNetworkState()){
+					if(((pBaseActivity)context).isNetworkAvailable){
 						if(isComMsg==0){
 							if(list==null||list.isEmpty()){
 								User user=new User();

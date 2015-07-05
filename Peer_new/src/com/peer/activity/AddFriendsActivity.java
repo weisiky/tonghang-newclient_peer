@@ -15,7 +15,7 @@ import com.peer.utils.pViewBox;
 
 /**
  * 添加好友
- * */
+ */
 public class AddFriendsActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

@@ -69,7 +69,7 @@ public class SearchResultActivity extends pBaseActivity {
 		String searchaccuratetarget = SearchBean.getInstance()
 				.getCallbacklabel();
 
-		lv_searchresult = (PullToRefreshListView) findViewById(R.id.lv_searchresult);// �Զ���ؼ����Լ�find
+		lv_searchresult = (PullToRefreshListView) findViewById(R.id.lv_searchresult);
 		pageViewaList.tv_title.setText(searchname);
 
 	}
@@ -79,7 +79,7 @@ public class SearchResultActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 
-		RefreshListner();// ����ˢ�¼���
+		RefreshListner();
 	}
 
 	@Override
@@ -137,10 +137,7 @@ public class SearchResultActivity extends pBaseActivity {
 
 	}
 
-	/**
-	 * ����������ˢ�·���
-	 * 
-	 */
+	
 	private void RefreshListner() {
 		// TODO Auto-generated method stub
 		lv_searchresult
@@ -165,7 +162,7 @@ public class SearchResultActivity extends pBaseActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
+						showToast("下拉", Toast.LENGTH_SHORT, false);
 					}
 
 					@Override
@@ -188,13 +185,13 @@ public class SearchResultActivity extends pBaseActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						showToast("����ˢ�³ɹ�", Toast.LENGTH_SHORT, false);
+						showToast("上拉", Toast.LENGTH_SHORT, false);
 					}
 				});
 	}
 
 	/**
-	 * �����ӿ�
+	 * 搜索请求
 	 * 
 	 * @param label_name
 	 * @param page
@@ -204,7 +201,7 @@ public class SearchResultActivity extends pBaseActivity {
 	private void SearchResult(String name, int page, String contanttype)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-		/** �����ַ **/
+		
 		String URL = null;
 
 		Map<String, Object> searchParams = new HashMap<String, Object>();

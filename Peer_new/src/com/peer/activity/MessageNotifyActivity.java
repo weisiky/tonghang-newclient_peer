@@ -16,7 +16,7 @@ import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
- * ����Message���ѷ�ʽ��
+ * 消息提醒方式类
  */
 public class MessageNotifyActivity extends pBaseActivity{
 	

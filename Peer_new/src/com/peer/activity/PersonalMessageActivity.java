@@ -26,9 +26,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.Tools;
 import com.peer.utils.pViewBox;
 
-/*
- * �޸��û�������Ϣ��
- **/
+/**
+ * 修改个人信息
+ */
 public class PersonalMessageActivity extends pBaseActivity{
 	
 	private String[] items;
@@ -75,9 +75,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.personalmessage));
 		items = getResources().getStringArray(R.array.pictrue);
-		pageViewaList.tv_sex.setText("��");
+		pageViewaList.tv_sex.setText("模拟数据:男");
 		pageViewaList.tv_setbirthday_my.setText("1993-01-18");
-		pageViewaList.tv_setaddress_my.setText("���");
+		pageViewaList.tv_setaddress_my.setText("天津");
 		pageViewaList.et_nikename_personMSG.setText("weisiky");
 		setDateTime();
 	}
@@ -145,11 +145,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 		case R.id.bt_update:
 			photo=pageViewaList.iv_headpic_personMSG.getDrawingCache();
 			img=getBitmapByte(photo);
-//			if(checkNetworkState()){
+
 				CommiteToServer();
-//			}else{
-//				ShowMessage(getResources().getString(R.string.Broken_network_prompt));
-//			}			
+			
 			break;
 		default:
 			break;
@@ -157,9 +155,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 		
 	}
 	
-	/*
-	 * ChangBirthday��
-	 * */
+	/**
+	 * ChangBirthday类
+	 */
 	private void ChangBirthday() {
 		// TODO Auto-generated method stub
 		 Message msg = new Message();         
@@ -178,9 +176,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    };
 	    
 	    
-	    /*
-	     * ��ʼ��Calendar�ؼ���
-	     * */
+	    /**
+	     * 初始化Calendar
+	     */
 	    private void setDateTime(){
 	   	 final Calendar c = Calendar.getInstance();  
 	        mYear = 1993;  
@@ -205,7 +203,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 	   }
 	    
 	    /*
-	     * ChangAddress��
+	     * ChangAddress类
 	     * */
 	    private void ChangAddress() {
 			// TODO Auto-generated method st
@@ -214,9 +212,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 		}
 	    
 	    
-	    /*
-	     * ����ͷ����
-	     * */
+	    
 	    private void showDialog() {
 
 			new AlertDialog.Builder(this)
@@ -258,9 +254,7 @@ public class PersonalMessageActivity extends pBaseActivity{
 		}
 	    
 	    
-	    /*
-	     * �¼�������ɣ����ظ���UI��
-	     * */
+	    
 	    @Override
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 			if (resultCode != RESULT_CANCELED) {
@@ -342,9 +336,9 @@ public class PersonalMessageActivity extends pBaseActivity{
 		}
 	    
 	    
-	    /*
-	     * �����Ա���
-	     * */
+	    /**
+	     * 选择性别
+	     */
 	    private void SexSelect() {
 			// TODO Auto-generated method stub
 			 final String[] items = getResources().getStringArray(  
@@ -362,8 +356,8 @@ public class PersonalMessageActivity extends pBaseActivity{
 	    
 	    
 	    /*
-	     * CommiteToServer��
-	     * ģ�����ʱ����ת��myfragment
+	     * CommiteToServer方法
+	     * 
 	     * */
 	    private void CommiteToServer() {
 			// TODO Auto-generated method stub

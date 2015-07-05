@@ -5,7 +5,7 @@ import android.view.View;
 
 
 /**
- * AdapterÊ¹ÓÃ
+ * Adapterä½¿ç”¨
  * @author zhangzg
  *
  */

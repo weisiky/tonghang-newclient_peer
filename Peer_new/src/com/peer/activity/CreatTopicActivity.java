@@ -22,10 +22,10 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.pViewBox;
 
-/*
- * ����������
+/**
+ * 创建话题
  * 
- * */
+ */
 public class CreatTopicActivity extends pBaseActivity{
 	
 	private AutoWrapRadioGroup tag_container;
@@ -148,7 +148,7 @@ public class CreatTopicActivity extends pBaseActivity{
 	}
 	
 	/*
-	 * ��������ʱ���Ƿ����
+	 * 创建话题时，分享Dialog
 	 * */
 	public void ShareDialog(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.sharedailog))  
@@ -160,13 +160,13 @@ public class CreatTopicActivity extends pBaseActivity{
 				// TODO Auto-generated method stub
 //				CreatTopicTask task=new CreatTopicTask();
 //				task.execute(selectlabel,topic.getText().toString().trim());
-				showToast("��������ɹ�", Toast.LENGTH_SHORT, false);
+				showToast("模拟测试", Toast.LENGTH_SHORT, false);
 			}
 		}) 
 		 .setPositiveButton(getResources().getString(R.string.sharesure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){            	 
               
-           showToast("������ʱ���ṩ", Toast.LENGTH_SHORT, false);
+           showToast("模拟测试", Toast.LENGTH_SHORT, false);
       		
              }
 		 })

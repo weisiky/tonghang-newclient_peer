@@ -25,7 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
- * View ×Ô¶¯find¹¤¾ßÀà
+ * View è‡ªåŠ¨findå·¥å…·ç±»
  * 
  * @author zhzhg
  * 

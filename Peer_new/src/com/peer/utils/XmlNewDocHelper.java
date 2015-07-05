@@ -7,7 +7,7 @@ import java.util.List;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * XML½âÎöÀà
+ * XMLè§£æç±»
  * 
  * @author puxun
  * 
@@ -17,7 +17,7 @@ public class XmlNewDocHelper {
 
 	private static XStream xStream;
 
-	// »ñÈ¡¶à¸öxmlÁĞ±í¶ÔÏó
+	// è·å–å¤šä¸ªxmlåˆ—è¡¨å¯¹è±¡
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> getXmlList(String aliaName, Class<T> cls,
 			InputStream input) throws Exception {
@@ -29,7 +29,7 @@ public class XmlNewDocHelper {
 			return (List<T>) xStream.fromXML(input);
 		} catch (Exception e) {
 			// TODO: handle exception
-			throw new Exception("XML ½âÎöÊ§°Ü");
+			throw new Exception("XML è§£æå¤±è´¥");
 		}
 	}
 
@@ -44,21 +44,21 @@ public class XmlNewDocHelper {
 			return (T) obj;
 		} catch (Exception e) {
 			// TODO: handle exception
-			throw new Exception("XML ½âÎöÊ§°Ü");
+			throw new Exception("XML è§£æå¤±è´¥");
 		}
 	}
 
 	/**
-	 * ObjectĞ´³ÉxmlÎÄ¼ş
+	 * Objectå†™æˆxmlæ–‡ä»¶
 	 * 
 	 * @param cls
-	 *            ¶ÔÏó
+	 *            å¯¹è±¡
 	 * @param filePath
-	 *            Â·¾¶
+	 *            è·¯å¾„
 	 * @param fileName
-	 *            xmlÎÄ¼şÃû³Æ
+	 *            xmlæ–‡ä»¶åç§°
 	 * @param isADD
-	 *            ÊÇ·ñ×·¼Ó
+	 *            æ˜¯å¦è¿½åŠ 
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -74,7 +74,7 @@ public class XmlNewDocHelper {
 			writer.close();
 		} catch (Exception e) {
 			// TODO: handle exception
-			throw new Exception("XML Ğ´ÈëÊ§°Ü");
+			throw new Exception("XML å†™å…¥å¤±è´¥");
 		}
 	}
 

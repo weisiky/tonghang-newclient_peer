@@ -16,7 +16,7 @@ import org.apache.tools.zip.ZipOutputStream;
 import com.peer.base.Constant;
 
 /**
- * Ñ¹ËõÓë½âÑ¹Ëõ¹¤¾ß
+ * å‹ç¼©ä¸è§£å‹ç¼©å·¥å…·
  * 
  * @author puxun
  * 
@@ -24,13 +24,13 @@ import com.peer.base.Constant;
 
 public class ZipUtil {
 	private ZipFile zipFile;
-	private ZipOutputStream zipOut; // Ñ¹ËõZip
+	private ZipOutputStream zipOut; // å‹ç¼©Zip
 	private int bufSize; // size of bytes
 	private int fileSize = 0; // size of bytes
 	private byte[] buf;
 
 	public ZipUtil() {
-		// Òª¹¹Ôìº¯ÊıÖĞÈ¥³õÊ¼»¯ÎÒÃÇµÄ»º³åÇø
+		// è¦æ„é€ å‡½æ•°ä¸­å»åˆå§‹åŒ–æˆ‘ä»¬çš„ç¼“å†²åŒº
 		this.bufSize = 1024 * 4;
 		this.buf = new byte[this.bufSize];
 	}
@@ -42,17 +42,17 @@ public class ZipUtil {
 	}
 
 	/**
-	 * ¶Ô´«ÈëµÄÄ¿Â¼»òÕßÊÇÎÄ¼ş½øĞĞÑ¹Ëõ
+	 * å¯¹ä¼ å…¥çš„ç›®å½•æˆ–è€…æ˜¯æ–‡ä»¶è¿›è¡Œå‹ç¼©
 	 * 
 	 * @param srcFile
-	 *            ĞèÒª¡¡Ñ¹ËõµÄÄ¿Â¼»òÕßÎÄ¼ş
+	 *            éœ€è¦ã€€å‹ç¼©çš„ç›®å½•æˆ–è€…æ–‡ä»¶
 	 * @param destFile
-	 *            ¡¡Ñ¹ËõÎÄ¼şµÄÂ·¾¶
+	 *            ã€€å‹ç¼©æ–‡ä»¶çš„è·¯å¾„
 	 */
-	public boolean doZip(String srcFile, String destFile) {// zipDirectoryPath:ĞèÒªÑ¹ËõµÄÎÄ¼ş¼ĞÃû
+	public boolean doZip(String srcFile, String destFile) {// zipDirectoryPath:éœ€è¦å‹ç¼©çš„æ–‡ä»¶å¤¹å
 		File zipFile = new File(srcFile);
 		try {
-			// Éú³ÉZipOutputStream£¬»á°ÑÑ¹ËõµÄÄÚÈİÈ«¶¼Í¨¹ıÕâ¸öÊä³öÁ÷Êä³ö£¬×îºóĞ´µ½Ñ¹ËõÎÄ¼şÖĞÈ¥
+			// ç”ŸæˆZipOutputStreamï¼Œä¼šæŠŠå‹ç¼©çš„å†…å®¹å…¨éƒ½é€šè¿‡è¿™ä¸ªè¾“å‡ºæµè¾“å‡ºï¼Œæœ€åå†™åˆ°å‹ç¼©æ–‡ä»¶ä¸­å»
 			File dFile=new File(Constant.SDCARD_DIR);
 			if(!dFile.exists()){
 				dFile.mkdirs();
@@ -60,19 +60,17 @@ public class ZipUtil {
 			
 			this.zipOut = new ZipOutputStream(new BufferedOutputStream(
 					new FileOutputStream(destFile)));
-			// ÉèÖÃÑ¹ËõµÄ×¢ÊÍ
+			// è®¾ç½®å‹ç¼©çš„æ³¨é‡Š
 			zipOut.setComment("comment");
-			// ÉèÖÃÑ¹ËõµÄ±àÂë£¬Èç¹ûÒªÑ¹ËõµÄÂ·¾¶ÖĞÓĞÖĞÎÄ£¬¾ÍÓÃÏÂÃæµÄ±àÂë
+			// è®¾ç½®å‹ç¼©çš„ç¼–ç ï¼Œå¦‚æœè¦å‹ç¼©çš„è·¯å¾„ä¸­æœ‰ä¸­æ–‡ï¼Œå°±ç”¨ä¸‹é¢çš„ç¼–ç 
 			zipOut.setEncoding("GBK");
-			// ÆôÓÃÑ¹Ëõ
+			// å¯ç”¨å‹ç¼©
 			zipOut.setMethod(ZipOutputStream.DEFLATED);
-
-			// Ñ¹Ëõ¼¶±ğÎª×îÇ¿Ñ¹Ëõ£¬µ«Ê±¼äÒª»¨µÃ¶àÒ»µã
+			// å‹ç¼©çº§åˆ«ä¸ºæœ€å¼ºå‹ç¼©ï¼Œä½†æ—¶é—´è¦èŠ±å¾—å¤šä¸€ç‚¹
 			zipOut.setLevel(Deflater.BEST_SPEED);
 
 			handleFile(zipFile, this.zipOut, "");
-
-			// ´¦ÀíÍê³Éºó¹Ø±ÕÎÒÃÇµÄÊä³öÁ÷
+			// å¤„ç†å®Œæˆåå…³é—­æˆ‘ä»¬çš„è¾“å‡ºæµ
 			this.zipOut.close();
 
 			return true;
@@ -83,70 +81,69 @@ public class ZipUtil {
 	}
 
 	/**
-	 * ÓÉdoZipµ÷ÓÃ,µİ¹éÍê³ÉÄ¿Â¼ÎÄ¼ş¶ÁÈ¡
+	 * ç”±doZipè°ƒç”¨,é€’å½’å®Œæˆç›®å½•æ–‡ä»¶è¯»å–
 	 * 
 	 * @param zipFile
 	 * @param zipOut
 	 * @param dirName
-	 *            Õâ¸öÖ÷ÒªÊÇÓÃÀ´¼ÇÂ¼Ñ¹ËõÎÄ¼şµÄÒ»¸öÄ¿Â¼²ã´Î½á¹¹µÄ
+	 *            è¿™ä¸ªä¸»è¦æ˜¯ç”¨æ¥è®°å½•å‹ç¼©æ–‡ä»¶çš„ä¸€ä¸ªç›®å½•å±‚æ¬¡ç»“æ„çš„
 	 * @throws IOException
 	 */
 	private void handleFile(File zipFile, ZipOutputStream zipOut, String dirName)
 			throws IOException {
-		System.out.println("±éÀúÎÄ¼ş£º" + zipFile.getName());
-		// Èç¹ûÊÇÒ»¸öÄ¿Â¼£¬Ôò±éÀú
+		System.out.println("éå†æ–‡ä»¶ï¼š" + zipFile.getName());
+		// å¦‚æœæ˜¯ä¸€ä¸ªç›®å½•ï¼Œåˆ™éå†
 		if (zipFile.isDirectory()) {
 			File[] files = zipFile.listFiles();
 
-			if (files.length == 0) {// Èç¹ûÄ¿Â¼Îª¿Õ,Ôòµ¥¶À´´½¨Ö®.
-				// Ö»ÊÇ·ÅÈëÁË¿ÕÄ¿Â¼µÄÃû×Ö
+			if (files.length == 0) {// å¦‚æœç›®å½•ä¸ºç©º,åˆ™å•ç‹¬åˆ›å»ºä¹‹.
+				// åªæ˜¯æ”¾å…¥äº†ç©ºç›®å½•çš„åå­—
 				this.zipOut.putNextEntry(new ZipEntry(dirName
 						+ zipFile.getName() + File.separator));
 				this.zipOut.closeEntry();
-			} else {// Èç¹ûÄ¿Â¼²»Îª¿Õ,Ôò½øÈëµİ¹é£¬´¦ÀíÏÂÒ»¼¶ÎÄ¼ş
+			} else {// å¦‚æœç›®å½•ä¸ä¸ºç©º,åˆ™è¿›å…¥é€’å½’ï¼Œå¤„ç†ä¸‹ä¸€çº§æ–‡ä»¶
 				for (File file : files) {
-					// ½øÈëµİ¹é£¬´¦ÀíÏÂÒ»¼¶µÄÎÄ¼ş
+					// è¿›å…¥é€’å½’ï¼Œå¤„ç†ä¸‹ä¸€çº§çš„æ–‡ä»¶
 					handleFile(file, zipOut, dirName + zipFile.getName()
 							+ File.separator);
 				}
 			}
 		}
-		// Èç¹ûÊÇÎÄ¼ş£¬ÔòÖ±½ÓÑ¹Ëõ
+		// å¦‚æœæ˜¯æ–‡ä»¶ï¼Œåˆ™ç›´æ¥å‹ç¼©
 		else {
 			FileInputStream fileIn = new FileInputStream(zipFile);
-			// ·ÅÈëÒ»¸öZipEntry
+			// æ”¾å…¥ä¸€ä¸ªZipEntry
 			this.zipOut.putNextEntry(new ZipEntry(dirName + zipFile.getName()));
 			int length = 0;
-			// ·ÅÈëÑ¹ËõÎÄ¼şµÄÁ÷
+			// æ”¾å…¥å‹ç¼©æ–‡ä»¶çš„æµ
 
 			while ((length = fileIn.read(this.buf)) > 0) {
 				this.zipOut.write(this.buf, 0, length);
 			}
-
-			// ¹Ø±ÕZipEntry£¬Íê³ÉÒ»¸öÎÄ¼şµÄÑ¹Ëõ
+			// å…³é—­ZipEntryï¼Œå®Œæˆä¸€ä¸ªæ–‡ä»¶çš„å‹ç¼©
 			this.zipOut.closeEntry();
 		}
 
 	}
 
 	/**
-	 * ½âÑ¹Ö¸¶¨zipÎÄ¼ş
+	 * è§£å‹æŒ‡å®šzipæ–‡ä»¶
 	 * 
 	 * @param unZipfile
-	 *            Ñ¹ËõÎÄ¼şµÄÂ·¾¶
+	 *            å‹ç¼©æ–‡ä»¶çš„è·¯å¾„
 	 * @param destFile
-	 *            ¡¡¡¡¡¡½âÑ¹µ½µÄÄ¿Â¼¡¡
+	 *            ã€€ã€€ã€€è§£å‹åˆ°çš„ç›®å½•ã€€
 	 */
-	public boolean unZip(String unZipfile, String destFile) {// unZipfileNameĞèÒª½âÑ¹µÄzipÎÄ¼şÃû
+	public boolean unZip(String unZipfile, String destFile) {// unZipfileNameéœ€è¦è§£å‹çš„zipæ–‡ä»¶å
 		FileOutputStream fileOut;
 		File file;
 		InputStream inputStream;
 
 		try {
-			// Éú³ÉÒ»¸özipµÄÎÄ¼ş
+			// ç”Ÿæˆä¸€ä¸ªzipçš„æ–‡ä»¶
 			this.zipFile = new ZipFile(unZipfile, "GBK");
 
-			// ±éÀúzipFileÖĞËùÓĞµÄÊµÌå£¬²¢°ÑËûÃÇ½âÑ¹³öÀ´
+			// éå†zipFileä¸­æ‰€æœ‰çš„å®ä½“ï¼Œå¹¶æŠŠä»–ä»¬è§£å‹å‡ºæ¥
 			for (@SuppressWarnings("unchecked")
 			Enumeration<ZipEntry> entries = this.zipFile.getEntries(); entries
 					.hasMoreElements();) {
@@ -157,24 +154,24 @@ public class ZipUtil {
 					name = name.replaceAll("\\\\", "\\/");
 				}
 
-				// Éú³ÉËûÃÇ½âÑ¹ºóµÄÒ»¸öÎÄ¼ş
+				// ç”Ÿæˆä»–ä»¬è§£å‹åçš„ä¸€ä¸ªæ–‡ä»¶
 				file = new File(destFile + File.separator + name);
 
 				if (entry.isDirectory()) {
 					file.mkdirs();
 				} else {
-					// Èç¹ûÖ¸¶¨ÎÄ¼şµÄÄ¿Â¼²»´æÔÚ,Ôò´´½¨Ö®.
+					// å¦‚æœæŒ‡å®šæ–‡ä»¶çš„ç›®å½•ä¸å­˜åœ¨,åˆ™åˆ›å»ºä¹‹.
 					File parent = file.getParentFile();
 					if (!parent.exists()) {
 						parent.mkdirs();
 					}
-					// »ñÈ¡³ö¸ÃÑ¹ËõÊµÌåµÄÊäÈëÁ÷
+					// è·å–å‡ºè¯¥å‹ç¼©å®ä½“çš„è¾“å…¥æµ
 					inputStream = zipFile.getInputStream(entry);
 
 					fileOut = new FileOutputStream(file);
 
 					int length = 0;
-					// ½«ÊµÌåĞ´µ½±¾µØÎÄ¼şÖĞÈ¥
+					// å°†å®ä½“å†™åˆ°æœ¬åœ°æ–‡ä»¶ä¸­å»
 					while ((length = inputStream.read(this.buf)) > 0) {
 						fileOut.write(this.buf, 0, length);
 					}

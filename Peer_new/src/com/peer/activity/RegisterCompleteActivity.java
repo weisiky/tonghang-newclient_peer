@@ -43,7 +43,8 @@ import com.peer.utils.pViewBox;
 
 
 /*
- * ע����Ϣ�����ࡣ
+ * 注册第二部
+ * 完善信息
  * 
  * */
 public class RegisterCompleteActivity extends pBaseActivity{
@@ -171,7 +172,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	
 	
 	/**
-	 * ���ע�᷽��
+	 * 
 	 * commit
 	 */
 	 private void CommiteToServer() {
@@ -184,7 +185,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 }
 	 
 	 /**
-		 * �����޸��û���Ϣ�ӿ�
+		 * 更改用户信息请求
 		 * 
 		 * @param email
 		 * @param password
@@ -273,7 +274,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 									+ response.toString());
 							super.onSuccess(statusCode, headers, response);
 					*/		
-							/** ���ŵ��� 
+							/**  
 							easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
 							easemobchatImp.getInstance().loadConversationsandGroups();
 							
@@ -298,9 +299,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 		}
 	 **/
 	
-	/*
-	 * ��bitmap
-	 * */
+	
 	public byte[] getBitmapByte(Bitmap bitmap) {
 		if (bitmap == null) {  
 		     return null;  
@@ -312,9 +311,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	}
 	
 	
-	/*
-	 * ��ѡ��ѡ���Ա�
-	 * */
+	
 	private void SexSelect() {
 		// TODO Auto-generated method stub
 		 final String[] items = getResources().getStringArray(  
@@ -331,9 +328,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	}
 	
 	
-	/*
-	 * ͼƬ�洢
-	 * */
+	
 	private void showDialog() {
 
 		new AlertDialog.Builder(this)
@@ -374,9 +369,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 
 	}
 	
-	/*
-	 * ����
-	 * */
+	
 	private void ChangBirthday() {
 		// TODO Auto-generated method stub
 		 Message msg = new Message(); 
@@ -397,9 +390,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	       }
 	    };
 	    
-	    /*
-	     * Ĭ�ϳ�������
-	     * */
+	    
 	    private void setDateTime(){
 	        final Calendar c = Calendar.getInstance();  
 	        mYear = 1993;  

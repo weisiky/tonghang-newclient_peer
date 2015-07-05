@@ -19,7 +19,7 @@ import com.peer.utils.ViewHolder;
 
 
 /*
- * 当前用户标签adapter
+ * 鏍囩adapter
  * */
 public class SkillAdapter extends pBaseAdapter{
 	private Context mContext;

@@ -20,16 +20,16 @@ import com.peer.utils.pViewBox;
 import com.umeng.analytics.f;
 
 
-/*
- * �鿴�ҵı�ǩ��
- * �ɶԱ�ǩ������Ӻ�ɾ��
- * */
+/**
+ * 用户标签类
+ * 显示、可操作
+ */
 public class MySkillActivity extends pBaseActivity{
 	
 	private PageViewList pageViewaList;
 	
-	private List<String> mlist;  //���ڴ洢��ǰ�û���ǩ����
-	private int Hadtag;		//�����������жϵ�ǰ�û���ǩ����
+	private List<String> mlist;  
+	private int Hadtag;		
 	
 	
 	
@@ -102,7 +102,7 @@ public class MySkillActivity extends pBaseActivity{
 		case R.id.ll_createTag_mytag:
 			Hadtag=mlist.size();
 			if(Hadtag>4){
-				showToast("���Ѿ��������ǩ�������ٴ�����", Toast.LENGTH_LONG, false);
+				showToast("您已经有五个标签，不能再创建了", Toast.LENGTH_LONG, false);
 				break;
 			}else{
 				CreateTagDialog();					
@@ -116,13 +116,13 @@ public class MySkillActivity extends pBaseActivity{
 
 	
 	
-	/*
-	 * ��ӱ�ǩ��
+	/**
+	 * 创建标签
 	 * 
-	 * */
+	 */
 	private void CreateTagDialog() {
 		// TODO Auto-generated method stub		
-		//�����༭��Dialog
+		
 		final EditText inputServer = new EditText(MySkillActivity.this);
 		inputServer.setFocusable(true);
 		AlertDialog.Builder builder = new AlertDialog.Builder(MySkillActivity.this);
@@ -172,7 +172,7 @@ public class MySkillActivity extends pBaseActivity{
                     	   }
                     	                     
                        }else{
-                    	   showToast("��������ҵ��ǩ��",Toast.LENGTH_LONG ,false);
+                    	   showToast("请输入行业标签名",Toast.LENGTH_LONG ,false);
                        }                       
                     }
                 });
@@ -188,8 +188,9 @@ public class MySkillActivity extends pBaseActivity{
 	
 	
 	/*
-	 * ���̸߳���UI
-	 * �����ɹ�ʱ����������ӵ�adapter��
+	 * 开线程
+	 * 将数据设置到adapter中
+	 * 
 	 * 
 	 * */
 	public class changLabelsTask extends  AsyncTask<String, String, String>{

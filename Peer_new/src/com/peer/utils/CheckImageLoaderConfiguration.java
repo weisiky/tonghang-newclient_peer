@@ -10,7 +10,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 /**
- * . ImageLoader³õÊ¼»¯ÉèÖÃ
+ * . ImageLoaderåˆå§‹åŒ–è®¾ç½®
  */
 public class CheckImageLoaderConfiguration {
 

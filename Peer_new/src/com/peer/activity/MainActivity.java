@@ -19,12 +19,12 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * ��ҳ����
+ * mainactivity
  */
 public class MainActivity extends pBaseActivity{
 	
 	/**
-	 * fragment����
+	 * fragment定义
 	 */
 	private HomeFragment homefragment;
 	private ComeMsgFragment comemsgfragment;
@@ -32,9 +32,7 @@ public class MainActivity extends pBaseActivity{
 	private MyFragment myfragment;
 	private Fragment[] fragments;
 	
-	/*
-	 * �ж�fragment��ת
-	 * */
+	
 	private int index;
 	private int currentTabIndex;
 	

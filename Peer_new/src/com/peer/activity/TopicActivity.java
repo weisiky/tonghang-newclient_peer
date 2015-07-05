@@ -11,9 +11,10 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �������ҵĻ��⡯�������Ļ��⡯�������Ļ��⡯�����Ѵ������⡯ҳ
- * */
+/**
+ * 用户话题类
+ * 某用户的全部话题
+ */
 public class TopicActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

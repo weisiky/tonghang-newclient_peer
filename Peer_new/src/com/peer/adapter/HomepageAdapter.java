@@ -83,7 +83,7 @@ public class HomepageAdapter extends pBaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if (!checkNetworkState()) {
+					if (!((pBaseActivity)mContext).isNetworkAvailable) {
 						Toast.makeText(
 								mContext,
 								mContext.getResources().getString(
@@ -129,7 +129,7 @@ public class HomepageAdapter extends pBaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if (!checkNetworkState()) {
+					if (!((pBaseActivity)mContext).isNetworkAvailable) {
 						Toast.makeText(
 								mContext,
 								mContext.getResources().getString(

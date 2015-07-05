@@ -13,26 +13,23 @@ import android.widget.Toast;
 
 public abstract class pBaseFragment extends Fragment implements OnClickListener{
 
-	/** ¹²ÏíÎÄ¼ş¹¤¾ßÀà **/
+	
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
-	/** ÍË³öµ¹¼ÆÊ± **/
+	
 	private long mExitTime;
-	/** ÌáÊ¾Ìõ **/
+	
 	public Toast toast;
-	/** ÖĞ¼ä²¼¾Ö **/
+	
 	private RelativeLayout contentLayout;
-	/** ¶¥²¿²¼¾Ö **/
+	
 	private RelativeLayout topLayout;
-	/** »ÒÉ«²¼¾Ö **/
+	
 	private LinearLayout shadeBg;
-	/** µ±Ç°Ò³ÃæµÄÃû³Æ **/
+	
 	public String currentPageName = null;
 	
 	
 	
-	/**
-	 * ³õÊ¼»¯¹²Ïí¹¤¾ßÀà
-	 */
 	public void initShareUtils() {
 		mShareFileUtils.initSharePre(getActivity(),
 				Constant.SHARE_NAME, 0);
@@ -42,28 +39,17 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 
 	
 	
-	/**
-	 * ÍË³öAPP
-	 */
+	
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("ÔÙ°´Ò»´ÎÍË³ö", Toast.LENGTH_SHORT, false);
+			showToast("å†æŒ‰ä¸€æ¬¡é€€å‡º", Toast.LENGTH_SHORT, false);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);
 		}
 	}
 	
-	/**
-	 * ÏÔÊ¾toast£¬»áÅĞ¶Ïµ±Ç°ÊÇ·ñÔÚtoast£¬Èç¹ûÕıÔÚtoast£¬ÏÈÈ¡Ïû£¬ÔÙÏÔÊ¾×îĞÂµÄtoast£¬·ÀÖ¹toastÊ±¼ä¹ı³¤
-	 * 
-	 * @param arg
-	 *            toastÄÚÈİ
-	 * @param length
-	 *            toastÏÔÊ¾³¤¶Ì£¨Toast.LENGTH_LONG,Toast.LENGTH_SHORT£©
-	 * @param isCenter
-	 *            ÌáÊ¾ÌõÊÇ·ñÒª¾ÓÖĞ
-	 */
+	
 	public  void showToast(String arg, int length, boolean isCenter) {
 		if (toast == null) {
 			toast = Toast.makeText(getActivity(), arg, length);
@@ -79,9 +65,7 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 		toast.show();
 	}
 	
-	/*
-	 * Á¬½ÓÍøÂçÅĞ¶ÏÀà
-	 * */
+	
 	public boolean checkNetworkState() {
 		boolean flag = false;		
 		ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);		

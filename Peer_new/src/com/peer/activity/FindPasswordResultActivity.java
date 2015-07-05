@@ -12,9 +12,10 @@ import com.peer.utils.pViewBox;
 
 
 
-/*
- * �һ�����Ľ��������
- * */
+/**
+ * 找回密码结果页。
+ * 只显示结果，不做处理 
+ */
 public class FindPasswordResultActivity extends pBaseActivity{
 	
 	class PageViewList {

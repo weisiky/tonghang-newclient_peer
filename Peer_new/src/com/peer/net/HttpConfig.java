@@ -8,85 +8,87 @@ package com.peer.net;
  */
 public interface HttpConfig {
 
-	/** ��������ַ **/
+	/** IP **/
 	public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
 	// http://www.tonghang1.com:3000
 	// http://192.168.23.1:8080/tonghang-serverapi
 	// http://192.168.1.2:8080/tonghang-serverapi
-	/** ��¼�����ַ **/
+	// http://114.215.143:8080/tonghangserver
+
+	/** 登入请求 **/
 	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/login.json";
-	/** ����ע�������ַ **/
+	/** 注册基本信息请求 **/
 	public static String REGISTTAG_IN_URL = SERVER_ADDRESS
 			+ "/user/regist.json";
-	/** �޸��û���Ϣ�����ַ **/
+	/** 更新用户信息请求 **/
 	public static String UPDATE_IN_URL = SERVER_ADDRESS
 			+ "/user/update/{client_id}.json";
-	/** �������������ַ **/
+	/** 忘记密码请求 **/
 	public static String FORGET_IN_URL = SERVER_ADDRESS
 			+ "/user/forget_password.json";
-	/** ��ҳ�û��Ƽ������ַ **/
+	/** 推荐用户请求 **/
 	public static String USER_RECOMMEND_IN_URL = SERVER_ADDRESS
 			+ "/user/recommend.json";
-	/** ��Ӧ��ǩ�µ��û������ַ **/
+	/** 相应标签下的用户 **/
 	public static String LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/search/label.json";
-	/** ���뻰����û������ַ **/
+	/** 参与话题的用户 **/
 	public static String NUMBER_IN_URL = SERVER_ADDRESS + "/topic/number.json";
-	/** ����ҵ���û������ַ **/
+	/** 按行业搜用户 **/
 	public static String SEARCH_USER_LABEL_URL = SERVER_ADDRESS
 			+ "/user/search/label.json";
-	/** ���ǳ����û������ַ **/
+	/** 按昵称搜用户 **/
 	public static String SEARCH_USER_NICK_URL = SERVER_ADDRESS
 			+ "/user/search/nick.json";
-	/** �޸��û����������ַ **/
+	/** 用户更改密码 **/
 	public static String UPDATE_PWD_IN_URL = SERVER_ADDRESS
 			+ "/user/update_pwd/{client_id}.json";
-	/** �鿴�û���Ϣ�����ַ **/
+	/** 查看用户信息 **/
 	public static String USER_IN_URL = SERVER_ADDRESS
 			+ "/user/{client_id}.json";
-	/** ����ָ���û���ǩ�����ַ **/
+	/** 设置指定用户标签 **/
 	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/update_label/{client_id}.json";
-	/** �����Ƽ������ַ **/
+	/** 推荐话题 **/
 	public static String TOPIC_RECOMMEND_IN_URL = SERVER_ADDRESS
 			+ "/topic/recommend.json";
-	/** ����ҵ�ѻ��������ַ **/
+	/** 按行业搜话题 **/
 	public static String SEARCH_TOPIC_LABEL_URL = SERVER_ADDRESS
 			+ "/topic/search/label.json";
-	/** ������ؼ����ѻ��������ַ **/
+	/** 按内容搜话题 **/
 	public static String SEARCH_TOPIC_SUBJECT_URL = SERVER_ADDRESS
 			+ "/topic/search/subject.json";
-	/** �鿴ָ���û��Ļ����б������ַ **/
+	/** 查看指定用户的话题列表 **/
 	public static String USER_TOPIC_IN_URL = SERVER_ADDRESS
 			+ "/user/topic.json";
-	/** ���뻰��Ⱥ�������ַ **/
+	/** 加入话题群聊 **/
 	public static String JOIN_TOPIC_IN_URL = SERVER_ADDRESS
 			+ "/topic/join.json";
-	/** �˳�����Ⱥ�������ַ **/
+	/** 退出话题群聊 **/
 	public static String LEAVE_TOPIC_IN_URL = SERVER_ADDRESS
 			+ "/topic/leave.json";
-	/** �����������ַ **/
+	/** 发表话题 **/
 	public static String TOPIC_CREATE_URL = SERVER_ADDRESS
 			+ "/topic/create.json";
-	/** �ύ������Ϣ�����ַ **/
+	/** 提交反馈信息接口 **/
 	public static String SYSTEM_FEEDBACK_URL = SERVER_ADDRESS
 			+ "/system/feedback.json";
-	/** ��ȡ��������ϵͳʱ�����Ӧ���������ַ **/
+	/** 获取服务器端系统时间和相应参数 **/
 	public static String SYSTEM_CONFIG_URL = SERVER_ADDRESS
 			+ "/system/system_config.json";
-	/** �õ�ĳ�˵ĺ��������б������ַ **/
+	/** 得到某人的好友申请列表 **/
 	public static String FRIEND_INVITATION_URL = SERVER_ADDRESS
 			+ "/friend/invitation/{client_id}.json";
-	/** ����Ӻ��ѵ�ַ **/
+	/** 请求加好友 **/
 	public static String FRIEND_ADD_URL = SERVER_ADDRESS
 			+ "/friend/add/{client_id}.json";
-	/** ͬ��/�ܾ��Ӻ��������ַ **/
+	/** 同意/拒绝加好友 **/
 	public static String FRIEND_STATUS_URL = SERVER_ADDRESS
 			+ "/friend/{status}/{inviter_id}.json";
-	/** ɾ�����������ַ **/
+	/** 删除好友 **/
 	public static String FRIEND_DELETE_URL = SERVER_ADDRESS
 			+ "/friend/delete/{client_id}.json";
-	/** �õ�ĳ�˵ĺ����б������ַ **/
+	/** 得到某人的好友列表 **/
 	public static String FRIEND_GET_URL = SERVER_ADDRESS
 			+ "/friend/get/{client_id}.json";
 }

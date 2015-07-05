@@ -11,7 +11,7 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 /**
- * ��ӭҳActivity
+ * 欢迎Activity
  * 
  * @author zhangzg
  * 
@@ -20,7 +20,7 @@ import com.peer.utils.pViewBox;
 public class WelComeActivity extends pBaseActivity {
 
 	class PageViewList {
-		// ������ѯ
+		
 		public LinearLayout welLin;
 	}
 

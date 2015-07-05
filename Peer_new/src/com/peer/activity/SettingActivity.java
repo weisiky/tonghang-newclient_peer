@@ -19,9 +19,9 @@ import com.peer.utils.pViewBox;
 import com.umeng.update.UmengUpdateAgent;
 
 
-/*
- * ����ҳ��
- * */
+/**
+ * ‘设置’页
+ */
 public class SettingActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back,ll_head_my,ll_setting_set,ll_newfunction_set,ll_feedback_set,ll_newversion_set,ll_clearcash_set;
@@ -130,9 +130,9 @@ public class SettingActivity extends pBaseActivity{
 	}
 	
 	
-	/*
-	 * ���������
-	 * */
+	/**
+	 * 清楚缓存
+	 */
 	private void Clean(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.clean))  
 		.setMessage(getResources().getString(R.string.clearcash)) .setNegativeButton(getResources().getString(R.string.cancel), null) 
@@ -153,10 +153,9 @@ public class SettingActivity extends pBaseActivity{
     }
 	
 	
-	/*
-	 * �˳�������
-	 * ģ�⡣
-	 * */
+	/**
+	 * 重新登入
+	 */
 	private void Relogin(){
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.exitlogin))  
 		.setMessage(getResources().getString(R.string.relogin)) .setNegativeButton(getResources().getString(R.string.cancel), null) 
@@ -169,9 +168,9 @@ public class SettingActivity extends pBaseActivity{
 		 }).show(); 
 	}
 	
-	/*
-	 * �˳�Ӧ����
-	 * */
+	/**
+	 * 退出
+	 */
 	private void Todesk(){	
 		
 		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.close))  

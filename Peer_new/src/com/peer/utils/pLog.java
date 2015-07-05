@@ -3,16 +3,16 @@ package com.peer.utils;
 import android.util.Log;
 
 /**
- * ÈÕÖ¾´òÓ¡Àà
+ * æ—¥å¿—æ‰“å°ç±»
  * 
  * @author zhzhg
  * @version 1.0.0
  */
 public class pLog {
 
-	/** ÊÇ·ñ´òÓ¡ÈÕÖ¾ **/
+	/** æ˜¯å¦æ‰“å°æ—¥å¿— **/
 	public static boolean isDebug = true;
-	/** ÈÕÖ¾±êÇ© **/
+	/** æ—¥å¿—æ ‡ç­¾ **/
 	public static String LOG_TAG = "frame";
 
 	public static void v(String tag, String msg) {

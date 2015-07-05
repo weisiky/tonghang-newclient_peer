@@ -9,7 +9,7 @@ public class JsonDocHelper {
 
 	/***
 	 * 
-	 * ���������л�ΪJSON�ı�
+	 * 将对象序列化为JSON文本
 	 * 
 	 * @param object
 	 * 

@@ -10,10 +10,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �¹��ܽ�����
- * 
- * */
+/**
+ * ‘新版本’页
+ */
 public class NewFunctionActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -35,7 +34,7 @@ public class NewFunctionActivity extends pBaseActivity{
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.newfunction));
-		pageViewaList.introduce.setText("��ǰ�İ汾��Ϊ"+getInfo());
+		pageViewaList.introduce.setText("当前的版本号为:"+getInfo());
 	}
 
 	@Override
@@ -77,9 +76,9 @@ public class NewFunctionActivity extends pBaseActivity{
 	}
 	
 	
-	/*
-	 * ��ȡ��ǰapk�汾��
-	 * */
+	/**
+	 * 获得当前版本号
+	 */
 	private String getInfo() {
 		// TODO Auto-generated method stub
 		String pkName = this.getPackageName();

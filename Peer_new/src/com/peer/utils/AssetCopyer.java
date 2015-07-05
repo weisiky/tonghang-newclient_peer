@@ -16,7 +16,7 @@ import android.content.res.AssetManager;
 import com.peer.base.Constant;
 
 /**
- * AssetCopyerÀà ÊµÏÖ½«assetsÏÂµÄÎÄ¼ş°´Ä¿Â¼½á¹¹¿½±´µ½sdcardÖĞ
+ * AssetCopyerç±» å®ç°å°†assetsä¸‹çš„æ–‡ä»¶æŒ‰ç›®å½•ç»“æ„æ‹·è´åˆ°sdcardä¸­
  * 
  * @author ticktick
  * @Email lujun.hust@gmail.com
@@ -34,18 +34,19 @@ public class AssetCopyer {
 		mAssetManager = context.getAssets();
 	}
 
+
 	/**
-	 * ½«assetsÄ¿Â¼ÏÂÖ¸¶¨µÄÎÄ¼ş¿½±´µ½sdcardÖĞ
+	 * å°†assetsç›®å½•ä¸‹æŒ‡å®šçš„æ–‡ä»¶æ‹·è´åˆ°sdcardä¸­
 	 * 
-	 * @return ÊÇ·ñ¿½±´³É¹¦,true ³É¹¦£»false Ê§°Ü
+	 * @return æ˜¯å¦æ‹·è´æˆåŠŸ,true æˆåŠŸï¼›false å¤±è´¥
 	 * @throws IOException
 	 */
 	public boolean copyFiles(String destPath) throws IOException {
 
 		List<String> srcFiles = new ArrayList<String>();
 
-		// »ñÈ¡ÏµÍ³ÔÚSDCardÖĞÎªapp·ÖÅäµÄÄ¿Â¼£¬eg:/sdcard/Android/data/$(app's package)
-		// ¸ÃÄ¿Â¼´æ·ÅappÏà¹ØµÄ¸÷ÖÖÎÄ¼ş(Èçcache£¬ÅäÖÃÎÄ¼şµÈ)£¬unstall appºó¸ÃÄ¿Â¼Ò²»áËæÖ®É¾³ı
+		// è·å–ç³»ç»Ÿåœ¨SDCardä¸­ä¸ºappåˆ†é…çš„ç›®å½•ï¼Œeg:/sdcard/Android/data/$(app's package)
+		// è¯¥ç›®å½•å­˜æ”¾appç›¸å…³çš„å„ç§æ–‡ä»¶(å¦‚cacheï¼Œé…ç½®æ–‡ä»¶ç­‰)ï¼Œunstall appåè¯¥ç›®å½•ä¹Ÿä¼šéšä¹‹åˆ é™¤
 		// mAppDirectory = mContext.getExternalFilesDir(null);
 		// if (null == mAppDirectory) {
 		// return false;
@@ -53,16 +54,16 @@ public class AssetCopyer {
 
 		mdestDirectory = new File(destPath);
 
-		// ¶ÁÈ¡assets/$(subDirectory)Ä¿Â¼ÏÂµÄassets.lstÎÄ¼ş£¬µÃµ½ĞèÒªcopyµÄÎÄ¼şÁĞ±í
+		// è¯»å–assets/$(subDirectory)ç›®å½•ä¸‹çš„assets.lstæ–‡ä»¶ï¼Œå¾—åˆ°éœ€è¦copyçš„æ–‡ä»¶åˆ—è¡¨
 		List<String> assets = getAssetsList();
 		for (String asset : assets) {
-			// Èç¹û²»´æÔÚ£¬ÔòÌí¼Óµ½copyÁĞ±í
+			// å¦‚æœä¸å­˜åœ¨ï¼Œåˆ™æ·»åŠ åˆ°copyåˆ—è¡¨
 			if (!new File(destPath, asset).exists()) {
 				srcFiles.add(asset);
 			}
 		}
 
-		// ÒÀ´Î¿½±´µ½AppµÄ°²×°Ä¿Â¼ÏÂ
+		// ä¾æ¬¡æ‹·è´åˆ°Appçš„å®‰è£…ç›®å½•ä¸‹
 		for (String file : srcFiles) {
 			copy(file);
 		}
@@ -71,9 +72,9 @@ public class AssetCopyer {
 	}
 
 	/**
-	 * »ñÈ¡ĞèÒª¿½±´µÄÎÄ¼şÁĞ±í£¨¼ÇÂ¼ÔÚassets/assets.lstÎÄ¼şÖĞ£©
+	 * è·å–éœ€è¦æ‹·è´çš„æ–‡ä»¶åˆ—è¡¨ï¼ˆè®°å½•åœ¨assets/assets.lstæ–‡ä»¶ä¸­ï¼‰
 	 * 
-	 * @return ÎÄ¼şÁĞ±í
+	 * @return æ–‡ä»¶åˆ—è¡¨
 	 * @throws IOException
 	 */
 	protected List<String> getAssetsList() throws IOException {
@@ -90,13 +91,12 @@ public class AssetCopyer {
 
 		return files;
 	}
-
 	/**
-	 * Ö´ĞĞ¿½±´ÈÎÎñ
+	 * æ‰§è¡Œæ‹·è´ä»»åŠ¡
 	 * 
 	 * @param asset
-	 *            ĞèÒª¿½±´µÄassetsÎÄ¼şÂ·¾¶
-	 * @return ¿½±´³É¹¦ºóµÄÄ¿±êÎÄ¼ş¾ä±ú
+	 *            éœ€è¦æ‹·è´çš„assetsæ–‡ä»¶è·¯å¾„
+	 * @return æ‹·è´æˆåŠŸåçš„ç›®æ ‡æ–‡ä»¶å¥æŸ„
 	 * @throws IOException
 	 */
 	protected File copy(String asset) throws IOException {
@@ -140,7 +140,7 @@ public class AssetCopyer {
 	}
 }
 
-// ×¢Òâ£¬±¾¿½±´´úÂëµÄÊµÏÖÒªÇóassetsÄ¿Â¼ÏÂ±ØĞëÓĞÒ»¸öassets.lstÎÄ¼ş£¬ÁĞ³öĞèÒª±»¿½±´µ½sdcardµÄÎÄ¼şÁĞ±í¡£¸½¼şÖĞÊÇÊ¾Àı¹¤³ÌµÄ´úÂë£¬¹¤³Ì½á¹¹ÈçÍ¼ËùÊ¾£º
-// ÆäÖĞ£¬assets.lst ÎÄ¼şÄÚÈİÈçÏÂ£º
-// map/china.txt
-// map/france.txt
+//æ³¨æ„ï¼Œæœ¬æ‹·è´ä»£ç çš„å®ç°è¦æ±‚assetsç›®å½•ä¸‹å¿…é¡»æœ‰ä¸€ä¸ªassets.lstæ–‡ä»¶ï¼Œåˆ—å‡ºéœ€è¦è¢«æ‹·è´åˆ°sdcardçš„æ–‡ä»¶åˆ—è¡¨ã€‚é™„ä»¶ä¸­æ˜¯ç¤ºä¾‹å·¥ç¨‹çš„ä»£ç ï¼Œå·¥ç¨‹ç»“æ„å¦‚å›¾æ‰€ç¤ºï¼š
+//å…¶ä¸­ï¼Œassets.lst æ–‡ä»¶å†…å®¹å¦‚ä¸‹ï¼š
+//map/china.txt
+//map/france.txt

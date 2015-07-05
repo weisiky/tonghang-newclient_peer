@@ -10,9 +10,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * ���ҵ��˻���ҳactivity
- * */
+/**
+ * 修改密码入口类
+ */
 public class MyAcountActivity extends pBaseActivity {
 	
 	class PageViewList {
@@ -37,10 +37,9 @@ public class MyAcountActivity extends pBaseActivity {
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.mycount));
-		/*
-		 * ������ʾ��ǰ�û�������
-		 * ��ʱ��̬Ĭ��
-		 * */
+		
+		
+		/** 需换成当前用户的邮箱 **/
 		pageViewaList.myeamil.setText("395296797@qq.com");
 	}
 

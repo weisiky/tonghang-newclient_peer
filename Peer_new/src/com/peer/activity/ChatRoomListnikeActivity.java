@@ -10,9 +10,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �鿴Ⱥ��Ա��
- * */
+/**
+ * 聊天室成员activity
+ */
 public class ChatRoomListnikeActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

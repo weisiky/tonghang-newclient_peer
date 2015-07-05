@@ -19,8 +19,10 @@ import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
+ * 注册第一步。
+ * 填写基本信息
+ * 为提交请求
  * 
- * ע�������Ҫ��Ϣ��
  */
 public class RegisterAcountActivity extends pBaseActivity {
 	
@@ -143,9 +145,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 
  }
 
-	/*
-	 * TextWatcher�����༭��
-	 */
+	
 	TextWatcher textwatcher = new TextWatcher() {
 
 		@Override
@@ -170,7 +170,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 	};
 
 	/*
-	 * �ж�botton�Ƿ�ɵ��
+	 * 判断botton是否可以点击
 	 */
 	private void testnull() {
 		// TODO Auto-generated method stub

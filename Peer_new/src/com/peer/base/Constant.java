@@ -2,9 +2,7 @@ package com.peer.base;
 
 import com.peer.utils.SDCardScanner;
 
-/**
- * ����ȫ�����Խӿ� ��Щ�����ǿ��������ϡ�
- */
+
 public class Constant {
 	public static int REFRESHHANDLE = 321;
 
@@ -38,10 +36,10 @@ public class Constant {
 	public static String LOGINSUCCESS = "success";
 	public static String LOGINFAIL = "fail";
 	/* search type */
-	public static String LABELUSER = "labeluser"; // ��ǩ���ǩ��ģ����ѯ��
+	public static String LABELUSER = "labeluser"; 
 	public static String LABELTOPIC = "topicuser";
 
-	public static String TOPICBYLABEL = "topiclist"; // ��ȷ��ѯ
+	public static String TOPICBYLABEL = "topiclist"; 
 	public static String TOPICBYTOPIC = "topicbytopic";
 	public static String USERBYNIKE = "userbynike";
 	public static String USERBYLABEL = "userbylabel";
@@ -66,7 +64,7 @@ public class Constant {
 	/* restart app */
 	public static String RELOGIN = "relogin";
 
-	// ���ڽ���������intent.putExtras�ļ�
+	
 	public static String IMAGE = "image";
 	public static String OWNERNIKE = "ownernike";
 	public static String THEME = "theme";
@@ -74,7 +72,7 @@ public class Constant {
 	public static String ROOMID = "roomid";
 	public static String TOPICID = "topicid";
 	public static String FROMFLOAT = "float";
-	// ȫ������
+	
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";

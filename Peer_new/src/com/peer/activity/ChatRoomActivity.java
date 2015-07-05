@@ -43,9 +43,9 @@ import com.peer.utils.pViewBox;
 import com.umeng.analytics.MobclickAgent;
 
 
-/*
- * ��������
- * */
+/**
+ *聊天室 
+ */
 public class ChatRoomActivity extends pBaseActivity{
 	
 	
@@ -108,7 +108,7 @@ public class ChatRoomActivity extends pBaseActivity{
 		mScrollView.setVerticalScrollBarEnabled(false);  
 		mScrollView.setHorizontalScrollBarEnabled(false);
 		
-		hideKeyboard();//�����
+		hideKeyboard();//软键盘
 		pageViewaList.btn_send.setEnabled(false);
 		pageViewaList.btn_send.addTextChangedListener(new TextWatcher() {
 			
@@ -182,11 +182,11 @@ public class ChatRoomActivity extends pBaseActivity{
 				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
 //				topicId=toChatUsername;
 			}
-			//����������ȡ���������������ļ���
+			
 //			Intent serviceintent = new Intent(ChatRoomActivity.this, FxService.class);
 //			stopService(serviceintent);			
 //			LocalStorage.saveBoolean(ChatRoomActivity.this, Constant.ISFLOAT, false);
-			//���빫��Ⱥ��
+			
 			easemobchatImp.getInstance().joingroup(toChatUsername);
 			
 //			ReplieTask task=new ReplieTask();
@@ -226,7 +226,7 @@ public class ChatRoomActivity extends pBaseActivity{
 //			adapter=new ChatMsgViewAdapter(this, msgList);
 //			pageViewaList.lv_chat.setAdapter(adapter);
 			pageViewaList.lv_chat.setSelection(pageViewaList.lv_chat.getCount() - 1);	
-			// �Ѵ˻Ự��δ������Ϊ0
+		
 			conversation.resetUnreadMsgCount();				
 		}
 
@@ -259,10 +259,10 @@ public class ChatRoomActivity extends pBaseActivity{
 		case R.id.theme_chat:		
 //			showtheme(num);
 //			num++;
-			showToast("ģ��theme_chat", Toast.LENGTH_SHORT, false);
+			showToast("模拟测试", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.tv_share:
-			showToast("ģ�����", Toast.LENGTH_SHORT, false);			
+			showToast("模拟测试", Toast.LENGTH_SHORT, false);			
 			break;
 
 		case R.id.im_downview:
@@ -271,7 +271,7 @@ public class ChatRoomActivity extends pBaseActivity{
 		case R.id.host_image:
 //			FriendsTask task=new FriendsTask();
 //			task.execute();
-			showToast("ģ��host_image", Toast.LENGTH_SHORT, false);
+			showToast("模拟测试", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.btn_send:
 //			if(ChatRoomTypeUtil.getInstance().getChatroomtype()==Constant.MULTICHAT){
@@ -279,7 +279,7 @@ public class ChatRoomActivity extends pBaseActivity{
 //			}else{
 //				sendMessage();
 //			}		
-			showToast("ģ�ⷢ��", Toast.LENGTH_SHORT, false);
+			showToast("模拟测试", Toast.LENGTH_SHORT, false);
 			break;
 		default:
 			break;
@@ -289,7 +289,7 @@ public class ChatRoomActivity extends pBaseActivity{
 	
 	
 	/**
-	 * ���������
+	 * 输入法软盘
 	 */
 	private void hideKeyboard() {
 		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -314,8 +314,8 @@ public class ChatRoomActivity extends pBaseActivity{
 	}
 	
 	
-	/*
-	 * ��popupwindow���м���
+	/**
+	 *下拉框
 	 * 
 	private void popupwindow() {
 		// TODO Auto-generated method stub		

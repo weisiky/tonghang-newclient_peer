@@ -19,9 +19,10 @@ import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 
-/*
- * ���address��
- * */
+/**
+ * 获取address类 
+ * 加载city.json
+ */
 public class GetAddressInfoActivity extends pBaseActivity{
 	
 	List<String> addressList = null;
@@ -59,8 +60,6 @@ public class GetAddressInfoActivity extends pBaseActivity{
 		addressList = location.getProvinceList();
 		
 		final ProvinceAdapter adapter = new ProvinceAdapter();
-		pLog.i("adapter��ʲô��", ""+adapter);
-		pLog.i("listView", ""+pageViewaList.listview);
 		pageViewaList.listview.setAdapter(adapter);
 			
 		pageViewaList.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

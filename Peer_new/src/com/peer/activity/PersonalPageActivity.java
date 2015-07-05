@@ -16,9 +16,11 @@ import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.pViewBox;
 
 
-/*
- * �û���Ϣ��
- * */
+/**
+ * 用户详细信息类
+ * 包括‘我的’、‘他的’、‘她的’
+ * 
+ */
 public class PersonalPageActivity extends pBaseActivity{
 	
 	private AutoWrapRadioGroup tag_container;
@@ -103,12 +105,12 @@ public class PersonalPageActivity extends pBaseActivity{
 //			}						
 			break;
 		case R.id.send:
-			showToast("ģ�ⷢ����Ϣ", Toast.LENGTH_SHORT, false);
+			showToast("模拟发送", Toast.LENGTH_SHORT, false);
 			break;
 		case R.id.addfriends:
 			Intent addfriends=new Intent(PersonalPageActivity.this,AddFriendsActivity.class);
 			startActivity(addfriends);
-			showToast("ģ����Ӻ���", Toast.LENGTH_SHORT, false);
+			showToast("模拟加好友", Toast.LENGTH_SHORT, false);
 			break;
 		default:
 			break;

@@ -13,7 +13,7 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * �Ƽ�������
+ * 话题推荐
  * 
  */
 public class Recommend_topic extends pBaseActivity{
@@ -40,7 +40,7 @@ public class Recommend_topic extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText("����");
+		pageViewaList.tv_title.setText("话题");
 		pull_refresh_topic = (PullToRefreshListView) findViewById(R.id.pull_refresh_topic);
 		pageViewaList.ll_topic.setVisibility(View.VISIBLE);
 		pageViewaList.im_search.setVisibility(View.GONE);

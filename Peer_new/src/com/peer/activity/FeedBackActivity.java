@@ -13,6 +13,9 @@ import android.widget.Toast;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
+/**
+ * 反馈信息activity 
+ */
 public class FeedBackActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -78,8 +81,8 @@ public class FeedBackActivity extends pBaseActivity{
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.commite_feedback:
-			//ģ�ⷢ����
-			showToast("�����ɹ���", Toast.LENGTH_LONG, true);
+			
+			showToast("模拟测试", Toast.LENGTH_LONG, true);
 //			if(checkNetworkState()){
 //				FeedBackTask task=new FeedBackTask();
 //				task.execute(pageViewaList.et_feedback_content.getText().toString().trim());					

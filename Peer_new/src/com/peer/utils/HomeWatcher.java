@@ -57,11 +57,11 @@ public class HomeWatcher {
 					Log.e(TAG, "action:" + action + ",reason:" + reason);
 					if (mListener != null) {
 						if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
-							// home¶Ì°´
+							// homeçŸ­æŒ‰
 							mListener.onHomePressed();
 						} else if (reason
 								.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
-							// ³¤°´home¼ü
+							// é•¿æŒ‰homeé”®
 							mListener.onHomeLongPressed();
 						}
 					}

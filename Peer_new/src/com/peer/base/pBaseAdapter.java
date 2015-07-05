@@ -36,15 +36,5 @@ public class pBaseAdapter extends BaseAdapter{
 		return null;
 	}
 	
-	/*
-	 * 检查网络是否连接类
-	 * */
-	public boolean checkNetworkState() {
-		boolean flag = false;		
-		ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);		
-		if (manager.getActiveNetworkInfo() != null) {
-			flag = manager.getActiveNetworkInfo().isAvailable();
-		}
-		return flag;
-	}
+	
 }

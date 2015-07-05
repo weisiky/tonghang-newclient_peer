@@ -24,14 +24,14 @@ import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.pViewBox;
 
-/*
- * ����������
- * */
+/**
+ * 搜索话题类
+ */
 public class SearchTopicActivity extends pBaseActivity {
 
 	public static int TOPIC_LABEL = 1;
 	public static int TOPIC_TOPICKEY = 2;
-	private int searchtype = TOPIC_LABEL;// �������� Ĭ�ϰ���ǩ��������
+	private int searchtype = TOPIC_LABEL;	//默认按标签搜
 	private TitlePopup tagPopup;
 	private InputMethodManager imm;
 	boolean page = false;
@@ -152,7 +152,7 @@ public class SearchTopicActivity extends pBaseActivity {
 			String searchtaget = pageViewaList.et_contentsearch.getText()
 					.toString().trim();
 			if (TextUtils.isEmpty(searchtaget)) {
-				showToast("��������Ϊ��", Toast.LENGTH_SHORT, false);
+				showToast("搜索框不能为空", Toast.LENGTH_SHORT, false);
 			} else {
 				Search(searchtaget);
 			}
@@ -190,13 +190,13 @@ public class SearchTopicActivity extends pBaseActivity {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYLABEL);
-					searchtype = TOPIC_LABEL;// ����ǩ��������
+					searchtype = TOPIC_LABEL;
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bytopic))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(
 							Constant.TOPICBYTOPIC);
-					searchtype = TOPIC_TOPICKEY;// ������ؼ�����������
+					searchtype = TOPIC_TOPICKEY;
 				}
 			}
 		});

@@ -9,9 +9,9 @@ import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
 
-/*
- * Э����
- * */
+/**
+ * 协议类
+ */
 public class xieyiActivity extends pBaseActivity{
 	class PageViewList {
 		private LinearLayout ll_back;

@@ -23,9 +23,9 @@ import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.pViewBox;
 
-/*
- * �����û���
- * */
+/**
+ * 搜索用户
+ */
 public class SearchUserActivity extends pBaseActivity {
 	private TitlePopup userPopup;
 	private InputMethodManager imm;
@@ -33,7 +33,7 @@ public class SearchUserActivity extends pBaseActivity {
 
 	private int USER_LABEL = 1;
 	private int USER_NICK = 2;
-	private int searchtype = USER_LABEL;// �������� Ĭ�ϰ���ǩ�����û�
+	private int searchtype = USER_LABEL;// 默认按标签搜
 
 	class PageViewList {
 		private LinearLayout ll_back, layout_clear_search_text,
@@ -151,7 +151,7 @@ public class SearchUserActivity extends pBaseActivity {
 			String searchtaget = pageViewaList.et_contentsearch.getText()
 					.toString().trim();
 			if (TextUtils.isEmpty(searchtaget)) {
-				showToast("��������Ϊ��", Toast.LENGTH_SHORT, false);
+				showToast("搜索框不能为空", Toast.LENGTH_SHORT, false);
 			} else {
 				Search(searchtaget);
 			}
@@ -189,12 +189,12 @@ public class SearchUserActivity extends pBaseActivity {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance()
 							.setSearchtype(Constant.USERBYLABEL);
-					searchtype = USER_LABEL;// ����ǩ�����û�
+					searchtype = USER_LABEL;
 				} else if (item.mTitle.equals(getResources().getString(
 						R.string.bynike))) {
 					pageViewaList.et_contentsearch.setHint(item.mTitle);
 					SearchBean.getInstance().setSearchtype(Constant.USERBYNIKE);
-					searchtype = USER_NICK;// ���ǳ������û�
+					searchtype = USER_NICK;
 				}
 			}
 		});
