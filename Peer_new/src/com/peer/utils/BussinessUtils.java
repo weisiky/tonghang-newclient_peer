@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
+import com.peer.base.Constant;
 import com.peer.bean.LoginBean;
 
 import android.app.Activity;
@@ -42,7 +43,7 @@ import android.util.DisplayMetrics;
 public class BussinessUtils {
 
 	/**
-	 * ��ȡ displayMetrics ����
+	 * 读取 displayMetrics 对象
 	 * 
 	 * @param context
 	 * @return
@@ -54,7 +55,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ����ͼƬ
+	 * 缩放图片
 	 * 
 	 * @param bitmap
 	 * @param w
@@ -82,13 +83,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �ӱ���װ��һ��ͼƬ
+	 * 从本地装饰一张图片
 	 * 
 	 * @param filePath
-	 *            �ļ�·��
+	 *            文件路径
 	 * @param maxSize
-	 *            ѹ���������ֽ��� Ŀǰ��λ��k
-	 * @return Bitmap ѹ�����bitmap
+	 *            压缩成最大的字节数 目前单位是k
+	 * @return Bitmap 压缩后的bitmap
 	 */
 	public static Bitmap decodeFile(String filePath, int maxSize) {
 		if (filePath != null && filePath.length() > 0) {
@@ -109,13 +110,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ����Ϊ��λ��ȡ�ļ��������ڶ������еĸ�ʽ���ļ�
+	 * 以行为单位读取文件，常用于读面向行的格式化文件
 	 * 
 	 * @param filePath
-	 *            �ļ�·��
+	 *            文件路径
 	 * @param fileName
-	 *            �ļ���
-	 * @return String ����Ľ���ַ������󣬵����Ϊ��ʱ������null
+	 *            文件名
+	 * @return String 处理的结果字符串对象，当结果为空时，返回null
 	 */
 	public static String readFileByLines(String filePath, String fileName) {
 		if (android.os.Environment.getExternalStorageState().equals(
@@ -152,10 +153,10 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ��ȡ�豸��������ַ
+	 * 读取设备的网卡地址
 	 * 
 	 * @param context
-	 * @return mac��ַ
+	 * @return mac地址
 	 */
 	public static String getMacAddress(Context context) {
 		WifiManager wifi = (WifiManager) context
@@ -170,8 +171,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �ǲ��������ַ just if the passed email address is syntactically valid or
-	 * not
+	 * 是不是邮箱地址 just if the passed email address is syntactically valid or not
 	 * 
 	 * @param email
 	 * @return
@@ -191,13 +191,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ��ȡ�쳣��Ϣ
+	 * 读取异常信息
 	 * 
 	 * @param ex
 	 * @return
 	 */
 	public static String getExceptionStr(Exception ex) {
-		String errorInfo = null; // ������Ϣ
+		String errorInfo = null; // 错误信息
 		ByteArrayOutputStream baos = null;
 		PrintStream printStream = null;
 		try {
@@ -224,7 +224,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �����쳣��Ϣ
+	 * 保存异常信息
 	 * 
 	 * @param context
 	 * @param buzType
@@ -238,15 +238,15 @@ public class BussinessUtils {
 		if (netIntType == pNetUitls.TYPE_WIFI) {
 			netType = "wifi";
 		} else if (netIntType == pNetUitls.TYPE_NO) {
-			netType = "û������";
+			netType = "没有网络";
 		} else {
-			netType = "2G��3G����";
+			netType = "2G或3G网络";
 		}
 		// NewsDbHelper.insertExpLog(netType, buzType, expType, expContent);
 	}
 
 	/**
-	 * ��ȡϵͳʱ��
+	 * 获取系统时间
 	 * 
 	 * @return
 	 */
@@ -257,7 +257,7 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �Ƿ����sim��
+	 * 是否存在sim卡
 	 * 
 	 * @param context
 	 * @return
@@ -265,7 +265,7 @@ public class BussinessUtils {
 	public static boolean isExistSim(Context context) {
 		TelephonyManager mTelephonyManager = (TelephonyManager) context
 				.getSystemService(Service.TELEPHONY_SERVICE);
-		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIM��û�о���
+		if (mTelephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) // SIM卡没有就绪
 		{
 			return false;
 		}
@@ -286,15 +286,15 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ����ͼƬ�����
+	 * 保存图片到相册
 	 * 
 	 * @param mContext
-	 *            ������
+	 *            上下文
 	 * @param bitmap
-	 *            ͼƬ
+	 *            图片
 	 * @param imageName
-	 *            ͼƬ����
-	 * @return ������
+	 *            图片名称
+	 * @return 保存结果
 	 */
 	public static Uri saveImageToMediaStore(Context mContext, Bitmap bitmap,
 			String imageName) {
@@ -312,13 +312,13 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �����ַ����������ֺ� �����ַ���ռ����Ļ�Ŀ��
+	 * 根据字符串和文字字号 计算字符串占据屏幕的宽度
 	 * 
 	 * @param content
-	 *            �ַ�������
+	 *            字符串内容
 	 * @param wordSize
-	 *            ���ִ�С
-	 * @return �ַ���ռ����Ļ�Ŀ��
+	 *            文字大小
+	 * @return 字符串占据屏幕的宽度
 	 */
 	public static float getStrWidth(String content, int wordSize) {
 		Paint pFont = new Paint();
@@ -327,15 +327,15 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * ��õ�ǰ��������
+	 * 获得当前网络名称
 	 * 
 	 * @param mContext
-	 *            ������
+	 *            上下文
 	 */
 	public static String getNetWorkName(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		// ��õ�ǰ������Ϣ
+		// 获得当前网络信息
 		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isAvailable()) {
 			if (networkInfo.getExtraInfo() != null) {
@@ -346,38 +346,38 @@ public class BussinessUtils {
 	}
 
 	/**
-	 * �ж��Ƿ�Ϊ�ֻ���
+	 * 判断是否为手机号
 	 */
 	public static boolean telNumMatch(String phoneNum) {
 		/*
-		 * �ƶ�: 2G�Ŷ�(GSM����)��139,138,137,136,135,134,159,158,152,151,150,
-		 * 3G�Ŷ�(TD-SCDMA����)��157,182,183,188,187 147���ƶ�TD������ר�úŶ�. ��ͨ:
-		 * 2G�Ŷ�(GSM����)��130,131,132,155,156 3G�Ŷ�(WCDMA����)��186,185 ����:
-		 * 2G�Ŷ�(CDMA����)��133,153 3G�Ŷ�(CDMA����)��189,180,181
+		 * 移动: 2G号段(GSM网络)有139,138,137,136,135,134,159,158,152,151,150,
+		 * 3G号段(TD-SCDMA网络)有157,182,183,188,187 147是移动TD上网卡专用号段. 联通:
+		 * 2G号段(GSM网络)有130,131,132,155,156 3G号段(WCDMA网络)有186,185 电信:
+		 * 2G号段(CDMA网络)有133,153 3G号段(CDMA网络)有189,180,181
 		 */
 		String YD = "^[1]{1}(([3]{1}[4-9]{1})|([5]{1}[012789]{1})|([8]{1}[2378]{1})|([4]{1}[7]{1}))[0-9]{8}$";
 		String LT = "^[1]{1}(([3]{1}[0-2]{1})|([5]{1}[56]{1})|([8]{1}[56]{1}))[0-9]{8}$";
 		String DX = "^[1]{1}(([3]{1}[3]{1})|([5]{1}[3]{1})|([8]{1}[0-9]{1}))[0-9]{8}$";
-		// �ж��ֻ������Ƿ���11λ
+		// 判断手机号码是否是11位
 		if (phoneNum.length() == 11) {
-			// �ж��ֻ������Ƿ�����й��ƶ��ĺ������
+			// 判断手机号码是否符合中国移动的号码规则
 			if (phoneNum.matches(YD)) {
 				return true;
 			}
-			// �ж��ֻ������Ƿ�����й���ͨ�ĺ������
+			// 判断手机号码是否符合中国联通的号码规则
 			else if (phoneNum.matches(LT)) {
 				return true;
 			}
-			// �ж��ֻ������Ƿ�����й����ŵĺ������
+			// 判断手机号码是否符合中国电信的号码规则
 			else if (phoneNum.matches(DX)) {
 				return true;
 			}
-			// �������� δ֪
+			// 都不合适 未知
 			else {
 				return false;
 			}
 		}
-		// ����11λ
+		// 不是11位
 		else {
 			return false;
 		}
@@ -401,8 +401,8 @@ public class BussinessUtils {
 				buf.append(Integer.toHexString(i));
 			}
 			str = buf.toString();
-			System.out.println("result: " + buf.toString());// 32λ�ļ���
-			System.out.println("result: " + buf.toString().substring(8, 24));// 16λ�ļ���
+			System.out.println("result: " + buf.toString());// 32位加密
+			System.out.println("result: " + buf.toString().substring(8, 24));// 16位加密
 
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -416,9 +416,44 @@ public class BussinessUtils {
 	 * 保存用户数据
 	 */
 	public static void saveUserData(LoginBean loginBean,
-			pShareFileUtils pShareFileUtils) {
+			pShareFileUtils mShareFileUtils) {
+		pShareFileUtils.setString(Constant.PIC_SERVER,
+				loginBean.getPic_server());
+		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
+		pShareFileUtils.setString(Constant.ID, loginBean.user.getId());
+		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
+		pShareFileUtils.setString(Constant.USERNAME,
+				loginBean.user.getUsername());
+		pShareFileUtils.setString(Constant.PHONE, loginBean.user.getPhone());
+		pShareFileUtils.setString(Constant.BIRTH, loginBean.user.getBirth());
+		pShareFileUtils.setString(Constant.USER_IMAGE,
+				loginBean.user.getImage());
+		pShareFileUtils.setString(Constant.CREATED_AT,
+				loginBean.user.getCreated_at());
+		pShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
+		pShareFileUtils.setString(Constant.CLIENT_ID,
+				loginBean.user.getClient_id());
+		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
+				.toString());
 
-//		pShareFileUtils.setString("", loginBean.getAge());
+	}
+
+	/**
+	 * 清楚用户数据
+	 */
+	public static void clearUserData(pShareFileUtils mShareFileUtils) {
+		pShareFileUtils.setString(Constant.PIC_SERVER, "");
+		pShareFileUtils.setString(Constant.SYS_TIME, "");
+		pShareFileUtils.setString(Constant.ID, "");
+		pShareFileUtils.setString(Constant.SEX, "");
+		pShareFileUtils.setString(Constant.USERNAME, "");
+		pShareFileUtils.setString(Constant.PHONE, "");
+		pShareFileUtils.setString(Constant.BIRTH, "");
+		pShareFileUtils.setString(Constant.USER_IMAGE, "");
+		pShareFileUtils.setString(Constant.CREATED_AT, "");
+		pShareFileUtils.setString(Constant.CITY, "");
+		pShareFileUtils.setString(Constant.CLIENT_ID, "");
+		pShareFileUtils.setString(Constant.LABELS, "");
 
 	}
 

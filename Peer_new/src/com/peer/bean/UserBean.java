@@ -11,7 +11,25 @@ public class UserBean {
 	private String email;
 
 	private String image;
+	private String phone;
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	private String created_at;
+	public String getClient_id() {
+		return client_id;
+	}
+
+	public void setClient_id(String client_id) {
+		this.client_id = client_id;
+	}
+
+	private String client_id;
 	private String city;
 	private ArrayList<String> labels = new ArrayList<String>();
 
