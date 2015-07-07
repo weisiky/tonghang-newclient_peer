@@ -170,9 +170,7 @@ public class SearchUserActivity extends pBaseActivity {
 		imm.hideSoftInputFromWindow(
 				pageViewaList.et_contentsearch.getWindowToken(), 0);
 		SearchBean.getInstance().setSearchname(tagetname);
-		// if(SearchUtil.getInstance().equals("USERBYNIKE")){
 		SearchBean.getInstance().setCallbacklabel(tagetname);
-		// }
 		Intent intent = new Intent();
 		startActivityForLeft(SearchResultActivity.class, intent, false);
 	}

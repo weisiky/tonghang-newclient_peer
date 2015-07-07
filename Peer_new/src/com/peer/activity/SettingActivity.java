@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.pBaseActivity;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.ManagerActivity;
 import com.peer.utils.pViewBox;
 import com.umeng.update.UmengUpdateAgent;
@@ -161,8 +162,9 @@ public class SettingActivity extends pBaseActivity{
 		.setMessage(getResources().getString(R.string.relogin)) .setNegativeButton(getResources().getString(R.string.cancel), null) 
 		 .setPositiveButton(getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){ 
-            	  ManagerActivity.getAppManager().restart(SettingActivity.this);
-            	  //�˳������˺�
+            	 BussinessUtils.clearUserData(mShareFileUtils);
+            	 ManagerActivity.getAppManager().restart(SettingActivity.this);
+            	  
      	     	 easemobchatImp.getInstance().logout();
              }
 		 }).show(); 

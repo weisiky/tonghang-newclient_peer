@@ -26,20 +26,28 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.activity.MainActivity;
+import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
+import com.peer.activity.Recommend_topic;
 import com.peer.activity.SearchUserActivity;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.LoginBean;
+import com.peer.bean.RecommendUserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 
@@ -81,7 +89,8 @@ public class HomeFragment extends pBaseFragment {
 		init();
 		setListener();
 		try {
-			sendRecommendTask(Constant.CLIENT_ID, page);
+			sendRecommendTask(mShareFileUtils.getString(
+					Constant.CLIENT_ID, ""), page);
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -97,10 +106,22 @@ public class HomeFragment extends pBaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				
 				if (position == 0) {
-
+//					if (!pbaseActivity.isNetworkAvailable) {
+//						pbaseActivity.showToast(getActivity().getResources().getString(
+//								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
+//					} else {
+						pbaseActivity.startActivityForLeft(Recommend_topic.class, intent, false);
+//					}
 				} else {
-
+					if (!pbaseActivity.isNetworkAvailable) {
+						pbaseActivity.showToast(getActivity().getResources().getString(
+								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
+					} else {
+						pbaseActivity.startActivityForLeft(PersonalPageActivity.class,intent,false);
+					}
 				}
 
 			}
@@ -125,7 +146,8 @@ public class HomeFragment extends pBaseFragment {
 								.setLastUpdatedLabel(label);
 						try {
 							page = 1;
-							sendRecommendTask(Constant.CLIENT_ID, page);
+							sendRecommendTask(mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""), page);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -145,7 +167,8 @@ public class HomeFragment extends pBaseFragment {
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
 						try {
-							sendRecommendTask(Constant.CLIENT_ID, ++page);
+							sendRecommendTask(mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""), ++page);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -175,7 +198,7 @@ public class HomeFragment extends pBaseFragment {
 		}
 
 		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL
-				+ "?page=" + page, entity, "application/json",
+				, entity, "application/json",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -217,16 +240,6 @@ public class HomeFragment extends pBaseFragment {
 								errorResponse);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						// TODO Auto-generated method stub
-
-						pLog.i("test", "onSuccess+statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
-						super.onSuccess(statusCode, headers, response);
-					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
@@ -239,8 +252,48 @@ public class HomeFragment extends pBaseFragment {
 
 						pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
 								"home.etag", false, response.toString());
-
+						
+						
 						try {
+							RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), RecommendUserBean.class);
+							if (recommenduserbean != null) {
+
+								pLog.i("test", "user1:"
+										+ recommenduserbean.users.get(0).getUsername().toString());
+							
+							}
+							for (int index = 0; index < recommenduserbean.users.size(); index++) {
+								ArrayList<Object> userlist = new ArrayList<Object>();
+								List<String> labelnames = new ArrayList<String>();
+								Map<String, Object> userMsg = new HashMap<String, Object>();
+								userMsg.put("email", recommenduserbean.users.get(index).getEmail());
+								userMsg.put("sex", recommenduserbean.users.get(index).getSex());
+								userMsg.put("city", recommenduserbean.users.get(index).getCity());
+								userMsg.put("username",
+										recommenduserbean.users.get(index).getUsername());
+								userMsg.put("client_id",
+										recommenduserbean.users.get(index).getClient_id());
+								userMsg.put("image", recommenduserbean.users.get(index).getImage());
+								userMsg.put("created_at",
+										recommenduserbean.users.get(index).getCreated_at());
+								userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
+								userlist.add(userMsg);
+								for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
+									labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+								}
+								userlist.add(labelnames);
+								list.add(userlist);
+							}
+
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						/*try {
 							JSONObject success = response
 									.getJSONObject("success");
 							JSONArray user = (JSONArray) success.get("user");
@@ -272,7 +325,7 @@ public class HomeFragment extends pBaseFragment {
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 
 						if (adapter == null) {
 							adapter = new HomepageAdapter(getActivity(), list);
@@ -281,8 +334,6 @@ public class HomeFragment extends pBaseFragment {
 
 						refresh();
 						// adapter.setBaseFragment(HomeFragment.this);
-
-						adapter.notifyDataSetChanged();
 
 						super.onSuccess(statusCode, headers, response);
 					}
@@ -312,19 +363,48 @@ public class HomeFragment extends pBaseFragment {
 
 	private void init() {
 		// TODO Auto-generated method stub
+		pull_refresh_homepage = (PullToRefreshListView) getView().findViewById(
+				R.id.pull_refresh_homepage);
 		base_neterror_item = (LinearLayout) getView().findViewById(
 				R.id.base_neterror_item);
 		tv_connect_errormsg = (TextView) base_neterror_item
 				.findViewById(R.id.tv_connect_errormsg);
 
 		ll_search = (LinearLayout) getView().findViewById(R.id.ll_search);
-		// createtopic=(TextView)getView().findViewById(R.id.tv_createtopic);
-
-		// createtopic.setOnClickListener(this);
 		ll_search.setOnClickListener(this);
 
 		String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
 				"home.etag");
+		
+		RecommendUserBean recommenduserbean;
+		try {
+			recommenduserbean = JsonDocHelper.toJSONObject(
+					homeCount, RecommendUserBean.class);
+		
+		
+		for (int index = 0; index < recommenduserbean.users.size(); index++) {
+			ArrayList<Object> userlist = new ArrayList<Object>();
+			List<String> labelnames = new ArrayList<String>();
+			Map<String, Object> userMsg = new HashMap<String, Object>();
+			userMsg.put("email", recommenduserbean.users.get(index).getEmail());
+			userMsg.put("sex", recommenduserbean.users.get(index).getSex());
+			userMsg.put("city", recommenduserbean.users.get(index).getCity());
+			userMsg.put("username",
+					recommenduserbean.users.get(index).getUsername());
+			userMsg.put("client_id",
+					recommenduserbean.users.get(index).getClient_id());
+			userMsg.put("image", recommenduserbean.users.get(index).getImage());
+			userMsg.put("created_at",
+					recommenduserbean.users.get(index).getCreated_at());
+			userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
+			userlist.add(userMsg);
+			for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
+				labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+			}
+			userlist.add(labelnames);
+			list.add(userlist);
+		}
+		
 		if (homeCount != null) {
 
 			if (adapter == null) {
@@ -334,11 +414,14 @@ public class HomeFragment extends pBaseFragment {
 			pull_refresh_homepage.setAdapter(adapter);
 
 		}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		refresh();
 
-		pull_refresh_homepage = (PullToRefreshListView) getView().findViewById(
-				R.id.pull_refresh_homepage);
+		
 
 		RefreshListner();
 

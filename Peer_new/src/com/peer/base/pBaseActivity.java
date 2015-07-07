@@ -23,6 +23,7 @@ import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.ManagerActivity;
 import com.peer.utils.pNetUitls;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pSysInfoUtils;
@@ -84,6 +85,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		MobclickAgent.updateOnlineConfig(this);
 		// 友盟统计 数据加密
 		AnalyticsConfig.enableEncrypt(true);
+		
+		ManagerActivity.getAppManager().addActivity(this);
 
 		this.findViewById();
 		this.setListener();
@@ -395,7 +398,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	 */
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("�ٰ�һ���˳�", Toast.LENGTH_SHORT, true);
+			showToast("再次点击退出", Toast.LENGTH_SHORT, true);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);

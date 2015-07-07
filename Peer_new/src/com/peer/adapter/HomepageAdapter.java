@@ -12,6 +12,7 @@ import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
 import com.peer.bean.UserBean;
 import com.peer.utils.ViewHolder;
+import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomepageAdapter extends pBaseAdapter {
-	ViewHolder viewHolder = null;
 	private boolean hasMesure = false;
 	private int maxLines;
 	private Context mContext;
@@ -79,34 +79,18 @@ public class HomepageAdapter extends pBaseAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_top_topic, null, false);
 			LinearLayout click = ViewHolder.get(convertView, R.id.ll_clike);
-			click.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if (!((pBaseActivity)mContext).isNetworkAvailable) {
-						Toast.makeText(
-								mContext,
-								mContext.getResources().getString(
-										R.string.Broken_network_prompt), 0)
-								.show();
-					} else {
-						mContext.startActivity(new Intent(mContext,
-								Recommend_topic.class));
-					}
-				}
-			});
 
 		} else {
 			position = position - 1;
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_recommend_person, null, false);
-			ImageView headpic = ViewHolder.get(convertView, R.id.im_headpic);
-			TextView nikename = ViewHolder.get(convertView, R.id.tv_nikename);
-			TextView descripe = ViewHolder.get(convertView, R.id.tv_descripe);
-			LinearLayout click = ViewHolder.get(convertView, R.id.ll_clike);
+			ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
+			TextView tv_nikename = ViewHolder.get(convertView, R.id.tv_nikename);
+			TextView tv_descripe = ViewHolder.get(convertView, R.id.tv_descripe);
+			LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
 			List plist = (List) mList.get(position);
 			Map pmap = (Map) plist.get(0);
-			nikename.setText((String) pmap.get("username"));
+			tv_nikename.setText((String) pmap.get("username"));
 			List<String> plabels = (List<String>) plist.get(1);
 			String labels = "";
 
@@ -123,26 +107,7 @@ public class HomepageAdapter extends pBaseAdapter {
 					labels = labels + " | " + s;
 				}
 			}
-			descripe.setText(labels);
-			click.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if (!((pBaseActivity)mContext).isNetworkAvailable) {
-						Toast.makeText(
-								mContext,
-								mContext.getResources().getString(
-										R.string.Broken_network_prompt), 0)
-								.show();
-					} else {
-
-						Intent intent = new Intent(mContext,
-								PersonalPageActivity.class);
-						mContext.startActivity(intent);
-					}
-				}
-			});
+			tv_descripe.setText(labels);
 		}
 
 		return convertView;

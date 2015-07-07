@@ -147,13 +147,7 @@ public class FindPasswordActivity extends pBaseActivity {
 			String email = pageViewaList.et_email_find.getText().toString()
 					.trim();
 			if (isNetworkAvailable) {
-
-				if (email.length() > 0) {
-
-					commitfindpasswd(email);
-				} else {
-					showToast("请输入邮箱", Toast.LENGTH_SHORT, false);
-				}
+					sendfindpasswd(email);
 			} else {
 
 			}
@@ -171,7 +165,7 @@ public class FindPasswordActivity extends pBaseActivity {
 	 * @param email
 	 * 
 	 */
-	private void commitfindpasswd(String email) {
+	private void sendfindpasswd(String email) {
 		// TODO Auto-generated method stub
 		showProgressBar();
 		HttpEntity entity = null;
@@ -225,16 +219,6 @@ public class FindPasswordActivity extends pBaseActivity {
 								errorResponse);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess+statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
-						super.onSuccess(statusCode, headers, response);
-					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
@@ -244,19 +228,12 @@ public class FindPasswordActivity extends pBaseActivity {
 						pLog.i("test", "onSuccess:statusCode:" + statusCode
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
+						Intent intent = new Intent();
+						startActivityForLeft(FindPasswordResultActivity.class, intent, false);
+						
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
-						super.onSuccess(statusCode, headers, responseString);
-					}
 
 				});
 		Intent intent = new Intent();

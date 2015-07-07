@@ -1,21 +1,17 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,19 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.nostra13.universalimageloader.utils.IoUtils;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
 import com.peer.bean.LoginResultBean;
-import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
-import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -74,6 +66,9 @@ public class LoginActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
+		pageViewaList.et_email_login.addTextChangedListener(textwatcher);
+		pageViewaList.et_password_login.addTextChangedListener(textwatcher);
+		pageViewaList.bt_login_login.setEnabled(false);
 
 	}
 
@@ -121,7 +116,7 @@ public class LoginActivity extends pBaseActivity {
 			String password = pageViewaList.et_password_login.getText()
 					.toString().trim();
 
-			if (email.length() > 0 && password.length() > 0) {
+		
 
 				if (isNetworkAvailable) {
 
@@ -135,9 +130,7 @@ public class LoginActivity extends pBaseActivity {
 				} else {
 
 				}
-			} else {
-				showToast("请填写用户名与密码", Toast.LENGTH_SHORT, false);
-			}
+			
 
 			break;
 		case R.id.tv_register_login:
@@ -217,26 +210,6 @@ public class LoginActivity extends pBaseActivity {
 								errorResponse);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess+statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
-						super.onSuccess(statusCode, headers, response);
-						Map result;
-						try {
-							result = (Map) response.get(0);
-							String client_id = (String) result.get("client_id");
-							pLog.i("client_id", client_id);
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
@@ -256,7 +229,10 @@ public class LoginActivity extends pBaseActivity {
 										mShareFileUtils);
 
 								pLog.i("test", mShareFileUtils.getString(
-										Constant.LABELS, ""));
+										Constant.USERNAME, ""));
+								pLog.i("test", mShareFileUtils.getString(
+										Constant.EMAIL, ""));
+								startActivityForLeft(MainActivity.class, intent, false);
 							}
 
 						} catch (Exception e1) {
@@ -265,7 +241,7 @@ public class LoginActivity extends pBaseActivity {
 							e1.printStackTrace();
 						}
 
-						try {
+/*						try {
 							JSONObject result = response
 									.getJSONObject("success");
 							String pic_server = result.getString("pic_server");
@@ -302,22 +278,11 @@ public class LoginActivity extends pBaseActivity {
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 						super.onSuccess(statusCode, headers, response);
 
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess/statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
-						super.onSuccess(statusCode, headers, responseString);
-
-					}
 
 				});
 	}
@@ -338,6 +303,42 @@ public class LoginActivity extends pBaseActivity {
 		}
 
 	}
+	
+	
+	TextWatcher textwatcher=new TextWatcher() {
+
+		@Override
+		public void afterTextChanged(Editable arg0) {
+			// TODO Auto-generated method stub
+			String email=pageViewaList.et_email_login.getText().toString().trim();
+			String password=pageViewaList.et_password_login.getText().toString().trim();
+			if(!TextUtils.isEmpty(email)&&!TextUtils.isEmpty(password)){
+				pageViewaList.bt_login_login.setEnabled(true);
+			}else{
+				pageViewaList.bt_login_login.setEnabled(false);
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+			// TODO Auto-generated method stub
+			String email=pageViewaList.et_email_login.getText().toString().trim();
+			String password=pageViewaList.et_password_login.getText().toString().trim();
+			if(!email.equals("")&&!password.equals("")){
+				pageViewaList.bt_login_login.setEnabled(true);
+			}else{
+				pageViewaList.bt_login_login.setEnabled(false);
+			}
+		}				
+		};	
+	
 
 	@Override
 	public void onNetworkOn() {

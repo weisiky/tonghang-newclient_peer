@@ -16,6 +16,7 @@ import com.peer.activity.MySkillActivity;
 import com.peer.activity.PersonalMessageActivity;
 import com.peer.activity.R;
 import com.peer.activity.SettingActivity;
+import com.peer.base.Constant;
 import com.peer.base.pBaseFragment;
 
 
@@ -83,8 +84,8 @@ public class MyFragment extends pBaseFragment{
 	
 	public void getlocalMsg(){
 		im_headpic.setBackgroundDrawable(getResources().getDrawable(R.drawable.mini_avatar_shadow));
-		tv_nikename.setText("weisiky");
-		tv_email.setText("395296797@qq.com");	
+		tv_nikename.setText(mShareFileUtils.getString(Constant.USERNAME,""));
+		tv_email.setText(mShareFileUtils.getString(Constant.EMAIL,""));	
 	}
 	
 	

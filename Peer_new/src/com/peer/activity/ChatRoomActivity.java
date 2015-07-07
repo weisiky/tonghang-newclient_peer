@@ -156,7 +156,7 @@ public class ChatRoomActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		
 		if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){			
-			toChatUsername=ChatRoomBean.getInstance().getTopic().getHuangxin_group_id();
+//			toChatUsername=ChatRoomBean.getInstance().getTopic().getHuangxin_group_id();
 			pageViewaList.host_imfor.setVisibility(View.VISIBLE);
 			if(!ChatRoomBean.getInstance().isIsowner()){
 				titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.lookformember), R.color.white));			
@@ -174,8 +174,8 @@ public class ChatRoomActivity extends pBaseActivity{
 //				topicId=intent.getStringExtra(Constant.TOPICID);				
 			}else{
 //				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance().getTopic().getLabel_name());
-				User u=ChatRoomBean.getInstance().getTopic().getUser();
-				pageViewaList.tv_nikename.setText(u.getUsername());
+//				User u=ChatRoomBean.getInstance().getTopic().getUser();
+//				pageViewaList.tv_nikename.setText(u.getUsername());
 //				LoadImageUtil.imageLoader.displayImage(u.getImage(), ownerimg,LoadImageUtil.options);
 				theme = ChatRoomBean.getInstance().getTopic().getSubject();
 				pageViewaList.theme_chat.setText(theme);

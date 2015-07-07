@@ -419,6 +419,8 @@ public class BussinessUtils {
 			pShareFileUtils mShareFileUtils) {
 		pShareFileUtils.setString(Constant.PIC_SERVER,
 				loginBean.getPic_server());
+		pShareFileUtils.setString(Constant.EMAIL,
+				loginBean.user.getEmail());
 		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
 		pShareFileUtils.setString(Constant.ID, loginBean.user.getId());
 		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
@@ -454,7 +456,7 @@ public class BussinessUtils {
 		pShareFileUtils.setString(Constant.CITY, "");
 		pShareFileUtils.setString(Constant.CLIENT_ID, "");
 		pShareFileUtils.setString(Constant.LABELS, "");
-
+		pShareFileUtils.setString(Constant.EMAIL, "");
 	}
 
 }

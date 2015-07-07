@@ -120,7 +120,28 @@ public class PeerParamsUtils {
 			int page) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
-		registerTagParams.put("page", page);
+		registerTagParams.put("pageindex", page);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+	
+	/**
+	 * 获取话题推荐参数绑定
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getRemTopicParams(Context context, String client_id,
+			int page) throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("pageindex", page);
 		HttpEntity entity = new StringEntity(
 				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
 		return entity;

@@ -1,7 +1,9 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
@@ -22,8 +24,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.adapter.Recommend_topicAdapter;
+import com.peer.adapter.SeachResultAdapter;
+import com.peer.adapter.SearchTopicAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.RecommendTopicBean;
+import com.peer.bean.RecommendUserBean;
 import com.peer.bean.SearchBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
@@ -36,7 +43,11 @@ import com.peer.utils.pViewBox;
  */
 public class SearchResultActivity extends pBaseActivity {
 
+	SeachResultAdapter adapter;
+	SearchTopicAdapter adapter1;
 	private PullToRefreshListView lv_searchresult;
+	List<Object> list = new ArrayList<Object>();
+	
 	/** 分页 **/
 	private int page = 1;
 	/** 查询分类 **/
@@ -78,7 +89,6 @@ public class SearchResultActivity extends pBaseActivity {
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
-
 		RefreshListner();
 	}
 
@@ -89,19 +99,19 @@ public class SearchResultActivity extends pBaseActivity {
 			if (SearchBean.getInstance().getSearchtype()
 					.equals(Constant.TOPICBYTOPIC)) {
 				contanttype = Constant.TOPICBYTOPIC;
-				SearchResult(searchname, page, contanttype);
+				sendSearchResult(searchname, page, contanttype);
 			} else if (SearchBean.getInstance().getSearchtype()
 					.equals(Constant.USERBYNIKE)) {
 				contanttype = Constant.USERBYNIKE;
-				SearchResult(searchname, page, contanttype);
+				sendSearchResult(searchname, page, contanttype);
 			} else if (SearchBean.getInstance().getSearchtype()
 					.equals(Constant.TOPICBYLABEL)) {
 				contanttype = Constant.TOPICBYLABEL;
-				SearchResult(searchname, page, contanttype);
+				sendSearchResult(searchname, page, contanttype);
 			} else if (SearchBean.getInstance().getSearchtype()
 					.equals(Constant.USERBYLABEL)) {
 				contanttype = Constant.USERBYLABEL;
-				SearchResult(searchname, page, contanttype);
+				sendSearchResult(searchname, page, contanttype);
 			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -157,7 +167,7 @@ public class SearchResultActivity extends pBaseActivity {
 								.setLastUpdatedLabel(label);
 						try {
 							page = 1;
-							SearchResult(searchname, page, contanttype);
+							sendSearchResult(searchname, page, contanttype);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -180,7 +190,7 @@ public class SearchResultActivity extends pBaseActivity {
 								.setLastUpdatedLabel(label);
 						page = +1;
 						try {
-							SearchResult(searchname, ++page, contanttype);
+							sendSearchResult(searchname, ++page, contanttype);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -198,7 +208,7 @@ public class SearchResultActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void SearchResult(String name, int page, String contanttype)
+	private void sendSearchResult(String name, int page, String contanttype)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		
@@ -206,47 +216,363 @@ public class SearchResultActivity extends pBaseActivity {
 
 		Map<String, Object> searchParams = new HashMap<String, Object>();
 
-		// List<BasicNameValuePair> baseParams = new
-		// ArrayList<BasicNameValuePair>();
 		if (contanttype.equals(Constant.USERBYLABEL)) {
 			searchParams.put("label_name", name);
-			// baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = HttpConfig.SEARCH_USER_LABEL_URL + "?page=" + page;
+			searchParams.put("pageindex", page);
+			try {
+				String	params = JsonDocHelper.toJSONString(searchParams);
+			
+
+			HttpEntity entity = new StringEntity(params, "utf-8");
+
+			HttpUtil.post(this, HttpConfig.SEARCH_USER_LABEL_URL, entity, "application/json",
+					new JsonHttpResponseHandler() {
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								String responseString, Throwable throwable) {
+							// TODO Auto-generated method stub
+
+							hideLoading();
+
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "responseString:" + responseString);
+
+							super.onFailure(statusCode, headers, responseString,
+									throwable);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONArray errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONObject errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure:statusCode:" + statusCode);
+							pLog.i("test", "throwable:" + throwable.toString());
+							pLog.i("test", "headers:" + headers.toString());
+							pLog.i("test",
+									"errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								JSONObject response) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess:statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());
+							
+							try {
+								RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+												.toString(), RecommendUserBean.class);
+								if (recommenduserbean != null) {
+
+									pLog.i("test", "user1:"
+											+ recommenduserbean.users.get(0).getUsername().toString());
+								
+								}
+								for (int index = 0; index < recommenduserbean.users.size(); index++) {
+									ArrayList<Object> userlist = new ArrayList<Object>();
+									List<String> labelnames = new ArrayList<String>();
+									Map<String, Object> userMsg = new HashMap<String, Object>();
+									userMsg.put("email", recommenduserbean.users.get(index).getEmail());
+									userMsg.put("sex", recommenduserbean.users.get(index).getSex());
+									userMsg.put("city", recommenduserbean.users.get(index).getCity());
+									userMsg.put("username",
+											recommenduserbean.users.get(index).getUsername());
+									userMsg.put("client_id",
+											recommenduserbean.users.get(index).getClient_id());
+									userMsg.put("image", recommenduserbean.users.get(index).getImage());
+									userMsg.put("created_at",
+											recommenduserbean.users.get(index).getCreated_at());
+									userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
+									userlist.add(userMsg);
+									for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
+										labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+									}
+									userlist.add(labelnames);
+									list.add(userlist);
+								}
+
+							} catch (Exception e1) {
+								pLog.i("test", "Exception:" + e1.toString());
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							if (adapter == null) {
+								adapter = new SeachResultAdapter(SearchResultActivity.this, list);
+								lv_searchresult.setAdapter(adapter);
+							}
+							refresh();
+							
+							super.onSuccess(statusCode, headers, response);
+						}
+
+					});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (contanttype.equals(Constant.USERBYNIKE)) {
 			searchParams.put("username", name);
-			// baseParams.add(new BasicNameValuePair("username", name));
-			URL = HttpConfig.SEARCH_USER_NICK_URL + "?page=" + page;
+			searchParams.put("pageindex", page);
+		
+			
+			try {
+				String	params = JsonDocHelper.toJSONString(searchParams);
+			
+
+			HttpEntity entity = new StringEntity(params, "utf-8");
+
+			HttpUtil.post(this, HttpConfig.SEARCH_USER_NICK_URL, entity, "application/json",
+					new JsonHttpResponseHandler() {
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								String responseString, Throwable throwable) {
+							// TODO Auto-generated method stub
+
+							hideLoading();
+
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "responseString:" + responseString);
+
+							super.onFailure(statusCode, headers, responseString,
+									throwable);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONArray errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONObject errorResponse) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onFailure:statusCode:" + statusCode);
+							pLog.i("test", "throwable:" + throwable.toString());
+							pLog.i("test", "headers:" + headers.toString());
+							pLog.i("test",
+									"errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								JSONObject response) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess:statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());
+							
+							try {
+								RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+												.toString(), RecommendUserBean.class);
+								if (recommenduserbean != null) {
+
+									pLog.i("test", "user1:"
+											+ recommenduserbean.users.get(0).getUsername().toString());
+								
+								}
+								for (int index = 0; index < recommenduserbean.users.size(); index++) {
+									ArrayList<Object> userlist = new ArrayList<Object>();
+									List<String> labelnames = new ArrayList<String>();
+									Map<String, Object> userMsg = new HashMap<String, Object>();
+									userMsg.put("email", recommenduserbean.users.get(index).getEmail());
+									userMsg.put("sex", recommenduserbean.users.get(index).getSex());
+									userMsg.put("city", recommenduserbean.users.get(index).getCity());
+									userMsg.put("username",
+											recommenduserbean.users.get(index).getUsername());
+									userMsg.put("client_id",
+											recommenduserbean.users.get(index).getClient_id());
+									userMsg.put("image", recommenduserbean.users.get(index).getImage());
+									userMsg.put("created_at",
+											recommenduserbean.users.get(index).getCreated_at());
+									userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
+									userlist.add(userMsg);
+									for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
+										labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+									}
+									userlist.add(labelnames);
+									list.add(userlist);
+								}
+
+							} catch (Exception e1) {
+								pLog.i("test", "Exception:" + e1.toString());
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							if (adapter == null) {
+								adapter = new SeachResultAdapter(SearchResultActivity.this, list);
+								lv_searchresult.setAdapter(adapter);
+							}
+							refresh();
+							
+							super.onSuccess(statusCode, headers, response);
+						}
+
+					});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (contanttype.equals(Constant.TOPICBYLABEL)) {
 			searchParams.put("label_name", name);
-			// baseParams.add(new BasicNameValuePair("label_name", name));
-			URL = HttpConfig.SEARCH_TOPIC_LABEL_URL + "?page=" + page;
+			searchParams.put("pageindex", page);
+			
+			try {
+				String	params = JsonDocHelper.toJSONString(searchParams);
+			
+
+			HttpEntity entity = new StringEntity(params, "utf-8");
+
+			HttpUtil.post(this, HttpConfig.SEARCH_TOPIC_LABEL_URL
+					, entity, "application/json",
+					new JsonHttpResponseHandler() {
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								String responseString, Throwable throwable) {
+							// TODO Auto-generated method stub
+
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "responseString:" + responseString);
+
+							super.onFailure(statusCode, headers, responseString,
+									throwable);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONArray errorResponse) {
+							// TODO Auto-generated method stub
+
+							pLog.i("test", "onFailure+statusCode:" + statusCode
+									+ "headers:" + headers.toString()
+									+ "errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONObject errorResponse) {
+							// TODO Auto-generated method stub
+
+							pLog.i("test", "onFailure:statusCode:" + statusCode);
+							pLog.i("test", "throwable:" + throwable.toString());
+							pLog.i("test", "headers:" + headers.toString());
+							pLog.i("test",
+									"errorResponse:" + errorResponse.toString());
+							super.onFailure(statusCode, headers, throwable,
+									errorResponse);
+						}
+
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								JSONObject response) {
+							// TODO Auto-generated method stub
+
+							pLog.i("test", "onSuccess:statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());			
+							try {
+								RecommendTopicBean recommendtopicbean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+												.toString(), RecommendTopicBean.class);
+								if (recommendtopicbean != null) {
+									pLog.i("test", "user1:"
+											+ recommendtopicbean.topics.get(0).getSubject().toString());
+								}
+								
+								for (int index = 0; index < recommendtopicbean.topics.size(); index++) {
+									Map<String, Object> topicMsg = new HashMap<String, Object>();
+									topicMsg.put("label_name", recommendtopicbean.topics.get(index).getLabel_name().toString());
+									topicMsg.put("subject", recommendtopicbean.topics.get(index).getSubject().toString());
+									topicMsg.put("user_id", recommendtopicbean.topics.get(index).getUser_id().toString());
+									topicMsg.put("topic_id",
+											recommendtopicbean.topics.get(index).getTopic_id().toString());
+									topicMsg.put("sys_time",
+											recommendtopicbean.getSys_time());
+									topicMsg.put("image",
+											recommendtopicbean.topics.get(index).getImage().toString());
+									list.add(topicMsg);
+								}
+
+							} catch (Exception e1) {
+								pLog.i("test", "Exception:" + e1.toString());
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							if (adapter1 == null) {
+								adapter1 = new SearchTopicAdapter(SearchResultActivity.this, list);
+								lv_searchresult.setAdapter(adapter1);
+							}
+
+							refresh();
+							// adapter.setBaseFragment(HomeFragment.this);
+
+							super.onSuccess(statusCode, headers, response);
+						}
+
+
+					});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		} else {
-			searchParams.put("Subject", name);
-			// baseParams.add(new BasicNameValuePair("Subject", name));
-			URL = HttpConfig.SEARCH_TOPIC_SUBJECT_URL + "?page=" + page;
-		}
-
-		pLog.i("URL", URL);
-
-		String params = null;
+			searchParams.put("subject", name);
+			searchParams.put("pageindex", page);
 		try {
-			params = JsonDocHelper.toJSONString(searchParams);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			String	params = JsonDocHelper.toJSONString(searchParams);
+		
 
 		HttpEntity entity = new StringEntity(params, "utf-8");
 
-		HttpUtil.post(this, URL, entity, "application/json",
+		HttpUtil.post(this, HttpConfig.SEARCH_TOPIC_SUBJECT_URL
+				, entity, "application/json",
 				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						hideLoading();
 
 						pLog.i("test", "onFailure+statusCode:" + statusCode
 								+ "headers:" + headers.toString()
@@ -260,7 +586,7 @@ public class SearchResultActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
+
 						pLog.i("test", "onFailure+statusCode:" + statusCode
 								+ "headers:" + headers.toString()
 								+ "errorResponse:" + errorResponse.toString());
@@ -272,7 +598,7 @@ public class SearchResultActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
+
 						pLog.i("test", "onFailure:statusCode:" + statusCode);
 						pLog.i("test", "throwable:" + throwable.toString());
 						pLog.i("test", "headers:" + headers.toString());
@@ -282,40 +608,61 @@ public class SearchResultActivity extends pBaseActivity {
 								errorResponse);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess+statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
-						super.onSuccess(statusCode, headers, response);
-					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
+
 						pLog.i("test", "onSuccess:statusCode:" + statusCode
 								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
+								+ response.toString());			
+						try {
+							RecommendTopicBean recommendtopicbean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), RecommendTopicBean.class);
+							if (recommendtopicbean != null) {
+								pLog.i("test", "user1:"
+										+ recommendtopicbean.topics.get(0).getSubject().toString());
+							}
+							
+							for (int index = 0; index < recommendtopicbean.topics.size(); index++) {
+								Map<String, Object> topicMsg = new HashMap<String, Object>();
+								topicMsg.put("label_name", recommendtopicbean.topics.get(index).getLabel_name().toString());
+								topicMsg.put("subject", recommendtopicbean.topics.get(index).getSubject().toString());
+								topicMsg.put("user_id", recommendtopicbean.topics.get(index).getUser_id().toString());
+								topicMsg.put("topic_id",
+										recommendtopicbean.topics.get(index).getTopic_id().toString());
+								topicMsg.put("sys_time",
+										recommendtopicbean.getSys_time());
+								topicMsg.put("image",
+										recommendtopicbean.topics.get(index).getImage().toString());
+								list.add(topicMsg);
+							}
+
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						if (adapter1 == null) {
+							adapter1 = new SearchTopicAdapter(SearchResultActivity.this, list);
+							lv_searchresult.setAdapter(adapter1);
+						}
+
+						refresh();
+						// adapter.setBaseFragment(HomeFragment.this);
+
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
-						super.onSuccess(statusCode, headers, responseString);
-					}
 
 				});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 	}
 
 	@Override
@@ -327,6 +674,16 @@ public class SearchResultActivity extends pBaseActivity {
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
+
+	}
+	
+	private void refresh() {
+
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
+		}else if(adapter1 != null){
+			adapter1.notifyDataSetChanged();
+		}
 
 	}
 }
