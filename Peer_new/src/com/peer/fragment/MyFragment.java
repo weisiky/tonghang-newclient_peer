@@ -1,5 +1,13 @@
 package com.peer.fragment;
 
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,13 +19,27 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.IMimplements.easemobchatImp;
+import com.peer.activity.MainActivity;
 import com.peer.activity.MyAcountActivity;
 import com.peer.activity.MySkillActivity;
 import com.peer.activity.PersonalMessageActivity;
+import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
 import com.peer.activity.SettingActivity;
 import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.LoginBean;
+import com.peer.bean.PersonpageBean;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 
 
 /**
@@ -29,6 +51,8 @@ public class MyFragment extends pBaseFragment{
 	private RelativeLayout rl_ponseralpage,rl_myacount_my;
 	private ImageView im_headpic;
 	private TextView tv_nikename,tv_email;
+	
+	private pBaseActivity pbaseActivity;
 	
 	public static final int UPDATESUCESS=9;
 
@@ -44,6 +68,13 @@ public class MyFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 			init();
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		pbaseActivity = (pBaseActivity) activity;
 	}
 	
 	
@@ -110,12 +141,109 @@ public class MyFragment extends pBaseFragment{
 			startActivity(setting);
 			break;
 		case R.id.rl_ponseralpage:
-			
-//			ToMypersonalpage();	
+			if(pbaseActivity.isNetworkAvailable){
+				try {
+					senduser(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				
+			}
+
 		
 			break;
 		default:
 			break;	
 		}
+	}
+	
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+
+	private void senduser(String client_id)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getUserParams(getActivity(),client_id);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		HttpUtil.post(getActivity(), HttpConfig.USER_IN_URL+client_id+".json", entity,
+				"application/json;charset=utf-8",
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							if (loginBean != null) {
+								BussinessUtils.saveUserData(loginBean,
+										mShareFileUtils);
+								PersonpageBean.getInstance().setUser(LoginBean.getInstance().user);
+								pbaseActivity.startActivityForLeft(PersonalPageActivity.class, intent, false);
+							}
+
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+
+				});
 	}
 }

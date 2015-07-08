@@ -18,9 +18,11 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
+import com.peer.activity.MyAcountActivity;
 import com.peer.activity.R;
 import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
+import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.ManagerActivity;
@@ -373,7 +375,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
-				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")
 				|| getLocalClassNameBySelf().contains("NewFunctionActivity")
 				|| getLocalClassNameBySelf().contains("FeedBackActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
@@ -383,11 +384,19 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("SettingActivity")
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
+				|| getLocalClassNameBySelf().contains("MyAcountActivity")
+				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
+				|| getLocalClassNameBySelf().contains("SearchResultActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
-		} else if (getLocalClassNameBySelf().contains("SearchResultActivity")) {
-			startActivityRight(SearchUserActivity.class, intent, true);
-		} else {
+		} else if(getLocalClassNameBySelf().contains("UpdatePasswordActivity")){
+			startActivityRight(MyAcountActivity.class, intent, true);
+		}else if(getLocalClassNameBySelf().contains("NewFunctionActivity")
+				||getLocalClassNameBySelf().contains("FeedBackActivity")
+				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")){
+			startActivityRight(SettingActivity.class, intent, true);
+		}else{
 			exitApp();
 		}
 

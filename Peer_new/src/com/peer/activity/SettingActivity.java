@@ -89,21 +89,19 @@ public class SettingActivity extends pBaseActivity{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent=new Intent();
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.ll_setting_set:
-			Intent setting=new Intent(SettingActivity.this,MessageNotifyActivity.class);
-			startActivity(setting);
+			startActivityForLeft(MessageNotifyActivity.class, intent, false);
 			break;
 		case R.id.ll_newfunction_set:
-			Intent newfunction=new Intent(SettingActivity.this,NewFunctionActivity.class);
-			startActivity(newfunction);
+			startActivityForLeft(NewFunctionActivity.class, intent, false);
 			break;
 		case R.id.ll_feedback_set:
-			Intent feedback=new Intent(SettingActivity.this,FeedBackActivity.class);
-			startActivity(feedback);
+			startActivityForLeft(FeedBackActivity.class, intent, false);
 			break;
-		case R.id.ll_newversion_set:
+		case R.id.ll_newversion_set:   //新版本更新
 //			if(checkNetworkState()){
 				UmengUpdateAgent.forceUpdate(SettingActivity.this);
 //			}else{
@@ -121,8 +119,8 @@ public class SettingActivity extends pBaseActivity{
 			Todesk();
 			break;
 		case R.id.xieyi:
-			Intent intent=new Intent(SettingActivity.this,xieyiActivity.class);
-			startActivity(intent);
+			Intent xieyi=new Intent(SettingActivity.this,xieyiActivity.class);
+			startActivity(xieyi);
 			break;
 		default:
 			break;

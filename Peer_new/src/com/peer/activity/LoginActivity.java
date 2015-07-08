@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
@@ -31,6 +32,7 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -128,7 +130,8 @@ public class LoginActivity extends pBaseActivity {
 						e.printStackTrace();
 					}
 				} else {
-
+					showToast(getResources().getString(
+							R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
 				}
 			
 
@@ -232,6 +235,8 @@ public class LoginActivity extends pBaseActivity {
 										Constant.USERNAME, ""));
 								pLog.i("test", mShareFileUtils.getString(
 										Constant.EMAIL, ""));
+								easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
+								easemobchatImp.getInstance().loadConversationsandGroups();
 								startActivityForLeft(MainActivity.class, intent, false);
 							}
 

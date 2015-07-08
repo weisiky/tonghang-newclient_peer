@@ -1,5 +1,6 @@
 package com.peer.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +11,10 @@ import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.PersonpageBean;
 import com.peer.bean.UserBean;
 import com.peer.utils.ViewHolder;
+import com.peer.utils.pLog;
 import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
 
 import android.content.Context;
@@ -90,8 +93,24 @@ public class HomepageAdapter extends pBaseAdapter {
 			LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
 			List plist = (List) mList.get(position);
 			Map pmap = (Map) plist.get(0);
-			tv_nikename.setText((String) pmap.get("username"));
-			List<String> plabels = (List<String>) plist.get(1);
+			final UserBean userbean = new UserBean();
+			userbean.setBirth((String)pmap.get("birth"));
+			userbean.setCity((String)pmap.get("city"));
+			userbean.setClient_id((String)pmap.get("client_id"));
+			userbean.setCreated_at((String)pmap.get("created_at"));
+			userbean.setEmail((String)pmap.get("email"));
+			userbean.setId((String)pmap.get("username"));
+			userbean.setImage((String)pmap.get("image"));
+			userbean.setLabels((ArrayList<String>)plist.get(1));
+			
+			pLog.i("test", "Labels:"+plist.get(1).toString());
+			
+			userbean.setPhone((String)pmap.get("username"));
+			userbean.setSex((String)pmap.get("sex"));
+			userbean.setUsername((String)pmap.get("username"));
+			
+			tv_nikename.setText(userbean.getUsername());
+			ArrayList<String> plabels = userbean.getLabels();
 			String labels = "";
 
 //			if (baseFragment != null) {
@@ -108,7 +127,25 @@ public class HomepageAdapter extends pBaseAdapter {
 				}
 			}
 			tv_descripe.setText(labels);
+			ll_clike.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					if (!((pBaseActivity)mContext).isNetworkAvailable) {
+						((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(
+								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
+					} else {
+						PersonpageBean.getInstance().setUser(userbean);
+						Intent intent=new Intent(mContext,PersonalPageActivity.class);
+						mContext.startActivity(intent);	
+					}
+					
+					
+				}
+			});
 		}
+		
 
 		return convertView;
 	}

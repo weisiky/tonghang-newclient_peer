@@ -22,7 +22,7 @@ public interface HttpConfig {
 			+ "/user/regist.json";
 	/** 更新用户信息请求 **/
 	public static String UPDATE_IN_URL = SERVER_ADDRESS
-			+ "/user/update/{client_id}.json";
+			+ "/user/update/";
 	/** 忘记密码请求 **/
 	public static String FORGET_IN_URL = SERVER_ADDRESS
 			+ "/user/forget_password.json";
@@ -42,10 +42,10 @@ public interface HttpConfig {
 			+ "/user/search/nick.json";
 	/** 用户更改密码 **/
 	public static String UPDATE_PWD_IN_URL = SERVER_ADDRESS
-			+ "/user/update_pwd/{client_id}.json";
+			+ "/user/update_pwd/";
 	/** 查看用户信息 **/
 	public static String USER_IN_URL = SERVER_ADDRESS
-			+ "/user/{client_id}.json";
+			+ "/user/";
 	/** 设置指定用户标签 **/
 	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/update_label/{client_id}.json";

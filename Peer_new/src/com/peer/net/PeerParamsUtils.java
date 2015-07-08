@@ -78,6 +78,46 @@ public class PeerParamsUtils {
 				JsonDocHelper.toJSONString(loginParams), "utf-8");
 		return entity;
 	}
+	
+	
+	/**
+	 * 获取用户信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getUserParams(Context context, String client_id)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
+	 * 更改密码参数绑定
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getUpdatepasswdParams(Context context, String oldpasswd , String newpasswd)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("old_passwd", oldpasswd);
+		loginParams.put("new_passwd", newpasswd);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
 
 	/**
 	 * 注册标签参数绑定
@@ -121,6 +161,33 @@ public class PeerParamsUtils {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
 		registerTagParams.put("pageindex", page);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+	
+	/**
+	 * 更改用户信息参数绑定
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @param username
+	 * @param labels
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getUpdateParams(Context context,
+			 String username, String birth, String sex , String address)
+			throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("username", username);
+		registerTagParams.put("sex", birth);
+		registerTagParams.put("birth", sex);
+		registerTagParams.put("city", address);
 		HttpEntity entity = new StringEntity(
 				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
 		return entity;
