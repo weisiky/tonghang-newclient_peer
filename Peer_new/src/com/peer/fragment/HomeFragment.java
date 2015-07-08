@@ -116,7 +116,12 @@ public class HomeFragment extends pBaseFragment {
 						pbaseActivity.startActivityForLeft(Recommend_topic.class, intent, false);
 //					}
 				} else {
-					
+					if (!pbaseActivity.isNetworkAvailable) {
+						pbaseActivity.showToast(getActivity().getResources().getString(
+								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
+					} else {
+						pbaseActivity.startActivityForLeft(PersonalPageActivity.class,intent,false);
+					}
 				}
 
 			}

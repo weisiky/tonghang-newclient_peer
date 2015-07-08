@@ -12,17 +12,6 @@ public class UserBean {
 
 	private String image;
 	private String phone;
-	private boolean is_friend;
-	
-	public boolean getIs_friend() {
-		return is_friend;
-	}
-
-	public void setIs_friend(boolean is_friend) {
-		this.is_friend = is_friend;
-	}
-	
-	
 	public String getPhone() {
 		return phone;
 	}

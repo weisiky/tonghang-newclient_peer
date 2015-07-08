@@ -32,7 +32,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
 import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
@@ -218,7 +217,9 @@ public class RegisterTagActivity extends pBaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+				Intent register_tag = new Intent();
+				startActivityForLeft(RegisterCompleteActivity.class,
+						register_tag, false);
 			}
 		} else {
 			pageViewaList.tv_remind.setText(getResources().getString(
@@ -303,37 +304,46 @@ public class RegisterTagActivity extends pBaseActivity {
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
+							JSONArray response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess+statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
+								+ response.toString());
+						super.onSuccess(statusCode, headers, response);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
 						pLog.i("test", "onSuccess:statusCode:" + statusCode
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
-						
-						LoginBean loginBean;
+						super.onSuccess(statusCode, headers, response);
+						UserBean user = new UserBean();
 						try {
-							loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							pLog.i("test", "test:"+loginBean.user.getClient_id());
-							pLog.i("test", "test:"+loginBean.user.getUsername());
-						if (loginBean != null) {
-							pShareFileUtils.setString("client_id", loginBean.user.getClient_id());
-							pShareFileUtils.setString("username", loginBean.user.getUsername());
-							
-							Intent register_tag = new Intent();
-							startActivityForLeft(RegisterCompleteActivity.class,
-									register_tag, false);
-							
-						}
-						}  catch (Exception e) {
+							Map result = (Map) response.get("user");
+							String birth = (String) result.get("birth");
+							user.setBirth(birth);
+							pLog.i("birth:", birth);
+						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						super.onSuccess(statusCode, headers, response);
 					}
 
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							String responseString) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString.toString());
+						super.onSuccess(statusCode, headers, responseString);
+					}
 
 				});
 	}

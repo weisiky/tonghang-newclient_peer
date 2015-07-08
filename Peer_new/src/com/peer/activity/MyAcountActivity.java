@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
@@ -38,7 +37,10 @@ public class MyAcountActivity extends pBaseActivity {
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.mycount));
-		pageViewaList.myeamil.setText(mShareFileUtils.getString(Constant.EMAIL, ""));
+		
+		
+		/** 需换成当前用户的邮箱 **/
+		pageViewaList.myeamil.setText("395296797@qq.com");
 	}
 
 	@Override
@@ -79,9 +81,10 @@ public class MyAcountActivity extends pBaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.ll_changepassword:
-			Intent intent=new Intent();	
-			startActivityForLeft(UpdatePasswordActivity.class, intent, false);
+			Intent changepassword=new Intent(MyAcountActivity.this,UpdatePasswordActivity.class);				
+			startActivity(changepassword);
 			break;
+
 		default:
 			break;
 		}

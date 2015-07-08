@@ -437,7 +437,6 @@ public class BussinessUtils {
 				loginBean.user.getClient_id());
 		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
 				.toString());
-		pShareFileUtils.setBoolean(Constant.IS_FRIEND, loginBean.user.getIs_friend());
 
 	}
 

@@ -14,14 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
 import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.pViewBox;
 
@@ -61,14 +58,6 @@ public class CreatTopicActivity extends pBaseActivity{
 		pageViewaList.tv_title.setText(getResources().getString(R.string.createtopic));
 		
 		tag_container = (AutoWrapRadioGroup) findViewById(R.id.tag_container);
-		LoginBean loginbean = new LoginBean();
-		for(int i=0;i<loginbean.user.getLabels().size();i++){
-			RadioButton rb=(RadioButton)getLayoutInflater().inflate(R.layout.skillradio, tag_container, false);
-			rb.setHeight((int)getResources().getDimension(R.dimen.hight));
-			rb.setText(loginbean.user.getLabels().get(i));
-			rb.setTextSize(18);
-			tag_container.addView(rb);
-		}	
 		
 		pageViewaList.bt_creattopic.setEnabled(false);
 		

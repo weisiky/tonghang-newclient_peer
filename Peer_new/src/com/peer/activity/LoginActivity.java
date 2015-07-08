@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
@@ -32,8 +31,8 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
+
 
 /**
  * 登录页面
@@ -130,8 +129,7 @@ public class LoginActivity extends pBaseActivity {
 						e.printStackTrace();
 					}
 				} else {
-					showToast(getResources().getString(
-							R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+
 				}
 			
 
@@ -171,44 +169,14 @@ public class LoginActivity extends pBaseActivity {
 		HttpUtil.post(this, HttpConfig.LONIN_IN_URL, entity,
 				"application/json;charset=utf-8",
 				new JsonHttpResponseHandler() {
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
-
-						hideLoading();
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
-
-						super.onFailure(statusCode, headers, responseString,
-								throwable);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
+			
+			
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -230,13 +198,6 @@ public class LoginActivity extends pBaseActivity {
 								
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
-
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.USERNAME, ""));
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.EMAIL, ""));
-								easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
-								easemobchatImp.getInstance().loadConversationsandGroups();
 								startActivityForLeft(MainActivity.class, intent, false);
 							}
 

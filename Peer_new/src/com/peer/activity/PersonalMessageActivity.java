@@ -4,12 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -27,21 +21,9 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.IMimplements.easemobchatImp;
-import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
-import com.peer.net.HttpConfig;
-import com.peer.net.HttpUtil;
-import com.peer.net.PeerParamsUtils;
-import com.peer.utils.BussinessUtils;
-import com.peer.utils.JsonDocHelper;
 import com.peer.utils.Tools;
-import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -93,10 +75,10 @@ public class PersonalMessageActivity extends pBaseActivity{
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.personalmessage));
 		items = getResources().getStringArray(R.array.pictrue);
-		pageViewaList.tv_sex.setText(mShareFileUtils.getString(Constant.SEX, ""));
-		pageViewaList.tv_setbirthday_my.setText(mShareFileUtils.getString(Constant.BIRTH, ""));
-		pageViewaList.tv_setaddress_my.setText(mShareFileUtils.getString(Constant.CITY, ""));
-		pageViewaList.et_nikename_personMSG.setText(mShareFileUtils.getString(Constant.USERNAME, ""));
+		pageViewaList.tv_sex.setText("模拟数据:男");
+		pageViewaList.tv_setbirthday_my.setText("1993-01-18");
+		pageViewaList.tv_setaddress_my.setText("天津");
+		pageViewaList.et_nikename_personMSG.setText("weisiky");
 		setDateTime();
 	}
 
@@ -164,16 +146,8 @@ public class PersonalMessageActivity extends pBaseActivity{
 			photo=pageViewaList.iv_headpic_personMSG.getDrawingCache();
 			img=getBitmapByte(photo);
 
-			if(isNetworkAvailable){
-				sendupdateusermsg(pShareFileUtils.getString("client_id", ""),
-						pageViewaList.tv_setbirthday_my.getText().toString(),
-						pageViewaList.tv_sex.getText().toString(),
-						pageViewaList.tv_setaddress_my.getText().toString(),
-						pageViewaList.et_nikename_personMSG.getText().toString());
-			}else{
-				showToast(getResources().getString(
-						R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
-			}
+				CommiteToServer();
+			
 			break;
 		default:
 			break;
@@ -380,127 +354,15 @@ public class PersonalMessageActivity extends pBaseActivity{
 	                 }).show();  
 		}
 	    
-	   
-			
 	    
-	    /**
-		 * 更改用户信息请求
-		 * 
-		 * @param client_id
-		 * @param sex
-		 * @param birth
-		 * @param address
-		 * @param username
-		 * @throws Exception 
-		 **/
-
-		private void sendupdateusermsg(String client_id, String tv_setbirth , String tv_sex , String tv_setaddress , String username){
+	    /*
+	     * CommiteToServer方法
+	     * 
+	     * */
+	    private void CommiteToServer() {
 			// TODO Auto-generated method stub
-			final Intent intent = new Intent();
-			HttpEntity entity = null;
-			try {
-				entity = PeerParamsUtils.getUpdateParams(
-						PersonalMessageActivity.this, tv_setbirth,tv_sex,tv_setaddress,username);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        
-			HttpUtil.post(this, HttpConfig.UPDATE_IN_URL+client_id+".json", entity,
-					"application/json;charset=utf-8",
-					new JsonHttpResponseHandler() {
-
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								String responseString, Throwable throwable) {
-							// TODO Auto-generated method stub
-
-							hideLoading();
-							
-							pLog.i("test", "onFailure+statusCode:" + statusCode
-									+ "headers:" + headers.toString()
-									+ "responseString:" + responseString);
-
-							super.onFailure(statusCode, headers, responseString,
-									throwable);
-						}
-
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								Throwable throwable, JSONArray errorResponse) {
-							// TODO Auto-generated method stub
-							hideLoading();
-							pLog.i("test", "onFailure+statusCode:" + statusCode
-									+ "headers:" + headers.toString()
-									+ "errorResponse:" + errorResponse.toString());
-							super.onFailure(statusCode, headers, throwable,
-									errorResponse);
-						}
-
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								Throwable throwable, JSONObject errorResponse) {
-							// TODO Auto-generated method stub
-							hideLoading();
-							pLog.i("test", "onFailure:statusCode:" + statusCode);
-							pLog.i("test", "throwable:" + throwable.toString());
-							pLog.i("test", "headers:" + headers.toString());
-							pLog.i("test", "errorResponse:" + errorResponse.toString());
-							super.onFailure(statusCode, headers, throwable,
-									errorResponse);
-						}
-
-						@Override
-						public void onSuccess(int statusCode, Header[] headers,
-								JSONObject response) {
-							// TODO Auto-generated method stub
-							hideLoading();
-							pLog.i("test", "onSuccess:statusCode:" + statusCode
-									+ "headers:" + headers.toString() + "response:"
-									+ response.toString());
-							try {
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-												.toString(), LoginBean.class);
-								if (loginBean != null) {
-
-									pLog.i("test", "getLabels:"
-											+ loginBean.user.getLabels().toString());
-									
-									BussinessUtils.saveUserData(loginBean,
-											mShareFileUtils);
-									showToast("更新成功！", Toast.LENGTH_SHORT, false);
-									finish();
-								}
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-							
-							
-							super.onSuccess(statusCode, headers, response);
-						}
-
-						@Override
-						public void onSuccess(int statusCode, Header[] headers,
-								String responseString) {
-							// TODO Auto-generated method stub
-							hideLoading();
-							pLog.i("test", "onSuccess:statusCode:" + statusCode
-									+ "headers:" + headers.toString()
-									+ "responseString:" + responseString.toString());
-							super.onSuccess(statusCode, headers, responseString);
-							Intent login_complete = new Intent();
-							startActivityForLeft(MainActivity.class, login_complete, false);
-						}
-
-					});
+			finish();	
 		}
-	    
 
 		@Override
 		public void onNetworkOn() {

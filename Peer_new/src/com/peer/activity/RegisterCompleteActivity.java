@@ -5,9 +5,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -36,12 +34,8 @@ import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
-import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
-import com.peer.utils.BussinessUtils;
-import com.peer.utils.JsonDocHelper;
 import com.peer.utils.Tools;
 import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
@@ -183,12 +177,10 @@ public class RegisterCompleteActivity extends pBaseActivity{
 	 */
 	 private void CommiteToServer() {
 		 showProgressBar();
-		 LoginBean loginBean = new LoginBean();
-		 sendUpdateRequest(pShareFileUtils.getString("client_id", ""), 
-				 pageViewaList.tv_setbirth.getText().toString().trim(),
-				 pageViewaList.tv_sex.getText().toString().trim(),
-				 pageViewaList.tv_setaddress.getText().toString().trim(),
-				 pShareFileUtils.getString("username", ""));	 
+//		 sendUpdateRequest(Constant.CLIENT_ID , 
+//				 pageViewaList.tv_setbirth.getText().toString().trim(),
+//				 pageViewaList.tv_sex.getText().toString().trim(),
+//				 pageViewaList.tv_setaddress.getText().toString().trim());	 
 		 
 	 }
 	 
@@ -198,23 +190,26 @@ public class RegisterCompleteActivity extends pBaseActivity{
 		 * @param email
 		 * @param password
 		 * @throws Exception 
-		 **/
+		 
 
-		private void sendUpdateRequest(String client_id, String tv_setbirth , String tv_sex , String tv_setaddress , String username){
+		private void sendUpdateRequest(String client_id, String tv_setbirth , String tv_sex , String tv_setaddress){
 			// TODO Auto-generated method stub
 			final Intent intent = new Intent();
-			HttpEntity entity = null;
-			try {
-				entity = PeerParamsUtils.getUpdateParams(
-						RegisterCompleteActivity.this, tv_setbirth,tv_sex,tv_setaddress,username);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			RequestParams params = PeerParamsUtils.getUpdateParams(
+					RegisterCompleteActivity.this, client_id, tv_setbirth,tv_sex,tv_setaddress);
+//			HttpEntity entity = null;
+//			JSONObject jsonObject = new JSONObject();   
+//	        try {
+//				jsonObject.put("email", email);
+//				jsonObject.put("password", password); 
+//				entity = new StringEntity(jsonObject.toString(), "UTF-8");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} 
 	        
-			HttpUtil.post(this, HttpConfig.UPDATE_IN_URL+client_id+".json", entity,
-					"application/json;charset=utf-8",
-					new JsonHttpResponseHandler() {
+			HttpUtil.post(Constant.LONIN_IN_URL, params,
+							new JsonHttpResponseHandler() {
 
 						@Override
 						public void onFailure(int statusCode, Header[] headers,
@@ -258,43 +253,33 @@ public class RegisterCompleteActivity extends pBaseActivity{
 
 						@Override
 						public void onSuccess(int statusCode, Header[] headers,
+								JSONArray response) {
+							// TODO Auto-generated method stub
+							hideLoading();
+							pLog.i("test", "onSuccess+statusCode:" + statusCode
+									+ "headers:" + headers.toString() + "response:"
+									+ response.toString());
+							super.onSuccess(statusCode, headers, response);
+							Intent login_complete = new Intent();
+							startActivityForLeft(MainActivity.class, login_complete, false);
+						}
+
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
 								JSONObject response) {
 							// TODO Auto-generated method stub
 							hideLoading();
 							pLog.i("test", "onSuccess:statusCode:" + statusCode
 									+ "headers:" + headers.toString() + "response:"
 									+ response.toString());
-							try {
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-												.toString(), LoginBean.class);
-								if (loginBean != null) {
-
-									pLog.i("test", "getLabels:"
-											+ loginBean.user.getLabels().toString());
-									
-									BussinessUtils.saveUserData(loginBean,
-											mShareFileUtils);
-
-									pLog.i("test", mShareFileUtils.getString(
-											Constant.USERNAME, ""));
-									pLog.i("test", mShareFileUtils.getString(
-											Constant.EMAIL, ""));
-									easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
-									easemobchatImp.getInstance().loadConversationsandGroups();
-									startActivityForLeft(MainActivity.class, intent, false);
-								}
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-							
-							
 							super.onSuccess(statusCode, headers, response);
+					*/		
+							/**  
+							easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
+							easemobchatImp.getInstance().loadConversationsandGroups();
+							
+							Intent login_complete = new Intent();
+							startActivityForLeft(MainActivity.class, login_complete, false);
 						}
 
 						@Override
@@ -312,7 +297,7 @@ public class RegisterCompleteActivity extends pBaseActivity{
 
 					});
 		}
-	 
+	 **/
 	
 	
 	public byte[] getBitmapByte(Bitmap bitmap) {

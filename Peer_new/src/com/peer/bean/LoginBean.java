@@ -14,15 +14,7 @@ public class LoginBean implements Serializable {
 	private String pic_server;
 	private String sys_time;
 	private String code;
-	private static LoginBean loginbean;
 	public UserBean user = new UserBean();
-	
-	public static LoginBean getInstance(){
-		if(loginbean==null){
-			loginbean=new LoginBean();
-		}		
-		return loginbean;
-	}
 
 	public String getPic_server() {
 		return pic_server;

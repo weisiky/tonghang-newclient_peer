@@ -104,6 +104,7 @@ public class HttpUtil {
 	 */
 	public static void get(Context context, String urlString,
 			HttpEntity entity, String contentType, JsonHttpResponseHandler res) {
+
 		client.get(context, urlString, entity, contentType, res);
 	}
 

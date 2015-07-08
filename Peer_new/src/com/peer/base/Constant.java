@@ -107,6 +107,5 @@ public class Constant {
 		public static String PIC_SERVER = "pic_server";
 		public static String SYS_TIME = "sys_time";
 		public static String LABELS = "Labels";
-		public static String IS_FRIEND = "is_friend";
 
 }
