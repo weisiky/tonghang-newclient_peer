@@ -1,5 +1,13 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +18,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.IMimplements.easemobchatImp;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.LoginBean;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -82,13 +101,17 @@ public class FeedBackActivity extends pBaseActivity{
 		switch (v.getId()) {
 		case R.id.commite_feedback:
 			
-			showToast("模拟测试", Toast.LENGTH_LONG, true);
-//			if(checkNetworkState()){
-//				FeedBackTask task=new FeedBackTask();
-//				task.execute(pageViewaList.et_feedback_content.getText().toString().trim());					
-//			}else{
-//				ShowMessage(getResources().getString(R.string.Broken_network_prompt));
-//			}							
+			if(isNetworkAvailable){
+				try {
+					sendfeedback(pageViewaList.et_feedback_content.getText().toString().trim(),
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+			}							
 			break;
 
 		default:
@@ -126,6 +149,88 @@ TextWatcher watcher=new TextWatcher() {
 			}
 		}
 	};
+	
+	
+	/**
+	 * 发送反馈信息接口
+	 * 
+	 * @param client_id
+	 * @param content
+	 * @throws UnsupportedEncodingException
+	 */
+
+	private void sendfeedback(String client_id, String content)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getLoginParams(this, client_id, content);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		HttpUtil.post(this, HttpConfig.SYSTEM_FEEDBACK_URL, entity,
+				"application/json;charset=utf-8",
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						hideLoading();
+
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						
+						showToast("已提交，感谢你的好建议！", Toast.LENGTH_SHORT, false);
+						
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+
+				});
+	}
 
 @Override
 public void onNetworkOn() {

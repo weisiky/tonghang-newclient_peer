@@ -75,7 +75,7 @@ public class Recommend_topicAdapter extends pBaseAdapter {
 					ImageView head = ViewHolder.get(convertView, R.id.head);
 					LinearLayout ll_click = ViewHolder.get(convertView, R.id.ll_click);
 					Map plist = (Map) mList.get(position);
-					tv_time.setText((String) plist.get("sys_time"));
+					tv_time.setText((String) plist.get("created_at"));
 					tv_skill.setText((String) plist.get("label_name"));
 					tv_topic.setText((String) plist.get("subject"));
 					ll_click.setOnClickListener(new OnClickListener() {

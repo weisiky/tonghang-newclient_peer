@@ -528,8 +528,8 @@ public class SearchResultActivity extends pBaseActivity {
 											recommendtopicbean.topics.get(index).getTopic_id().toString());
 									topicMsg.put("sys_time",
 											recommendtopicbean.getSys_time());
-									topicMsg.put("image",
-											recommendtopicbean.topics.get(index).getImage().toString());
+									topicMsg.put("created_at",
+											recommendtopicbean.topics.get(index).getCreated_at().toString());
 									list.add(topicMsg);
 								}
 
@@ -635,8 +635,8 @@ public class SearchResultActivity extends pBaseActivity {
 										recommendtopicbean.topics.get(index).getTopic_id().toString());
 								topicMsg.put("sys_time",
 										recommendtopicbean.getSys_time());
-								topicMsg.put("image",
-										recommendtopicbean.topics.get(index).getImage().toString());
+								topicMsg.put("created_at",
+										recommendtopicbean.topics.get(index).getCreated_at().toString());
 								list.add(topicMsg);
 							}
 

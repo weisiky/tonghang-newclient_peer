@@ -177,7 +177,7 @@ public class ChatRoomActivity extends pBaseActivity{
 //				User u=ChatRoomBean.getInstance().getTopic().getUser();
 //				pageViewaList.tv_nikename.setText(u.getUsername());
 //				LoadImageUtil.imageLoader.displayImage(u.getImage(), ownerimg,LoadImageUtil.options);
-				theme = ChatRoomBean.getInstance().getTopic().getSubject();
+				theme = ChatRoomBean.getInstance().getTopicBean().getSubject();
 				pageViewaList.theme_chat.setText(theme);
 				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
 //				topicId=toChatUsername;
@@ -194,7 +194,7 @@ public class ChatRoomActivity extends pBaseActivity{
 			conversation = EMChatManager.getInstance().getConversation(toChatUsername);
 			conversation.resetUnreadMsgCount();		
 		}else if(ChatRoomBean.getInstance().getChatroomtype()==Constant.SINGLECHAT){
-			toChatUsername=ChatRoomBean.getInstance().getUser().getClient_Id();
+			toChatUsername=ChatRoomBean.getInstance().getUserBean().getClient_id();
 			pageViewaList.host_imfor.setVisibility(View.GONE);
 //			pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance().getUser().getUsername());
 			titlePopup.addAction(new ActionItem(this, getResources().getString(R.string.deletemes), R.color.white));

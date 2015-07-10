@@ -1,11 +1,19 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -14,10 +22,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.peer.adapter.SkillAdapter;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.LoginBean;
+import com.peer.bean.PersonpageBean;
+import com.peer.event.SkillEvent;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 import com.umeng.analytics.f;
+
+import de.greenrobot.event.EventBus;
 
 
 /**
@@ -27,13 +47,16 @@ import com.umeng.analytics.f;
 public class MySkillActivity extends pBaseActivity{
 	
 	private PageViewList pageViewaList;
-	
+	private EventBus mBus;
 	private List<String> mlist;  
-	private int Hadtag;		
+	private int Hadtag;	
 	
-	
-	
+	public static Handler handler;
+	private TextView title;
 	private SkillAdapter adapter;
+	
+	
+	
 	
 	class PageViewList {
 		private LinearLayout ll_back,ll_createTag_mytag;
@@ -57,8 +80,7 @@ public class MySkillActivity extends pBaseActivity{
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(R.string.myskill));
 		
-		adapter=new SkillAdapter(this,mlist);
-		pageViewaList.lv_myskill.setAdapter(adapter);
+		
 	}
 
 	@Override
@@ -71,7 +93,11 @@ public class MySkillActivity extends pBaseActivity{
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		
+		mlist = PersonpageBean.getInstance().user.getLabels();
+		Hadtag=mlist.size();
+		adapter=new SkillAdapter(this,mlist);
+		pageViewaList.lv_myskill.setAdapter(adapter);
+		registEventBus();
 
 	}
 
@@ -102,10 +128,15 @@ public class MySkillActivity extends pBaseActivity{
 		case R.id.ll_createTag_mytag:
 			Hadtag=mlist.size();
 			if(Hadtag>4){
-				showToast("您已经有五个标签，不能再创建了", Toast.LENGTH_LONG, false);
+				showToast("您已经有五个标签，不能再创建了", Toast.LENGTH_SHORT, false);
 				break;
 			}else{
-				CreateTagDialog();					
+				if(isNetworkAvailable){
+					CreateTagDialog();	
+				}else{
+					showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+				}
+							
 			}		
 			break;
 		default:
@@ -122,9 +153,8 @@ public class MySkillActivity extends pBaseActivity{
 	 */
 	private void CreateTagDialog() {
 		// TODO Auto-generated method stub		
-		
 		final EditText inputServer = new EditText(MySkillActivity.this);
-		inputServer.setFocusable(true);
+		 inputServer.setFocusable(true);
 		AlertDialog.Builder builder = new AlertDialog.Builder(MySkillActivity.this);
         builder.setTitle(getResources().getString(R.string.register_tag)).setView(inputServer).
         setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -140,7 +170,7 @@ public class MySkillActivity extends pBaseActivity{
     	                      		 for(int i=0;i<mlist.size();i++){ 
     	                      			 if(mlist.get(i).equals(inputName)){
     	                      				issame=true;
-    	                      				 showToast(getResources().getString(R.string.repetskill), Toast.LENGTH_LONG,false);
+    	                      				 showToast(getResources().getString(R.string.repetskill), Toast.LENGTH_SHORT, false);
     	                      				 break;	                      				
     	                      			 }
     	                      		 }
@@ -148,8 +178,7 @@ public class MySkillActivity extends pBaseActivity{
     	                      			createLable(inputName);
     	                      		 }	                      		
     	                      	}else{
-    	                      		showToast(getResources().getString(R.string.skillname), Toast.LENGTH_LONG,false);
-    	                      		
+                     				 showToast(getResources().getString(R.string.skillname), Toast.LENGTH_SHORT, false);
     	                      	}       
                     	   }else{
                     		   if(inputName.length()<7){
@@ -157,8 +186,7 @@ public class MySkillActivity extends pBaseActivity{
     	                      		 for(int i=0;i<mlist.size();i++){ 
     	                      			 if(mlist.get(i).equals(inputName)){
     	                      				issame=true;
-    	                      				showToast(getResources().getString(R.string.repetskill), Toast.LENGTH_LONG,false);
-    	                      				
+    	                      				showToast(getResources().getString(R.string.repetskill), Toast.LENGTH_SHORT, false);
     	                      				 break;	                      				
     	                      			 }
     	                      		 }
@@ -166,13 +194,12 @@ public class MySkillActivity extends pBaseActivity{
     	                      			createLable(inputName);
     	                      		 }	                      		
     	                      	}else{
-    	                      		showToast(getResources().getString(R.string.skillname), Toast.LENGTH_LONG,false);
-    	                      		
+    	                      		showToast(getResources().getString(R.string.skillname), Toast.LENGTH_SHORT, false);
     	                      	}     
                     	   }
                     	                     
                        }else{
-                    	   showToast("请输入行业标签名",Toast.LENGTH_LONG ,false);
+                    	   showToast("请输入行业标签名", Toast.LENGTH_SHORT, false);
                        }                       
                     }
                 });
@@ -182,30 +209,157 @@ public class MySkillActivity extends pBaseActivity{
 	
 	public void createLable(String label){
 		mlist.add(label);
-		changLabelsTask task=new changLabelsTask();
-		task.execute();				
-	}
-	
-	
-	/*
-	 * 开线程
-	 * 将数据设置到adapter中
-	 * 
-	 * 
-	 * */
-	public class changLabelsTask extends  AsyncTask<String, String, String>{
-
-		@Override
-		protected String doInBackground(String... arg0) {
-			// TODO Auto-generated method stub
-			Hadtag=mlist.size();
-			adapter=new SkillAdapter(MySkillActivity.this,mlist);
-			pageViewaList.lv_myskill.setAdapter(adapter);
-			return null;
+		if(isNetworkAvailable){
+			try {
+				senduserlabels(PersonpageBean.getInstance().user.getClient_id(),
+						mlist);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}else{
+			showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
 		}
 				
 	}
+	
+	
+	/**
+	 * 修改当前用户标签请求
+	 * @param client_id
+	 * @param label_name
+	 * @throws UnsupportedEncodingException
+	 */
+	private void senduserlabels(String client_id , List<String> label_name)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getUserLabelsParams(this,client_id,label_name);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		HttpUtil.post(this, HttpConfig.USER_UPDATE_LABEL_IN_URL+client_id+".json", entity,
+				"application/json;charset=utf-8",
+				new JsonHttpResponseHandler() {
 
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							PersonpageBean.getInstance().user = loginBean.user;
+							Hadtag=mlist.size();
+							adapter=new SkillAdapter(MySkillActivity.this,mlist);
+							pageViewaList.lv_myskill.setAdapter(adapter);
+
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+
+				});
+	}
+	
+	
+	
+	
+	
+	
+	
+	private void registEventBus() {
+		// TODO Auto-generated method stub
+		 mBus=EventBus.getDefault();
+		/*
+		 * Registration: three parameters are respectively, message subscriber (receiver), receiving method name, event classes
+		 */
+		 mBus.register(this, "getSkillEvent",SkillEvent.class);
+	}
+
+	private void getSkillEvent(final SkillEvent event){
+		event.getPosition();
+		event.getLabel();
+		if(event.isIsdelete()){
+			if(Hadtag<3){
+				showToast("至少需要保留两个行业标签", Toast.LENGTH_SHORT, false);
+			}else{
+				mlist.remove(event.getPosition());
+				if(isNetworkAvailable){
+					try {
+						senduserlabels(PersonpageBean.getInstance().user.getClient_id(),
+								mlist);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}else{
+					showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+				}
+			}				
+		}else{
+			mlist.remove(event.getPosition());
+			mlist.add(event.getLabel());		
+			if(isNetworkAvailable){
+				try {
+					senduserlabels(PersonpageBean.getInstance().user.getClient_id(),
+							mlist);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}else{
+				showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+			}
+		}
+	}
 
 
 	@Override

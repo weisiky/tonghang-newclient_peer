@@ -18,9 +18,11 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
+import com.peer.activity.MyAcountActivity;
 import com.peer.activity.R;
 import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
+import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.ManagerActivity;
@@ -63,11 +65,10 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 	public boolean isNetworkAvailable;
 	public pBaseApplication application;
-
-	private ActivityManager activityManager;
-
+	
+	private ActivityManager activityManager ;
+	
 	private OnNetworkStatusListener onNetworkStatusListener;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -86,38 +87,37 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		MobclickAgent.updateOnlineConfig(this);
 		// 友盟统计 数据加密
 		AnalyticsConfig.enableEncrypt(true);
-
+		
 		ManagerActivity.getAppManager().addActivity(this);
 
 		this.findViewById();
 		this.setListener();
 		this.processBiz();
-
+		
 		application = (pBaseApplication) getApplication();
-
+		
 		onNetworkStatusListener = new OnNetworkStatusListener() {
 			public void networkOn() {
 				isNetworkAvailable = true;
 				onNetworkOn();
 			}
-
 			public void netWorkOff() {
 				isNetworkAvailable = false;
 				onNetWorkOff();
 			}
 		};
 		application.addNetworkStatusListener(onNetworkStatusListener);
-
+		
 		isNetworkAvailable = pNetUitls.isNetworkAvailable(this);
 
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume() { 
 		// TODO Auto-generated method stub
 		super.onResume();
 		EMChatManager.getInstance().activityResumed();
-		MobclickAgent.onResume(this);
+		MobclickAgent.onResume(this); 
 	}
 
 	@Override
@@ -188,17 +188,15 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
 
 	}
-
 	/**
 	 * 网络连通后回调该函数
 	 */
 	public abstract void onNetworkOn();
-
+	
 	/**
 	 * 网络断开后回调该函数
 	 */
 	public abstract void onNetWorkOff();
-
 	/**
 	 * 获取页面控件对象
 	 */
@@ -367,17 +365,16 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
-			startActivityRight(LoginActivity.class, intent, false);
+			startActivityRight(LoginActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("RegisterTagActivity")) {
 			startActivityRight(RegisterAcountActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains(
 				"RegisterCompleteActivity")) {
-			showToast("请完成注册", Toast.LENGTH_SHORT, false);
+			showToast("请完成注册", Toast.LENGTH_SHORT, true);
 		} else if (getLocalClassNameBySelf().contains("SearchUserActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
-				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")
 				|| getLocalClassNameBySelf().contains("NewFunctionActivity")
 				|| getLocalClassNameBySelf().contains("FeedBackActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
@@ -387,11 +384,20 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("SettingActivity")
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
+				|| getLocalClassNameBySelf().contains("MyAcountActivity")
+				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
+				|| getLocalClassNameBySelf().contains("SearchResultActivity")
+				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
-		} else if (getLocalClassNameBySelf().contains("SearchResultActivity")) {
-			startActivityRight(SearchUserActivity.class, intent, true);
-		} else {
+		} else if(getLocalClassNameBySelf().contains("UpdatePasswordActivity")){
+			startActivityRight(MyAcountActivity.class, intent, true);
+		}else if(getLocalClassNameBySelf().contains("NewFunctionActivity")
+				||getLocalClassNameBySelf().contains("FeedBackActivity")
+				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")){
+			startActivityRight(SettingActivity.class, intent, true);
+		}else{
 			exitApp();
 		}
 
@@ -402,7 +408,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	 */
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("再次点击退出", Toast.LENGTH_SHORT, false);
+			showToast("再次点击退出", Toast.LENGTH_SHORT, true);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);
@@ -427,11 +433,11 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		} else {
 			toast.setText(arg);
 		}
-		// if (isCenter) {
-		// toast.setGravity(Gravity.CENTER, 0, 0);
-		// } else {
-		toast.setGravity(Gravity.BOTTOM, 0, 0);
-		// }
+		if (isCenter) {
+			toast.setGravity(Gravity.CENTER, 0, 0);
+		} else {
+			toast.setGravity(Gravity.BOTTOM, 0, 0);
+		}
 		toast.show();
 	}
 

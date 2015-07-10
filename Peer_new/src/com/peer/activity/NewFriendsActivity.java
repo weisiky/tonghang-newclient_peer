@@ -1,19 +1,48 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.adapter.FriendsAdapter;
+import com.peer.adapter.NewfriendsAdapter;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.NewFriendBean;
+import com.peer.bean.RecommendUserBean;
+import com.peer.event.NewFriensEvent;
+import com.peer.fragment.FriendsFragment;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
+
+import de.greenrobot.event.EventBus;
 
 
 /**
  * ‘新朋友’页
  */
 public class NewFriendsActivity extends pBaseActivity {
+	
+	private EventBus mBus;
+	private List<Object> mlist,list;
+	private NewfriendsAdapter adapter;
+	
 
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -47,6 +76,13 @@ public class NewFriendsActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
+		registEventBus();		
+		try {
+			sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 
 	}
 
@@ -86,5 +122,138 @@ public class NewFriendsActivity extends pBaseActivity {
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	private void registEventBus() {
+		// TODO Auto-generated method stub
+		 mBus=EventBus.getDefault();
+		/*
+		 * Registration: three parameters are respectively, message subscriber (receiver), receiving method name, event classes
+		 */
+		 mBus.register(this, "getEvent",NewFriensEvent.class);
+	}
+	
+	
+	private void getEvent(NewFriensEvent event){
+		
+		mlist.remove(event.getPosition());
+		adapter.notifyDataSetChanged();
+		FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		 mBus.unregister(this);
+	}
+	
+	
+	/**
+	 * 获取新朋友请求
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	private void sendnewfriend(String client_id)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+
+		HttpUtil.get(HttpConfig.FRIEND_INVITATION_URL+client_id+".json",
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test",
+								"errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
+								+ response.toString());
+						try{
+							NewFriendBean newfriendbean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+									.toString(), NewFriendBean.class);
+						
+							if (newfriendbean != null) {
+	
+								pLog.i("test", "user1:"
+										+ newfriendbean.getInvitationbean().get(0).getUserbean().getUsername().toString());
+						
+						}
+						for (int index = 0; index < NewFriendBean.getInstance().getInvitationbean().size(); index++) {
+							list.add(NewFriendBean.getInstance().getInvitationbean().get(index));
+						}
+
+					} catch (Exception e1) {
+						pLog.i("test", "Exception:" + e1.toString());
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+						
+
+
+						if (adapter == null) {
+							adapter = new NewfriendsAdapter(NewFriendsActivity.this, list);
+							pageViewaList.lv_newfriends.setAdapter(adapter);
+						}
+
+						refresh();
+						// adapter.setBaseFragment(HomeFragment.this);
+
+						super.onSuccess(statusCode, headers, response);
+					}
+
+
+				});
+
+	}
+	
+	private void refresh() {
+
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
+		}
+
 	}
 }

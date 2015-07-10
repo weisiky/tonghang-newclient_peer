@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_clike"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:background="@drawable/selector_presseffect"
+    android:orientation="vertical" >
+    <RelativeLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:id="@+id/list_topic_rel">
+        <TextView 
+            android:id="@+id/tv_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/textsize_smallmiddle"
+            android:layout_alignParentRight="true"
+            android:text="2015/01/03"
+            />
+        
+
+        
+        <TextView
+            android:id="@+id/tv_skill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textSize="@dimen/textsize_middle"
+            android:textColor="@color/black"
+            android:text="android"
+             />
+        
+        
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+		    <TextView 
+		        android:id="@+id/tv_topic"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:ellipsize="end"
+		        android:maxLines="5"
+		        android:layout_marginLeft="8dp"
+		        android:layout_marginTop="10dp"
+		        android:text="关于android讨论"
+		        android:textColor="@color/deepgray"
+		        android:textSize="@dimen/textsize_smallmiddle"
+		        
+		        />
+		    <View 
+		        android:layout_width="match_parent"
+		        android:layout_height="0.5dp"
+		        android:layout_below="@+id/tv_topic"
+		        android:layout_marginTop="8dp"
+		        android:background="@color/gray"
+		        />
+	</RelativeLayout>
+</LinearLayout>

@@ -15,7 +15,10 @@ import android.widget.TextView;
 
 import com.peer.activity.R;
 import com.peer.base.pBaseAdapter;
+import com.peer.event.SkillEvent;
 import com.peer.utils.ViewHolder;
+
+import de.greenrobot.event.EventBus;
 
 
 /*
@@ -51,9 +54,6 @@ public class SkillAdapter extends pBaseAdapter{
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parentgroup) {
 		// TODO Auto-generated method stub
-
-		if(convertView==null){
-
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_skill,null,false);
 			TextView tv_skill = ViewHolder.get(convertView,R.id.tv_skill);
 			TextView tv_delete = ViewHolder.get(convertView,R.id.tv_delete);
@@ -64,11 +64,7 @@ public class SkillAdapter extends pBaseAdapter{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-//					if(checkNetworkState()){
 						deleteSkill(position);
-//					}else{
-//						Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
-//					}
 					
 				}
 			});
@@ -77,17 +73,10 @@ public class SkillAdapter extends pBaseAdapter{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-//					if(checkNetworkState()){
 						updateSkill(position);
-//					}else{
-//						Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
-//					}
 					
 				}
 			});							
-		}else{
-			convertView.getTag();
-		}	
 		
 		return convertView;
 	}
@@ -96,7 +85,7 @@ public class SkillAdapter extends pBaseAdapter{
 		.setMessage(mContext.getResources().getString(R.string.deletethisskill)) .setNegativeButton(mContext.getResources().getString(R.string.cancel), null) 
 		 .setPositiveButton(mContext.getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){ 
-//            	 EventBus.getDefault().post(new SkillEvent(position,mlist.get(position),true));           	      	        	 
+            	 EventBus.getDefault().post(new SkillEvent(position,mlist.get(position),true));           	      	        	 
              }
 		 })
 		 .show();  
@@ -121,7 +110,7 @@ public class SkillAdapter extends pBaseAdapter{
                     			  }                    		   
                     	   }
                     	   if(!issamelabel){
-//                    		   EventBus.getDefault().post(new SkillEvent(position,inputName,false));                  		  
+                    		   EventBus.getDefault().post(new SkillEvent(position,inputName,false));                  		  
                     	   }                   	
                        }      
                     }

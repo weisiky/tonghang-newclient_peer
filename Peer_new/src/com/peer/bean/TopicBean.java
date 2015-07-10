@@ -10,7 +10,7 @@ public class TopicBean implements Serializable{
 	private String topic_id;
 	private String user_id;
 	private String subject;
-	private String image;
+	private String created_at;
 	
 
 	public String getLabel_name() {
@@ -30,12 +30,12 @@ public class TopicBean implements Serializable{
 	}
 
 	
-	public String getImage() {
-		return image;
+	public String getCreated_at() {
+		return created_at;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
 	}
 
 

@@ -17,6 +17,7 @@ import android.media.JetPlayer.OnJetEventListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.IMimplements.easemobchatUser;
 import com.peer.activity.R;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
@@ -59,6 +60,88 @@ public class PeerParamsUtils {
 				JsonDocHelper.toJSONString(loginParams), "utf-8");
 		return entity;
 	}
+	
+	/**
+	 * 创建话题参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param subject
+	 * @param label_name
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getcreatetopicParams(Context context, String client_id,
+			String subject , String label_name) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		loginParams.put("subject", subject);
+		loginParams.put("label_name", label_name);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	/**
+	 * 添加好友参数绑定
+	 * 
+	 * @param context
+	 * @param invitee_id
+	 * @param reason
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getaddfriendParams(Context context, String invitee_id,
+			String reason) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("invitee_id", invitee_id);
+		loginParams.put("reason", reason);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	
+	/**
+	 * 删除好友参数绑定
+	 * 
+	 * @param context
+	 * 
+	 * @param friend_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getdeletefriendParams(Context context, String friend_id) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("friend_id", friend_id);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
+	 * 获取未读取消息参数绑定
+	 * 
+	 * @param context
+	 * 
+	 * @param users
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getComMsgParams(Context context, easemobchatUser users) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("entries", users.getEasemobchatusers());
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
 
 	/**
 	 * 找回密码参数绑定
@@ -74,6 +157,66 @@ public class PeerParamsUtils {
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("email", email);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
+	 * 获取用户信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getUserParams(Context context, String client_id)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
+	 * 修改当前用户标签参数绑定
+	 * 
+	 * @param client_id
+	 * @param label_name
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getUserLabelsParams(Context context, String client_id , List<String> label_name)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		loginParams.put("label_name", label_name);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
+	 * 更改密码参数绑定
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getUpdatepasswdParams(Context context, String oldpasswd , String newpasswd)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("old_passwd", oldpasswd);
+		loginParams.put("new_passwd", newpasswd);
 		HttpEntity entity = new StringEntity(
 				JsonDocHelper.toJSONString(loginParams), "utf-8");
 		return entity;
@@ -121,6 +264,33 @@ public class PeerParamsUtils {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
 		registerTagParams.put("pageindex", page);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
+	
+	/**
+	 * 更改用户信息参数绑定
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param email
+	 * @param password
+	 * @param username
+	 * @param labels
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getUpdateParams(Context context,
+			 String username, String birth, String sex , String address)
+			throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("username", username);
+		registerTagParams.put("sex", birth);
+		registerTagParams.put("birth", sex);
+		registerTagParams.put("city", address);
 		HttpEntity entity = new StringEntity(
 				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
 		return entity;

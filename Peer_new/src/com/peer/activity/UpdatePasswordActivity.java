@@ -1,5 +1,12 @@
 package com.peer.activity;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.IMimplements.easemobchatImp;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.LoginBean;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 
@@ -106,15 +124,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		String old=pageViewaList.et_oldpasw.getText().toString().trim();
 		final String newpasws=pageViewaList.et_newpasw.getText().toString().trim();
 		String testnew=pageViewaList.et_repasw.getText().toString().trim();
-		
-		/*
-		final String email=LocalStorage.getString(UpdatePasswordActivity.this, Constant.EMAIL);
-		final UserDao udao=new UserDao(UpdatePasswordActivity.this);		
-		String password=udao.getPassord(email);
-		if(!old.equals(password)){
-			remind.setText(getResources().getString(R.string.erroroldpsw));
-			return;
-		}else */
 		if(!newpasws.matches("^[a-zA-Z0-9_]{5,17}$")){
 			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.errorpswformat));
 			return;
@@ -122,9 +131,135 @@ public class UpdatePasswordActivity extends pBaseActivity {
 			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.oldnewnot));
 			return;
 		}else{
-			showToast("模拟完成更改", Toast.LENGTH_SHORT, false);
-			finish();
+			if(isNetworkAvailable){
+			sendUpdatePassword(mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+					old,newpasws);
+			}else{
+				showToast(getResources().getString(
+						R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+			}
 		}
+	}
+	
+	
+	
+	/**
+	 * 更改用户密码请求
+	 * 
+	 * @param client_id
+	 * @param oldpasswd
+	 * @throws newpasswd 
+	 **/
+
+	private void sendUpdatePassword(String client_id, String oldpasswd , String newpasswd ){
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		HttpEntity entity = null;
+		try {
+			entity = PeerParamsUtils.getUpdatepasswdParams(
+					UpdatePasswordActivity.this, oldpasswd , newpasswd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		HttpUtil.post(this, HttpConfig.UPDATE_PWD_IN_URL+client_id+".json", entity,
+				"application/json;charset=utf-8",
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						hideLoading();
+						
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString);
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure+statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onFailure:statusCode:" + statusCode);
+						pLog.i("test", "throwable:" + throwable.toString());
+						pLog.i("test", "headers:" + headers.toString());
+						pLog.i("test", "errorResponse:" + errorResponse.toString());
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString() + "response:"
+								+ response.toString());
+						try {
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							if (loginBean != null) {
+
+								pLog.i("test", "getLabels:"
+										+ loginBean.user.getLabels().toString());
+								
+								BussinessUtils.saveUserData(loginBean,
+										mShareFileUtils);
+
+								pLog.i("test", mShareFileUtils.getString(
+										Constant.USERNAME, ""));
+								pLog.i("test", mShareFileUtils.getString(
+										Constant.EMAIL, ""));
+								startActivityForLeft(MyAcountActivity.class, intent, false);
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+						
+						super.onSuccess(statusCode, headers, response);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							String responseString) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "onSuccess:statusCode:" + statusCode
+								+ "headers:" + headers.toString()
+								+ "responseString:" + responseString.toString());
+						super.onSuccess(statusCode, headers, responseString);
+						Intent login_complete = new Intent();
+						startActivityForLeft(MainActivity.class, login_complete, false);
+					}
+
+				});
 	}
 	
 	

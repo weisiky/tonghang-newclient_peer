@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class UserBean {
 
-	private String id;
+	
 	private String sex;
 	private String username;
 	private String birth;
@@ -12,6 +12,22 @@ public class UserBean {
 
 	private String image;
 	private String phone;
+	private boolean is_friend;
+	
+	private String created_at;
+	private String client_id;
+	private String city;
+	private ArrayList<String> labels = new ArrayList<String>();
+	
+	public boolean getIs_friend() {
+		return is_friend;
+	}
+
+	public void setIs_friend(boolean is_friend) {
+		this.is_friend = is_friend;
+	}
+	
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -20,7 +36,7 @@ public class UserBean {
 		this.phone = phone;
 	}
 
-	private String created_at;
+	
 	public String getClient_id() {
 		return client_id;
 	}
@@ -29,17 +45,6 @@ public class UserBean {
 		this.client_id = client_id;
 	}
 
-	private String client_id;
-	private String city;
-	private ArrayList<String> labels = new ArrayList<String>();
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getSex() {
 		return sex;

@@ -116,12 +116,7 @@ public class HomeFragment extends pBaseFragment {
 						pbaseActivity.startActivityForLeft(Recommend_topic.class, intent, false);
 //					}
 				} else {
-					if (!pbaseActivity.isNetworkAvailable) {
-						pbaseActivity.showToast(getActivity().getResources().getString(
-								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
-					} else {
-						pbaseActivity.startActivityForLeft(PersonalPageActivity.class,intent,false);
-					}
+					
 				}
 
 			}
@@ -279,6 +274,7 @@ public class HomeFragment extends pBaseFragment {
 								userMsg.put("created_at",
 										recommenduserbean.users.get(index).getCreated_at());
 								userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
+								userMsg.put("is_friend", recommenduserbean.users.get(index).getIs_friend());
 								userlist.add(userMsg);
 								for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
 									labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
