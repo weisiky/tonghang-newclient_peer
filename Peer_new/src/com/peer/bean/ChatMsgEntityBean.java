@@ -13,6 +13,15 @@ public class ChatMsgEntityBean {
 	private String date;//消息日期
 	private String message;//消息内容
 	private int isComMeg;//收到哪种消息  1为我，0为其他人
+	
+	private static ChatMsgEntityBean chatmsgentitybean;
+	
+	public static ChatMsgEntityBean getInstance(){
+		if(chatmsgentitybean==null){
+			chatmsgentitybean=new ChatMsgEntityBean();
+		}
+		return chatmsgentitybean;
+	}
 
 	public String getUserId() {
 		return userId;

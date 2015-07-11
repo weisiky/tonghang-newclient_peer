@@ -422,7 +422,6 @@ public class BussinessUtils {
 		pShareFileUtils.setString(Constant.EMAIL,
 				loginBean.user.getEmail());
 		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
-		pShareFileUtils.setString(Constant.ID, loginBean.user.getId());
 		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
 		pShareFileUtils.setString(Constant.USERNAME,
 				loginBean.user.getUsername());

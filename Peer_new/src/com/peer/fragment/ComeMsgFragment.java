@@ -114,12 +114,12 @@ public class ComeMsgFragment extends pBaseFragment{
 		}
 		easemobchatUser users=new easemobchatUser();
 		users.setEasemobchatusers(easemobchatusers);
-		try {
+	/*	try {
 			sendComeMsg(users);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}	*/
 	}
 	
 	

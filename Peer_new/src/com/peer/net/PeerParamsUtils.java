@@ -183,6 +183,27 @@ public class PeerParamsUtils {
 	
 	
 	/**
+	 * 加入话题参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param topic_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static HttpEntity getJoinParams(Context context, String client_id , String topic_id)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		loginParams.put("topic_id", topic_id);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(loginParams), "utf-8");
+		return entity;
+	}
+	
+	
+	/**
 	 * 修改当前用户标签参数绑定
 	 * 
 	 * @param client_id

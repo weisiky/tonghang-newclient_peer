@@ -225,16 +225,10 @@ public class LoginActivity extends pBaseActivity {
 											.toString(), LoginBean.class);
 							if (loginBean != null) {
 
-								pLog.i("test", "getLabels:"
-										+ loginBean.user.getLabels().toString());
 								
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
 
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.USERNAME, ""));
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.EMAIL, ""));
 //								easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id", ""), pShareFileUtils.getString("password", ""));
 //								easemobchatImp.getInstance().loadConversationsandGroups();
 								startActivityForLeft(MainActivity.class, intent, false);
