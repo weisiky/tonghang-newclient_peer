@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -269,14 +270,19 @@ public class ComeMsgFragment extends pBaseFragment{
 								+ "headers:" + headers.toString() + "response:"
 								+ response.toString());
 
-						JSONObject result = response.getJSONObject("success");
+						try {
+							JSONObject result = response.getJSONObject("success");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 
 
-						if (adapter == null) {
+						/*if (adapter == null) {
 							adapter = new ChatHistoryAdapter(getActivity(), list);
 							ListView_come.setAdapter(adapter);
-						}
+						}*/
 
 						refresh1();
 						// adapter.setBaseFragment(HomeFragment.this);

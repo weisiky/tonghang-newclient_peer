@@ -58,16 +58,16 @@ public class ChatHistoryAdapter extends pBaseAdapter {
 		String type=(String) userlist.get(position).get("type");
 		
 			if(type.equals(Constant.TOPIC)){
-				Topic topic=(Topic)userlist.get(position).get(Constant.TOPIC);				
+//				Topic topic=(Topic)userlist.get(position).get(Constant.TOPIC);				
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_come_listtopic,null,false);
 				TextView tv_skill=(TextView)convertView.findViewById(R.id.tv_skill);			
 				TextView tv_topic=(TextView)convertView.findViewById(R.id.tv_topic);
 				TextView tv_time=(TextView)convertView.findViewById(R.id.tv_time);				
 				LinearLayout ll_clike=(LinearLayout)convertView.findViewById(R.id.ll_clike);
-				EMConversation conversation = EMChatManager.getInstance().getConversation(topic.getHuangxin_group_id());
+//				EMConversation conversation = EMChatManager.getInstance().getConversation(topic.getHuangxin_group_id());
 			}else if(type.equals(Constant.USER)){	
 				User user=(User) userlist.get(position).get(Constant.USER);
-				EMConversation conversation = EMChatManager.getInstance().getConversation(user.getHuangxin_username());				
+//				EMConversation conversation = EMChatManager.getInstance().getConversation(user.getHuangxin_username());				
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_come_listperson,null,false);				
 				ImageView im_headpic=(ImageView)convertView.findViewById(R.id.im_headpic);	
 				TextView tv_nikename=(TextView)convertView.findViewById(R.id.tv_nikename);			
@@ -81,42 +81,41 @@ public class ChatHistoryAdapter extends pBaseAdapter {
 	private void setUserView(ViewHolder viewHolder,
 			EMConversation conversation, final User user) {
 		// TODO Auto-generated method stub
-		LoadImageUtil.imageLoader.displayImage(user.getImage(), viewHolder.headpic, LoadImageUtil.options);
 		
-		viewHolder.nikename.setText(user.getUsername());
+//		viewHolder.nikename.setText(user.getUsername());
 		EMMessage lastMessage = conversation.getLastMessage();
 		TextMessageBody body=(TextMessageBody) lastMessage.getBody();
-		viewHolder.descripe.setText(body.getMessage());
-		final BadgeView bd=new BadgeView(mContext, viewHolder.click);
-		if (conversation.getUnreadMsgCount() > 0) {				
-			bd.setText(String.valueOf(conversation.getUnreadMsgCount()));
-			bd.show();
-		}else{
-			bd.hide();
-		}
-		viewHolder.click.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if(!checkNetworkState()){
-					Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
-				}else{	
-					bd.hide();					
-					ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.SINGLECHAT);
-/*					ChatRoomTypeUtil.getInstance().setTitle(user.getUsername());
-					ChatRoomTypeUtil.getInstance().setUserId(user.getUserid());
-					ChatRoomTypeUtil.getInstance().setHuanxingId(user.getHuangxin_username());
-*/					ChatRoomTypeUtil.getInstance().setUser(user);
-					Intent intent=new Intent(mContext,ChatRoomActivity.class);
-					mContext.startActivity(intent);
-				}
-			}
-		});
+//		viewHolder.descripe.setText(body.getMessage());
+//		final BadgeView bd=new BadgeView(mContext, viewHolder.click);
+//		if (conversation.getUnreadMsgCount() > 0) {				
+//			bd.setText(String.valueOf(conversation.getUnreadMsgCount()));
+//			bd.show();
+//		}else{
+//			bd.hide();
+//		}
+//		viewHolder.click.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				if(!checkNetworkState()){
+//					Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
+//				}else{	
+//					bd.hide();					
+//					ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.SINGLECHAT);
+///*					ChatRoomTypeUtil.getInstance().setTitle(user.getUsername());
+//					ChatRoomTypeUtil.getInstance().setUserId(user.getUserid());
+//					ChatRoomTypeUtil.getInstance().setHuanxingId(user.getHuangxin_username());
+//*/					ChatRoomTypeUtil.getInstance().setUser(user);
+//					Intent intent=new Intent(mContext,ChatRoomActivity.class);
+//					mContext.startActivity(intent);
+//				}
+//			}
+//		});
 		
 	}
 
-	private void setTopicView(ViewHolder viewHolder, EMConversation conversation,final Topic topic, final int position) {
+	/*private void setTopicView(ViewHolder viewHolder, EMConversation conversation,final Topic topic, final int position) {
 		// TODO Auto-generated method stub
 		viewHolder.time.setText(topic.getCreate_time());
 		viewHolder.nikename.setText(topic.getLabel_name());
@@ -136,11 +135,11 @@ public class ChatHistoryAdapter extends pBaseAdapter {
 					Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
 				}else{							
 					ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.MULTICHAT);	
-/*					ChatRoomTypeUtil.getInstance().setHuanxingId(topic.getHuangxin_group_id());
+					ChatRoomTypeUtil.getInstance().setHuanxingId(topic.getHuangxin_group_id());
 					ChatRoomTypeUtil.getInstance().setTitle(topic.getLabel_name());
 					ChatRoomTypeUtil.getInstance().setTheme(topic.getSubject());
 					ChatRoomTypeUtil.getInstance().setTopicId(topic.getTopicid());
-*/					
+					
 					User user=(User)userlist.get(position).get(Constant.USER);
 					String ownerid=null;
 					try {
@@ -161,5 +160,5 @@ public class ChatHistoryAdapter extends pBaseAdapter {
 				}
 			}
 		});
-	}
+	}*/
 }
