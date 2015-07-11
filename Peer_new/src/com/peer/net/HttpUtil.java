@@ -134,9 +134,6 @@ public class HttpUtil {
 		
 //		RequestParams params=new RequestParams();
 //		params.p
-
-		pLog.i("test", "params:" + params);
-
 		List<Header> headersList = new ArrayList<Header>();
 		Header[] headers = headersList.toArray(new Header[headersList.size()]);
 		client.post(context, urlString, headers, params, contentType, res);

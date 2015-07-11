@@ -123,7 +123,6 @@ public class ManagerActivity {
 	 * finsh all Activity
 	 */
 	public void finishAllActivity() {
-		pLog.i("test","test:"+activityStack.size());
 		for (int i = 0; i < activityStack.size(); i++) {
 			if (null != activityStack.get(i)) {
 				activityStack.get(i).finish();

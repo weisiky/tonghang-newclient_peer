@@ -178,11 +178,7 @@ public class AddFriendsActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
-
+						hideLoading();
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -191,10 +187,7 @@ public class AddFriendsActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -203,12 +196,7 @@ public class AddFriendsActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

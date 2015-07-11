@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 
+import cn.jpush.android.api.JPushInterface;
+
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
@@ -20,7 +23,7 @@ import com.peer.utils.pViewBox;
 public class WelComeActivity extends pBaseActivity {
 
 	class PageViewList {
-		
+
 		public LinearLayout welLin;
 	}
 
@@ -45,13 +48,34 @@ public class WelComeActivity extends pBaseActivity {
 
 			}
 
+			@SuppressWarnings("static-access")
 			public void onFinish() {
 				Intent intent = new Intent();
-				startActivityForLeft(LoginActivity.class, intent, false);
+				if (mShareFileUtils.getString(Constant.CLIENT_ID, "")
+						.equals("")) {
+					startActivityForLeft(MainActivity.class, intent, false);
+				} else {
+					startActivityForLeft(LoginActivity.class, intent, false);
+
+				}
 			}
 
 		}.start();
 
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		JPushInterface.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		JPushInterface.onPause(this);
 	}
 
 	@Override
@@ -102,13 +126,13 @@ public class WelComeActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

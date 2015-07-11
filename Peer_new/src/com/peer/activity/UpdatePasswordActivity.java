@@ -173,10 +173,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 
 						hideLoading();
-						
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
 
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -187,9 +183,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -199,10 +192,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test", "errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -212,25 +201,14 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
 						try {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
 							if (loginBean != null) {
-
-								pLog.i("test", "getLabels:"
-										+ loginBean.user.getLabels().toString());
 								
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
-
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.USERNAME, ""));
-								pLog.i("test", mShareFileUtils.getString(
-										Constant.EMAIL, ""));
 								startActivityForLeft(MyAcountActivity.class, intent, false);
 							}
 						} catch (JSONException e) {
@@ -251,9 +229,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							String responseString) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
 						super.onSuccess(statusCode, headers, responseString);
 						Intent login_complete = new Intent();
 						startActivityForLeft(MainActivity.class, login_complete, false);

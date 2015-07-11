@@ -35,13 +35,11 @@ public class JsonDocHelper {
 			if (gson == null) {
 				gson = new Gson();
 			}
-			pLog.i("test", "json:"+json);
 			Object obj = gson.fromJson(json, cls);
 
 			return (T) obj;
 
 		} catch (Exception ex) {
-			pLog.i("test", "Exception:"+ex.toString());
 			throw new Exception("Convert Process in Exception");
 		}
 	}

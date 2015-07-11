@@ -82,41 +82,57 @@ public class HomepageAdapter extends pBaseAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_top_topic, null, false);
 			LinearLayout click = ViewHolder.get(convertView, R.id.ll_clike);
+			click.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent();
+					if (!((pBaseActivity) mContext).isNetworkAvailable) {
+						((pBaseActivity) mContext).showToast(
+								mContext.getResources().getString(
+										R.string.Broken_network_prompt),
+								Toast.LENGTH_LONG, false);
+					} else {
+						((pBaseActivity) mContext).startActivityForLeft(
+								Recommend_topic.class, intent, false);
+					}
+				}
+			});
 
 		} else {
 			position = position - 1;
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_recommend_person, null, false);
 			ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
-			TextView tv_nikename = ViewHolder.get(convertView, R.id.tv_nikename);
-			TextView tv_descripe = ViewHolder.get(convertView, R.id.tv_descripe);
+			TextView tv_nikename = ViewHolder
+					.get(convertView, R.id.tv_nikename);
+			TextView tv_descripe = ViewHolder
+					.get(convertView, R.id.tv_descripe);
 			LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
 			List plist = (List) mList.get(position);
 			Map pmap = (Map) plist.get(0);
 			final UserBean userbean = new UserBean();
-			userbean.setBirth((String)pmap.get("birth"));
-			userbean.setCity((String)pmap.get("city"));
-			userbean.setClient_id((String)pmap.get("client_id"));
-			userbean.setCreated_at((String)pmap.get("created_at"));
-			userbean.setEmail((String)pmap.get("email"));
-			userbean.setImage((String)pmap.get("image"));
-			userbean.setLabels((ArrayList<String>)plist.get(1));
-			
-			pLog.i("test", "Labels:"+plist.get(1).toString());
-			
-			userbean.setPhone((String)pmap.get("username"));
-			userbean.setSex((String)pmap.get("sex"));
-			userbean.setUsername((String)pmap.get("username"));
-			
+			userbean.setBirth((String) pmap.get("birth"));
+			userbean.setCity((String) pmap.get("city"));
+			userbean.setClient_id((String) pmap.get("client_id"));
+			userbean.setCreated_at((String) pmap.get("created_at"));
+			userbean.setEmail((String) pmap.get("email"));
+			userbean.setImage((String) pmap.get("image"));
+			userbean.setLabels((ArrayList<String>) plist.get(1));
+			userbean.setPhone((String) pmap.get("username"));
+			userbean.setSex((String) pmap.get("sex"));
+			userbean.setUsername((String) pmap.get("username"));
+
 			tv_nikename.setText(userbean.getUsername());
 			ArrayList<String> plabels = userbean.getLabels();
 			String labels = "";
 
-//			if (baseFragment != null) {
-//				headpic.setOnClickListener((OnClickListener) baseFragment);
-//			} else {
-//				headpic.setOnClickListener((OnClickListener) mContext);
-//			}
+			// if (baseFragment != null) {
+			// headpic.setOnClickListener((OnClickListener) baseFragment);
+			// } else {
+			// headpic.setOnClickListener((OnClickListener) mContext);
+			// }
 
 			for (String s : plabels) {
 				if (labels.equals("")) {
@@ -127,24 +143,28 @@ public class HomepageAdapter extends pBaseAdapter {
 			}
 			tv_descripe.setText(labels);
 			ll_clike.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if (!((pBaseActivity)mContext).isNetworkAvailable) {
-						((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(
-								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
+					if (!((pBaseActivity) mContext).isNetworkAvailable) {
+						((pBaseActivity) mContext)
+								.showToast(
+										((pBaseActivity) mContext)
+												.getResources()
+												.getString(
+														R.string.Broken_network_prompt),
+										Toast.LENGTH_LONG, false);
 					} else {
 						PersonpageBean.getInstance().setUser(userbean);
-						Intent intent=new Intent(mContext,PersonalPageActivity.class);
-						mContext.startActivity(intent);	
+						Intent intent = new Intent(mContext,
+								PersonalPageActivity.class);
+						mContext.startActivity(intent);
 					}
-					
-					
+
 				}
 			});
 		}
-		
 
 		return convertView;
 	}

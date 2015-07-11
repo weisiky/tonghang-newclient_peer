@@ -89,8 +89,8 @@ public class HomeFragment extends pBaseFragment {
 		init();
 		setListener();
 		try {
-			sendRecommendTask(mShareFileUtils.getString(
-					Constant.CLIENT_ID, ""), page);
+			sendRecommendTask(
+					mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -107,16 +107,18 @@ public class HomeFragment extends pBaseFragment {
 					int position, long id) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent();
-				
+
 				if (position == 0) {
-//					if (!pbaseActivity.isNetworkAvailable) {
-//						pbaseActivity.showToast(getActivity().getResources().getString(
-//								R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
-//					} else {
-						pbaseActivity.startActivityForLeft(Recommend_topic.class, intent, false);
-//					}
+					// if (!pbaseActivity.isNetworkAvailable) {
+					// pbaseActivity.showToast(getActivity().getResources().getString(
+					// R.string.Broken_network_prompt), Toast.LENGTH_LONG,
+					// false);
+					// } else {
+					pbaseActivity.startActivityForLeft(Recommend_topic.class,
+							intent, false);
+					// }
 				} else {
-					
+
 				}
 
 			}
@@ -179,7 +181,7 @@ public class HomeFragment extends pBaseFragment {
 	 * @param page
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendRecommendTask(String client_id, int page)
+	private void sendRecommendTask(String client_id, final int page)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
@@ -192,19 +194,14 @@ public class HomeFragment extends pBaseFragment {
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL
-				, entity, "application/json",
-				new JsonHttpResponseHandler() {
+		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL, entity,
+				"application/json", new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
-
+						pbaseActivity.hideLoading();
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -213,10 +210,7 @@ public class HomeFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
+						pbaseActivity.hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -225,62 +219,80 @@ public class HomeFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
+						pbaseActivity.hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
-
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
+						pbaseActivity.hideLoading();
 
 						pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
 								"home.etag", false, response.toString());
-						
-						
+
 						try {
-							RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), RecommendUserBean.class);
+							RecommendUserBean recommenduserbean = JsonDocHelper
+									.toJSONObject(
+											response.getJSONObject("success")
+													.toString(),
+											RecommendUserBean.class);
 							if (recommenduserbean != null) {
 
-								pLog.i("test", "user1:"
-										+ recommenduserbean.users.get(0).getUsername().toString());
-							
-							}
-							for (int index = 0; index < recommenduserbean.users.size(); index++) {
-								ArrayList<Object> userlist = new ArrayList<Object>();
-								List<String> labelnames = new ArrayList<String>();
-								Map<String, Object> userMsg = new HashMap<String, Object>();
-								userMsg.put("email", recommenduserbean.users.get(index).getEmail());
-								userMsg.put("sex", recommenduserbean.users.get(index).getSex());
-								userMsg.put("city", recommenduserbean.users.get(index).getCity());
-								userMsg.put("username",
-										recommenduserbean.users.get(index).getUsername());
-								userMsg.put("client_id",
-										recommenduserbean.users.get(index).getClient_id());
-								userMsg.put("image", recommenduserbean.users.get(index).getImage());
-								userMsg.put("created_at",
-										recommenduserbean.users.get(index).getCreated_at());
-								userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
-								userMsg.put("is_friend", recommenduserbean.users.get(index).getIs_friend());
-								userlist.add(userMsg);
-								for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
-									labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+								if (page == 1) {
+									list.clear();
 								}
-								userlist.add(labelnames);
-								list.add(userlist);
+
+								for (int index = 0; index < recommenduserbean.users
+										.size(); index++) {
+									ArrayList<Object> userlist = new ArrayList<Object>();
+									List<String> labelnames = new ArrayList<String>();
+									Map<String, Object> userMsg = new HashMap<String, Object>();
+									userMsg.put("email",
+											recommenduserbean.users.get(index)
+													.getEmail());
+									userMsg.put("sex", recommenduserbean.users
+											.get(index).getSex());
+									userMsg.put("city", recommenduserbean.users
+											.get(index).getCity());
+									userMsg.put("username",
+											recommenduserbean.users.get(index)
+													.getUsername());
+									userMsg.put("client_id",
+											recommenduserbean.users.get(index)
+													.getClient_id());
+									userMsg.put("image",
+											recommenduserbean.users.get(index)
+													.getImage());
+									userMsg.put("created_at",
+											recommenduserbean.users.get(index)
+													.getCreated_at());
+									userMsg.put("birth",
+											recommenduserbean.users.get(index)
+													.getBirth());
+									userMsg.put("is_friend",
+											recommenduserbean.users.get(index)
+													.getIs_friend());
+									userlist.add(userMsg);
+									for (int i = 0; i < recommenduserbean.users
+											.get(index).getLabels().size(); i++) {
+										labelnames.add(recommenduserbean.users
+												.get(index).getLabels().get(i));
+									}
+									userlist.add(labelnames);
+									list.add(userlist);
+								}
+
+								if (adapter == null) {
+									adapter = new HomepageAdapter(
+											getActivity(), list);
+									pull_refresh_homepage.setAdapter(adapter);
+								}
+
+								refresh();
+
 							}
 
 						} catch (Exception e1) {
@@ -289,46 +301,32 @@ public class HomeFragment extends pBaseFragment {
 							e1.printStackTrace();
 						}
 
-						/*try {
-							JSONObject success = response
-									.getJSONObject("success");
-							JSONArray user = (JSONArray) success.get("user");
-							for (int index = 0; index < user.length(); index++) {
-								ArrayList<Object> userlist = new ArrayList<Object>();
-								JSONObject person = user.getJSONObject(index);
-								List<String> labelnames = new ArrayList<String>();
-								Map<String, Object> userMsg = new HashMap<String, Object>();
-								userMsg.put("email", person.getString("email"));
-								userMsg.put("sex", person.getString("sex"));
-								userMsg.put("city", person.getString("city"));
-								userMsg.put("username",
-										person.getString("username"));
-								userMsg.put("client_id",
-										person.getString("client_id"));
-								userMsg.put("image", person.getString("image"));
-								userMsg.put("created_at",
-										person.getString("created_at"));
-								userMsg.put("birth", person.getString("birth"));
-								userlist.add(userMsg);
-								JSONArray lab = (JSONArray) person
-										.get("labels");
-								for (int i = 0; i < lab.length(); i++) {
-									labelnames.add(lab.getString(i));
-								}
-								userlist.add(labelnames);
-								list.add(userlist);
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}*/
-
-						if (adapter == null) {
-							adapter = new HomepageAdapter(getActivity(), list);
-							pull_refresh_homepage.setAdapter(adapter);
-						}
-
-						refresh();
+						/*
+						 * try { JSONObject success = response
+						 * .getJSONObject("success"); JSONArray user =
+						 * (JSONArray) success.get("user"); for (int index = 0;
+						 * index < user.length(); index++) { ArrayList<Object>
+						 * userlist = new ArrayList<Object>(); JSONObject person
+						 * = user.getJSONObject(index); List<String> labelnames
+						 * = new ArrayList<String>(); Map<String, Object>
+						 * userMsg = new HashMap<String, Object>();
+						 * userMsg.put("email", person.getString("email"));
+						 * userMsg.put("sex", person.getString("sex"));
+						 * userMsg.put("city", person.getString("city"));
+						 * userMsg.put("username",
+						 * person.getString("username"));
+						 * userMsg.put("client_id",
+						 * person.getString("client_id")); userMsg.put("image",
+						 * person.getString("image")); userMsg.put("created_at",
+						 * person.getString("created_at")); userMsg.put("birth",
+						 * person.getString("birth")); userlist.add(userMsg);
+						 * JSONArray lab = (JSONArray) person .get("labels");
+						 * for (int i = 0; i < lab.length(); i++) {
+						 * labelnames.add(lab.getString(i)); }
+						 * userlist.add(labelnames); list.add(userlist); } }
+						 * catch (JSONException e) { // TODO Auto-generated
+						 * catch block e.printStackTrace(); }
+						 */
 						// adapter.setBaseFragment(HomeFragment.this);
 
 						super.onSuccess(statusCode, headers, response);
@@ -338,10 +336,6 @@ public class HomeFragment extends pBaseFragment {
 					public void onSuccess(int statusCode, Header[] headers,
 							String responseString) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
 						super.onSuccess(statusCode, headers, responseString);
 					}
 
@@ -353,6 +347,7 @@ public class HomeFragment extends pBaseFragment {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
+			pull_refresh_homepage.onRefreshComplete();
 		}
 
 	}
@@ -371,53 +366,56 @@ public class HomeFragment extends pBaseFragment {
 
 		String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
 				"home.etag");
-		
+
 		RecommendUserBean recommenduserbean;
 		try {
-			recommenduserbean = JsonDocHelper.toJSONObject(
-					homeCount, RecommendUserBean.class);
-		
-		
-		for (int index = 0; index < recommenduserbean.users.size(); index++) {
-			ArrayList<Object> userlist = new ArrayList<Object>();
-			List<String> labelnames = new ArrayList<String>();
-			Map<String, Object> userMsg = new HashMap<String, Object>();
-			userMsg.put("email", recommenduserbean.users.get(index).getEmail());
-			userMsg.put("sex", recommenduserbean.users.get(index).getSex());
-			userMsg.put("city", recommenduserbean.users.get(index).getCity());
-			userMsg.put("username",
-					recommenduserbean.users.get(index).getUsername());
-			userMsg.put("client_id",
-					recommenduserbean.users.get(index).getClient_id());
-			userMsg.put("image", recommenduserbean.users.get(index).getImage());
-			userMsg.put("created_at",
-					recommenduserbean.users.get(index).getCreated_at());
-			userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
-			userlist.add(userMsg);
-			for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
-				labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
-			}
-			userlist.add(labelnames);
-			list.add(userlist);
-		}
-		
-		if (homeCount != null) {
+			recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
+					RecommendUserBean.class);
 
-			if (adapter == null) {
-				adapter = new HomepageAdapter(getActivity(), list);
+			for (int index = 0; index < recommenduserbean.users.size(); index++) {
+				ArrayList<Object> userlist = new ArrayList<Object>();
+				List<String> labelnames = new ArrayList<String>();
+				Map<String, Object> userMsg = new HashMap<String, Object>();
+				userMsg.put("email", recommenduserbean.users.get(index)
+						.getEmail());
+				userMsg.put("sex", recommenduserbean.users.get(index).getSex());
+				userMsg.put("city", recommenduserbean.users.get(index)
+						.getCity());
+				userMsg.put("username", recommenduserbean.users.get(index)
+						.getUsername());
+				userMsg.put("client_id", recommenduserbean.users.get(index)
+						.getClient_id());
+				userMsg.put("image", recommenduserbean.users.get(index)
+						.getImage());
+				userMsg.put("created_at", recommenduserbean.users.get(index)
+						.getCreated_at());
+				userMsg.put("birth", recommenduserbean.users.get(index)
+						.getBirth());
+				userlist.add(userMsg);
+				for (int i = 0; i < recommenduserbean.users.get(index)
+						.getLabels().size(); i++) {
+					labelnames.add(recommenduserbean.users.get(index)
+							.getLabels().get(i));
+				}
+				userlist.add(labelnames);
+				list.add(userlist);
 			}
-			// adapter.setBaseFragment(HomeFragment.this);
-			pull_refresh_homepage.setAdapter(adapter);
 
-		}
+			if (homeCount != null) {
+
+				if (adapter == null) {
+					adapter = new HomepageAdapter(getActivity(), list);
+				}
+				// adapter.setBaseFragment(HomeFragment.this);
+				pull_refresh_homepage.setAdapter(adapter);
+
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		refresh();
-
-		
 
 		RefreshListner();
 

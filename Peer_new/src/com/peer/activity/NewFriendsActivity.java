@@ -33,16 +33,14 @@ import com.peer.utils.pViewBox;
 
 import de.greenrobot.event.EventBus;
 
-
 /**
  * ‘新朋友’页
  */
 public class NewFriendsActivity extends pBaseActivity {
-	
+
 	private EventBus mBus;
-	private List<Object> mlist,list;
+	private List<Object> mlist, list;
 	private NewfriendsAdapter adapter;
-	
 
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -56,7 +54,7 @@ public class NewFriendsActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -64,7 +62,8 @@ public class NewFriendsActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.newfriends));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.newfriends));
 	}
 
 	@Override
@@ -76,13 +75,13 @@ public class NewFriendsActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		registEventBus();		
+		registEventBus();
 		try {
 			sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 
 	}
 
@@ -98,7 +97,7 @@ public class NewFriendsActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_newfriends, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -109,46 +108,45 @@ public class NewFriendsActivity extends pBaseActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 	private void registEventBus() {
 		// TODO Auto-generated method stub
-		 mBus=EventBus.getDefault();
+		mBus = EventBus.getDefault();
 		/*
-		 * Registration: three parameters are respectively, message subscriber (receiver), receiving method name, event classes
+		 * Registration: three parameters are respectively, message subscriber
+		 * (receiver), receiving method name, event classes
 		 */
-		 mBus.register(this, "getEvent",NewFriensEvent.class);
+		mBus.register(this, "getEvent", NewFriensEvent.class);
 	}
-	
-	
-	private void getEvent(NewFriensEvent event){
-		
+
+	private void getEvent(NewFriensEvent event) {
+
 		mlist.remove(event.getPosition());
 		adapter.notifyDataSetChanged();
 		FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
 	}
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		 mBus.unregister(this);
+		mBus.unregister(this);
 	}
-	
-	
+
 	/**
 	 * 获取新朋友请求
 	 * 
@@ -159,17 +157,14 @@ public class NewFriendsActivity extends pBaseActivity {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
-		HttpUtil.get(HttpConfig.FRIEND_INVITATION_URL+client_id+".json",
+		HttpUtil.get(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
 				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
+						hideLoading();
 
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -179,10 +174,7 @@ public class NewFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -191,50 +183,45 @@ public class NewFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
-
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+						try {
+							NewFriendBean newfriendbean = JsonDocHelper
+									.toJSONObject(
+											response.getJSONObject("success")
+													.toString(),
+											NewFriendBean.class);
 
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());
-						try{
-							NewFriendBean newfriendbean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-									.toString(), NewFriendBean.class);
-						
 							if (newfriendbean != null) {
-	
+
 								pLog.i("test", "user1:"
-										+ newfriendbean.getInvitationbean().get(0).getUserbean().getUsername().toString());
-						
-						}
-						for (int index = 0; index < NewFriendBean.getInstance().getInvitationbean().size(); index++) {
-							list.add(NewFriendBean.getInstance().getInvitationbean().get(index));
-						}
+										+ newfriendbean.getInvitationbean()
+												.get(0).getUserbean()
+												.getUsername().toString());
 
-					} catch (Exception e1) {
-						pLog.i("test", "Exception:" + e1.toString());
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-						
+							}
+							for (int index = 0; index < NewFriendBean
+									.getInstance().getInvitationbean().size(); index++) {
+								list.add(NewFriendBean.getInstance()
+										.getInvitationbean().get(index));
+							}
 
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 						if (adapter == null) {
-							adapter = new NewfriendsAdapter(NewFriendsActivity.this, list);
+							adapter = new NewfriendsAdapter(
+									NewFriendsActivity.this, list);
 							pageViewaList.lv_newfriends.setAdapter(adapter);
 						}
 
@@ -244,11 +231,10 @@ public class NewFriendsActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-
 				});
 
 	}
-	
+
 	private void refresh() {
 
 		if (adapter != null) {

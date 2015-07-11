@@ -68,9 +68,6 @@ public class FriendsAdapter extends pBaseAdapter {
 			userbean.setUsername((String)pmap.get("username"));
 			userbean.setImage((String)pmap.get("image"));
 			userbean.setLabels((ArrayList<String>)plist.get(1));
-			
-			pLog.i("test", "Labels:"+plist.get(1).toString());
-			
 			userbean.setPhone((String)pmap.get("username"));
 			userbean.setSex((String)pmap.get("sex"));
 			

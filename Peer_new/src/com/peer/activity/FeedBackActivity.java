@@ -181,10 +181,6 @@ TextWatcher watcher=new TextWatcher() {
 
 						hideLoading();
 
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
-
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -194,9 +190,6 @@ TextWatcher watcher=new TextWatcher() {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -206,11 +199,6 @@ TextWatcher watcher=new TextWatcher() {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

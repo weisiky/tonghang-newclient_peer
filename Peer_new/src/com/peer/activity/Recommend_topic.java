@@ -34,20 +34,19 @@ import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-
 /**
  * 话题推荐
  * 
  */
-public class Recommend_topic extends pBaseActivity{
-	
+public class Recommend_topic extends pBaseActivity {
+
 	private PullToRefreshListView pull_refresh_topic;
-	private List<Map> list = new ArrayList<Map>(); 
+	private List<Map> list = new ArrayList<Map>();
 	private int page = 1;
-    Recommend_topicAdapter adapter;
-	
+	Recommend_topicAdapter adapter;
+
 	class PageViewList {
-		private LinearLayout ll_back,ll_topic;
+		private LinearLayout ll_back, ll_topic;
 		private TextView tv_title;
 		private ImageView im_search;
 	}
@@ -58,7 +57,7 @@ public class Recommend_topic extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -78,7 +77,7 @@ public class Recommend_topic extends pBaseActivity{
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.ll_topic.setOnClickListener(this);
 		pageViewaList.im_search.setOnClickListener(this);
-		
+
 		pull_refresh_topic.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -86,35 +85,40 @@ public class Recommend_topic extends pBaseActivity{
 					int position, long id) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent();
-				
-				if(!isNetworkAvailable){
-					showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
-				}else{
-					/*ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.MULTICHAT);	
-					
-					ChatRoomTypeUtil.getInstance().setHuanxingId(topic.getHuangxin_group_id());
-					ChatRoomTypeUtil.getInstance().setTitle(topic.getLabel_name());
-					ChatRoomTypeUtil.getInstance().setTheme(topic.getSubject());
-					ChatRoomTypeUtil.getInstance().setTopicId(topic.getTopicid());
-					
-					User user=(User)mList.get(position).get(Constant.USER);
-					String ownerid=null;
-					try {
-						ownerid = PeerUI.getInstance().getISessionManager().getUserId();
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
-					if(user.getUserid().equals(ownerid)){
-						ChatRoomTypeUtil.getInstance().setIsowner(true);
-					}else{
-						ChatRoomTypeUtil.getInstance().setIsowner(false);
-					}
-					topic.setUser(user);
-					ChatRoomTypeUtil.getInstance().setTopic(topic);	
-					Intent intent=new Intent(mContext,ChatRoomActivity.class);
-					mContext.startActivity(intent);*/	
-				}	
+
+				if (!isNetworkAvailable) {
+					showToast(
+							getResources().getString(
+									R.string.Broken_network_prompt),
+							Toast.LENGTH_SHORT, false);
+				} else {
+					/*
+					 * ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.
+					 * MULTICHAT);
+					 * 
+					 * ChatRoomTypeUtil.getInstance().setHuanxingId(topic.
+					 * getHuangxin_group_id());
+					 * ChatRoomTypeUtil.getInstance().setTitle
+					 * (topic.getLabel_name());
+					 * ChatRoomTypeUtil.getInstance().setTheme
+					 * (topic.getSubject());
+					 * ChatRoomTypeUtil.getInstance().setTopicId
+					 * (topic.getTopicid());
+					 * 
+					 * User user=(User)mList.get(position).get(Constant.USER);
+					 * String ownerid=null; try { ownerid =
+					 * PeerUI.getInstance().getISessionManager().getUserId(); }
+					 * catch (RemoteException e) { // TODO Auto-generated catch
+					 * block e.printStackTrace(); }
+					 * if(user.getUserid().equals(ownerid)){
+					 * ChatRoomTypeUtil.getInstance().setIsowner(true); }else{
+					 * ChatRoomTypeUtil.getInstance().setIsowner(false); }
+					 * topic.setUser(user);
+					 * ChatRoomTypeUtil.getInstance().setTopic(topic); Intent
+					 * intent=new Intent(mContext,ChatRoomActivity.class);
+					 * mContext.startActivity(intent);
+					 */
+				}
 
 			}
 		});
@@ -124,8 +128,8 @@ public class Recommend_topic extends pBaseActivity{
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 		try {
-			sendRecommendtopic(mShareFileUtils.getString(
-					Constant.CLIENT_ID, ""), page);
+			sendRecommendtopic(
+					mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,9 +147,10 @@ public class Recommend_topic extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_recommend_topic, null);
+		return getLayoutInflater().inflate(R.layout.activity_recommend_topic,
+				null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -158,37 +163,32 @@ public class Recommend_topic extends pBaseActivity{
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.im_search:
-			Intent searchtopic = new Intent(this,SearchTopicActivity.class);
+			Intent searchtopic = new Intent(this, SearchTopicActivity.class);
 			startActivity(searchtopic);
 			break;
 		case R.id.ll_topic:
-			Intent createtopic = new Intent(this,CreatTopicActivity.class);
+			Intent createtopic = new Intent(this, CreatTopicActivity.class);
 			startActivity(createtopic);
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 推荐话题请求
 	 * 
@@ -202,26 +202,20 @@ public class Recommend_topic extends pBaseActivity{
 
 		HttpEntity entity = null;
 		try {
-			entity = PeerParamsUtils.getRemTopicParams(this, client_id,
-					page);
+			entity = PeerParamsUtils.getRemTopicParams(this, client_id, page);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.TOPIC_RECOMMEND_IN_URL
-				, entity, "application/json",
-				new JsonHttpResponseHandler() {
+		HttpUtil.post(this, HttpConfig.TOPIC_RECOMMEND_IN_URL, entity,
+				"application/json", new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString);
-
+						hideLoading();
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -230,10 +224,7 @@ public class Recommend_topic extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure+statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -242,45 +233,48 @@ public class Recommend_topic extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onFailure:statusCode:" + statusCode);
-						pLog.i("test", "throwable:" + throwable.toString());
-						pLog.i("test", "headers:" + headers.toString());
-						pLog.i("test",
-								"errorResponse:" + errorResponse.toString());
+						hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
-
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString() + "response:"
-								+ response.toString());			
+						hideLoading();
 						try {
-							RecommendTopicBean recommendtopicbean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), RecommendTopicBean.class);
+							RecommendTopicBean recommendtopicbean = JsonDocHelper
+									.toJSONObject(
+											response.getJSONObject("success")
+													.toString(),
+											RecommendTopicBean.class);
 							if (recommendtopicbean != null) {
 								pLog.i("test", "user1:"
-										+ recommendtopicbean.topics.get(0).getSubject().toString());
+										+ recommendtopicbean.topics.get(0)
+												.getSubject().toString());
 							}
-							
-							for (int index = 0; index < recommendtopicbean.topics.size(); index++) {
+
+							for (int index = 0; index < recommendtopicbean.topics
+									.size(); index++) {
 								Map<String, Object> topicMsg = new HashMap<String, Object>();
-								topicMsg.put("label_name", recommendtopicbean.topics.get(index).getLabel_name().toString());
-								topicMsg.put("subject", recommendtopicbean.topics.get(index).getSubject().toString());
-								topicMsg.put("user_id", recommendtopicbean.topics.get(index).getUser_id().toString());
+								topicMsg.put("label_name",
+										recommendtopicbean.topics.get(index)
+												.getLabel_name().toString());
+								topicMsg.put("subject",
+										recommendtopicbean.topics.get(index)
+												.getSubject().toString());
+								topicMsg.put("user_id",
+										recommendtopicbean.topics.get(index)
+												.getUser_id().toString());
 								topicMsg.put("topic_id",
-										recommendtopicbean.topics.get(index).getTopic_id().toString());
+										recommendtopicbean.topics.get(index)
+												.getTopic_id().toString());
 								topicMsg.put("sys_time",
 										recommendtopicbean.getSys_time());
 								topicMsg.put("created_at",
-										recommendtopicbean.topics.get(index).getCreated_at().toString());
+										recommendtopicbean.topics.get(index)
+												.getCreated_at().toString());
 								list.add(topicMsg);
 							}
 
@@ -290,7 +284,8 @@ public class Recommend_topic extends pBaseActivity{
 							e1.printStackTrace();
 						}
 						if (adapter == null) {
-							adapter = new Recommend_topicAdapter(Recommend_topic.this, list);
+							adapter = new Recommend_topicAdapter(
+									Recommend_topic.this, list);
 							pull_refresh_topic.setAdapter(adapter);
 						}
 
@@ -304,17 +299,14 @@ public class Recommend_topic extends pBaseActivity{
 					public void onSuccess(int statusCode, Header[] headers,
 							String responseString) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "onSuccess:statusCode:" + statusCode
-								+ "headers:" + headers.toString()
-								+ "responseString:" + responseString.toString());
+						hideLoading();
 						super.onSuccess(statusCode, headers, responseString);
 					}
 
 				});
 
 	}
-	
+
 	private void refresh() {
 
 		if (adapter != null) {

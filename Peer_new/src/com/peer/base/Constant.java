@@ -2,7 +2,6 @@ package com.peer.base;
 
 import com.peer.utils.SDCardScanner;
 
-
 public class Constant {
 	public static int REFRESHHANDLE = 321;
 
@@ -21,8 +20,6 @@ public class Constant {
 	/* Share key */
 	public static String WX_APP_ID = "wxe2461f1b754deb94";
 
-	
-
 	/* chatroom type */
 	public static int SINGLECHAT = 1;
 	public static int MULTICHAT = 2;
@@ -33,10 +30,10 @@ public class Constant {
 	public static String LOGINSUCCESS = "success";
 	public static String LOGINFAIL = "fail";
 	/* search type */
-	public static String LABELUSER = "labeluser"; 
+	public static String LABELUSER = "labeluser";
 	public static String LABELTOPIC = "topicuser";
 
-	public static String TOPICBYLABEL = "topiclist"; 
+	public static String TOPICBYLABEL = "topiclist";
 	public static String TOPICBYTOPIC = "topicbytopic";
 	public static String USERBYNIKE = "userbynike";
 	public static String USERBYLABEL = "userbylabel";
@@ -61,7 +58,6 @@ public class Constant {
 	/* restart app */
 	public static String RELOGIN = "relogin";
 
-	
 	public static String IMAGE = "image";
 	public static String OWNERNIKE = "ownernike";
 	public static String THEME = "theme";
@@ -69,7 +65,7 @@ public class Constant {
 	public static String ROOMID = "roomid";
 	public static String TOPICID = "topicid";
 	public static String FROMFLOAT = "float";
-	
+
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";
@@ -90,23 +86,23 @@ public class Constant {
 	public static String C_IMAGE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
 			+ "imagecache/";
 	/** 客户端client_id **/
-	public static String CLIENT_ID = "44393c565b15e21df03336b8f4a82eff713c9a95";
-	
+	public static String CLIENT_ID = "";
+
 	/** 用户信息 **/
-		public static String USER = "user";
-		public static String ID = "id";
-		public static String SEX = "sex";
-		public static String USERNAME = "username";
-		public static String PHONE = "phone";
-		public static String BIRTH = "birth";
-		public static String USER_IMAGE = "image";
-		public static String CREATED_AT = "created_at";
-		public static String CITY = "city";
-		public static String TOPIC = "topic";
-		public static String TIME = "time";
-		public static String PIC_SERVER = "pic_server";
-		public static String SYS_TIME = "sys_time";
-		public static String LABELS = "Labels";
-		public static String IS_FRIEND = "is_friend";
+	public static String USER = "user";
+	public static String ID = "id";
+	public static String SEX = "sex";
+	public static String USERNAME = "username";
+	public static String PHONE = "phone";
+	public static String BIRTH = "birth";
+	public static String USER_IMAGE = "image";
+	public static String CREATED_AT = "created_at";
+	public static String CITY = "city";
+	public static String TOPIC = "topic";
+	public static String TIME = "time";
+	public static String PIC_SERVER = "pic_server";
+	public static String SYS_TIME = "sys_time";
+	public static String LABELS = "Labels";
+	public static String IS_FRIEND = "is_friend";
 
 }

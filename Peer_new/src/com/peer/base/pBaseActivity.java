@@ -24,7 +24,10 @@ import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
 import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
+import com.peer.service.FxService;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.HomeWatcher;
+import com.peer.utils.HomeWatcher.OnHomePressedListener;
 import com.peer.utils.ManagerActivity;
 import com.peer.utils.pNetUitls;
 import com.peer.utils.pShareFileUtils;
@@ -62,13 +65,16 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	public Animation alphaAnimation;
 	/** 首次进入页面的loading圈圈 **/
 	public RelativeLayout baseProgressBarLayout;
-
+	// 网络状态
 	public boolean isNetworkAvailable;
 	public pBaseApplication application;
-	
-	private ActivityManager activityManager ;
-	
+
+	private ActivityManager activityManager;
+	// 网络状态监听
 	private OnNetworkStatusListener onNetworkStatusListener;
+	// Home键监听
+	private HomeWatcher mHomeWatcher;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -87,37 +93,45 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		MobclickAgent.updateOnlineConfig(this);
 		// 友盟统计 数据加密
 		AnalyticsConfig.enableEncrypt(true);
-		
+
 		ManagerActivity.getAppManager().addActivity(this);
 
 		this.findViewById();
 		this.setListener();
 		this.processBiz();
-		
+
 		application = (pBaseApplication) getApplication();
-		
+
 		onNetworkStatusListener = new OnNetworkStatusListener() {
 			public void networkOn() {
 				isNetworkAvailable = true;
 				onNetworkOn();
 			}
+
 			public void netWorkOff() {
 				isNetworkAvailable = false;
 				onNetWorkOff();
 			}
 		};
 		application.addNetworkStatusListener(onNetworkStatusListener);
-		
+
 		isNetworkAvailable = pNetUitls.isNetworkAvailable(this);
+
+		HomeKeyWatcher();
+
+		// 友盟统计 发送策略
+		MobclickAgent.updateOnlineConfig(this);
+		// 友盟统计 数据加密
+		AnalyticsConfig.enableEncrypt(true);
 
 	}
 
 	@Override
-	protected void onResume() { 
+	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		EMChatManager.getInstance().activityResumed();
-		MobclickAgent.onResume(this); 
+		MobclickAgent.onResume(this);
 	}
 
 	@Override
@@ -131,7 +145,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-
+		mHomeWatcher.stopWatch();
 	}
 
 	/**
@@ -188,15 +202,17 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
 
 	}
+
 	/**
 	 * 网络连通后回调该函数
 	 */
 	public abstract void onNetworkOn();
-	
+
 	/**
 	 * 网络断开后回调该函数
 	 */
 	public abstract void onNetWorkOff();
+
 	/**
 	 * 获取页面控件对象
 	 */
@@ -385,19 +401,20 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
-				|| getLocalClassNameBySelf().contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf()
+						.contains("PersonalMessageActivity")
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
 				|| getLocalClassNameBySelf().contains("SearchResultActivity")
 				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
-		} else if(getLocalClassNameBySelf().contains("UpdatePasswordActivity")){
+		} else if (getLocalClassNameBySelf().contains("UpdatePasswordActivity")) {
 			startActivityRight(MyAcountActivity.class, intent, true);
-		}else if(getLocalClassNameBySelf().contains("NewFunctionActivity")
-				||getLocalClassNameBySelf().contains("FeedBackActivity")
-				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")){
+		} else if (getLocalClassNameBySelf().contains("NewFunctionActivity")
+				|| getLocalClassNameBySelf().contains("FeedBackActivity")
+				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")) {
 			startActivityRight(SettingActivity.class, intent, true);
-		}else{
+		} else {
 			exitApp();
 		}
 
@@ -501,6 +518,27 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			return super.onKeyDown(keyCode, event);
 		}
 
+	}
+
+	private void HomeKeyWatcher() {
+		// TODO Auto-generated method stub
+		mHomeWatcher = new HomeWatcher(this);
+		mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
+
+			@Override
+			public void onHomePressed() {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(pBaseActivity.this, FxService.class);
+				stopService(intent);
+			}
+
+			@Override
+			public void onHomeLongPressed() {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		mHomeWatcher.startWatch();
 	}
 
 	/*

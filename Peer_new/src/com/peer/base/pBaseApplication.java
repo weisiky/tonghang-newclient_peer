@@ -2,24 +2,35 @@ package com.peer.base;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
+import cn.jpush.android.api.JPushInterface;
+import cn.sharesdk.framework.ShareSDK;
+
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMChatService;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.peer.crash.CrashHandler;
+import com.peer.service.ListenBroadcastReceiver;
 import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.pLog;
-
-import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 
 /**
  * 基础Application
@@ -61,6 +72,59 @@ public class pBaseApplication extends Application {
 				.tasksProcessingOrder(QueueProcessingType.LIFO).build();
 		ImageLoader.getInstance().init(config);
 
+		// 初始化环信
+		initEMChat();
+
+		// 极光PUSH
+		JPushInterface.setDebugMode(false);
+		JPushInterface.init(this);
+		// ShareSDK初始化
+		ShareSDK.initSDK(this);
+		
+		IntentFilter filter=new IntentFilter();
+		filter.addAction(Intent.ACTION_TIME_TICK);
+		ListenBroadcastReceiver receiver=new ListenBroadcastReceiver();
+		registerReceiver(receiver, filter);
+
+	}
+
+	/* 初始化环信sdk */
+	private void initEMChat() {
+		// TODO Auto-generated method stub
+		int pid = android.os.Process.myPid();
+		String processAppName = getAppName(pid);
+
+		EMChat.getInstance().init(instance);
+
+		EMChatManager.getInstance().getChatOptions()
+				.setShowNotificationInBackgroud(false);
+		EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+		options.setNotifyBySoundAndVibrate(false);
+		EMChat.getInstance().setDebugMode(true);
+	}
+
+	private String getAppName(int pID) {
+		String processName = null;
+		ActivityManager am = (ActivityManager) this
+				.getSystemService(ACTIVITY_SERVICE);
+		List l = am.getRunningAppProcesses();
+		Iterator i = l.iterator();
+		PackageManager pm = this.getPackageManager();
+		while (i.hasNext()) {
+			ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i
+					.next());
+			try {
+				if (info.pid == pID) {
+					CharSequence c = pm.getApplicationLabel(pm
+							.getApplicationInfo(info.processName,
+									PackageManager.GET_META_DATA));
+					processName = info.processName;
+					return processName;
+				}
+			} catch (Exception e) {
+			}
+		}
+		return processName;
 	}
 
 	public static pBaseApplication getInstance() {
@@ -72,6 +136,9 @@ public class pBaseApplication extends Application {
 		super.onTerminate();
 
 		unRegisterReceiver();
+
+		Intent serviceIntent = new Intent(this, EMChatService.class);
+		startService(serviceIntent);
 	}
 
 	public void unRegisterReceiver() {
