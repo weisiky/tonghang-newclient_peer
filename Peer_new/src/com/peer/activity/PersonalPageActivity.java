@@ -294,14 +294,19 @@ public class PersonalPageActivity extends pBaseActivity{
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub				
-				Intent intent=new Intent(PersonalPageActivity.this,AddFriendsActivity.class);
-				intent.putExtra("user_client_id", userbean.getClient_id());
-				intent.putExtra("image", userbean.getImage());
-				intent.putExtra("nike", userbean.getUsername());
-				intent.putExtra("email", userbean.getEmail());
-				startActivity(intent);
-				ManagerActivity.getAppManager().finishActivity();
+				// TODO Auto-generated method stub	
+				if(!userbean.getIs_friend()){
+					Intent intent=new Intent(PersonalPageActivity.this,AddFriendsActivity.class);
+					intent.putExtra("user_client_id", userbean.getClient_id());
+					intent.putExtra("image", userbean.getImage());
+					intent.putExtra("nike", userbean.getUsername());
+					intent.putExtra("email", userbean.getEmail());
+					startActivity(intent);
+					ManagerActivity.getAppManager().finishActivity();
+				}else{
+					showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
+				}
+				
 			}
 		});
 	}
