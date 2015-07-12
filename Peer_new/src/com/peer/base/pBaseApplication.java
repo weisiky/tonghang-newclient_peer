@@ -94,7 +94,7 @@ public class pBaseApplication extends Application {
 		int pid = android.os.Process.myPid();
 		String processAppName = getAppName(pid);
 
-		EMChat.getInstance().init(instance);
+		EMChat.getInstance().init(this);
 
 		EMChatManager.getInstance().getChatOptions()
 				.setShowNotificationInBackgroud(false);

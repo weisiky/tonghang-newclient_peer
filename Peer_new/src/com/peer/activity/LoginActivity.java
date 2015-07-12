@@ -217,21 +217,22 @@ public class LoginActivity extends pBaseActivity {
 										mShareFileUtils);
 
 								// 注册极光
-								// JPushInterface.setAlias(getApplication(),
-								// loginBean.user.get.getHuangxin_username(),
-								// new TagAliasCallback() {
-								// @Override
-								// public void gotResult(int code,
-								// String arg1,
-								// Set<String> arg2) {
-								// // TODO Auto-generated method
-								// // stub
-								// System.out.println("code"
-								// + code);
-								// pLog.i("注册极光结果放回",
-								// String.valueOf(code));
-								// }
-								// });
+//								JPushInterface.setAlias(getApplication(),
+//										loginBean.user.get
+//												.getHuangxin_username(),
+//										new TagAliasCallback() {
+//											@Override
+//											public void gotResult(int code,
+//													String arg1,
+//													Set<String> arg2) {
+//												// TODO Auto-generated method
+//												// stub
+//												System.out.println("code"
+//														+ code);
+//												pLog.i("注册极光结果放回",
+//														String.valueOf(code));
+//											}
+//										});
 
 								// easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id",
 								// ""), pShareFileUtils.getString("password",

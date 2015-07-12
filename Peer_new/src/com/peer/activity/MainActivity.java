@@ -55,12 +55,16 @@ public class MainActivity extends pBaseActivity {
 		super.onCreate(savedInstanceState);
 		init();
 
-		// if (LocalStorage.getBoolean(this, Constant.CAN_UPGRADE_SILENTLY)) {
-		// UmengUpdateAgent.silentUpdate(this);
-		// } else {
-		// UmengUpdateAgent.setUpdateOnlyWifi(false);
-		// UmengUpdateAgent.update(this);
-		// }
+		// 考虑到用户流量的限制，目前我们默认在Wi-Fi接入情况下才进行自动提醒。如需要在任意网络环境下都进行更新自动提醒，
+		// 则请在update调用之前添加以下代码：
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.update(this);
+
+		// v2.4版本以后的SDK中默认开启了集成检测功能，在调用任意的更新接口后，我们将替您自动检查上述集成过程中2、3两个步骤是否被正确完成。
+		// 如果正确完成不会出现任何提示，否则会以如下的toast提示您。
+		// 你可以通过调用UmengUpdateAgent.setUpdateCheckConfig(false)来禁用此功能。
+//		UmengUpdateAgent.setUpdateCheckConfig(false);
+
 	}
 
 	private void init() {
@@ -79,6 +83,11 @@ public class MainActivity extends pBaseActivity {
 				.add(R.id.fragment_container, friendsfragment)
 				.hide(friendsfragment).add(R.id.fragment_container, myfragment)
 				.hide(myfragment).show(homefragment).commit();
+
+		index = 0;
+		pageViewaList.tv_find.setTextColor(getResources().getColor(
+				R.color.bottomtextblue));
+		pageViewaList.iv_backfind.setImageResource(R.drawable.peer_press);
 
 	}
 

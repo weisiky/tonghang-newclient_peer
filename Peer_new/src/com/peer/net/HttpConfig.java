@@ -9,7 +9,9 @@ package com.peer.net;
 public interface HttpConfig {
 
 	/** IP **/
-	public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
+	// public static String SERVER_ADDRESS =
+	// "http://192.168.23.1:8080/tonghang-serverapi";
+	public static String SERVER_ADDRESS = "http://114.215.143.83:8080/tonghangserver";
 	// http://www.tonghang1.com:3000
 	// http://192.168.23.1:8080/tonghang-serverapi
 	// http://192.168.1.2:8080/tonghang-serverapi
@@ -21,8 +23,7 @@ public interface HttpConfig {
 	public static String REGISTTAG_IN_URL = SERVER_ADDRESS
 			+ "/user/regist.json";
 	/** 更新用户信息请求 **/
-	public static String UPDATE_IN_URL = SERVER_ADDRESS
-			+ "/user/update/";
+	public static String UPDATE_IN_URL = SERVER_ADDRESS + "/user/update/";
 	/** 忘记密码请求 **/
 	public static String FORGET_IN_URL = SERVER_ADDRESS
 			+ "/user/forget_password.json";
@@ -44,8 +45,7 @@ public interface HttpConfig {
 	public static String UPDATE_PWD_IN_URL = SERVER_ADDRESS
 			+ "/user/update_pwd/";
 	/** 查看用户信息 **/
-	public static String USER_IN_URL = SERVER_ADDRESS
-			+ "/user/";
+	public static String USER_IN_URL = SERVER_ADDRESS + "/user/";
 	/** 设置指定用户标签 **/
 	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/update_label/";
@@ -80,17 +80,13 @@ public interface HttpConfig {
 	public static String FRIEND_INVITATION_URL = SERVER_ADDRESS
 			+ "/friend/invitation/";
 	/** 请求加好友 **/
-	public static String FRIEND_ADD_URL = SERVER_ADDRESS
-			+ "/friend/add/";
+	public static String FRIEND_ADD_URL = SERVER_ADDRESS + "/friend/add/";
 	/** 同意/拒绝加好友 **/
-	public static String FRIEND_STATUS_URL = SERVER_ADDRESS
-			+ "/friend/";
+	public static String FRIEND_STATUS_URL = SERVER_ADDRESS + "/friend/";
 	/** 删除好友 **/
-	public static String FRIEND_DELETE_URL = SERVER_ADDRESS
-			+ "/friend/delete/";
+	public static String FRIEND_DELETE_URL = SERVER_ADDRESS + "/friend/delete/";
 	/** 得到某人的好友列表 **/
-	public static String FRIEND_GET_URL = SERVER_ADDRESS
-			+ "/friend/get/";
+	public static String FRIEND_GET_URL = SERVER_ADDRESS + "/friend/get/";
 	/** 得到未读取消息列表 **/
 	public static String HUANXIN_URL = SERVER_ADDRESS
 			+ "/huanxin/hid2sids.json";
