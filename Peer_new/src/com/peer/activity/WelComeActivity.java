@@ -1,5 +1,10 @@
 package com.peer.activity;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -9,8 +14,12 @@ import android.widget.LinearLayout;
 
 import cn.jpush.android.api.JPushInterface;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /**
@@ -37,6 +46,7 @@ public class WelComeActivity extends pBaseActivity {
 		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
 		animation.setDuration(4000);
 		pageViewaList.welLin.startAnimation(animation);
+		sendSystemConfig();
 	}
 
 	@Override
@@ -51,7 +61,7 @@ public class WelComeActivity extends pBaseActivity {
 			@SuppressWarnings("static-access")
 			public void onFinish() {
 				Intent intent = new Intent();
-				if (mShareFileUtils.getString(Constant.CLIENT_ID, "")
+				if (!mShareFileUtils.getString(Constant.CLIENT_ID, "")
 						.equals("")) {
 					startActivityForLeft(MainActivity.class, intent, false);
 				} else {
@@ -95,6 +105,42 @@ public class WelComeActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
+
+	}
+	
+	private void sendSystemConfig(){
+		HttpEntity entity = null;
+		HttpUtil.post(HttpConfig.LONIN_IN_URL, new JsonHttpResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						super.onSuccess(statusCode, headers, response);
+						
+						pLog.i("test","response:"+ response.toString());
+						
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONArray response) {
+						// TODO Auto-generated method stub
+						pLog.i("test","JSONArray:"+ response.toString());
+						super.onSuccess(statusCode, headers, response);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							String responseString) {
+						// TODO Auto-generated method stub
+						pLog.i("test","responseString:"+ responseString);
+						super.onSuccess(statusCode, headers, responseString);
+					}
+					
+			
+			
+		});
 
 	}
 

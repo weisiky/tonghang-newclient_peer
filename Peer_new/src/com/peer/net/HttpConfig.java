@@ -11,7 +11,7 @@ public interface HttpConfig {
 	/** IP **/
 	// public static String SERVER_ADDRESS =
 	// "http://192.168.23.1:8080/tonghang-serverapi";
-	public static String SERVER_ADDRESS = "http://114.215.143.83:8080/tonghangserver";
+	public static String SERVER_ADDRESS = "http://114.215.143.83:8080/tonghang-serverapi";
 	// http://www.tonghang1.com:3000
 	// http://192.168.23.1:8080/tonghang-serverapi
 	// http://192.168.1.2:8080/tonghang-serverapi
@@ -90,4 +90,6 @@ public interface HttpConfig {
 	/** 得到未读取消息列表 **/
 	public static String HUANXIN_URL = SERVER_ADDRESS
 			+ "/huanxin/hid2sids.json";
+	/** 得到某人的好友列表 **/
+	public static String FRIEND_GET_SYSTEMCONFIG = SERVER_ADDRESS + "/system/system_config.json";
 }

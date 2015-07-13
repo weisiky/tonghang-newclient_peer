@@ -209,6 +209,8 @@ public class AddFriendsActivity extends pBaseActivity{
 						JSONObject result;
 						try {
 							result = response.getJSONObject("success");
+							
+							pLog.i("test", "result:"+result);
 						
 						String code = result.getString("code");
 						if (code.equals("ok")){

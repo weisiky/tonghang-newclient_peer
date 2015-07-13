@@ -239,6 +239,7 @@ public class ChatRoomActivity extends pBaseActivity {
 					.getClient_id(), ChatRoomBean.getInstance().getTopicBean()
 					.getTopic_id());
 
+			/** 未读消息数清零 **/
 			conversation = EMChatManager.getInstance().getConversation(
 					toChatUsername);
 			conversation.resetUnreadMsgCount();
@@ -370,12 +371,13 @@ public class ChatRoomActivity extends pBaseActivity {
 
 			break;
 		case R.id.btn_send:
-			 if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
+			
+			/** 以前版本好像群聊走自己服务器，不走环信。具体不清楚。这里只发环信，可能出错 **/
+//			 if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
 //			 reply();
-			 }else{
-//			 sendMessage();
-			 }
-			showToast("模拟测试", Toast.LENGTH_SHORT, false);
+//			 }else{
+			 sendMessage();
+//			 }
 			break;
 		default:
 			break;
@@ -518,6 +520,9 @@ public class ChatRoomActivity extends pBaseActivity {
 					if (item.mTitle.equals(getResources().getString(
 							R.string.exitroom))) {
 						easemobchatImp.getInstance().exitgroup(toChatUsername);
+						sendleavegroup(ChatRoomBean.getInstance().getUserBean()
+								.getClient_id(), ChatRoomBean.getInstance()
+								.getTopicBean().getTopic_id());
 						finish();
 					} else if (item.mTitle.equals(getResources().getString(
 							R.string.deletemes))) {
@@ -531,6 +536,8 @@ public class ChatRoomActivity extends pBaseActivity {
 								ChatRoomListnikeActivity.class);
 						intent.putExtra("groupId", ChatRoomBean.getInstance()
 								.getTopicBean().getTopic_id());
+						intent.putExtra("client_id", ChatRoomBean.getInstance()
+								.getUserBean().getClient_id());
 						startActivity(intent);
 					}
 				}
@@ -540,77 +547,33 @@ public class ChatRoomActivity extends pBaseActivity {
 	}
 	
 	
-	/*private void reply() {
-		// TODO Auto-generated method stub
-		new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				final String content=messagebody.getText().toString().trim();				
-				SessionListener callback=new SessionListener();
-				try {
-					PeerUI.getInstance().getISessionManager().replyTopic(ChatRoomTypeUtil.getInstance().getTopic().getTopicid(), content, callback);					
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(callback.getMessage().equals(Constant.CALLBACKSUCCESS)){
-					runOnUiThread(new Runnable() {
-						public void run() {
-							SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss     ");     
-							 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
-							String   str   =   formatter.format(curDate);     
-							ChatMsgEntity entity=new ChatMsgEntity();
-							entity.setDate(str);
-//							entity.setName(username);
-							entity.setImage(imagurl);
-							entity.setMessage(content);
-							entity.setUserId(userid);
-							entity.setMsgType(Constant.SELF);					
-							msgList.add(entity);
-							adapter.notifyDataSetChanged();
-							selflistview.setSelection(selflistview.getCount() - 1);		
-							messagebody.setText("");
-						}
-					});					
-				}else{
-					runOnUiThread(new Runnable() {
-						
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							ShowMessage(getResources().getString(R.string.broken_net));
-						}
-					});
-				}				
-			}
-		}).start();		
-	}
 
 	private void sendMessage() {
 		// TODO Auto-generated method stub
 		if(EMChatManager.getInstance().isConnected()){
-			String content=messagebody.getText().toString().trim();				
+			String content=pageViewaList.et_sendmessage.getText().toString().trim();	
+			String imagurl = JoinTopicBean.getInstance().getUserbean().getImage();
+			String userid = JoinTopicBean.getInstance().getUserbean().getClient_id();
 			//环信发送消息，携带消息内容，自己头像，自己Id
 			easemobchatImp.getInstance().sendMessage(content, Constant.SINGLECHAT, toChatUsername,imagurl,userid);			
 			
 			SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss     ");     
 			 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
 			String   str   =   formatter.format(curDate);     
-			ChatMsgEntity entity=new ChatMsgEntity();
-			entity.setDate(str);
-			entity.setImage(imagurl);
-			entity.setUserId(userid);
-			entity.setMessage(content);
-			entity.setMsgType(Constant.SELF);					
-			msgList.add(entity);
+			ChatMsgEntityBean.getInstance().setDate(str);
+			ChatMsgEntityBean.getInstance().setImage(imagurl);
+			ChatMsgEntityBean.getInstance().setUserId(userid);
+			ChatMsgEntityBean.getInstance().setMessage(content);
+			ChatMsgEntityBean.getInstance().setMsgType(Constant.SELF);					
+			msgList.add(ChatMsgEntityBean.getInstance());
 			adapter.notifyDataSetChanged();
-			selflistview.setSelection(selflistview.getCount() - 1);		
-			messagebody.setText("");
+			pageViewaList.lv_chat
+			.setSelection(pageViewaList.lv_chat.getCount() - 1);
+			pageViewaList.et_sendmessage.setText("");
 		}else{
 			showToast(getResources().getString(R.string.broken_net), Toast.LENGTH_SHORT, false);
 		}
-	}*/
+	}
 
 	private void initChatListener() {
 		// TODO Auto-generated method stub

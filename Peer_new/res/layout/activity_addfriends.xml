@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bottomback"
     android:orientation="vertical" >
-   
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"        
+        android:layout_height="wrap_content"
         android:background="@drawable/border"
         android:orientation="horizontal" >
 
@@ -23,8 +24,7 @@
                 android:id="@+id/personhead"
                 android:layout_width="60.0dip"
                 android:layout_height="60.0dip"
-                android:layout_gravity="center"
-                 />
+                android:layout_gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,7 +43,6 @@
                     android:id="@+id/personnike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
 
@@ -53,7 +52,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
-                    
                     android:textColor="@color/deepgray"
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
@@ -66,25 +64,27 @@
         android:layout_height="97dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp" 
+        android:layout_marginTop="16dp"
         android:background="@drawable/border"
-        android:hint="请输入验证信息"
         android:gravity="top"
-        android:padding="4dp"/>
-	<LinearLayout
-	    android:layout_marginTop="16dp" 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:gravity="center_horizontal"
-	    >
-    <Button
-         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:id="@+id/bt_send"
+        android:hint="请输入验证信息"
+        android:padding="4dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="发送" 
-        android:textColor="@color/white"
-        android:background="@drawable/selector_back"/>
-	</LinearLayout>
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/bt_send"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/selector_back"
+            android:text="发送"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
 </LinearLayout>

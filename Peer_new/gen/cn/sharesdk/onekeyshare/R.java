@@ -162,35 +162,35 @@ public final class R {
 		public static final int title_shadow = 0x7f0200e7;
 	}
 	public static final class id {
-		public static final int actionbarLayout = 0x7f0700d9;
-		public static final int atDescTextView = 0x7f0700e5;
-		public static final int atLayout = 0x7f0700e0;
-		public static final int atTextView = 0x7f0700e4;
-		public static final int backImageView = 0x7f0700e8;
-		public static final int checkedImageView = 0x7f0700ed;
-		public static final int closeImageView = 0x7f0700dd;
-		public static final int divider = 0x7f0700de;
-		public static final int gridView = 0x7f0700ea;
-		public static final int hScrollView = 0x7f0700e2;
-		public static final int imageRemoveBtn = 0x7f0700e7;
-		public static final int imageView = 0x7f0700e6;
-		public static final int imagesLinearLayout = 0x7f0700e3;
-		public static final int logoImageView = 0x7f0700eb;
-		public static final int mainRelLayout = 0x7f0700da;
-		public static final int nameTextView = 0x7f0700ec;
-		public static final int okImageView = 0x7f0700e9;
-		public static final int textCounterTextView = 0x7f0700e1;
-		public static final int textEditText = 0x7f0700df;
-		public static final int titleEditText = 0x7f0700dc;
-		public static final int titleLayout = 0x7f0700db;
+		public static final int actionbarLayout = 0x7f0700da;
+		public static final int atDescTextView = 0x7f0700e6;
+		public static final int atLayout = 0x7f0700e1;
+		public static final int atTextView = 0x7f0700e5;
+		public static final int backImageView = 0x7f0700e9;
+		public static final int checkedImageView = 0x7f0700ee;
+		public static final int closeImageView = 0x7f0700de;
+		public static final int divider = 0x7f0700df;
+		public static final int gridView = 0x7f0700eb;
+		public static final int hScrollView = 0x7f0700e3;
+		public static final int imageRemoveBtn = 0x7f0700e8;
+		public static final int imageView = 0x7f0700e7;
+		public static final int imagesLinearLayout = 0x7f0700e4;
+		public static final int logoImageView = 0x7f0700ec;
+		public static final int mainRelLayout = 0x7f0700db;
+		public static final int nameTextView = 0x7f0700ed;
+		public static final int okImageView = 0x7f0700ea;
+		public static final int textCounterTextView = 0x7f0700e2;
+		public static final int textEditText = 0x7f0700e0;
+		public static final int titleEditText = 0x7f0700dd;
+		public static final int titleLayout = 0x7f0700dc;
 	}
 	public static final class layout {
-		public static final int skyblue_editpage = 0x7f030036;
-		public static final int skyblue_editpage_at_layout = 0x7f030037;
-		public static final int skyblue_editpage_inc_image_layout = 0x7f030038;
-		public static final int skyblue_share_actionbar = 0x7f030039;
-		public static final int skyblue_share_platform_list = 0x7f03003a;
-		public static final int skyblue_share_platform_list_item = 0x7f03003b;
+		public static final int skyblue_editpage = 0x7f030037;
+		public static final int skyblue_editpage_at_layout = 0x7f030038;
+		public static final int skyblue_editpage_inc_image_layout = 0x7f030039;
+		public static final int skyblue_share_actionbar = 0x7f03003a;
+		public static final int skyblue_share_platform_list = 0x7f03003b;
+		public static final int skyblue_share_platform_list_item = 0x7f03003c;
 	}
 	public static final class string {
 		public static final int baidutieba = 0x7f05003c;

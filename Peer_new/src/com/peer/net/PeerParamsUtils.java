@@ -362,5 +362,29 @@ public class PeerParamsUtils {
 				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
 		return entity;
 	}
+	
+	
+	/**
+	 * 获取参与话题用户参数绑定
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param groupid
+	 * @param page
+	 * @param client_id
+	 * @return
+	 * @throws Exception
+	 */
+	public static HttpEntity getUserNumberParams(Context context, String groupid,
+			int page , String client_id) throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		registerTagParams.put("topicid", groupid);
+		registerTagParams.put("pageindex", page);
+		registerTagParams.put("client_id", client_id);
+		HttpEntity entity = new StringEntity(
+				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
+		return entity;
+	}
 
 }

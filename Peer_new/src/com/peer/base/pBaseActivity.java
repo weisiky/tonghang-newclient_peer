@@ -406,6 +406,9 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
 				|| getLocalClassNameBySelf().contains("SearchResultActivity")
 				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
+				|| getLocalClassNameBySelf().contains("TopicActivity")
+				|| getLocalClassNameBySelf().contains("AddFriendsActivity")
+				|| getLocalClassNameBySelf().contains("ChatRoomActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
 		} else if (getLocalClassNameBySelf().contains("UpdatePasswordActivity")) {
