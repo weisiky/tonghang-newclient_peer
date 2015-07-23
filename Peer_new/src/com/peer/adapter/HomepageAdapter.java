@@ -13,6 +13,7 @@ import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.UserBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.ViewHolder;
 import com.peer.utils.pLog;
 import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
@@ -42,30 +43,33 @@ public class HomepageAdapter extends pBaseAdapter {
 	private boolean hasMesure = false;
 	private int maxLines;
 	private Context mContext;
-	private List<Object> mList;
+	private List<UserBean> users = new ArrayList<UserBean>();
 	int i;
 	private pBaseFragment baseFragment;
+	private String pic_server;
 
 	// List<String> pre_labels ; //获取登陆者label
-	public HomepageAdapter(Context mContext, List<Object> mList) {
+	public HomepageAdapter(Context mContext, List<UserBean> users,
+			String pic_server) {
 
 		super(mContext);
 
 		this.mContext = mContext;
-		this.mList = mList;
+		this.users = users;
+		this.pic_server = pic_server;
 
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return mList.size() + 1;
+		return users.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return mList.get(arg0);
+		return users.get(arg0);
 	}
 
 	@Override
@@ -105,34 +109,21 @@ public class HomepageAdapter extends pBaseAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_recommend_person, null, false);
 			ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
+
 			TextView tv_nikename = ViewHolder
 					.get(convertView, R.id.tv_nikename);
 			TextView tv_descripe = ViewHolder
 					.get(convertView, R.id.tv_descripe);
 			LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
-			List plist = (List) mList.get(position);
-			Map pmap = (Map) plist.get(0);
-			final UserBean userbean = new UserBean();
-			userbean.setBirth((String) pmap.get("birth"));
-			userbean.setCity((String) pmap.get("city"));
-			userbean.setClient_id((String) pmap.get("client_id"));
-			userbean.setCreated_at((String) pmap.get("created_at"));
-			userbean.setEmail((String) pmap.get("email"));
-			userbean.setImage((String) pmap.get("image"));
-			userbean.setLabels((ArrayList<String>) plist.get(1));
-			userbean.setPhone((String) pmap.get("username"));
-			userbean.setSex((String) pmap.get("sex"));
-			userbean.setUsername((String) pmap.get("username"));
+			final UserBean userbean = users.get(position);
+			// ImageLoader加载图片
+			ImageLoaderUtil.getInstance().showHttpImage(
+					pic_server + userbean.getImage(), im_headpic,
+					R.drawable.mini_avatar_shadow);
 
 			tv_nikename.setText(userbean.getUsername());
 			ArrayList<String> plabels = userbean.getLabels();
 			String labels = "";
-
-			// if (baseFragment != null) {
-			// headpic.setOnClickListener((OnClickListener) baseFragment);
-			// } else {
-			// headpic.setOnClickListener((OnClickListener) mContext);
-			// }
 
 			for (String s : plabels) {
 				if (labels.equals("")) {

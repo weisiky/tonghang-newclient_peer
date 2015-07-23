@@ -27,6 +27,7 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMMessage;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
 import com.peer.activity.R;
 import com.peer.adapter.ChatHistoryAdapter;
@@ -42,21 +43,20 @@ import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 
-public class ComeMsgFragment extends pBaseFragment{
+public class ComeMsgFragment extends pBaseFragment {
 
 	private ListView ListView_come;
 	private boolean hidden;
 	private List<EMGroup> groups;
 	private ChatHistoryAdapter adapter;
 	private List<EMConversation> list;
-	private List<Map> easemobchatusers=new ArrayList<Map>();
-	
+	private List<Map> easemobchatusers = new ArrayList<Map>();
+
 	private pBaseActivity pbaseActivity;
-	
-	private String isnumber = "^\\d+$";//正则用来匹配纯数字
 
-		private ListView lv_come;
+	private String isnumber = "^\\d+$";// 正则用来匹配纯数字
 
+	private ListView lv_come;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,65 +64,59 @@ public class ComeMsgFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.fragment_comemsg, container, false);
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-			init();
+		init();
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		pbaseActivity = (pBaseActivity) activity;
 	}
-	
-	
-	
-
 
 	private void init() {
-		// TODO Auto-generated method stub	
-			
-		list=loadConversationsWithRecentChat();		
-		lv_come=(ListView)getView().findViewById(R.id.lv_come);	
-		for(EMConversation em:loadConversationsWithRecentChat()){
-			Map m=new HashMap<String, Object>();
+		// TODO Auto-generated method stub
+
+		list = loadConversationsWithRecentChat();
+		lv_come = (ListView) getView().findViewById(R.id.lv_come);
+		for (EMConversation em : loadConversationsWithRecentChat()) {
+			Map m = new HashMap<String, Object>();
 			m.put("username", em.getUserName());
-			/*环信的群组ID为纯数字，用正则匹配来判断是不是群组*/
-			m.put("is_group", em.getUserName().matches(isnumber));			
-			easemobchatusers.add(m);
-		}
-		easemobchatUser users=new easemobchatUser();
-		users.setEasemobchatusers(easemobchatusers);
-			
-	}
-	
-	public void refresh() {
-		if(list!=null){
-			list.clear();
-		}				
-		list.addAll(loadConversationsWithRecentChat());
-		easemobchatusers.clear();
-		for(EMConversation em:loadConversationsWithRecentChat()){
-			Map m=new HashMap<String, Object>();
-			m.put("username", em.getUserName());
-			/*环信的群组ID为纯数字，用正则匹配来判断是不是群组*/
+			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
 			m.put("is_group", em.getUserName().matches(isnumber));
 			easemobchatusers.add(m);
 		}
-		easemobchatUser users=new easemobchatUser();
+		easemobchatUser users = new easemobchatUser();
 		users.setEasemobchatusers(easemobchatusers);
-	/*	try {
-			sendComeMsg(users);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	*/
+
 	}
-	
-	
+
+	public void refresh() {
+		if (list != null) {
+			list.clear();
+		}
+		list.addAll(loadConversationsWithRecentChat());
+		easemobchatusers.clear();
+		for (EMConversation em : loadConversationsWithRecentChat()) {
+			Map m = new HashMap<String, Object>();
+			m.put("username", em.getUserName());
+			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
+			m.put("is_group", em.getUserName().matches(isnumber));
+			easemobchatusers.add(m);
+		}
+		easemobchatUser users = new easemobchatUser();
+		users.setEasemobchatusers(easemobchatusers);
+		/*
+		 * try { sendComeMsg(users); } catch (UnsupportedEncodingException e) {
+		 * // TODO Auto-generated catch block e.printStackTrace(); }
+		 */
+	}
+
 	/**
 	 * 获取所有会话
 	 * 
@@ -131,8 +125,8 @@ public class ComeMsgFragment extends pBaseFragment{
 	 */
 	private List<EMConversation> loadConversationsWithRecentChat() {
 		// 获取所有会话，包括陌生人
-		Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().
-				getAllConversations();
+		Hashtable<String, EMConversation> conversations = EMChatManager
+				.getInstance().getAllConversations();
 		List<EMConversation> list = new ArrayList<EMConversation>();
 		// 过滤掉messages seize为0的conversation
 		for (EMConversation conversation : conversations.values()) {
@@ -143,23 +137,26 @@ public class ComeMsgFragment extends pBaseFragment{
 		sortConversationByLastChatTime(list);
 		return list;
 	}
-	
-	
+
 	/**
 	 * 根据最后一条消息的时间排序
 	 * 
 	 * @param usernames
 	 */
-	private void sortConversationByLastChatTime(List<EMConversation> conversationList) {
+	private void sortConversationByLastChatTime(
+			List<EMConversation> conversationList) {
 		Collections.sort(conversationList, new Comparator<EMConversation>() {
 			@Override
-			public int compare(final EMConversation con1, final EMConversation con2) {
+			public int compare(final EMConversation con1,
+					final EMConversation con2) {
 
 				EMMessage con2LastMessage = con2.getLastMessage();
 				EMMessage con1LastMessage = con1.getLastMessage();
-				if (con2LastMessage.getMsgTime() == con1LastMessage.getMsgTime()) {
+				if (con2LastMessage.getMsgTime() == con1LastMessage
+						.getMsgTime()) {
 					return 0;
-				} else if (con2LastMessage.getMsgTime() > con1LastMessage.getMsgTime()) {
+				} else if (con2LastMessage.getMsgTime() > con1LastMessage
+						.getMsgTime()) {
 					return 1;
 				} else {
 					return -1;
@@ -168,14 +165,13 @@ public class ComeMsgFragment extends pBaseFragment{
 
 		});
 	}
-	
-	
+
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		this.hidden = hidden;
 		if (!hidden) {
-			if(pbaseActivity.isNetworkAvailable){
+			if (pbaseActivity.isNetworkAvailable) {
 				if (!hidden) {
 					refresh();
 				}
@@ -185,20 +181,18 @@ public class ComeMsgFragment extends pBaseFragment{
 
 	@Override
 	public void onResume() {
-		super.onResume();		
-		if(pbaseActivity.isNetworkAvailable){
-				refresh();
+		super.onResume();
+		if (pbaseActivity.isNetworkAvailable) {
+			refresh();
 		}
 	}
-	
-	
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 	/**
 	 * 获取未读取消息请求
 	 * 
@@ -209,16 +203,23 @@ public class ComeMsgFragment extends pBaseFragment{
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getComMsgParams(getActivity(), users);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getComMsgParams(getActivity(), users);
+			params = PeerParamsUtils.getComMsgParams(getActivity(), users);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(getActivity(), HttpConfig.HUANXIN_URL
-				, entity, "application/json",
+		HttpUtil.post(getActivity(), HttpConfig.HUANXIN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -248,25 +249,24 @@ public class ComeMsgFragment extends pBaseFragment{
 								errorResponse);
 					}
 
-
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
 
-
-						/*if (adapter == null) {
-							adapter = new ChatHistoryAdapter(getActivity(), list);
-							ListView_come.setAdapter(adapter);
-						}*/
+						/*
+						 * if (adapter == null) { adapter = new
+						 * ChatHistoryAdapter(getActivity(), list);
+						 * ListView_come.setAdapter(adapter); }
+						 */
 
 						refresh1();
 						// adapter.setBaseFragment(HomeFragment.this);
@@ -274,11 +274,10 @@ public class ComeMsgFragment extends pBaseFragment{
 						super.onSuccess(statusCode, headers, response);
 					}
 
-
 				});
 
 	}
-	
+
 	private void refresh1() {
 
 		if (adapter != null) {
@@ -286,9 +285,5 @@ public class ComeMsgFragment extends pBaseFragment{
 		}
 
 	}
-	
-	
-	
-	
 
 }

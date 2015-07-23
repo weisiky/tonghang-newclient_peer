@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -45,6 +46,8 @@ import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.AutoWrapRadioGroup;
+import com.peer.utils.ChatRoomTypeUtil;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ManagerActivity;
 import com.peer.utils.pIOUitls;
@@ -68,12 +71,13 @@ public class PersonalPageActivity extends pBaseActivity {
 		private LinearLayout ll_back, ll_personpagebottom, contentauto;
 		private TextView tv_title, personnike, personcount, sex, city,
 				tv_topic;
-		private Button send, addfriends;
+		private Button btnSend, addfriends;
 		private ImageView personhead, im_downview;
 		private RelativeLayout rl_topic;
 	}
 
 	private PageViewList pageViewaList;
+	private String pic_server;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +115,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.rl_topic.setOnClickListener(this);
-		pageViewaList.send.setOnClickListener(this);
+		pageViewaList.btnSend.setOnClickListener(this);
 		pageViewaList.addfriends.setOnClickListener(this);
 
 	}
@@ -119,24 +123,28 @@ public class PersonalPageActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		/*
-		 * UserBean userbean=PersonpageBean.getInstance().getUser();
-		 * pageViewaList.personnike.setText(userbean.getUsername());
-		 * pageViewaList.personcount.setText(userbean.getEmail());
-		 * pageViewaList.city.setText(userbean.getCity());
-		 * pageViewaList.sex.setText(userbean.getSex()); for(int
-		 * i=0;i<userbean.getLabels().size();i++){ String
-		 * tag=userbean.getLabels().get(i);
-		 * 
-		 * skill=(RadioButton) getLayoutInflater().inflate(R.layout.skill,
-		 * tag_container, false);
-		 * skill.setHeight((int)getResources().getDimension(R.dimen.hight));
-		 * skill.setTextSize(20);
-		 * skill.setTextColor(getResources().getColor(R.color.white)); int
-		 * pading=(int)getResources().getDimension(R.dimen.pading);
-		 * skill.setText(tag); skill.setTag(""+i); tag_container.addView(skill);
-		 * }
-		 */
+
+		UserBean userbean = PersonpageBean.getInstance().getUser();
+//		pageViewaList.personnike.setText(userbean.getUsername());
+//		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.city.setText(userbean.getCity());
+//		pageViewaList.sex.setText(userbean.getSex());
+//		for (int i = 0; i < userbean.getLabels().size(); i++) {
+//			String tag = userbean.getLabels().get(i);
+//
+//			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
+//					tag_container, false);
+//			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
+//			skill.setTextSize(20);
+//			skill.setTextColor(getResources().getColor(R.color.white));
+//			int pading = (int) getResources().getDimension(R.dimen.pading);
+//			skill.setText(tag);
+//			skill.setTag("" + i);
+//			tag_container.addView(skill);
+//		}
+
+		pic_server = mShareFileUtils.getString(Constant.PIC_SERVER, "");
+
 		ViewType();
 
 	}
@@ -228,25 +236,30 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.tv_topic.setText(getResources().getString(
 				R.string.topic_owen));
 		pageViewaList.ll_personpagebottom.setVisibility(View.INVISIBLE);
-		if (isNetworkAvailable) {
-			pageViewaList.personnike.setText(userbean.getUsername());
-			pageViewaList.personcount.setText(userbean.getEmail());
-			pageViewaList.city.setText(userbean.getCity());
-			pageViewaList.sex.setText(userbean.getSex());
-			ArrayList<String> lables = userbean.getLabels();
-			for (int i = 0; i < lables.size(); i++) {
-				String tag = lables.get(i);
-				skill = (RadioButton) getLayoutInflater().inflate(
-						R.layout.skill, tag_container, false);
-				skill.setHeight((int) getResources()
-						.getDimension(R.dimen.hight));
-				skill.setTextSize(20);
-				skill.setTextColor(getResources().getColor(R.color.white));
-				int pading = (int) getResources().getDimension(R.dimen.pading);
-				skill.setText(tag);
-				skill.setTag("" + i);
-				tag_container.addView(skill);
-			}
+
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				pic_server + userbean.getImage(), pageViewaList.personhead,
+				R.drawable.mini_avatar_shadow);
+
+		pageViewaList.personnike.setText(userbean.getUsername());
+		pageViewaList.personcount.setText(userbean.getEmail());
+		pageViewaList.city.setText(userbean.getCity());
+		pageViewaList.sex.setText(userbean.getSex());
+		ArrayList<String> lables = userbean.getLabels();
+		
+		for (int i = 0; i < lables.size(); i++) {
+			String tag = lables.get(i);
+			pLog.i("test", "tag:"+tag);
+			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
+					tag_container, false);
+			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
+			skill.setTextSize(20);
+			skill.setTextColor(getResources().getColor(R.color.white));
+			int pading = (int) getResources().getDimension(R.dimen.pading);
+			skill.setText(tag);
+			skill.setTag("" + i);
+			tag_container.addView(skill);
 		}
 	}
 
@@ -257,7 +270,8 @@ public class PersonalPageActivity extends pBaseActivity {
 	 */
 	private void unfriendsPersonPage() {
 
-		if (userbean.getSex().toString().equals("男")) {
+		if (userbean.getSex() == null
+				|| userbean.getSex().toString().equals("男")) {
 			pageViewaList.tv_topic.setText(getResources().getString(
 					R.string.topic_other));
 			pageViewaList.tv_title.setText(getResources().getString(
@@ -273,6 +287,9 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
+		ImageLoaderUtil.getInstance().showHttpImage(
+				pic_server + userbean.getImage(), pageViewaList.personhead,
+				R.drawable.mini_avatar_shadow);
 		for (int i = 0; i < userbean.getLabels().size(); i++) {
 			String tag = userbean.getLabels().get(i);
 
@@ -284,25 +301,17 @@ public class PersonalPageActivity extends pBaseActivity {
 			int pading = (int) getResources().getDimension(R.dimen.pading);
 			skill.setText(tag);
 			skill.setTag("" + i);
-			tag_container.addView(skill);
+//			tag_container.addView(skill);
 		}
 
-		pageViewaList.send.setOnClickListener(new View.OnClickListener() {
+		pageViewaList.btnSend.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				ChatRoomTypeUtil.getInstance().setUserId(
-//						PersonpageUtil.getInstance().getUser().getUserid());
-//				ChatRoomTypeUtil.getInstance().setHuanxingId(
-//						PersonpageUtil.getInstance().getUser()
-//								.getHuangxin_username());
-//				ChatRoomTypeUtil.getInstance().setTitle(
-//						PersonpageUtil.getInstance().getUser().getUsername());
-//
-//				ChatRoomTypeUtil.getInstance().setChatroomtype(
-//						Constant.SINGLECHAT);
-//				ChatRoomTypeUtil.getInstance().setUser(userpage);
+				ChatRoomTypeUtil.getInstance().setChatroomtype(
+						Constant.SINGLECHAT);
+				ChatRoomTypeUtil.getInstance().setUser(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
 						ChatRoomActivity.class);
 				startActivity(intent);
@@ -321,7 +330,6 @@ public class PersonalPageActivity extends pBaseActivity {
 					intent.putExtra("nike", userbean.getUsername());
 					intent.putExtra("email", userbean.getEmail());
 					startActivity(intent);
-					ManagerActivity.getAppManager().finishActivity();
 				} else {
 					showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
 				}
@@ -342,8 +350,11 @@ public class PersonalPageActivity extends pBaseActivity {
 		String userid = null;
 
 		pageViewaList.im_downview.setVisibility(View.VISIBLE);
-		pageViewaList.send.setVisibility(View.GONE);
+		pageViewaList.btnSend.setVisibility(View.GONE);
 		pageViewaList.addfriends.setVisibility(View.GONE);
+		ImageLoaderUtil.getInstance().showHttpImage(
+				pic_server + userbean.getImage(), pageViewaList.personhead,
+				R.drawable.mini_avatar_shadow);
 
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
 				R.string.deletefriends), R.color.white));
@@ -370,21 +381,12 @@ public class PersonalPageActivity extends pBaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				/*
-				 * ChatRoomTypeUtil.getInstance().setUserId(PersonpageUtil.
-				 * getInstance().getUser().getUserid());
-				 * ChatRoomTypeUtil.getInstance
-				 * ().setHuanxingId(PersonpageUtil.getInstance
-				 * ().getUser().getHuangxin_username());
-				 * ChatRoomTypeUtil.getInstance
-				 * ().setTitle(PersonpageUtil.getInstance
-				 * ().getUser().getUsername());
-				 */
-				// ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.SINGLECHAT);
-				// ChatRoomTypeUtil.getInstance().setUser(userpage);
-				// Intent intent=new
-				// Intent(PersonalPageActivity.this,ChatRoomActivity.class);
-				// startActivity(intent);
+				ChatRoomTypeUtil.getInstance().setChatroomtype(
+						Constant.SINGLECHAT);
+				ChatRoomTypeUtil.getInstance().setUser(userbean);
+				Intent intent = new Intent(PersonalPageActivity.this,
+						ChatRoomActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
@@ -417,16 +419,23 @@ public class PersonalPageActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 	private void senddeletefriend(String client_id, String friend_id) {
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getdeletefriendParams(this, friend_id);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getdeletefriendParams(this, friend_id);
+			params = PeerParamsUtils.getdeletefriendParams(this, friend_id);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		HttpUtil.post(this, HttpConfig.FRIEND_DELETE_URL + client_id + ".json",
-				entity, "application/json", new JsonHttpResponseHandler() {
+				params, new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,

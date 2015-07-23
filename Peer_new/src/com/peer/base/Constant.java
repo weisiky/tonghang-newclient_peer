@@ -86,7 +86,8 @@ public class Constant {
 	public static String C_IMAGE_CACHE_PATH = DEFAULT_MAIN_DIRECTORY
 			+ "imagecache/";
 	/** 客户端client_id **/
-	public static String CLIENT_ID = "";
+	public static String CLIENT_ID = "client_id";
+	public static String PASSWORD = "password";
 
 	/** 用户信息 **/
 	public static String USER = "user";

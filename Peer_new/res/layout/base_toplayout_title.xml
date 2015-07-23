@@ -2,105 +2,95 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/widgeheight" >
-    
-<RelativeLayout
-            android:id="@+id/rl1"
-            android:layout_width="fill_parent"
-            android:layout_height="48dip"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/title_backcolor" >   
-            <LinearLayout 
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/title_backcolor" >
+
+        <LinearLayout
             android:id="@+id/ll_back"
-		    android:orientation="horizontal"
-		    android:layout_width="wrap_content"
-		    android:layout_height="48dp"
-		    android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
             android:background="@drawable/selector_back"
             android:clickable="true"
-		    >
-            
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-	        <ImageView
-	            android:layout_marginRight="8dp"
-	            android:id="@+id/iv_back_search"
-	            android:layout_width="30dp"
-	            android:layout_height="30dp"
-	            android:layout_marginLeft="8dp"
-	            android:background="@drawable/icon_back" />
-	          
-			</LinearLayout>
+            <ImageView
+                android:id="@+id/iv_back_search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/icon_back" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-    			android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textsize_large"
-                 />
-            
-            
-            <LinearLayout
-                android:id="@+id/ll_search"
-                android:orientation="horizontal"  
-                android:layout_width="@dimen/widgeheight"     
-                android:layout_height="match_parent"          
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:clickable="true"
-                android:background="@drawable/selector_back"
-                >
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large" />
+
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="@dimen/widgeheight"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_back"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
             <ImageView
                 android:id="@+id/im_search"
-                android:layout_gravity="center"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:src="@drawable/search38"
-                />
-            
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/im_downview"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-               
-                android:src="@drawable/icon_chatroom_menu" />
-            </LinearLayout>
-            
-             <LinearLayout 
-		            android:id="@+id/ll_topic"
-				    android:orientation="horizontal"
-				    android:layout_width="wrap_content"
-				    android:layout_height="48dp"
-				    android:layout_toLeftOf="@+id/ll_search"
-		            android:layout_centerVertical="true"
-		            android:gravity="center_vertical"
-		            android:background="@drawable/selector_back"
-		            android:clickable="true"
-		            android:visibility="gone"
-			    >
-            
+                android:src="@drawable/icon_chatroom_menu"
+                android:visibility="gone" />
+        </LinearLayout>
 
-		        <ImageView
-		            android:layout_marginRight="8dp"
-		            android:id="@+id/iv_create_topic"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginLeft="8dp"
-		            android:background="@drawable/createtopic" />
-		        
-	          
-			</LinearLayout>
-  
-            
-  </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ll_topic"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ll_search"
+            android:background="@drawable/selector_back"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone" 
+            >
+
+            <ImageView
+                android:id="@+id/iv_create_topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/createtopic" />
+        </LinearLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

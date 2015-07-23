@@ -3,7 +3,6 @@ package com.peer.activity;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,23 +18,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.IMimplements.easemobchatImp;
+import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
-import com.peer.utils.BussinessUtils;
-import com.peer.utils.JsonDocHelper;
-import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
- * 反馈信息activity 
+ * 反馈信息activity
  */
-public class FeedBackActivity extends pBaseActivity{
+public class FeedBackActivity extends pBaseActivity {
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
@@ -49,7 +43,7 @@ public class FeedBackActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -57,7 +51,8 @@ public class FeedBackActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.feedback));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.feedback));
 		pageViewaList.et_feedback_content.addTextChangedListener(watcher);
 		pageViewaList.commite_feedback.setEnabled(false);
 	}
@@ -87,7 +82,7 @@ public class FeedBackActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_feedback, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -100,57 +95,63 @@ public class FeedBackActivity extends pBaseActivity{
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.commite_feedback:
-			
-			if(isNetworkAvailable){
+
+			if (isNetworkAvailable) {
 				try {
-					sendfeedback(pageViewaList.et_feedback_content.getText().toString().trim(),
+					sendfeedback(pageViewaList.et_feedback_content.getText()
+							.toString().trim(),
 							mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else{
-				showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
-			}							
+			} else {
+				showToast(
+						getResources()
+								.getString(R.string.Broken_network_prompt),
+						Toast.LENGTH_SHORT, false);
+			}
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
-	
-	
-TextWatcher watcher=new TextWatcher() {
-		
+
+	TextWatcher watcher = new TextWatcher() {
+
 		@Override
-		public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
 			// TODO Auto-generated method stub
-			if(!pageViewaList.et_feedback_content.getText().toString().trim().equals("")){
+			if (!pageViewaList.et_feedback_content.getText().toString().trim()
+					.equals("")) {
 				pageViewaList.commite_feedback.setEnabled(true);
-			}else {
+			} else {
 				pageViewaList.commite_feedback.setEnabled(false);
 			}
-		}		
+		}
+
 		@Override
 		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 				int arg3) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 		@Override
 		public void afterTextChanged(Editable arg0) {
 			// TODO Auto-generated method stub
-			if(!pageViewaList.et_feedback_content.getText().toString().trim().equals("")){
+			if (!pageViewaList.et_feedback_content.getText().toString().trim()
+					.equals("")) {
 				pageViewaList.commite_feedback.setEnabled(true);
-			}else {
+			} else {
 				pageViewaList.commite_feedback.setEnabled(false);
 			}
 		}
 	};
-	
-	
+
 	/**
 	 * 发送反馈信息接口
 	 * 
@@ -163,15 +164,22 @@ TextWatcher watcher=new TextWatcher() {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getLoginParams(this, client_id, content);
+		// } catch (Exception e2) {
+		// // TODO Auto-generated catch block
+		// e2.printStackTrace();
+		// }
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getLoginParams(this, client_id, content);
-		} catch (Exception e2) {
+			params = PeerParamsUtils.getLoginParams(this, client_id, content);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(this, HttpConfig.SYSTEM_FEEDBACK_URL, entity,
-				"application/json;charset=utf-8",
+		HttpUtil.post(this, HttpConfig.SYSTEM_FEEDBACK_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -203,33 +211,31 @@ TextWatcher watcher=new TextWatcher() {
 								errorResponse);
 					}
 
-
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						
+
 						showToast("已提交，感谢你的好建议！", Toast.LENGTH_SHORT, false);
-						
+
 						super.onSuccess(statusCode, headers, response);
 
 					}
 
-
 				});
 	}
 
-@Override
-public void onNetworkOn() {
-	// TODO Auto-generated method stub
-	
-}
+	@Override
+	public void onNetworkOn() {
+		// TODO Auto-generated method stub
 
-@Override
-public void onNetWorkOff() {
-	// TODO Auto-generated method stub
-	
-}
+	}
+
+	@Override
+	public void onNetWorkOff() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

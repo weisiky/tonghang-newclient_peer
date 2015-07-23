@@ -22,7 +22,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/send"
+            android:id="@+id/btnSend"
             android:layout_width="match_parent"
             android:layout_height="@dimen/widgeheight"
             android:layout_weight="1"

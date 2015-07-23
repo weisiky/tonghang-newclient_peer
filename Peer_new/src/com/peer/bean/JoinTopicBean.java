@@ -2,46 +2,43 @@ package com.peer.bean;
 
 import java.io.Serializable;
 
-public class JoinTopicBean implements Serializable{
+public class JoinTopicBean implements Serializable {
 	private String pic_server;
 	private String sys_time;
 	private String code;
-	
+
 	private UserBean userbean;
-	
+
 	private String created_at;
 	/** 创建话题者的client_id **/
 	private String client_id;
 	private String label_name;
 	private String subject;
 	private String topic_id;
-	
+
 	private boolean Isower;
-	
-	
 
 	public static JoinTopicBean jointopicbean;
-	
+
 	public static JoinTopicBean getInstance() {
-		if(jointopicbean!=null){
+		if (jointopicbean != null) {
 			jointopicbean = new JoinTopicBean();
 		}
-		
+
 		return jointopicbean;
-		
+
 	}
-	
-	public boolean pdower(){
-		if(userbean.getClient_id().equals(client_id)){
+
+	public boolean pdower() {
+		if (userbean.getClient_id().equals(client_id)) {
 			Isower = true;
-		}else{
+		} else {
 			Isower = false;
 		}
-		
+
 		return Isower;
 	}
-	
-	
+
 	public String getCreated_at() {
 		return created_at;
 	}
@@ -82,8 +79,6 @@ public class JoinTopicBean implements Serializable{
 		this.topic_id = topic_id;
 	}
 
-	
-	
 	public UserBean getUserbean() {
 		return userbean;
 	}
@@ -92,14 +87,10 @@ public class JoinTopicBean implements Serializable{
 		this.userbean = userbean;
 	}
 
-	
 	public boolean getIsower() {
 		return pdower();
 	}
 
-	
-	
-	
 	public String getPic_server() {
 		return pic_server;
 	}

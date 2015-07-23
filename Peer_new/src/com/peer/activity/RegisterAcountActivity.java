@@ -19,13 +19,11 @@ import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
- * 注册第一步。
- * 填写基本信息
- * 为提交请求
+ * 注册第一步。 填写基本信息 为提交请求
  * 
  */
 public class RegisterAcountActivity extends pBaseActivity {
-	
+
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title, registe_remind;
@@ -106,46 +104,51 @@ public class RegisterAcountActivity extends pBaseActivity {
 
 	private void Registernext() {
 		// TODO Auto-generated method stub
-		
-		  String format ="^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$"; 
-		  String email=pageViewaList.et_email_regist.getText().toString().trim();
-		  String password=pageViewaList.et_password_registe.getText().toString().trim(); 
-		  String repassword=pageViewaList.et_repassword_registe.getText().toString().trim(); 
-		  String nikename=pageViewaList.et_nike_registe.getText().toString().trim();
-		 
-		 if(!email.matches(format)){
-		  pageViewaList.registe_remind.setText(getResources().getString(R.string.erroremail)); 
-		  return ; 
-		  }else if(!password.matches("^[a-zA-Z0-9_]{5,17}$")){
-		  pageViewaList.registe_remind.setText(getResources().getString(R.string.errorpswformat)); 
-		  return ;
-		  }else if(!password.equals(repassword)){
-		  pageViewaList.registe_remind.setText(getResources().getString(R.string.notmatchpsw)); 
-		  return ; 
-		  }else if(pageViewaList.et_nike_registe.length()>10){
-		  pageViewaList.registe_remind.setText(getResources().getString(R.string.errornike)); 
-		  return ;
-		  }else{
-			  pShareFileUtils.setString("email", email);
-			  pShareFileUtils.setString("password", password);
-			  pShareFileUtils.setString("nikename", nikename);
-//		  ArrayList<String> baseregister_list=new ArrayList<String>();
-//		  
-//		  baseregister_list.add(email); 
-//		  baseregister_list.add(password);
-//		  baseregister_list.add(nikename);
-		 
-		
-		
-		Intent intent = new Intent();
-		startActivityForLeft(RegisterTagActivity.class, intent, false);
-		pageViewaList.registe_remind.setText("");
+
+		String format = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+		String email = pageViewaList.et_email_regist.getText().toString()
+				.trim();
+		String password = pageViewaList.et_password_registe.getText()
+				.toString().trim();
+		String repassword = pageViewaList.et_repassword_registe.getText()
+				.toString().trim();
+		String nikename = pageViewaList.et_nike_registe.getText().toString()
+				.trim();
+
+		if (!email.matches(format)) {
+			pageViewaList.registe_remind.setText(getResources().getString(
+					R.string.erroremail));
+			return;
+		} else if (!password.matches("^[a-zA-Z0-9_]{5,17}$")) {
+			pageViewaList.registe_remind.setText(getResources().getString(
+					R.string.errorpswformat));
+			return;
+		} else if (!password.equals(repassword)) {
+			pageViewaList.registe_remind.setText(getResources().getString(
+					R.string.notmatchpsw));
+			return;
+		} else if (pageViewaList.et_nike_registe.length() > 10) {
+			pageViewaList.registe_remind.setText(getResources().getString(
+					R.string.errornike));
+			return;
+		} else {
+			pShareFileUtils.setString("email", email);
+			pShareFileUtils.setString("password", password);
+			pShareFileUtils.setString("nikename", nikename);
+			// ArrayList<String> baseregister_list=new ArrayList<String>();
+			//
+			// baseregister_list.add(email);
+			// baseregister_list.add(password);
+			// baseregister_list.add(nikename);
+
+			Intent intent = new Intent();
+			startActivityForLeft(RegisterTagActivity.class, intent, false);
+			pageViewaList.registe_remind.setText("");
+
+		}
 
 	}
 
- }
-
-	
 	TextWatcher textwatcher = new TextWatcher() {
 
 		@Override
@@ -194,12 +197,12 @@ public class RegisterAcountActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

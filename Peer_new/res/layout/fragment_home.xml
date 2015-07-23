@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="@color/white"
-    >
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
     <LinearLayout
         android:id="@+id/ll_head_homepage"
         android:layout_width="fill_parent"
         android:layout_height="48dip"
-        android:orientation="horizontal"
-        android:background="@color/title_backcolor" >
-    <RelativeLayout
+        android:background="@color/title_backcolor"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent" >
 
@@ -25,49 +26,45 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/textsize_large" />
 
-           <LinearLayout
+            <LinearLayout
                 android:id="@+id/ll_search"
-                android:orientation="horizontal"  
-                android:layout_width="@dimen/widgeheight"     
-                android:layout_height="match_parent"          
+                android:layout_width="@dimen/widgeheight"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:clickable="true"
                 android:background="@drawable/selector_back"
-                >
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:src="@drawable/search38"
-                />
-            </LinearLayout>
-           
-        </RelativeLayout>
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal" >
 
-</LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/search38" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/base_neterror_item"
-        android:layout_below="@+id/ll_head_homepage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_head_homepage"
         android:background="@color/black"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone" >
 
-      <include layout="@layout/base_neterror_item"/>
-
+        <include layout="@layout/base_neterror_item" />
     </LinearLayout>
-     
-    
-     <com.handmark.pulltorefresh.library.PullToRefreshListView
-       android:background="@color/white"
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/pull_refresh_homepage"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/base_neterror_item"
+        android:background="@color/white"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0.5dp"
@@ -75,8 +72,6 @@
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:smoothScrollbar="true"
-        android:layout_below="@+id/base_neterror_item"
-        />  
+        android:smoothScrollbar="true" />
 
 </RelativeLayout>

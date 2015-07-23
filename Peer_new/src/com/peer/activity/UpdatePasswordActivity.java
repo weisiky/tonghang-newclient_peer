@@ -1,7 +1,6 @@
 package com.peer.activity;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.IMimplements.easemobchatImp;
+import com.loopj.android.http.RequestParams;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
@@ -27,33 +26,28 @@ import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
-import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
-
 
 /*
  * 更改密码（发请求）
  * */
 public class UpdatePasswordActivity extends pBaseActivity {
-	
+
 	private TextWatcher textwatcher;
 	private PageViewList pageViewaList;
 
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title,updatepasw_remind;
-        private EditText et_oldpasw,et_newpasw,et_repasw;
-        private Button bt_changesubmite;
+		private TextView tv_title, updatepasw_remind;
+		private EditText et_oldpasw, et_newpasw, et_repasw;
+		private Button bt_changesubmite;
 	}
-
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -61,7 +55,8 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.updatepassword));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.updatepassword));
 		pageViewaList.bt_changesubmite.setEnabled(false);
 	}
 
@@ -73,7 +68,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		pageViewaList.et_oldpasw.addTextChangedListener(textwatcher);
 		pageViewaList.et_newpasw.addTextChangedListener(textwatcher);
 		pageViewaList.et_repasw.addTextChangedListener(textwatcher);
-		
+
 		pageViewaList.bt_changesubmite.setOnClickListener(this);
 	}
 
@@ -93,9 +88,10 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_changpassword, null);
+		return getLayoutInflater().inflate(R.layout.activity_changpassword,
+				null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
@@ -109,63 +105,75 @@ public class UpdatePasswordActivity extends pBaseActivity {
 		switch (v.getId()) {
 		case R.id.bt_changesubmite:
 			UpdatePassword();
-			
+
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
-	
-	
+
 	private void UpdatePassword() {
-		// TODO Auto-generated method stub		
-		String old=pageViewaList.et_oldpasw.getText().toString().trim();
-		final String newpasws=pageViewaList.et_newpasw.getText().toString().trim();
-		String testnew=pageViewaList.et_repasw.getText().toString().trim();
-		if(!newpasws.matches("^[a-zA-Z0-9_]{5,17}$")){
-			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.errorpswformat));
+		// TODO Auto-generated method stub
+		String old = pageViewaList.et_oldpasw.getText().toString().trim();
+		final String newpasws = pageViewaList.et_newpasw.getText().toString()
+				.trim();
+		String testnew = pageViewaList.et_repasw.getText().toString().trim();
+		if (!newpasws.matches("^[a-zA-Z0-9_]{5,17}$")) {
+			pageViewaList.updatepasw_remind.setText(getResources().getString(
+					R.string.errorpswformat));
 			return;
-		}else if(!newpasws.equals(testnew)){
-			pageViewaList.updatepasw_remind.setText(getResources().getString(R.string.oldnewnot));
+		} else if (!newpasws.equals(testnew)) {
+			pageViewaList.updatepasw_remind.setText(getResources().getString(
+					R.string.oldnewnot));
 			return;
-		}else{
-			if(isNetworkAvailable){
-			sendUpdatePassword(mShareFileUtils.getString(Constant.CLIENT_ID, ""),
-					old,newpasws);
-			}else{
-				showToast(getResources().getString(
-						R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+		} else {
+			if (isNetworkAvailable) {
+				sendUpdatePassword(
+						mShareFileUtils.getString(Constant.CLIENT_ID, ""), old,
+						newpasws);
+			} else {
+				showToast(
+						getResources()
+								.getString(R.string.Broken_network_prompt),
+						Toast.LENGTH_SHORT, false);
 			}
 		}
 	}
-	
-	
-	
+
 	/**
 	 * 更改用户密码请求
 	 * 
 	 * @param client_id
 	 * @param oldpasswd
-	 * @throws newpasswd 
+	 * @throws newpasswd
 	 **/
 
-	private void sendUpdatePassword(String client_id, String oldpasswd , String newpasswd ){
+	private void sendUpdatePassword(String client_id, String oldpasswd,
+			String newpasswd) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getUpdatepasswdParams(
+		// UpdatePasswordActivity.this, oldpasswd , newpasswd);
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getUpdatepasswdParams(
-					UpdatePasswordActivity.this, oldpasswd , newpasswd);
-		} catch (Exception e) {
+			params = PeerParamsUtils.getUpdatepasswdParams(
+					UpdatePasswordActivity.this, oldpasswd, newpasswd);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-        
-		HttpUtil.post(this, HttpConfig.UPDATE_PWD_IN_URL+client_id+".json", entity,
-				"application/json;charset=utf-8",
-				new JsonHttpResponseHandler() {
+
+		HttpUtil.post(this, HttpConfig.UPDATE_PWD_IN_URL + client_id + ".json",
+				params, new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -206,10 +214,11 @@ public class UpdatePasswordActivity extends pBaseActivity {
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
 							if (loginBean != null) {
-								
+
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
-								startActivityForLeft(MyAcountActivity.class, intent, false);
+								startActivityForLeft(MyAcountActivity.class,
+										intent, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -218,9 +227,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						
-						
+
 						super.onSuccess(statusCode, headers, response);
 					}
 
@@ -231,18 +238,16 @@ public class UpdatePasswordActivity extends pBaseActivity {
 						hideLoading();
 						super.onSuccess(statusCode, headers, responseString);
 						Intent login_complete = new Intent();
-						startActivityForLeft(MainActivity.class, login_complete, false);
+						startActivityForLeft(MainActivity.class,
+								login_complete, false);
 					}
 
 				});
 	}
-	
-	
-	
-	
+
 	private void CreateTextwatcher() {
 		// TODO Auto-generated method stub
-		textwatcher=new TextWatcher() {
+		textwatcher = new TextWatcher() {
 
 			@Override
 			public void afterTextChanged(Editable arg0) {
@@ -254,7 +259,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 			public void beforeTextChanged(CharSequence arg0, int arg1,
 					int arg2, int arg3) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -262,19 +267,19 @@ public class UpdatePasswordActivity extends pBaseActivity {
 					int arg3) {
 				// TODO Auto-generated method stub
 				TestNull();
-			}			
+			}
 		};
-		
+
 	}
-	
+
 	private void TestNull() {
 		// TODO Auto-generated method stub
-		String old=pageViewaList.et_oldpasw.getText().toString();
-		String newpasws=pageViewaList.et_newpasw.getText().toString();
-		String testnew=pageViewaList.et_repasw.getText().toString();
-		if(!old.equals("")&&!newpasws.equals("")&&!testnew.equals("")){
+		String old = pageViewaList.et_oldpasw.getText().toString();
+		String newpasws = pageViewaList.et_newpasw.getText().toString();
+		String testnew = pageViewaList.et_repasw.getText().toString();
+		if (!old.equals("") && !newpasws.equals("") && !testnew.equals("")) {
 			pageViewaList.bt_changesubmite.setEnabled(true);
-		}else{
+		} else {
 			pageViewaList.bt_changesubmite.setEnabled(false);
 		}
 	}
@@ -282,13 +287,13 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

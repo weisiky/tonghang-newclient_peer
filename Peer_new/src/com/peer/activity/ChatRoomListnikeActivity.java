@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.adapter.FriendsAdapter;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
@@ -137,18 +138,17 @@ public class ChatRoomListnikeActivity extends pBaseActivity{
 	private void sendUserNumber(String groupid, final int page , String client_id)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-
-		HttpEntity entity = null;
+		
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getUserNumberParams(ChatRoomListnikeActivity.this, groupid,
+			params =PeerParamsUtils.getUserNumberParams(ChatRoomListnikeActivity.this, groupid,
 					page,client_id);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.NUMBER_IN_URL, entity,
-				"application/json", new JsonHttpResponseHandler() {
+		HttpUtil.post(HttpConfig.NUMBER_IN_URL, params, new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,

@@ -10,6 +10,7 @@ import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.peer.IMinterface.IM;
 import com.peer.base.Constant;
+import com.peer.utils.pLog;
 
 
 /**
@@ -35,6 +36,10 @@ public class easemobchatImp implements IM{
 	@Override
 	public void login(String email, String password) {
 		// TODO Auto-generated method stub
+		
+		pLog.i("test", "email:"+email);
+		pLog.i("test", "password:"+password);
+		
 		EMChatManager.getInstance().login(email,password,new EMCallBack() {
 			
 			@Override
@@ -53,6 +58,10 @@ public class easemobchatImp implements IM{
 			@Override
 			public void onError(int arg0, String arg1) {
 				// TODO Auto-generated method stub
+				
+				pLog.i("test", "arg0:"+arg0);
+				pLog.i("test", "arg1:"+arg1);
+				
 				System.out.println("环信登录错误---->");
 			}
 		});

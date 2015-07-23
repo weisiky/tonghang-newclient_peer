@@ -36,8 +36,8 @@ public class PeerParamsUtils {
 	 * @param context
 	 * @return
 	 */
-	public static Map<String, Object> getDefaultParams(Context context) {
-		Map<String, Object> defaultParams = new HashMap<String, Object>();
+	public static HashMap<String, Object> getDefaultParams(Context context) {
+		HashMap<String, Object> defaultParams = new HashMap<String, Object>();
 		return defaultParams;
 	}
 
@@ -51,16 +51,17 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getLoginParams(Context context, String email,
-			String password) throws UnsupportedEncodingException, Exception {
+	public static RequestParams getLoginParams(Context context, String email,
+			String password) throws Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("email", email);
 		loginParams.put("password", password);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
 	}
-	
+
 	/**
 	 * 创建话题参数绑定
 	 * 
@@ -72,17 +73,18 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getcreatetopicParams(Context context, String client_id,
-			String subject , String label_name) throws UnsupportedEncodingException, Exception {
+	public static RequestParams getcreatetopicParams(Context context,
+			String client_id, String subject, String label_name)
+			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
 		loginParams.put("subject", subject);
 		loginParams.put("label_name", label_name);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
+
 	/**
 	 * 添加好友参数绑定
 	 * 
@@ -93,18 +95,17 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getaddfriendParams(Context context, String invitee_id,
-			String reason) throws UnsupportedEncodingException, Exception {
+	public static RequestParams getaddfriendParams(Context context,
+			String invitee_id, String reason)
+			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("invitee_id", invitee_id);
 		loginParams.put("reason", reason);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
-	
+
 	/**
 	 * 删除好友参数绑定
 	 * 
@@ -115,15 +116,17 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getdeletefriendParams(Context context, String friend_id) throws UnsupportedEncodingException, Exception {
+	public static RequestParams getdeletefriendParams(Context context,
+			String friend_id) throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("friend_id", friend_id);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		// HttpEntity entity = new StringEntity(
+		// JsonDocHelper.toJSONString(loginParams), "utf-8");
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 获取未读取消息参数绑定
 	 * 
@@ -134,14 +137,15 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getComMsgParams(Context context, easemobchatUser users) throws UnsupportedEncodingException, Exception {
+	public static RequestParams getComMsgParams(Context context,
+			easemobchatUser users) throws UnsupportedEncodingException,
+			Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("entries", users.getEasemobchatusers());
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
 
 	/**
 	 * 找回密码参数绑定
@@ -153,16 +157,15 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getFindPassWordParams(Context context, String email)
-			throws UnsupportedEncodingException, Exception {
+	public static RequestParams getFindPassWordParams(Context context,
+			String email) throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("email", email);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 获取用户信息参数绑定
 	 * 
@@ -172,16 +175,15 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getUserParams(Context context, String client_id)
+	public static RequestParams getUserParams(Context context, String client_id)
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 加入话题参数绑定
 	 * 
@@ -192,17 +194,17 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getJoinParams(Context context, String client_id , String topic_id)
+	public static RequestParams getJoinParams(Context context,
+			String client_id, String topic_id)
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
 		loginParams.put("topic_id", topic_id);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 修改当前用户标签参数绑定
 	 * 
@@ -212,17 +214,17 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getUserLabelsParams(Context context, String client_id , List<String> label_name)
+	public static RequestParams getUserLabelsParams(Context context,
+			String client_id, List<String> label_name)
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
 		loginParams.put("label_name", label_name);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 更改密码参数绑定
 	 * 
@@ -233,14 +235,15 @@ public class PeerParamsUtils {
 	 * @throws UnsupportedEncodingException
 	 * @throws Exception
 	 */
-	public static HttpEntity getUpdatepasswdParams(Context context, String oldpasswd , String newpasswd)
+	public static RequestParams getUpdatepasswdParams(Context context,
+			String oldpasswd, String newpasswd)
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("old_passwd", oldpasswd);
 		loginParams.put("new_passwd", newpasswd);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(loginParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
 	}
 
 	/**
@@ -256,17 +259,17 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getRegisterTagParams(Context context,
+	public static RequestParams getRegisterTagParams(Context context,
 			String email, String password, String username, List labels)
 			throws Exception {
-		Map<String, Object> registerTagParams = getDefaultParams(context);
+		RequestParams params = new RequestParams();
+		HashMap<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("email", email);
 		registerTagParams.put("password", password);
 		registerTagParams.put("username", username);
 		registerTagParams.put("labels", labels);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
 
 	/**
@@ -280,16 +283,36 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getHomeParams(Context context, String client_id,
-			int page) throws Exception {
+	public static RequestParams getHomeParams(Context context,
+			String client_id, int page) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
 		registerTagParams.put("pageindex", page);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
-	
+
+	/**
+	 * 获取用户好友申请列表
+	 * 
+	 * @param
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getNewFriendsParams(Context context,
+			int pageindex) throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		registerTagParams.put("pageindex", pageindex);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+
 	/**
 	 * 更改用户信息参数绑定
 	 * 
@@ -303,20 +326,20 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getUpdateParams(Context context,
-			 String username, String birth, String sex , String address)
+	public static RequestParams getUpdateParams(Context context,
+			String username, String birth, String sex, String address)
 			throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
-		
+
 		registerTagParams.put("username", username);
 		registerTagParams.put("sex", birth);
 		registerTagParams.put("birth", sex);
 		registerTagParams.put("city", address);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
-	
+
 	/**
 	 * 获取话题推荐参数绑定
 	 * 
@@ -328,14 +351,14 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getRemTopicParams(Context context, String client_id,
-			int page) throws Exception {
+	public static RequestParams getRemTopicParams(Context context,
+			String client_id, int page) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
 		registerTagParams.put("pageindex", page);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
 
 	/**
@@ -351,19 +374,18 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getSearchResultParams(Context context,
+	public static RequestParams getSearchResultParams(Context context,
 			String name, int page, String contanttype) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		// registerTagParams.put("email", email);
 		// registerTagParams.put("password", password);
 		// registerTagParams.put("username", username);
 		// registerTagParams.put("labels", labels);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
-	
-	
+
 	/**
 	 * 获取参与话题用户参数绑定
 	 * 
@@ -376,15 +398,15 @@ public class PeerParamsUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static HttpEntity getUserNumberParams(Context context, String groupid,
-			int page , String client_id) throws Exception {
+	public static RequestParams getUserNumberParams(Context context,
+			String groupid, int page, String client_id) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("topicid", groupid);
 		registerTagParams.put("pageindex", page);
 		registerTagParams.put("client_id", client_id);
-		HttpEntity entity = new StringEntity(
-				JsonDocHelper.toJSONString(registerTagParams), "utf-8");
-		return entity;
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
 	}
 
 }

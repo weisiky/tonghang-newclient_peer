@@ -43,6 +43,7 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.easemob.util.DensityUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.adapter.ChatMsgViewAdapter;
 import com.peer.base.Constant;
@@ -84,11 +85,9 @@ public class ChatRoomActivity extends pBaseActivity {
 	private String topicId;
 	private int num = 1; // num用作判断用户是否点击theme_chat 0-no;1-yes
 
-	ScrollView mScrollView;
 
 	class PageViewList {
-		private LinearLayout ll_back;
-		private TextView tv_title, tv_share, tv_nikename, theme_chat;
+		private TextView tv_tagname, tv_share, tv_nikename, theme_chat;
 		private RelativeLayout host_imfor, rl_bottom;
 		private ImageView host_image, im_downview;
 		private ListView lv_chat;
@@ -129,13 +128,9 @@ public class ChatRoomActivity extends pBaseActivity {
 				LayoutParams.WRAP_CONTENT, page);
 		popupwindow();
 
-		mScrollView = (ScrollView) findViewById(R.id.scrollContent);
-		mScrollView.setVerticalScrollBarEnabled(false);
-		mScrollView.setHorizontalScrollBarEnabled(false);
-
 		hideKeyboard();// 软键盘
 		pageViewaList.btn_send.setEnabled(false);
-		pageViewaList.btn_send.addTextChangedListener(new TextWatcher() {
+		pageViewaList.et_sendmessage.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
@@ -172,7 +167,6 @@ public class ChatRoomActivity extends pBaseActivity {
 	@Override
 	protected void setListener() {
 		// TODO Auto-generated method stub
-		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.im_downview.setOnClickListener(this);
 		pageViewaList.host_image.setOnClickListener(this);
 		pageViewaList.theme_chat.setOnClickListener(this);
@@ -206,7 +200,7 @@ public class ChatRoomActivity extends pBaseActivity {
 			if (intent.getStringExtra(Constant.FROMFLOAT) != null
 					&& intent.getStringExtra(Constant.FROMFLOAT).equals(
 							Constant.FROMFLOAT)) {
-				pageViewaList.tv_title.setText(ChatRoomBean.getInstance()
+				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
 						.getTopicBean().getLabel_name());
 				pageViewaList.tv_nikename.setText(ChatRoomBean.getInstance()
 						.getUserBean().getUsername());
@@ -215,7 +209,7 @@ public class ChatRoomActivity extends pBaseActivity {
 				topicId = ChatRoomBean.getInstance().getTopicBean()
 						.getTopic_id();
 			} else {
-				pageViewaList.tv_title.setText(ChatRoomBean.getInstance()
+				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
 						.getTopicBean().getLabel_name());
 				UserBean u = ChatRoomBean.getInstance().getUserBean();
 				pageViewaList.tv_nikename.setText(u.getUsername());
@@ -249,7 +243,7 @@ public class ChatRoomActivity extends pBaseActivity {
 			toChatUsername = ChatRoomBean.getInstance().getUserBean()
 					.getClient_id();
 			pageViewaList.host_imfor.setVisibility(View.GONE);
-			pageViewaList.tv_title.setText(ChatRoomBean.getInstance()
+			pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
 					.getUserBean().getUsername());
 			titlePopup.addAction(new ActionItem(this, getResources().getString(
 					R.string.deletemes), R.color.white));
@@ -295,7 +289,9 @@ public class ChatRoomActivity extends pBaseActivity {
 	@Override
 	protected View loadTopLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
+		// return getLayoutInflater().inflate(R.layout.base_toplayout_title,
+		// null);
+		return null;
 	}
 
 	@Override
@@ -315,18 +311,14 @@ public class ChatRoomActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			if (true) {
-				if (!JoinTopicBean.getInstance().getIsower()) {
-					sendleavegroup(ChatRoomBean.getInstance().getUserBean()
-							.getClient_id(), ChatRoomBean.getInstance()
-							.getTopicBean().getTopic_id());
-					backPage();
-				} else {
-					startfloatView();
-				}
-			} else {
-				backPage();
-			}
+			// if (!JoinTopicBean.getInstance().getIsower()) {
+			// sendleavegroup(ChatRoomBean.getInstance().getUserBean()
+			// .getClient_id(), ChatRoomBean.getInstance()
+			// .getTopicBean().getTopic_id());
+			// backPage();
+			// } else {
+			startfloatView();
+			// }
 			return true;
 		} else {
 			return super.onKeyDown(keyCode, event);
@@ -356,8 +348,9 @@ public class ChatRoomActivity extends pBaseActivity {
 				if (JoinTopicBean.getInstance().getIsower()) {
 					UserBean u = JoinTopicBean.getInstance().getUserbean();
 					PersonpageBean.getInstance().setUser(u);
-					startActivityForLeft(PersonalPageActivity.class, intent, false);
-				}else{
+					startActivityForLeft(PersonalPageActivity.class, intent,
+							false);
+				} else {
 					try {
 						senduser(JoinTopicBean.getInstance().getClient_id());
 					} catch (UnsupportedEncodingException e) {
@@ -371,13 +364,13 @@ public class ChatRoomActivity extends pBaseActivity {
 
 			break;
 		case R.id.btn_send:
-			
+
 			/** 以前版本好像群聊走自己服务器，不走环信。具体不清楚。这里只发环信，可能出错 **/
-//			 if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
-//			 reply();
-//			 }else{
-			 sendMessage();
-//			 }
+			// if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
+			// reply();
+			// }else{
+			sendMessage();
+			// }
 			break;
 		default:
 			break;
@@ -545,33 +538,37 @@ public class ChatRoomActivity extends pBaseActivity {
 			}
 		});
 	}
-	
-	
 
 	private void sendMessage() {
 		// TODO Auto-generated method stub
-		if(EMChatManager.getInstance().isConnected()){
-			String content=pageViewaList.et_sendmessage.getText().toString().trim();	
-			String imagurl = JoinTopicBean.getInstance().getUserbean().getImage();
-			String userid = JoinTopicBean.getInstance().getUserbean().getClient_id();
-			//环信发送消息，携带消息内容，自己头像，自己Id
-			easemobchatImp.getInstance().sendMessage(content, Constant.SINGLECHAT, toChatUsername,imagurl,userid);			
-			
-			SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss     ");     
-			 Date   curDate   =   new   Date(System.currentTimeMillis());//获取当前时间     
-			String   str   =   formatter.format(curDate);     
+		if (EMChatManager.getInstance().isConnected()) {
+			String content = pageViewaList.et_sendmessage.getText().toString()
+					.trim();
+			String imagurl = JoinTopicBean.getInstance().getUserbean()
+					.getImage();
+			String userid = JoinTopicBean.getInstance().getUserbean()
+					.getClient_id();
+			// 环信发送消息，携带消息内容，自己头像，自己Id
+			easemobchatImp.getInstance().sendMessage(content,
+					Constant.SINGLECHAT, toChatUsername, imagurl, userid);
+
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy年MM月dd日   HH:mm:ss     ");
+			Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
+			String str = formatter.format(curDate);
 			ChatMsgEntityBean.getInstance().setDate(str);
 			ChatMsgEntityBean.getInstance().setImage(imagurl);
 			ChatMsgEntityBean.getInstance().setUserId(userid);
 			ChatMsgEntityBean.getInstance().setMessage(content);
-			ChatMsgEntityBean.getInstance().setMsgType(Constant.SELF);					
+			ChatMsgEntityBean.getInstance().setMsgType(Constant.SELF);
 			msgList.add(ChatMsgEntityBean.getInstance());
 			adapter.notifyDataSetChanged();
 			pageViewaList.lv_chat
-			.setSelection(pageViewaList.lv_chat.getCount() - 1);
+					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			pageViewaList.et_sendmessage.setText("");
-		}else{
-			showToast(getResources().getString(R.string.broken_net), Toast.LENGTH_SHORT, false);
+		} else {
+			showToast(getResources().getString(R.string.broken_net),
+					Toast.LENGTH_SHORT, false);
 		}
 	}
 
@@ -646,16 +643,15 @@ public class ChatRoomActivity extends pBaseActivity {
 	private void sendjoingroup(String client_id, String topic_id) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getJoinParams(ChatRoomActivity.this,
+			params = PeerParamsUtils.getJoinParams(ChatRoomActivity.this,
 					client_id, topic_id);
-		} catch (Exception e2) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(ChatRoomActivity.this, HttpConfig.JOIN_TOPIC_IN_URL,
-				entity, "application/json;charset=utf-8",
+		HttpUtil.post(HttpConfig.JOIN_TOPIC_IN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -664,7 +660,6 @@ public class ChatRoomActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 
 						hideLoading();
-
 
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -720,16 +715,15 @@ public class ChatRoomActivity extends pBaseActivity {
 	private void sendleavegroup(String client_id, String topic_id) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getJoinParams(ChatRoomActivity.this,
+			params = PeerParamsUtils.getJoinParams(ChatRoomActivity.this,
 					client_id, topic_id);
-		} catch (Exception e2) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(ChatRoomActivity.this, HttpConfig.LEAVE_TOPIC_IN_URL,
-				entity, "application/json;charset=utf-8",
+		HttpUtil.post(HttpConfig.LEAVE_TOPIC_IN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -738,7 +732,6 @@ public class ChatRoomActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 
 						hideLoading();
-
 
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -784,8 +777,7 @@ public class ChatRoomActivity extends pBaseActivity {
 
 				});
 	}
-	
-	
+
 	/**
 	 * 获取用户信息接口
 	 * 
@@ -793,19 +785,17 @@ public class ChatRoomActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void senduser(String client_id)
-			throws UnsupportedEncodingException {
+	private void senduser(String client_id) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getUserParams(this,client_id);
-		} catch (Exception e2) {
+			params = PeerParamsUtils.getUserParams(this, client_id);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(this, HttpConfig.USER_IN_URL+client_id+".json", entity,
-				"application/json;charset=utf-8",
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json", params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -833,7 +823,6 @@ public class ChatRoomActivity extends pBaseActivity {
 								errorResponse);
 					}
 
-
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
@@ -842,9 +831,11 @@ public class ChatRoomActivity extends pBaseActivity {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
-							
-							PersonpageBean.getInstance().setUser(LoginBean.getInstance().user);
-							startActivityForLeft(PersonalPageActivity.class, intent, false);
+
+							PersonpageBean.getInstance().setUser(
+									LoginBean.getInstance().user);
+							startActivityForLeft(PersonalPageActivity.class,
+									intent, false);
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
@@ -855,7 +846,6 @@ public class ChatRoomActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 
 					}
-
 
 				});
 	}

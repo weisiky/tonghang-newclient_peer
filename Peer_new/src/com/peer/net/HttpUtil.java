@@ -73,6 +73,23 @@ public class HttpUtil {
 	 */
 	public static void post(String urlString, RequestParams params,
 			AsyncHttpResponseHandler res) {
+		pLog.i("test", "urlString:" + urlString);
+		pLog.i("test", "params:" + params.toString());
+		client.post(urlString, params, res);
+	}
+
+	/**
+	 * post url里面带参数
+	 * 
+	 * @param urlString
+	 * @param res
+	 */
+	public static void post(Context context, String urlString,
+			RequestParams params, JsonHttpResponseHandler res) {
+
+		pLog.i("test", "urlString:" + urlString);
+		pLog.i("test", "params:" + params.toString());
+
 		client.post(urlString, params, res);
 	}
 
@@ -93,6 +110,9 @@ public class HttpUtil {
 	 * @param res
 	 */
 	public static void post(String urlString, JsonHttpResponseHandler res) {
+
+		pLog.i("test", "urlString:" + urlString);
+
 		client.post(urlString, res);
 	}
 
@@ -131,9 +151,9 @@ public class HttpUtil {
 	public static void post(Context context, String urlString,
 			RequestParams params, String contentType,
 			JsonHttpResponseHandler res) {
-		
-//		RequestParams params=new RequestParams();
-//		params.p
+
+		// RequestParams params=new RequestParams();
+		// params.p
 		List<Header> headersList = new ArrayList<Header>();
 		Header[] headers = headersList.toArray(new Header[headersList.size()]);
 		client.post(context, urlString, headers, params, contentType, res);

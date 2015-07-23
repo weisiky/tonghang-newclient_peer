@@ -24,7 +24,8 @@
                 android:id="@+id/personhead"
                 android:layout_width="60.0dip"
                 android:layout_height="60.0dip"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/mini_avatar_shadow" />
         </LinearLayout>
 
         <LinearLayout

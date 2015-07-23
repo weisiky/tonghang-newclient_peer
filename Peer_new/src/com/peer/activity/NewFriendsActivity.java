@@ -1,10 +1,7 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -17,16 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.adapter.FriendsAdapter;
+import com.loopj.android.http.RequestParams;
 import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.NewFriendBean;
-import com.peer.bean.RecommendUserBean;
 import com.peer.event.NewFriensEvent;
 import com.peer.fragment.FriendsFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
@@ -49,6 +46,8 @@ public class NewFriendsActivity extends pBaseActivity {
 	}
 
 	private PageViewList pageViewaList;
+	// 分页
+	private int pageindex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +75,7 @@ public class NewFriendsActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 		registEventBus();
-		try {
-			sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 
 	}
 
@@ -153,11 +147,18 @@ public class NewFriendsActivity extends pBaseActivity {
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendnewfriend(String client_id)
-			throws UnsupportedEncodingException {
+	private void sendnewfriend(String client_id) {
 		// TODO Auto-generated method stub
 
-		HttpUtil.get(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
+		// RequestParams params = null;
+		// try {
+		// params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
+		HttpUtil.post(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -192,6 +193,9 @@ public class NewFriendsActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+
+						pLog.i("test", "response:" + response.toString());
+
 						try {
 							NewFriendBean newfriendbean = JsonDocHelper
 									.toJSONObject(
@@ -220,8 +224,10 @@ public class NewFriendsActivity extends pBaseActivity {
 						}
 
 						if (adapter == null) {
-							adapter = new NewfriendsAdapter(
-									NewFriendsActivity.this, list);
+							if (list!=null&&list.size() > 0) {
+								adapter = new NewfriendsAdapter(
+										NewFriendsActivity.this, list);
+							}
 							pageViewaList.lv_newfriends.setAdapter(adapter);
 						}
 

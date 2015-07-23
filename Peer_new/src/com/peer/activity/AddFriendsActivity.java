@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -30,34 +31,35 @@ import com.peer.bean.RecommendUserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-
 /**
  * 添加好友
  */
-public class AddFriendsActivity extends pBaseActivity{
-	
+public class AddFriendsActivity extends pBaseActivity {
+
 	String user_client_id;
-	
+
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title,personnike,email;
+		private TextView tv_title, personnike, email;
 		private ImageView personhead;
 		private EditText add_reson;
 		private Button bt_send;
 	}
 
 	private PageViewList pageViewaList;
+	private String pic_server;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -65,7 +67,8 @@ public class AddFriendsActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.checkfriends));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.checkfriends));
 	}
 
 	@Override
@@ -75,20 +78,29 @@ public class AddFriendsActivity extends pBaseActivity{
 		pageViewaList.bt_send.setOnClickListener(this);
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		
-		Intent t = new Intent();
+
+		Intent t = getIntent();
 		user_client_id = t.getStringExtra("user_client_id");
 		String image = t.getStringExtra("image");
 		String nike = t.getStringExtra("nike");
 		String email = t.getStringExtra("email");
 
+		pLog.i("test", "image:" + image);
+		pLog.i("test", "nike:" + nike);
+		pLog.i("test", "email:" + email);
+
+		pic_server = mShareFileUtils.getString(Constant.PIC_SERVER, "");
+
+		ImageLoaderUtil.getInstance().showHttpImage(pic_server + image,
+				pageViewaList.personhead, R.drawable.mini_avatar_shadow);
+
 		pageViewaList.personnike.setText(nike);
 		pageViewaList.email.setText(email);
-		
-		
+
 	}
 
 	@Override
@@ -103,52 +115,57 @@ public class AddFriendsActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		return getLayoutInflater().inflate(R.layout.activity_addfriends, null);
 	}
-	
+
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_send:
-			
-			
-			if(isNetworkAvailable){
-				String reason = pageViewaList.add_reson.getText().toString().trim();
+
+			if (isNetworkAvailable) {
+				String reason = pageViewaList.add_reson.getText().toString()
+						.trim();
 				try {
-					sendaddfriend(user_client_id,reason,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+					sendaddfriend(user_client_id, reason,
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else{
-				showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
-			}		
+			} else {
+				showToast(
+						getResources()
+								.getString(R.string.Broken_network_prompt),
+						Toast.LENGTH_SHORT, false);
+			}
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * 添加好友请求
 	 * 
@@ -157,21 +174,19 @@ public class AddFriendsActivity extends pBaseActivity{
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendaddfriend(String invitee_id, String reason , String client_id)
-			throws UnsupportedEncodingException {
+	private void sendaddfriend(String invitee_id, String reason,
+			String client_id) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-
-		HttpEntity entity = null;
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getaddfriendParams(this, invitee_id,
+			params = PeerParamsUtils.getaddfriendParams(this, invitee_id,
 					reason);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.FRIEND_ADD_URL+client_id+".json"
-				, entity, "application/json",
+		HttpUtil.post(HttpConfig.FRIEND_ADD_URL + client_id + ".json", params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -201,7 +216,6 @@ public class AddFriendsActivity extends pBaseActivity{
 								errorResponse);
 					}
 
-
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
@@ -209,16 +223,17 @@ public class AddFriendsActivity extends pBaseActivity{
 						JSONObject result;
 						try {
 							result = response.getJSONObject("success");
-							
-							pLog.i("test", "result:"+result);
-						
-						String code = result.getString("code");
-						if (code.equals("ok")){
-							showToast("请求已送达！", Toast.LENGTH_SHORT, false);
-							finish();
-						}else{
-							showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT, false);
-						}
+
+							pLog.i("test", "result:" + result);
+
+							String code = result.getString("code");
+							if (code.equals("ok")) {
+								showToast("请求已送达！", Toast.LENGTH_SHORT, false);
+								finish();
+							} else {
+								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,
+										false);
+							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -226,7 +241,6 @@ public class AddFriendsActivity extends pBaseActivity{
 						super.onSuccess(statusCode, headers, response);
 					}
 
-		
-		});
+				});
 	}
 }

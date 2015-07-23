@@ -20,7 +20,6 @@ public class ImageLoaderUtil {
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 
 	private ImageLoaderUtil() {
-		init();
 	}
 
 	public static ImageLoaderUtil getInstance() {
@@ -30,32 +29,38 @@ public class ImageLoaderUtil {
 		return instance;
 	}
 
-	private void init() {
+	private void init(int defaultImage) {
 		options = new DisplayImageOptions.Builder().cacheInMemory()
-				.showImageForEmptyUri(R.drawable.load_pic_faild)
-				.showImageOnFail(R.drawable.load_pic_faild)
-				.showStubImage(R.drawable.img_loading)
+				.showImageForEmptyUri(defaultImage)
+				.showImageOnFail(defaultImage).showStubImage(defaultImage)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
 				.bitmapConfig(Config.RGB_565).build();
 	}
-	
-	public void showImage(String filePath, ImageView imageView) {
+
+	public void showImage(String filePath, ImageView imageView, int defaultImage) {
 		String iUrl = Scheme.FILE.wrap(filePath);
+		init(defaultImage);
 		imageLoader.displayImage(iUrl, imageView, options);
 	}
 
-	public void showAssetImage(String filePath, ImageView imageView) {
+	public void showAssetImage(String filePath, ImageView imageView,
+			int defaultImage) {
 		String iUrl = Scheme.ASSETS.wrap(filePath);
+		init(defaultImage);
 		imageLoader.displayImage(iUrl, imageView, options);
 	}
 
-	public void showHttpImage(String filePath, ImageView imageView) {
+	public void showHttpImage(String filePath, ImageView imageView,
+			int defaultImage) {
 		String iUrl = Scheme.HTTP.wrap(filePath);
+		init(defaultImage);
 		imageLoader.displayImage(iUrl, imageView, options);
 	}
 
-	public void showHttpsImage(String filePath, ImageView imageView) {
+	public void showHttpsImage(String filePath, ImageView imageView,
+			int defaultImage) {
 		String iUrl = Scheme.HTTPS.wrap(filePath);
+		init(defaultImage);
 		imageLoader.displayImage(iUrl, imageView, options);
 	}
 

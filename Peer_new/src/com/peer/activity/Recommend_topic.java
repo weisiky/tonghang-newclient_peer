@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.adapter.Recommend_topicAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -200,16 +201,24 @@ public class Recommend_topic extends pBaseActivity {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getRemTopicParams(this, client_id, page);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getRemTopicParams(this, client_id, page);
+			params = PeerParamsUtils.getRemTopicParams(this, client_id, page);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.TOPIC_RECOMMEND_IN_URL, entity,
-				"application/json", new JsonHttpResponseHandler() {
+		HttpUtil.post(this, HttpConfig.TOPIC_RECOMMEND_IN_URL, params,
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -243,6 +252,9 @@ public class Recommend_topic extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
+
+						pLog.i("test", "response:" + response.toString());
+
 						try {
 							RecommendTopicBean recommendtopicbean = JsonDocHelper
 									.toJSONObject(

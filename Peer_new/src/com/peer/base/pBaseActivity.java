@@ -2,6 +2,7 @@ package com.peer.base;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import com.easemob.chat.EMChatManager;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
 import com.peer.activity.MyAcountActivity;
+import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
 import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
@@ -78,9 +80,11 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.base);
+		
 		// 当前页面名称
 		currentPageName = getLocalClassNameBySelf();
 		// 获取手机屏幕跨度，图片适配使用
@@ -381,13 +385,16 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
-			startActivityRight(LoginActivity.class, intent, true);
+			startActivityRight(LoginActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("RegisterTagActivity")) {
-			startActivityRight(RegisterAcountActivity.class, intent, true);
+			startActivityRight(RegisterAcountActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains(
 				"RegisterCompleteActivity")) {
-			showToast("请完成注册", Toast.LENGTH_SHORT, true);
-		} else if (getLocalClassNameBySelf().contains("SearchUserActivity")) {
+			showToast("请完成注册", Toast.LENGTH_SHORT, false);
+		} else if (getLocalClassNameBySelf().contains("ChatRoomActivity")) {
+			startActivityRight(PersonalPageActivity.class, intent, false);
+		} else if (getLocalClassNameBySelf().contains("SearchUserActivity")
+				|| getLocalClassNameBySelf().contains("Recommend_topic")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
@@ -396,7 +403,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")
-				|| getLocalClassNameBySelf().contains("MySkillActivity")
 				|| getLocalClassNameBySelf().contains("SettingActivity")
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
@@ -408,15 +414,16 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
 				|| getLocalClassNameBySelf().contains("TopicActivity")
 				|| getLocalClassNameBySelf().contains("AddFriendsActivity")
-				|| getLocalClassNameBySelf().contains("ChatRoomActivity")
+				|| getLocalClassNameBySelf().contains("UpdateNikeActivity")
+				|| getLocalClassNameBySelf().contains("MySkillActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
 		} else if (getLocalClassNameBySelf().contains("UpdatePasswordActivity")) {
-			startActivityRight(MyAcountActivity.class, intent, true);
+			startActivityRight(MyAcountActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("NewFunctionActivity")
 				|| getLocalClassNameBySelf().contains("FeedBackActivity")
 				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")) {
-			startActivityRight(SettingActivity.class, intent, true);
+			startActivityRight(SettingActivity.class, intent, false);
 		} else {
 			exitApp();
 		}
@@ -428,7 +435,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	 */
 	public void exitApp() {
 		if ((System.currentTimeMillis() - mExitTime) > 2000) {
-			showToast("再次点击退出", Toast.LENGTH_SHORT, true);
+			showToast("再次点击退出", Toast.LENGTH_SHORT, false);
 			mExitTime = System.currentTimeMillis();
 		} else {
 			System.exit(0);

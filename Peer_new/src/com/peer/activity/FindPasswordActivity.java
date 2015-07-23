@@ -147,7 +147,7 @@ public class FindPasswordActivity extends pBaseActivity {
 			String email = pageViewaList.et_email_find.getText().toString()
 					.trim();
 			if (isNetworkAvailable) {
-					sendfindpasswd(email);
+				sendfindpasswd(email);
 			} else {
 
 			}
@@ -168,15 +168,22 @@ public class FindPasswordActivity extends pBaseActivity {
 	private void sendfindpasswd(String email) {
 		// TODO Auto-generated method stub
 		showProgressBar();
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getFindPassWordParams(this, email);
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getFindPassWordParams(this, email);
-		} catch (Exception e) {
+			params = PeerParamsUtils.getFindPassWordParams(this, email);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(this, HttpConfig.FORGET_IN_URL, entity,
-				"application/json", new JsonHttpResponseHandler() {
+		HttpUtil.post(this, HttpConfig.FORGET_IN_URL, params,
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -206,18 +213,17 @@ public class FindPasswordActivity extends pBaseActivity {
 								errorResponse);
 					}
 
-
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
 						Intent intent = new Intent();
-						startActivityForLeft(FindPasswordResultActivity.class, intent, false);
-						
+						startActivityForLeft(FindPasswordResultActivity.class,
+								intent, false);
+
 						super.onSuccess(statusCode, headers, response);
 					}
-
 
 				});
 		Intent intent = new Intent();

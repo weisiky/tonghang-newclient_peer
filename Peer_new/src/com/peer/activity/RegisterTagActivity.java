@@ -144,7 +144,6 @@ public class RegisterTagActivity extends pBaseActivity {
 
 	}
 
-	
 	private void RegisteTag() {
 		// TODO Auto-generated method stub
 
@@ -156,7 +155,6 @@ public class RegisterTagActivity extends pBaseActivity {
 		String[] arr = { t1, t2, t3, t4, t5 };
 		ArrayList<String> list = new ArrayList<String>();
 
-		
 		boolean sameTag = true;
 		boolean Tolong = true;
 		boolean isbreak = true;
@@ -218,7 +216,7 @@ public class RegisterTagActivity extends pBaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 		} else {
 			pageViewaList.tv_remind.setText(getResources().getString(
@@ -241,23 +239,17 @@ public class RegisterTagActivity extends pBaseActivity {
 			String nikename, List labels) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		// Map<String, Object> paramsMap = new HashMap<String, Object>();
-		// paramsMap.put("email", email);
-		// paramsMap.put("password", password);
-		// paramsMap.put("username", nikename);
-		// paramsMap.put("labels",labels);
 
-		HttpEntity entity = null;
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getRegisterTagParams(this, email, password,
-					nikename, labels);
+			params = PeerParamsUtils.getRegisterTagParams(this, email,
+					password, nikename, labels);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.REGISTTAG_IN_URL, entity,
-				"application/json;charset=utf-8",
+		HttpUtil.post(HttpConfig.REGISTTAG_IN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -294,32 +286,36 @@ public class RegisterTagActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						hideLoading();
 						LoginBean loginBean;
+
+						pLog.i("test", "response:" + response.toString());
+
 						try {
-							loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-						if (loginBean != null) {
-							pShareFileUtils.setString("client_id", loginBean.user.getClient_id());
-							pShareFileUtils.setString("username", loginBean.user.getUsername());
-							
-							Intent register_tag = new Intent();
-							startActivityForLeft(RegisterCompleteActivity.class,
-									register_tag, false);
-							
-						}
-						}  catch (Exception e) {
+							loginBean = JsonDocHelper.toJSONObject(response
+									.getJSONObject("success").toString(),
+									LoginBean.class);
+							if (loginBean != null) {
+								pShareFileUtils.setString("client_id",
+										loginBean.user.getClient_id());
+								pShareFileUtils.setString("username",
+										loginBean.user.getUsername());
+
+								Intent register_tag = new Intent();
+								startActivityForLeft(
+										RegisterCompleteActivity.class,
+										register_tag, false);
+
+							}
+						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 						super.onSuccess(statusCode, headers, response);
 					}
-
 
 				});
 	}
 
-	
 	TextWatcher watcher = new TextWatcher() {
 
 		@Override

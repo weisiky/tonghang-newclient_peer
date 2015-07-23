@@ -1,9 +1,9 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Set;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,11 +19,11 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -159,19 +159,28 @@ public class LoginActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void sendLoginRequest(String email, String password)
+	private void sendLoginRequest(String email, final String password)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getLoginParams(this, email, password);
+		// } catch (Exception e2) {
+		// // TODO Auto-generated catch block
+		// e2.printStackTrace();
+		// }
+
+		pLog.i("test", "password:" + password);
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getLoginParams(this, email, password);
-		} catch (Exception e2) {
+			params = PeerParamsUtils.getLoginParams(this, email, password);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e1.printStackTrace();
 		}
-		HttpUtil.post(this, HttpConfig.LONIN_IN_URL, entity,
-				"application/json;charset=utf-8",
+		HttpUtil.post(HttpConfig.LONIN_IN_URL, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -202,42 +211,64 @@ public class LoginActivity extends pBaseActivity {
 								errorResponse);
 					}
 
+					@SuppressWarnings("static-access")
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
+
 						try {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
 							if (loginBean != null) {
 
+								mShareFileUtils.setString(Constant.PASSWORD,
+										password);
+								pLog.i("test",
+										"response:"
+												+ mShareFileUtils.getString(
+														Constant.PASSWORD, ""));
+
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
 
 								// 注册极光
-//								JPushInterface.setAlias(getApplication(),
-//										loginBean.user.get
-//												.getHuangxin_username(),
-//										new TagAliasCallback() {
-//											@Override
-//											public void gotResult(int code,
-//													String arg1,
-//													Set<String> arg2) {
-//												// TODO Auto-generated method
-//												// stub
-//												System.out.println("code"
-//														+ code);
-//												pLog.i("注册极光结果放回",
-//														String.valueOf(code));
-//											}
-//										});
+								JPushInterface.setAlias(getApplication(),
+										loginBean.user.getClient_id(),
+										new TagAliasCallback() {
+											@Override
+											public void gotResult(int code,
+													String arg1,
+													Set<String> arg2) {
+												// TODO Auto-generated method
+												// stub
+												System.out.println("code"
+														+ code);
+												pLog.i("注册极光结果放回",
+														String.valueOf(code));
+											}
+										});
 
-								// easemobchatImp.getInstance().login(pShareFileUtils.getString("client_id",
-								// ""), pShareFileUtils.getString("password",
+								String client_id = mShareFileUtils.getString(
+										Constant.CLIENT_ID, "");
+								easemobchatImp.getInstance().login(
+										client_id.replace("-", ""),
+										mShareFileUtils.getString(
+												Constant.PASSWORD, ""));
+								easemobchatImp.getInstance()
+										.loadConversationsandGroups();
+
+								// easemobchatImp.getInstance().login(
+								// mShareFileUtils.getString("client_id",
+								// ""),
+								// mShareFileUtils.getString("password",
 								// ""));
-								// easemobchatImp.getInstance().loadConversationsandGroups();
+								//
+								// easemobchatImp.getInstance()
+								// .loadConversationsandGroups();
+
 								startActivityForLeft(MainActivity.class,
 										intent, false);
 							}

@@ -7,11 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -26,14 +22,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.peer.activity.MainActivity;
-import com.peer.activity.PersonalPageActivity;
+import com.loopj.android.http.RequestParams;
 import com.peer.activity.R;
 import com.peer.activity.Recommend_topic;
 import com.peer.activity.SearchUserActivity;
@@ -41,12 +35,11 @@ import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
-import com.peer.bean.LoginBean;
 import com.peer.bean.RecommendUserBean;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
-import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
@@ -59,7 +52,7 @@ public class HomeFragment extends pBaseFragment {
 	HomepageAdapter adapter;
 
 	private LinearLayout ll_search;
-	List<Object> list = new ArrayList<Object>();
+	public List<UserBean> usersList = new ArrayList<UserBean>();
 	private PullToRefreshListView pull_refresh_homepage;
 	public LinearLayout base_neterror_item;
 	private TextView tv_connect_errormsg;
@@ -185,17 +178,26 @@ public class HomeFragment extends pBaseFragment {
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
-		HttpEntity entity = null;
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getHomeParams(pbaseActivity, client_id,
+		// page);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
+		RequestParams params = null;
 		try {
-			entity = PeerParamsUtils.getHomeParams(pbaseActivity, client_id,
+			params = PeerParamsUtils.getHomeParams(pbaseActivity, client_id,
 					page);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL, entity,
-				"application/json", new JsonHttpResponseHandler() {
+		HttpUtil.post(getActivity(), HttpConfig.USER_RECOMMEND_IN_URL, params,
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -233,6 +235,8 @@ public class HomeFragment extends pBaseFragment {
 						pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
 								"home.etag", false, response.toString());
 
+						pLog.i("test", "response:" + response);
+
 						try {
 							RecommendUserBean recommenduserbean = JsonDocHelper
 									.toJSONObject(
@@ -242,52 +246,15 @@ public class HomeFragment extends pBaseFragment {
 							if (recommenduserbean != null) {
 
 								if (page == 1) {
-									list.clear();
+									usersList.clear();
 								}
 
-								for (int index = 0; index < recommenduserbean.users
-										.size(); index++) {
-									ArrayList<Object> userlist = new ArrayList<Object>();
-									List<String> labelnames = new ArrayList<String>();
-									Map<String, Object> userMsg = new HashMap<String, Object>();
-									userMsg.put("email",
-											recommenduserbean.users.get(index)
-													.getEmail());
-									userMsg.put("sex", recommenduserbean.users
-											.get(index).getSex());
-									userMsg.put("city", recommenduserbean.users
-											.get(index).getCity());
-									userMsg.put("username",
-											recommenduserbean.users.get(index)
-													.getUsername());
-									userMsg.put("client_id",
-											recommenduserbean.users.get(index)
-													.getClient_id());
-									userMsg.put("image",
-											recommenduserbean.users.get(index)
-													.getImage());
-									userMsg.put("created_at",
-											recommenduserbean.users.get(index)
-													.getCreated_at());
-									userMsg.put("birth",
-											recommenduserbean.users.get(index)
-													.getBirth());
-									userMsg.put("is_friend",
-											recommenduserbean.users.get(index)
-													.getIs_friend());
-									userlist.add(userMsg);
-									for (int i = 0; i < recommenduserbean.users
-											.get(index).getLabels().size(); i++) {
-										labelnames.add(recommenduserbean.users
-												.get(index).getLabels().get(i));
-									}
-									userlist.add(labelnames);
-									list.add(userlist);
-								}
+								usersList.addAll(recommenduserbean.users);
 
 								if (adapter == null) {
 									adapter = new HomepageAdapter(
-											getActivity(), list);
+											getActivity(), usersList,
+											recommenduserbean.getPic_server());
 									pull_refresh_homepage.setAdapter(adapter);
 								}
 
@@ -352,6 +319,7 @@ public class HomeFragment extends pBaseFragment {
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void init() {
 		// TODO Auto-generated method stub
 		pull_refresh_homepage = (PullToRefreshListView) getView().findViewById(
@@ -371,40 +339,12 @@ public class HomeFragment extends pBaseFragment {
 		try {
 			recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
 					RecommendUserBean.class);
-
-			for (int index = 0; index < recommenduserbean.users.size(); index++) {
-				ArrayList<Object> userlist = new ArrayList<Object>();
-				List<String> labelnames = new ArrayList<String>();
-				Map<String, Object> userMsg = new HashMap<String, Object>();
-				userMsg.put("email", recommenduserbean.users.get(index)
-						.getEmail());
-				userMsg.put("sex", recommenduserbean.users.get(index).getSex());
-				userMsg.put("city", recommenduserbean.users.get(index)
-						.getCity());
-				userMsg.put("username", recommenduserbean.users.get(index)
-						.getUsername());
-				userMsg.put("client_id", recommenduserbean.users.get(index)
-						.getClient_id());
-				userMsg.put("image", recommenduserbean.users.get(index)
-						.getImage());
-				userMsg.put("created_at", recommenduserbean.users.get(index)
-						.getCreated_at());
-				userMsg.put("birth", recommenduserbean.users.get(index)
-						.getBirth());
-				userlist.add(userMsg);
-				for (int i = 0; i < recommenduserbean.users.get(index)
-						.getLabels().size(); i++) {
-					labelnames.add(recommenduserbean.users.get(index)
-							.getLabels().get(i));
-				}
-				userlist.add(labelnames);
-				list.add(userlist);
-			}
-
+			usersList.addAll(recommenduserbean.users);
 			if (homeCount != null) {
 
 				if (adapter == null) {
-					adapter = new HomepageAdapter(getActivity(), list);
+					adapter = new HomepageAdapter(getActivity(), usersList,
+							mShareFileUtils.getString(Constant.PIC_SERVER, ""));
 				}
 				// adapter.setBaseFragment(HomeFragment.this);
 				pull_refresh_homepage.setAdapter(adapter);
