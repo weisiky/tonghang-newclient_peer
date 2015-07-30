@@ -177,6 +177,7 @@ public class ChatRoomActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
+		pLog.i("test","Chatroomtype1:"+ChatRoomBean.getInstance().getChatroomtype());
 		/** 判断群聊 **/
 		if (ChatRoomBean.getInstance().getChatroomtype() == Constant.MULTICHAT) {
 
@@ -242,6 +243,10 @@ public class ChatRoomActivity extends pBaseActivity {
 			/** 单聊页面 **/
 			toChatUsername = ChatRoomBean.getInstance().getUserBean()
 					.getClient_id();
+			
+			pLog.i("test", "toChatUsername:"+toChatUsername);
+			
+			
 			pageViewaList.host_imfor.setVisibility(View.GONE);
 			pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
 					.getUserBean().getUsername());
@@ -249,6 +254,7 @@ public class ChatRoomActivity extends pBaseActivity {
 					R.string.deletemes), R.color.white));
 			conversation = EMChatManager.getInstance().getConversation(
 					toChatUsername);
+			pLog.i("test", "conversation:"+conversation);
 			for (int i = 0; i < conversation.getMsgCount(); i++) {
 				EMMessage message = conversation.getMessage(i);
 

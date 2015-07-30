@@ -25,8 +25,8 @@ import android.widget.Toast;
 
 public class TopicAdapter extends pBaseAdapter {
 	private Context mContext;
-	private List<Map> mlist;
-	public TopicAdapter(Context mContext,List<Map> list){
+	private List<TopicBean> mlist;
+	public TopicAdapter(Context mContext,List<TopicBean> list){
 		super(mContext);
 		this.mContext=mContext;
 		this.mlist=list;
@@ -58,9 +58,7 @@ public class TopicAdapter extends pBaseAdapter {
 			TextView tv_skill=ViewHolder.get(convertView, R.id.tv_skill);			
 			TextView tv_topic=ViewHolder.get(convertView, R.id.tv_topic);
 			LinearLayout ll_clike=ViewHolder.get(convertView, R.id.ll_clike);
-		final TopicBean topic=(TopicBean) mlist.get(position);
-		Map topictime = (Map)mlist.get(position);
-				
+		final TopicBean topic= mlist.get(position);
 		tv_time.setText(topic.getCreated_at());
 		tv_skill.setText(topic.getLabel_name());
 		tv_topic.setText(topic.getSubject());

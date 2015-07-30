@@ -76,5 +76,11 @@
         android:background="@color/white"
         android:divider="@color/lightgray" >
     </ListView>
+    <View
+        android:id="@+id/rl_line_come"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/rl_newfriends"
+        android:background="@color/lightgray" />
 
 </RelativeLayout>

@@ -11,7 +11,7 @@ import com.peer.utils.pViewBox;
 
 
 /**
- * ‘新版本’页
+ * ‘新版本介绍’页
  */
 public class NewFunctionActivity extends pBaseActivity{
 	class PageViewList {

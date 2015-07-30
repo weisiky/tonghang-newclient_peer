@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.peer.base.Constant;
 import com.peer.bean.LoginBean;
@@ -435,10 +437,9 @@ public class BussinessUtils {
 		pShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
 		pShareFileUtils.setString(Constant.CLIENT_ID,
 				loginBean.user.getClient_id());
-		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
-				.toString());
+		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels().toString());
 		pShareFileUtils.setBoolean(Constant.IS_FRIEND, loginBean.user.getIs_friend());
-
+	
 	}
 
 	/**

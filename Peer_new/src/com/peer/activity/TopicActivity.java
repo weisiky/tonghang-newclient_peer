@@ -25,6 +25,7 @@ import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendTopicBean;
+import com.peer.bean.TopicBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -38,7 +39,7 @@ import com.peer.utils.pViewBox;
 public class TopicActivity extends pBaseActivity {
 
 	int page = 1;
-	List<Map> list = new ArrayList<Map>();
+	List<TopicBean> list = new ArrayList<TopicBean>();
 	TopicAdapter adapter;
 
 	class PageViewList {
@@ -63,11 +64,11 @@ public class TopicActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		if (PersonpageBean.getInstance().user.getClient_id().equals(
+		if (PersonpageBean.getInstance().getUser().getClient_id().equals(
 				mShareFileUtils.getString(Constant.CLIENT_ID, ""))) {
 			pageViewaList.tv_title.setText(getResources().getString(
 					R.string.topic_owen));
-		} else if (PersonpageBean.getInstance().user.getSex().equals("男")) {
+		} else if (PersonpageBean.getInstance().getUser().getSex().equals("男")) {
 			pageViewaList.tv_title.setText(getResources().getString(
 					R.string.topic_other));
 		} else {
@@ -86,12 +87,16 @@ public class TopicActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent();
+		Intent intent = getIntent();
+		String name = intent.getStringExtra("nike");
+		String email = intent.getStringExtra("email");
+		System.out.println("name:"+name);
+		System.out.println("email:"+email);
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
 		pageViewaList.email.setText(intent.getStringExtra("email"));
 
 		try {
-			sendUserTopic(PersonpageBean.getInstance().user.getClient_id(),
+			sendUserTopic(PersonpageBean.getInstance().getUser().getClient_id(),
 					page);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -213,29 +218,13 @@ public class TopicActivity extends pBaseActivity {
 								pLog.i("test", "user1:"
 										+ recommendtopicbean.topics.get(0)
 												.getSubject().toString());
-							}
+								list.addAll(recommendtopicbean.topics);
+								if (adapter == null) {
+									adapter = new TopicAdapter(TopicActivity.this, list);
+									pageViewaList.lv_topichistory.setAdapter(adapter);
+								}
 
-							for (int index = 0; index < recommendtopicbean.topics
-									.size(); index++) {
-								Map<String, Object> topicMsg = new HashMap<String, Object>();
-								topicMsg.put("label_name",
-										recommendtopicbean.topics.get(index)
-												.getLabel_name().toString());
-								topicMsg.put("subject",
-										recommendtopicbean.topics.get(index)
-												.getSubject().toString());
-								topicMsg.put("user_id",
-										recommendtopicbean.topics.get(index)
-												.getUser_id().toString());
-								topicMsg.put("topic_id",
-										recommendtopicbean.topics.get(index)
-												.getTopic_id().toString());
-								topicMsg.put("sys_time",
-										recommendtopicbean.getSys_time());
-								topicMsg.put("created_at",
-										recommendtopicbean.topics.get(index)
-												.getCreated_at().toString());
-								list.add(topicMsg);
+								refresh();
 							}
 
 						} catch (Exception e1) {
@@ -243,12 +232,7 @@ public class TopicActivity extends pBaseActivity {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						if (adapter == null) {
-							adapter = new TopicAdapter(TopicActivity.this, list);
-							pageViewaList.lv_topichistory.setAdapter(adapter);
-						}
-
-						refresh();
+						
 
 						super.onSuccess(statusCode, headers, response);
 					}

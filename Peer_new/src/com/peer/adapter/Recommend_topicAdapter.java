@@ -6,9 +6,13 @@ import java.util.Map;
 import com.peer.activity.ChatRoomActivity;
 import com.peer.activity.R;
 import com.peer.activity.Recommend_topic;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
+import com.peer.bean.ChatRoomBean;
+import com.peer.bean.TopicBean;
 import com.peer.utils.ViewHolder;
+import com.peer.utils.pLog;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,17 +35,10 @@ import android.widget.Toast;
 
 public class Recommend_topicAdapter extends pBaseAdapter {
 	private Context mContext;
-	private List<Map> mList;
-//	List<String> pre_labels ;   //获取登陆者label
-	public Recommend_topicAdapter( Context mContext,List<Map> mList){
+	private List<TopicBean> mList;
+	public Recommend_topicAdapter( Context mContext,List<TopicBean> mList){
 		
 		super(mContext);
-//		try {
-//			pre_labels = PeerUI.getInstance().getISessionManager().getLabels();
-//		} catch (RemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		this.mContext=mContext;
 		this.mList=mList;
 	}
@@ -67,22 +64,25 @@ public class Recommend_topicAdapter extends pBaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parentgroup) {
 		
 		// TODO Auto-generated method stub
-				
+					
+		
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_come_listtopic,null,false);
 					TextView tv_time=ViewHolder.get(convertView, R.id.tv_time);
 					TextView tv_skill=ViewHolder.get(convertView, R.id.tv_skill);			
 					TextView tv_topic=ViewHolder.get(convertView, R.id.tv_topic);
 					ImageView head = ViewHolder.get(convertView, R.id.head);
 					LinearLayout ll_click = ViewHolder.get(convertView, R.id.ll_click);
-					Map plist = (Map) mList.get(position);
-					tv_time.setText((String) plist.get("created_at"));
-					tv_skill.setText((String) plist.get("label_name"));
-					tv_topic.setText((String) plist.get("subject"));
+					final TopicBean topicbean =  mList.get(position);
+					tv_time.setText(topicbean.getCreated_at());
+					tv_skill.setText(topicbean.getLabel_name());
+					tv_topic.setText(topicbean.getSubject());
 					ll_click.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View arg0) {
 							// TODO Auto-generated method stub
+							ChatRoomBean.getInstance().setChatroomtype(
+									Constant.MULTICHAT);
 							Intent intent=new Intent();
 							((pBaseActivity)mContext).startActivityForLeft(ChatRoomActivity.class, intent, false);
 							

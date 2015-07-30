@@ -217,6 +217,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
+								showToast("修改成功！", Toast.LENGTH_SHORT, false);
 								startActivityForLeft(MyAcountActivity.class,
 										intent, false);
 							}

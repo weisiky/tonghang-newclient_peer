@@ -453,8 +453,9 @@ public class PersonalMessageActivity extends pBaseActivity {
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getUpdateParams(
-					PersonalMessageActivity.this, tv_setbirth, tv_sex,
+					PersonalMessageActivity.this,client_id, tv_setbirth, tv_sex,
 					tv_setaddress, username);
+			System.out.println(params);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

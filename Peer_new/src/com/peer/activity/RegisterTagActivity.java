@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -288,11 +289,13 @@ public class RegisterTagActivity extends pBaseActivity {
 						LoginBean loginBean;
 
 						pLog.i("test", "response:" + response.toString());
-
+						
 						try {
 							loginBean = JsonDocHelper.toJSONObject(response
 									.getJSONObject("success").toString(),
 									LoginBean.class);
+							pLog.i("test", "loginBean:" + loginBean.toString());
+							
 							if (loginBean != null) {
 								pShareFileUtils.setString("client_id",
 										loginBean.user.getClient_id());
@@ -308,6 +311,7 @@ public class RegisterTagActivity extends pBaseActivity {
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							showToast("dash", Toast.LENGTH_SHORT, false);
 						}
 
 						super.onSuccess(statusCode, headers, response);

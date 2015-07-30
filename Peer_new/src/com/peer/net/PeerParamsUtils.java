@@ -61,7 +61,122 @@ public class PeerParamsUtils {
 		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
+	
+	/**
+	 * 按标签搜用户参数绑定
+	 * 
+	 * @param context
+	 * @param label_name
+	 * @param pageindex
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getSearchUserByLabelParams(Context context, String label_name,
+			int pageindex , String client_id) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("label_name", label_name);
+		loginParams.put("pageindex", pageindex);
+		loginParams.put("client_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
+	}
+	
+	
+	/**
+	 * 按昵称搜用户参数绑定
+	 * 
+	 * @param context
+	 * @param username
+	 * @param pageindex
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getSearchUserByNikeParams(Context context, String username,
+			int pageindex , String client_id) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("username", username);
+		loginParams.put("pageindex", pageindex);
+		loginParams.put("client_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
+	}
 
+	/**
+	 * 按标签搜话题参数绑定
+	 * 
+	 * @param context
+	 * @param label_name
+	 * @param pageindex
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getSearchTopicByLabelParams(Context context, String label_name,
+			int pageindex , String client_id) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("label_name", label_name);
+		loginParams.put("pageindex", pageindex);
+		loginParams.put("client_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
+	}
+	
+	/**
+	 * 按关键字搜话题参数绑定
+	 * 
+	 * @param context
+	 * @param subject
+	 * @param pageindex
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getSearchTopicBySubjectParams(Context context, String subject,
+			int pageindex , String client_id) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("subject", subject);
+		loginParams.put("pageindex", pageindex);
+		loginParams.put("client_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
+	}
+	
+	
+	/**
+	 * 同意/拒绝某人为好友参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getaddfriendParams(Context context,
+			String client_id) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("invitee_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
+		return params;
+	}
+	
+	
+	
 	/**
 	 * 创建话题参数绑定
 	 * 
@@ -299,17 +414,14 @@ public class PeerParamsUtils {
 	 * @param
 	 * 
 	 * @param context
-	 * @param client_id
 	 * @param page
 	 * @return
 	 * @throws Exception
 	 */
 	public static RequestParams getNewFriendsParams(Context context,
 			int pageindex) throws Exception {
-		Map<String, Object> registerTagParams = getDefaultParams(context);
-		registerTagParams.put("pageindex", pageindex);
 		RequestParams params = new RequestParams();
-		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		params.put("pageindex", pageindex);
 		return params;
 	}
 
@@ -319,22 +431,24 @@ public class PeerParamsUtils {
 	 * @param
 	 * 
 	 * @param context
-	 * @param email
-	 * @param password
+	 * @param client_id
+	 * @param tv_setbirth
+	 * @param tv_sex
+	 * @param tv_setaddress
 	 * @param username
-	 * @param labels
 	 * @return
 	 * @throws Exception
 	 */
 	public static RequestParams getUpdateParams(Context context,
-			String username, String birth, String sex, String address)
+			String client_id, String tv_setbirth, String tv_sex, String tv_setaddress,String username)
 			throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("birth", tv_setbirth);
+		registerTagParams.put("sex", tv_sex);
+		registerTagParams.put("city", tv_setaddress);
 		registerTagParams.put("username", username);
-		registerTagParams.put("sex", birth);
-		registerTagParams.put("birth", sex);
-		registerTagParams.put("city", address);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
 		return params;
@@ -406,6 +520,26 @@ public class PeerParamsUtils {
 		registerTagParams.put("client_id", client_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	/**
+	 * 获取用户反馈参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param content
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getFeedParams(Context context, String client_id,String content
+			) throws Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("client_id", client_id);
+		loginParams.put("content", content);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 

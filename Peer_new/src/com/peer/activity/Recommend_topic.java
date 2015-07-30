@@ -13,21 +13,26 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.adapter.Recommend_topicAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.RecommendTopicBean;
+import com.peer.bean.TopicBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -42,7 +47,7 @@ import com.peer.utils.pViewBox;
 public class Recommend_topic extends pBaseActivity {
 
 	private PullToRefreshListView pull_refresh_topic;
-	private List<Map> list = new ArrayList<Map>();
+	private List<TopicBean> list = new ArrayList<TopicBean>();
 	private int page = 1;
 	Recommend_topicAdapter adapter;
 
@@ -69,7 +74,7 @@ public class Recommend_topic extends pBaseActivity {
 		pageViewaList.tv_title.setText("话题");
 		pull_refresh_topic = (PullToRefreshListView) findViewById(R.id.pull_refresh_topic);
 		pageViewaList.ll_topic.setVisibility(View.VISIBLE);
-		pageViewaList.im_search.setVisibility(View.GONE);
+		pageViewaList.im_search.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -78,6 +83,8 @@ public class Recommend_topic extends pBaseActivity {
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.ll_topic.setOnClickListener(this);
 		pageViewaList.im_search.setOnClickListener(this);
+		
+		RefreshListner();
 
 		pull_refresh_topic.setOnItemClickListener(new OnItemClickListener() {
 
@@ -124,6 +131,57 @@ public class Recommend_topic extends pBaseActivity {
 			}
 		});
 	}
+	
+	
+	private void RefreshListner() {
+		// TODO Auto-generated method stub
+		pull_refresh_topic
+				.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+					@Override
+					public void onPullDownToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(Recommend_topic.this
+								.getApplicationContext(), System
+								.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						try {
+							page = 1;
+							sendRecommendtopic(mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""), page);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onPullUpToRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						// TODO Auto-generated method stub
+						String label = DateUtils.formatDateTime(Recommend_topic.this
+								.getApplicationContext(), System
+								.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						try {
+							sendRecommendtopic(mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""), ++page);
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+	}
+	
 
 	@Override
 	protected void processBiz() {
@@ -265,55 +323,23 @@ public class Recommend_topic extends pBaseActivity {
 								pLog.i("test", "user1:"
 										+ recommendtopicbean.topics.get(0)
 												.getSubject().toString());
-							}
+								list.addAll(recommendtopicbean.topics);
+								if (adapter == null) {
+									adapter = new Recommend_topicAdapter(
+											Recommend_topic.this, list);
+									pull_refresh_topic.setAdapter(adapter);
+								}
 
-							for (int index = 0; index < recommendtopicbean.topics
-									.size(); index++) {
-								Map<String, Object> topicMsg = new HashMap<String, Object>();
-								topicMsg.put("label_name",
-										recommendtopicbean.topics.get(index)
-												.getLabel_name().toString());
-								topicMsg.put("subject",
-										recommendtopicbean.topics.get(index)
-												.getSubject().toString());
-								topicMsg.put("user_id",
-										recommendtopicbean.topics.get(index)
-												.getUser_id().toString());
-								topicMsg.put("topic_id",
-										recommendtopicbean.topics.get(index)
-												.getTopic_id().toString());
-								topicMsg.put("sys_time",
-										recommendtopicbean.getSys_time());
-								topicMsg.put("created_at",
-										recommendtopicbean.topics.get(index)
-												.getCreated_at().toString());
-								list.add(topicMsg);
+								refresh();
 							}
-
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						if (adapter == null) {
-							adapter = new Recommend_topicAdapter(
-									Recommend_topic.this, list);
-							pull_refresh_topic.setAdapter(adapter);
-						}
-
-						refresh();
-						// adapter.setBaseFragment(HomeFragment.this);
-
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						super.onSuccess(statusCode, headers, responseString);
-					}
 
 				});
 

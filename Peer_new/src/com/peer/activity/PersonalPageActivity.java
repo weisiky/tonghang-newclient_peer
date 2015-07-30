@@ -2,19 +2,14 @@ package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -30,15 +25,12 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
-import com.peer.bean.LoginBean;
+import com.peer.bean.ChatRoomBean;
 import com.peer.bean.PersonpageBean;
-import com.peer.bean.RecommendUserBean;
 import com.peer.bean.SearchBean;
 import com.peer.bean.UserBean;
-import com.peer.fragment.FriendsFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -48,9 +40,6 @@ import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.ChatRoomTypeUtil;
 import com.peer.utils.ImageLoaderUtil;
-import com.peer.utils.JsonDocHelper;
-import com.peer.utils.ManagerActivity;
-import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -66,6 +55,7 @@ public class PersonalPageActivity extends pBaseActivity {
 	private RadioButton skill;
 
 	final UserBean userbean = PersonpageBean.getInstance().getUser();
+	
 
 	class PageViewList {
 		private LinearLayout ll_back, ll_personpagebottom, contentauto;
@@ -117,6 +107,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.rl_topic.setOnClickListener(this);
 		pageViewaList.btnSend.setOnClickListener(this);
 		pageViewaList.addfriends.setOnClickListener(this);
+		pageViewaList.im_downview.setOnClickListener(this);
 
 	}
 
@@ -188,6 +179,9 @@ public class PersonalPageActivity extends pBaseActivity {
 								.getString(R.string.Broken_network_prompt),
 						Toast.LENGTH_SHORT, false);
 			}
+			break;
+		case R.id.im_downview:
+			titlePopup.show(v);
 			break;
 		default:
 			break;
@@ -290,9 +284,11 @@ public class PersonalPageActivity extends pBaseActivity {
 		ImageLoaderUtil.getInstance().showHttpImage(
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
-		for (int i = 0; i < userbean.getLabels().size(); i++) {
-			String tag = userbean.getLabels().get(i);
-
+		ArrayList<String> lables = userbean.getLabels();
+		
+		for (int i = 0; i < lables.size(); i++) {
+			String tag = lables.get(i);
+			pLog.i("test", "tag:"+tag);
 			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
 					tag_container, false);
 			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
@@ -301,7 +297,7 @@ public class PersonalPageActivity extends pBaseActivity {
 			int pading = (int) getResources().getDimension(R.dimen.pading);
 			skill.setText(tag);
 			skill.setTag("" + i);
-//			tag_container.addView(skill);
+			tag_container.addView(skill);
 		}
 
 		pageViewaList.btnSend.setOnClickListener(new View.OnClickListener() {
@@ -309,9 +305,11 @@ public class PersonalPageActivity extends pBaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomTypeUtil.getInstance().setChatroomtype(
+				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
-				ChatRoomTypeUtil.getInstance().setUser(userbean);
+				pLog.i("test","SINGLECHAT:"+Constant.SINGLECHAT);
+				pLog.i("test","Chatroomtype0:"+ChatRoomBean.getInstance().getChatroomtype());
+				ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
 						ChatRoomActivity.class);
 				startActivity(intent);
@@ -352,14 +350,35 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.im_downview.setVisibility(View.VISIBLE);
 		pageViewaList.btnSend.setVisibility(View.GONE);
 		pageViewaList.addfriends.setVisibility(View.GONE);
+		pageViewaList.personnike.setText(userbean.getUsername());
+		pageViewaList.personcount.setText(userbean.getEmail());
+		pageViewaList.city.setText(userbean.getCity());
+		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
 
+		ArrayList<String> lables = userbean.getLabels();
+		
+		for (int i = 0; i < lables.size(); i++) {
+			String tag = lables.get(i);
+			pLog.i("test", "tag:"+tag);
+			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
+					tag_container, false);
+			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
+			skill.setTextSize(20);
+			skill.setTextColor(getResources().getColor(R.color.white));
+			int pading = (int) getResources().getDimension(R.dimen.pading);
+			skill.setText(tag);
+			skill.setTag("" + i);
+			tag_container.addView(skill);
+		}
+		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ,page);	
+		
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
 				R.string.deletefriends), R.color.white));
 		popupwindow();
-		if (PersonpageBean.getInstance().user.getSex().equals("男")) {
+		if (PersonpageBean.getInstance().getUser().getSex().equals("男")) {
 			pageViewaList.tv_topic.setText(getResources().getString(
 					R.string.topic_other));
 			pageViewaList.tv_title.setText(getResources().getString(

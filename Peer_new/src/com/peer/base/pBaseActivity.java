@@ -393,13 +393,10 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			showToast("请完成注册", Toast.LENGTH_SHORT, false);
 		} else if (getLocalClassNameBySelf().contains("ChatRoomActivity")) {
 			startActivityRight(PersonalPageActivity.class, intent, false);
-		} else if (getLocalClassNameBySelf().contains("SearchUserActivity")
-				|| getLocalClassNameBySelf().contains("Recommend_topic")) {
+		} else if (getLocalClassNameBySelf().contains("Recommend_topic")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
-				|| getLocalClassNameBySelf().contains("NewFunctionActivity")
-				|| getLocalClassNameBySelf().contains("FeedBackActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")

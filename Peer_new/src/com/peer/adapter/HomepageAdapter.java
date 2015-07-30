@@ -63,7 +63,7 @@ public class HomepageAdapter extends pBaseAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return users.size();
+		return users.size()+1;
 	}
 
 	@Override
@@ -110,6 +110,8 @@ public class HomepageAdapter extends pBaseAdapter {
 					R.layout.adapter_recommend_person, null, false);
 			ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
 
+			
+			
 			TextView tv_nikename = ViewHolder
 					.get(convertView, R.id.tv_nikename);
 			TextView tv_descripe = ViewHolder

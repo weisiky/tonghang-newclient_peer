@@ -1,5 +1,7 @@
 package com.peer.utils;
 
+import java.util.Set;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -34,6 +36,18 @@ public class pShareFileUtils {
      */
     public static String getString(String key ,String defValue) {
         return mPreference.getString(key,defValue);
+    }
+    
+    /**
+     * 从共享文件中获取集合
+     * 
+     * @param key
+     *            表签名
+     * @param defValue
+     *            值
+     */
+    public static Set<String> getStringSet(String key ,Set<String> defValue) {
+        return mPreference.getStringSet(key, defValue);
     }
 
     /**
@@ -70,6 +84,19 @@ public class pShareFileUtils {
      */
     public static void setString(String key, String defValue) {
     	mPreference.edit().putString(key, defValue).commit();
+    }
+    
+    
+    /**
+     * 保存集合数据
+     * 
+     * @param key
+     *            表签名
+     * @param defValue
+     *            值
+     */
+    public static void setStringSet(String key, Set<String> defValue) {
+    	mPreference.edit().putStringSet(key, defValue).commit();
     }
 
     /**

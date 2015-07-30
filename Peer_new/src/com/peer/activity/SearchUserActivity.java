@@ -147,7 +147,7 @@ public class SearchUserActivity extends pBaseActivity {
 			userPopup.showonserchuser(v);
 			break;
 		case R.id.im_search_search:
-			// if(checkNetworkState()){
+			 if(isNetworkAvailable){
 			String searchtaget = pageViewaList.et_contentsearch.getText()
 					.toString().trim();
 			if (TextUtils.isEmpty(searchtaget)) {
@@ -155,9 +155,9 @@ public class SearchUserActivity extends pBaseActivity {
 			} else {
 				Search(searchtaget);
 			}
-			// }else{
-			// ShowMessage(getResources().getString(R.string.Broken_network_prompt));
-			// }
+			 }else{
+			 showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+			 }
 			break;
 		default:
 			break;

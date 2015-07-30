@@ -1,6 +1,7 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -18,7 +19,9 @@ import com.loopj.android.http.RequestParams;
 import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.InvitationBean;
 import com.peer.bean.NewFriendBean;
+import com.peer.bean.UserBean;
 import com.peer.event.NewFriensEvent;
 import com.peer.fragment.FriendsFragment;
 import com.peer.net.HttpConfig;
@@ -36,8 +39,10 @@ import de.greenrobot.event.EventBus;
 public class NewFriendsActivity extends pBaseActivity {
 
 	private EventBus mBus;
-	private List<Object> mlist, list;
+	private List<Object> mlist;
+	public List<InvitationBean> invitationbean = new ArrayList<InvitationBean>();
 	private NewfriendsAdapter adapter;
+	int page=1;
 
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -150,14 +155,14 @@ public class NewFriendsActivity extends pBaseActivity {
 	private void sendnewfriend(String client_id) {
 		// TODO Auto-generated method stub
 
-		// RequestParams params = null;
-		// try {
-		// params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
-		// } catch (Exception e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-
+//		 RequestParams params = null;
+//		 try {
+//		 params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
+//		 } catch (Exception e1) {
+//		 // TODO Auto-generated catch block
+//		 e1.printStackTrace();
+//		 }
+		
 		HttpUtil.post(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
 				new JsonHttpResponseHandler() {
 
@@ -166,7 +171,11 @@ public class NewFriendsActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
-
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "responseString:"+responseString);
+						pLog.i("test", "throwable:"+throwable);
+						
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -176,6 +185,11 @@ public class NewFriendsActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
+						
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -185,6 +199,10 @@ public class NewFriendsActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -205,33 +223,26 @@ public class NewFriendsActivity extends pBaseActivity {
 
 							if (newfriendbean != null) {
 
+								invitationbean.addAll(newfriendbean.invitation);
 								pLog.i("test", "user1:"
-										+ newfriendbean.getInvitationbean()
-												.get(0).getUserbean()
-												.getUsername().toString());
+										+ invitationbean.toString());
+								if (adapter == null) {
+									if (invitationbean!=null&&invitationbean.size() > 0) {
+										adapter = new NewfriendsAdapter(
+												NewFriendsActivity.this, invitationbean);
+									}
+									pageViewaList.lv_newfriends.setAdapter(adapter);
+								}
 
+								refresh();
 							}
-							for (int index = 0; index < NewFriendBean
-									.getInstance().getInvitationbean().size(); index++) {
-								list.add(NewFriendBean.getInstance()
-										.getInvitationbean().get(index));
-							}
-
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 
-						if (adapter == null) {
-							if (list!=null&&list.size() > 0) {
-								adapter = new NewfriendsAdapter(
-										NewFriendsActivity.this, list);
-							}
-							pageViewaList.lv_newfriends.setAdapter(adapter);
-						}
-
-						refresh();
+						
 						// adapter.setBaseFragment(HomeFragment.this);
 
 						super.onSuccess(statusCode, headers, response);

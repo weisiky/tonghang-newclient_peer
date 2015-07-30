@@ -174,12 +174,10 @@ public class MyFragment extends pBaseFragment {
 		userBean.setBirth(mShareFileUtils.getString(Constant.BIRTH, ""));
 		userBean.setCity(mShareFileUtils.getString(Constant.CITY, ""));
 		userBean.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-		userBean.setCreated_at(mShareFileUtils.getString(Constant.CREATED_AT,
-				""));
+		userBean.setCreated_at(mShareFileUtils.getString(Constant.CREATED_AT,""));
 		userBean.setEmail(mShareFileUtils.getString(Constant.EMAIL, ""));
 		userBean.setImage(mShareFileUtils.getString(Constant.IMAGE, ""));
-		userBean.setIs_friend(mShareFileUtils.getBoolean(Constant.IS_FRIEND,
-				true));
+		userBean.setIs_friend(mShareFileUtils.getBoolean(Constant.IS_FRIEND,true));
 		ArrayList<String> labels = JsonDocHelper.toJSONArrary(
 				mShareFileUtils.getString(Constant.LABELS, ""), String.class);
 		userBean.setLabels(labels);

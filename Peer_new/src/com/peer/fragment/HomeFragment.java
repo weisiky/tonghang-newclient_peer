@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -102,14 +103,14 @@ public class HomeFragment extends pBaseFragment {
 				Intent intent = new Intent();
 
 				if (position == 0) {
-					// if (!pbaseActivity.isNetworkAvailable) {
-					// pbaseActivity.showToast(getActivity().getResources().getString(
-					// R.string.Broken_network_prompt), Toast.LENGTH_LONG,
-					// false);
-					// } else {
+					 if (!pbaseActivity.isNetworkAvailable) {
+					 pbaseActivity.showToast(getActivity().getResources().getString(
+					 R.string.Broken_network_prompt), Toast.LENGTH_LONG,
+					 false);
+					 } else {
 					pbaseActivity.startActivityForLeft(Recommend_topic.class,
 							intent, false);
-					// }
+					 }
 				} else {
 
 				}
@@ -268,42 +269,7 @@ public class HomeFragment extends pBaseFragment {
 							e1.printStackTrace();
 						}
 
-						/*
-						 * try { JSONObject success = response
-						 * .getJSONObject("success"); JSONArray user =
-						 * (JSONArray) success.get("user"); for (int index = 0;
-						 * index < user.length(); index++) { ArrayList<Object>
-						 * userlist = new ArrayList<Object>(); JSONObject person
-						 * = user.getJSONObject(index); List<String> labelnames
-						 * = new ArrayList<String>(); Map<String, Object>
-						 * userMsg = new HashMap<String, Object>();
-						 * userMsg.put("email", person.getString("email"));
-						 * userMsg.put("sex", person.getString("sex"));
-						 * userMsg.put("city", person.getString("city"));
-						 * userMsg.put("username",
-						 * person.getString("username"));
-						 * userMsg.put("client_id",
-						 * person.getString("client_id")); userMsg.put("image",
-						 * person.getString("image")); userMsg.put("created_at",
-						 * person.getString("created_at")); userMsg.put("birth",
-						 * person.getString("birth")); userlist.add(userMsg);
-						 * JSONArray lab = (JSONArray) person .get("labels");
-						 * for (int i = 0; i < lab.length(); i++) {
-						 * labelnames.add(lab.getString(i)); }
-						 * userlist.add(labelnames); list.add(userlist); } }
-						 * catch (JSONException e) { // TODO Auto-generated
-						 * catch block e.printStackTrace(); }
-						 */
-						// adapter.setBaseFragment(HomeFragment.this);
-
 						super.onSuccess(statusCode, headers, response);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						super.onSuccess(statusCode, headers, responseString);
 					}
 
 				});

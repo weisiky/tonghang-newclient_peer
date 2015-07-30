@@ -25,16 +25,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
 import com.peer.activity.NewFriendsActivity;
 import com.peer.activity.R;
 import com.peer.adapter.ChatHistoryAdapter;
 import com.peer.adapter.FriendsAdapter;
+import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.InvitationBean;
 import com.peer.bean.RecommendUserBean;
 import com.peer.bean.User;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -49,7 +53,7 @@ public class FriendsFragment extends pBaseFragment{
 	private TextView tv_newfriends;
 	private ListView lv_friends;
 	
-	private List<Object> list;
+	private List<UserBean> list= new ArrayList<UserBean>();
 	
 	private FriendsAdapter adapter;
 	
@@ -69,23 +73,23 @@ public class FriendsFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		init();
-		refreshhandle=new Handler(){
-			@Override
-			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
-				if(msg.what==Constant.REFRESHHANDLE){
-					if(list!=null){
-						list.clear();
-					}
+//		refreshhandle=new Handler(){
+//			@Override
+//			public void handleMessage(Message msg) {
+//				// TODO Auto-generated method stub
+//				if(msg.what==Constant.REFRESHHANDLE){
+//					if(list!=null){
+//						list.clear();
+//					}
 					try {
 						sendComeMsg(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-			}
-		};
+//				}
+//			}
+//		};
 			
 	}
 	
@@ -167,19 +171,12 @@ public class FriendsFragment extends pBaseFragment{
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendComeMsg(String client_id)
+	private void sendComeMsg(String client_id )
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
-		/*HttpEntity entity = null;
-		try {
-			entity = PeerParamsUtils.getComMsgParams(getActivity(), client_id);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-*/
-		HttpUtil.get(HttpConfig.FRIEND_GET_URL+client_id+".json",
+
+		HttpUtil.post(HttpConfig.FRIEND_GET_URL+client_id+".json",
 				new JsonHttpResponseHandler() {
 
 					@Override
@@ -187,6 +184,10 @@ public class FriendsFragment extends pBaseFragment{
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "responseString:"+responseString);
+						pLog.i("test", "throwable:"+throwable);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -196,6 +197,10 @@ public class FriendsFragment extends pBaseFragment{
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -205,6 +210,10 @@ public class FriendsFragment extends pBaseFragment{
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -215,56 +224,30 @@ public class FriendsFragment extends pBaseFragment{
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						pLog.i("test", "response:"+response.toString());
 						try{
 							RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 									.toString(), RecommendUserBean.class);
 						
 							if (recommenduserbean != null) {
-	
-								pLog.i("test", "user1:"
-										+ recommenduserbean.users.get(0).getUsername().toString());
-						
-						}
-						for (int index = 0; index < recommenduserbean.users.size(); index++) {
-							ArrayList<Object> userlist = new ArrayList<Object>();
-							List<String> labelnames = new ArrayList<String>();
-							Map<String, Object> userMsg = new HashMap<String, Object>();
-							userMsg.put("email", recommenduserbean.users.get(index).getEmail());
-							userMsg.put("sex", recommenduserbean.users.get(index).getSex());
-							userMsg.put("city", recommenduserbean.users.get(index).getCity());
-							userMsg.put("username",
-									recommenduserbean.users.get(index).getUsername());
-							userMsg.put("client_id",
-									recommenduserbean.users.get(index).getClient_id());
-							userMsg.put("image", recommenduserbean.users.get(index).getImage());
-							userMsg.put("created_at",
-									recommenduserbean.users.get(index).getCreated_at());
-							userMsg.put("birth", recommenduserbean.users.get(index).getBirth());
-							userMsg.put("is_friend", recommenduserbean.users.get(index).getIs_friend());
-							userlist.add(userMsg);
-							for (int i = 0; i <recommenduserbean.users.get(index).getLabels().size(); i++) {
-								labelnames.add(recommenduserbean.users.get(index).getLabels().get(i));
+								System.out.println("recommenduserbean:"+recommenduserbean.users);
+								list.addAll(recommenduserbean.users);
+
+								if (adapter == null) {
+									adapter = new FriendsAdapter(getActivity(), list);
+									lv_friends.setAdapter(adapter);
+								}
+
+								refresh1();
+
 							}
-							userlist.add(labelnames);
-							list.add(userlist);
-						}
 
 					} catch (Exception e1) {
 						pLog.i("test", "Exception:" + e1.toString());
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-						
-
-
-						if (adapter == null) {
-							adapter = new FriendsAdapter(getActivity(), list);
-							lv_friends.setAdapter(adapter);
-						}
-
-						refresh1();
-						// adapter.setBaseFragment(HomeFragment.this);
 
 						super.onSuccess(statusCode, headers, response);
 					}

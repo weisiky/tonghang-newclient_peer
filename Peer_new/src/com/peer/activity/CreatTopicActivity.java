@@ -1,10 +1,12 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -28,11 +30,15 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.ChatRoomBean;
 import com.peer.bean.CreateToipcBean;
+import com.peer.bean.LabelBean;
 import com.peer.bean.LoginBean;
 import com.peer.bean.PersonpageBean;
+import com.peer.bean.RecommendUserBean;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -78,15 +84,17 @@ public class CreatTopicActivity extends pBaseActivity {
 				R.string.createtopic));
 
 		tag_container = (AutoWrapRadioGroup) findViewById(R.id.tag_container);
-
-		for (int i = 0; i < LoginBean.getInstance().user.getLabels().size(); i++) {
+		ArrayList<String> labels = JsonDocHelper.toJSONArrary(
+				mShareFileUtils.getString(Constant.LABELS, ""), String.class);		
+		for (int i = 0; i < labels.size(); i++) {
 			RadioButton rb = (RadioButton) getLayoutInflater().inflate(
 					R.layout.skillradio, tag_container, false);
 			rb.setHeight((int) getResources().getDimension(R.dimen.hight));
-			rb.setText(LoginBean.getInstance().user.getLabels().get(i));
+			rb.setText(labels.get(i));
 			rb.setTextSize(18);
 			tag_container.addView(rb);
 		}
+		
 
 		pageViewaList.bt_creattopic.setEnabled(false);
 
@@ -195,9 +203,14 @@ public class CreatTopicActivity extends pBaseActivity {
 			}
 			break;
 		case R.id.rl_mytopic:
-			PersonpageBean.getInstance().user = LoginBean.getInstance().user;
+			PersonpageBean.getInstance().setUser(new UserBean());
+			PersonpageBean.getInstance().getUser().setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+			System.out.println("NICKNAME："+mShareFileUtils.getString(Constant.NICKNAME, ""));
 			Intent mytopic = new Intent(CreatTopicActivity.this,
 					TopicActivity.class);
+			mytopic.putExtra("image", mShareFileUtils.getString(Constant.IMAGE, ""));
+			mytopic.putExtra("nike", mShareFileUtils.getString(Constant.NICKNAME, ""));
+			mytopic.putExtra("email", mShareFileUtils.getString(Constant.EMAIL, ""));
 			startActivity(mytopic);
 			break;
 		default:

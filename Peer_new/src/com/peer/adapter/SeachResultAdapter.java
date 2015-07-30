@@ -17,12 +17,14 @@ import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.R;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
+import com.peer.bean.PersonpageBean;
+import com.peer.bean.UserBean;
 import com.peer.utils.ViewHolder;
 
 public class SeachResultAdapter extends pBaseAdapter {
-	private List<Object> mlist;
+	private List<UserBean> mlist;
 	private Context mContext;
-	public SeachResultAdapter(Context mContext,List<Object> list){
+	public SeachResultAdapter(Context mContext,List<UserBean> list){
 		super(mContext);
 		this.mContext=mContext;
 		this.mlist=list;
@@ -48,16 +50,17 @@ public class SeachResultAdapter extends pBaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parentgroup) {
 		// TODO Auto-generated method stub
+		final UserBean userbean = mlist.get(position);
 		convertView = LayoutInflater.from(mContext).inflate(
 				R.layout.adapter_listnike_friends, null, false);
 		ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
 		TextView tv_nikename = ViewHolder.get(convertView, R.id.tv_nikename);
 		TextView tv_descripe = ViewHolder.get(convertView, R.id.tv_descripe);
 		LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
-		List plist = (List) mlist.get(position);
-		Map pmap = (Map) plist.get(0);
-		tv_nikename.setText((String) pmap.get("username"));
-		List<String> plabels = (List<String>) plist.get(1);
+//		List plist = (List) mlist.get(position);
+//		Map pmap = (Map) plist.get(0);
+		tv_nikename.setText(userbean.getUsername());
+		List<String> plabels = userbean.getLabels();
 		String labels = "";
 
 		for (String s : plabels) {
@@ -73,6 +76,7 @@ public class SeachResultAdapter extends pBaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				PersonpageBean.getInstance().setUser(userbean);
 				Intent intent=new Intent();
 				((pBaseActivity)mContext).startActivityForLeft(PersonalPageActivity.class, intent, false);
 			}

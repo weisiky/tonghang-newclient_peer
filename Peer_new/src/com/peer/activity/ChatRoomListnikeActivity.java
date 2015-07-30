@@ -41,7 +41,7 @@ import com.peer.utils.pViewBox;
  */
 public class ChatRoomListnikeActivity extends pBaseActivity{
 	
-	private List<Object> list=new ArrayList<Object>();
+	private List<UserBean> userlist=new ArrayList<UserBean>();
 	private FriendsAdapter adapter;
 	private int page = 1;
 	
@@ -188,59 +188,21 @@ public class ChatRoomListnikeActivity extends pBaseActivity{
 							if (recommenduserbean != null) {
 
 								if (page == 1) {
-									list.clear();
+									userlist.clear();
 								}
-
-								for (int index = 0; index < recommenduserbean.users
-										.size(); index++) {
-									ArrayList<UserBean> userlist = new ArrayList<UserBean>();
-									List<String> labelnames = new ArrayList<String>();
-									Map<String, Object> userMsg = new HashMap<String, Object>();
-									userMsg.put("email",
-											recommenduserbean.users.get(index)
-													.getEmail());
-									userMsg.put("sex", recommenduserbean.users
-											.get(index).getSex());
-									userMsg.put("city", recommenduserbean.users
-											.get(index).getCity());
-									userMsg.put("username",
-											recommenduserbean.users.get(index)
-													.getUsername());
-									userMsg.put("client_id",
-											recommenduserbean.users.get(index)
-													.getClient_id());
-									userMsg.put("image",
-											recommenduserbean.users.get(index)
-													.getImage());
-									userMsg.put("created_at",
-											recommenduserbean.users.get(index)
-													.getCreated_at());
-									userMsg.put("birth",
-											recommenduserbean.users.get(index)
-													.getBirth());
-									userMsg.put("is_friend",
-											recommenduserbean.users.get(index)
-													.getIs_friend());
-									userlist.add((UserBean) userMsg);
-									for (int i = 0; i < recommenduserbean.users
-											.get(index).getLabels().size(); i++) {
-										labelnames.add(recommenduserbean.users
-												.get(index).getLabels().get(i));
-									}
-									userlist.add((UserBean) labelnames);
-									list.addAll(userlist);
-								}
+								userlist.addAll(recommenduserbean.users);
+								
 
 								if (adapter == null) {
 									adapter = new FriendsAdapter(
-											ChatRoomListnikeActivity.this, list);
+											ChatRoomListnikeActivity.this, userlist);
 									pageViewaList.lv_listnike_chatroom.setAdapter(adapter);
 								}
 
 								refresh();
 
+							
 							}
-
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block

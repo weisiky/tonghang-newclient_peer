@@ -5,7 +5,10 @@ import java.io.Serializable;
 public class PersonpageBean implements Serializable{
 	
 	private static PersonpageBean personpagebean;	
-	public UserBean user;
+	private UserBean user;
+	private PersonpageBean(){
+		
+	}
 	public static PersonpageBean getInstance(){
 		if(personpagebean==null){
 			personpagebean=new PersonpageBean();

@@ -7,7 +7,7 @@ public class InvitationBean implements Serializable{
 	private String reason;
 	private String invitee_id;
 	private String inviter_id;
-	public UserBean userbean;
+	public UserBean invitor;
 	
 	
 	
@@ -38,10 +38,10 @@ public class InvitationBean implements Serializable{
 		this.inviter_id = inviter_id;
 	}
 	public UserBean getUserbean() {
-		return userbean;
+		return invitor;
 	}
-	public void setUserbean(UserBean userbean) {
-		this.userbean = userbean;
+	public void setUserbean(UserBean invitor) {
+		this.invitor = invitor;
 	}
 	
 }

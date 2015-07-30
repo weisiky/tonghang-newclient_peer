@@ -47,11 +47,11 @@ import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
-/*
+/**
  * 注册第二部
  * 完善信息
  * 
- * */
+ */
 public class RegisterCompleteActivity extends pBaseActivity {
 
 	private String[] items;
@@ -196,8 +196,11 @@ public class RegisterCompleteActivity extends pBaseActivity {
 	/**
 	 * 更改用户信息请求
 	 * 
-	 * @param email
-	 * @param password
+	 * @param client_id
+	 * @param tv_setbirth
+	 * @param tv_sex
+	 * @param tv_setaddress
+	 * @param username
 	 * @throws Exception
 	 **/
 
@@ -218,7 +221,7 @@ public class RegisterCompleteActivity extends pBaseActivity {
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getUpdateParams(
-					RegisterCompleteActivity.this, tv_setbirth, tv_sex,
+					RegisterCompleteActivity.this, client_id,tv_setbirth, tv_sex,
 					tv_setaddress, username);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

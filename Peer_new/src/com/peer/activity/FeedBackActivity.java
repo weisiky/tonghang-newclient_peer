@@ -24,6 +24,7 @@ import com.peer.base.pBaseActivity;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /**
@@ -97,10 +98,11 @@ public class FeedBackActivity extends pBaseActivity {
 		case R.id.commite_feedback:
 
 			if (isNetworkAvailable) {
+				pLog.i("test", "CLIENT_ID:"+mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 				try {
-					sendfeedback(pageViewaList.et_feedback_content.getText()
-							.toString().trim(),
-							mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+					
+					sendfeedback(mShareFileUtils.getString(Constant.CLIENT_ID, ""),pageViewaList.et_feedback_content.getText()
+							.toString().trim());
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -174,7 +176,7 @@ public class FeedBackActivity extends pBaseActivity {
 
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getLoginParams(this, client_id, content);
+			params = PeerParamsUtils.getFeedParams(FeedBackActivity.this, client_id, content);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

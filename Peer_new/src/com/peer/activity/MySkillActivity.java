@@ -93,7 +93,7 @@ public class MySkillActivity extends pBaseActivity {
 		mlist = JsonDocHelper.toJSONArrary(
 				getIntent().getStringExtra("labels"), String.class);
 
-		pLog.i("test", "mlist:" + mlist);
+		pLog.i("test", "初始化mlist:" + mlist);
 
 		Hadtag = mlist.size();
 		adapter = new SkillAdapter(this, mlist);
@@ -233,6 +233,8 @@ public class MySkillActivity extends pBaseActivity {
 				senduserlabels(
 						mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 						mlist);
+				pLog.i("test", "mlist:" + mlist);
+				
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -307,7 +309,7 @@ public class MySkillActivity extends pBaseActivity {
 					LoginBean loginBean = JsonDocHelper.toJSONObject(response
 							.getJSONObject("success").toString(),
 							LoginBean.class);
-					PersonpageBean.getInstance().user = loginBean.user;
+					PersonpageBean.getInstance().setUser(loginBean.user);
 
 					if (loginBean.user.getLabels() != null
 							&& loginBean.user.getLabels().size() > 0) {
@@ -354,6 +356,7 @@ public class MySkillActivity extends pBaseActivity {
 					try {
 						senduserlabels(mShareFileUtils.getString(
 								Constant.CLIENT_ID, ""), mlist);
+						pLog.i("test", "mlist:" + mlist);
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -373,6 +376,7 @@ public class MySkillActivity extends pBaseActivity {
 					senduserlabels(
 							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 							mlist);
+					pLog.i("test", "mlist:" + mlist);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
