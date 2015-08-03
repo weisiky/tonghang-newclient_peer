@@ -2,6 +2,8 @@ package com.peer.activity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectOutputStream.PutField;
 import java.util.Calendar;
 
 import org.apache.http.Header;
@@ -223,6 +225,7 @@ public class RegisterCompleteActivity extends pBaseActivity {
 			params = PeerParamsUtils.getUpdateParams(
 					RegisterCompleteActivity.this, client_id,tv_setbirth, tv_sex,
 					tv_setaddress, username);
+			params.put("image", new File(Constant.C_IMAGE_CACHE_PATH+"img.jpg"));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

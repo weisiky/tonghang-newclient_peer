@@ -29,6 +29,7 @@ import com.peer.bean.TopicBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
@@ -90,10 +91,16 @@ public class TopicActivity extends pBaseActivity {
 		Intent intent = getIntent();
 		String name = intent.getStringExtra("nike");
 		String email = intent.getStringExtra("email");
+		String image = intent.getStringExtra("image");
 		System.out.println("name:"+name);
 		System.out.println("email:"+email);
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
 		pageViewaList.email.setText(intent.getStringExtra("email"));
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				mShareFileUtils.getString(Constant.PIC_SERVER, "") + image
+				, pageViewaList.personhead,
+				R.drawable.mini_avatar_shadow);
 
 		try {
 			sendUserTopic(PersonpageBean.getInstance().getUser().getClient_id(),
@@ -205,8 +212,6 @@ public class TopicActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-
-						pLog.i("test", "TopicActivity:" + response.toString());
 
 						try {
 							RecommendTopicBean recommendtopicbean = JsonDocHelper

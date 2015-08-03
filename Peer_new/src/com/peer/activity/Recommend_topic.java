@@ -86,7 +86,7 @@ public class Recommend_topic extends pBaseActivity {
 		
 		RefreshListner();
 
-		pull_refresh_topic.setOnItemClickListener(new OnItemClickListener() {
+		/*pull_refresh_topic.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -100,7 +100,7 @@ public class Recommend_topic extends pBaseActivity {
 									R.string.Broken_network_prompt),
 							Toast.LENGTH_SHORT, false);
 				} else {
-					/*
+					
 					 * ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.
 					 * MULTICHAT);
 					 * 
@@ -125,18 +125,18 @@ public class Recommend_topic extends pBaseActivity {
 					 * ChatRoomTypeUtil.getInstance().setTopic(topic); Intent
 					 * intent=new Intent(mContext,ChatRoomActivity.class);
 					 * mContext.startActivity(intent);
-					 */
+					 
 				}
 
 			}
-		});
+		});*/
 	}
-	
 	
 	private void RefreshListner() {
 		// TODO Auto-generated method stub
 		pull_refresh_topic
 				.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+					@SuppressWarnings("static-access")
 					@Override
 					public void onPullDownToRefresh(
 							PullToRefreshBase<ListView> refreshView) {
@@ -159,6 +159,7 @@ public class Recommend_topic extends pBaseActivity {
 						}
 					}
 
+					@SuppressWarnings("static-access")
 					@Override
 					public void onPullUpToRefresh(
 							PullToRefreshBase<ListView> refreshView) {
@@ -255,7 +256,7 @@ public class Recommend_topic extends pBaseActivity {
 	 * @param page
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendRecommendtopic(String client_id, int page)
+	private void sendRecommendtopic(String client_id, final int page)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
@@ -283,6 +284,10 @@ public class Recommend_topic extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","throwable:"+throwable);
+						pLog.i("test","throwable:"+throwable);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -292,6 +297,10 @@ public class Recommend_topic extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","throwable:"+throwable);
+						pLog.i("test","errorResponse:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -301,6 +310,10 @@ public class Recommend_topic extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","throwable:"+throwable);
+						pLog.i("test","errorResponse:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -323,20 +336,25 @@ public class Recommend_topic extends pBaseActivity {
 								pLog.i("test", "user1:"
 										+ recommendtopicbean.topics.get(0)
 												.getSubject().toString());
+								if (page == 1) {
+									list.clear();
+								}
 								list.addAll(recommendtopicbean.topics);
 								if (adapter == null) {
 									adapter = new Recommend_topicAdapter(
-											Recommend_topic.this, list);
+											Recommend_topic.this, list
+											,recommendtopicbean.getPic_server());
 									pull_refresh_topic.setAdapter(adapter);
 								}
 
-								refresh();
+								
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						refresh();
 						super.onSuccess(statusCode, headers, response);
 					}
 
@@ -349,6 +367,7 @@ public class Recommend_topic extends pBaseActivity {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
+			pull_refresh_topic.onRefreshComplete();
 		}
 
 	}

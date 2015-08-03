@@ -40,6 +40,8 @@
 
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
 
+    
+    
     <application
         android:name="com.peer.base.pBaseApplication"
         android:allowBackup="true"
@@ -365,6 +367,9 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        
+        <service android:name="com.peer.service.FxService"/>
+        
     </application>
 
 </manifest>

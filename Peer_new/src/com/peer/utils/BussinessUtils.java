@@ -3,24 +3,18 @@ package com.peer.utils;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.peer.base.Constant;
-import com.peer.bean.LoginBean;
 
 import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -36,6 +30,9 @@ import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
+import com.peer.base.Constant;
+import com.peer.bean.LoginBean;
 
 /**
  * 工具类

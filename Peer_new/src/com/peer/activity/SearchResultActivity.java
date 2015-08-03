@@ -289,7 +289,8 @@ public class SearchResultActivity extends pBaseActivity {
 										userbean.addAll(recommenduserbean.users);
 										if (adapter == null) {
 											adapter = new SeachResultAdapter(
-													SearchResultActivity.this, userbean);
+													SearchResultActivity.this, userbean
+													,recommenduserbean.getPic_server());
 											lv_searchresult.setAdapter(adapter);
 										}
 										refresh();
@@ -380,7 +381,8 @@ public class SearchResultActivity extends pBaseActivity {
 										userbean.addAll(recommenduserbean.users);
 										if (adapter == null) {
 											adapter = new SeachResultAdapter(
-													SearchResultActivity.this, userbean);
+													SearchResultActivity.this, userbean
+													,recommenduserbean.getPic_server());
 											lv_searchresult.setAdapter(adapter);
 										}
 										refresh();
@@ -465,7 +467,8 @@ public class SearchResultActivity extends pBaseActivity {
 										topicbean.addAll(recommendtopicbean.topics);
 										if (adapter1 == null) {
 											adapter1 = new SearchTopicAdapter(
-													SearchResultActivity.this, topicbean);
+													SearchResultActivity.this, topicbean
+													,recommendtopicbean.getPic_server());
 											lv_searchresult.setAdapter(adapter1);
 										}
 
@@ -555,7 +558,8 @@ public class SearchResultActivity extends pBaseActivity {
 										topicbean.addAll(recommendtopicbean.topics);
 										if (adapter1 == null) {
 											adapter1 = new SearchTopicAdapter(
-													SearchResultActivity.this, topicbean);
+													SearchResultActivity.this, topicbean
+													,recommendtopicbean.getPic_server());
 											lv_searchresult.setAdapter(adapter1);
 										}
 

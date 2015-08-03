@@ -1,6 +1,7 @@
 package com.peer.service;
 
-/**悬浮头像触发逻辑：
+/**
+ * 悬浮头像触发逻辑：
  * 1.首次启动app不触发。
  * 2.app启动后，进入自己创建的房间，（在不人为退出房间的时候）后退到主页面时，悬浮头像启动。
  * 3.悬浮头像只保留最后一次退出时的房间信息。
@@ -14,7 +15,9 @@ import com.peer.activity.ChatRoomActivity;
 import com.peer.activity.R;
 import com.peer.base.Constant;
 import com.peer.bean.ChatRoomBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.RoundImageView;
+import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
 
 import android.app.Service;
@@ -57,7 +60,8 @@ public class FxService extends Service
 	{
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Log.i(TAG, "oncreat");		
+		Log.i(TAG, "oncreat");
+		pLog.i("test", "oncreat");
         //Toast.makeText(FxService.this, "create FxService", Toast.LENGTH_LONG);		
 	}
 	@Override
@@ -70,27 +74,42 @@ public class FxService extends Service
 	@Deprecated
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
-		image=intent.getStringExtra(Constant.IMAGE);
-		ownernike=intent.getStringExtra(Constant.OWNERNIKE);
-		theme=intent.getStringExtra(Constant.THEME);
-		tagname=intent.getStringExtra(Constant.TAGNAME);
-		userId=intent.getStringExtra(Constant.USERID);
-		topicid=intent.getStringExtra(Constant.TOPICID);
-		roomaddress=intent.getStringExtra(Constant.ROOMID);
+		image=intent.getStringExtra(Constant.F_IMAGE);
+		ownernike=intent.getStringExtra(Constant.F_OWNERNIKE);
+		theme=intent.getStringExtra(Constant.F_THEME);
+		tagname=intent.getStringExtra(Constant.F_TAGNAME);
+		userId=intent.getStringExtra(Constant.F_USERID);
+		topicid=intent.getStringExtra(Constant.F_TOPICID);
+		roomaddress=intent.getStringExtra(Constant.F_ROOMID);
 		fromfloat=intent.getStringExtra(Constant.FROMFLOAT);
 		mShareFileUtils.initSharePre(getApplicationContext(),
 				Constant.SHARE_NAME, 0);
+		pLog.i("test", "image:"+image);		
+		pLog.i("test", "ownernike:"+ownernike);		
+		pLog.i("test", "theme:"+theme);		
+		pLog.i("test", "tagname:"+tagname);		
+		pLog.i("test", "userId:"+userId);		
+		pLog.i("test", "topicid:"+topicid);		
+		pLog.i("test", "roomaddress:"+roomaddress);		
+		pLog.i("test", "fromfloat:"+fromfloat);		
 		
-		
-		mShareFileUtils.setString(Constant.IMAGE, image);
-		mShareFileUtils.setString(Constant.OWNERNIKE, ownernike);
-		mShareFileUtils.setString(Constant.THEME, theme);
-		mShareFileUtils.setString(Constant.TAGNAME, tagname);
-		mShareFileUtils.setString(Constant.USERID, userId);
-		mShareFileUtils.setString(Constant.TOPICID, topicid);
-		mShareFileUtils.setString(Constant.ROOMID, roomaddress);
+		mShareFileUtils.setString(Constant.F_IMAGE, image);
+		mShareFileUtils.setString(Constant.F_OWNERNIKE, ownernike);
+		mShareFileUtils.setString(Constant.F_THEME, theme);
+		mShareFileUtils.setString(Constant.F_TAGNAME, tagname);
+		mShareFileUtils.setString(Constant.F_USERID, userId);
+		mShareFileUtils.setString(Constant.F_TOPICID, topicid);
+		mShareFileUtils.setString(Constant.F_ROOMID, roomaddress);
 		mShareFileUtils.setString(Constant.FROMFLOAT, fromfloat);
 		
+		pLog.i("test", "F_IMAGE:"+mShareFileUtils.getString(Constant.F_IMAGE, ""));		
+		pLog.i("test", "F_OWNERNIKE:"+mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));		
+		pLog.i("test", "F_THEME:"+mShareFileUtils.getString(Constant.F_THEME, ""));		
+		pLog.i("test", "F_TAGNAME:"+mShareFileUtils.getString(Constant.F_TAGNAME, ""));		
+		pLog.i("test", "F_USERID:"+mShareFileUtils.getString(Constant.F_USERID, ""));		
+		pLog.i("test", "F_TOPICID:"+mShareFileUtils.getString(Constant.F_TOPICID, ""));		
+		pLog.i("test", "F_ROOMID:"+mShareFileUtils.getString(Constant.F_ROOMID, ""));		
+		pLog.i("test", "FROMFLOAT:"+mShareFileUtils.getString(Constant.FROMFLOAT, ""));
 		createFloatView();
 		super.onStart(intent, startId);
 	}
@@ -126,8 +145,13 @@ public class FxService extends Service
 				View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
 				.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         	
-//        LoadImageUtil.initImageLoader(this);
-//		LoadImageUtil.imageLoader.displayImage(image, mFloatView, LoadImageUtil.options);
+        System.out.println("泡泡："+image);
+     // ImageLoader加载图片
+     		ImageLoaderUtil.getInstance().showHttpImage(
+     				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
+     				+ image
+     				, mFloatView,
+     				R.drawable.mini_avatar_shadow);
        
 		mFloatView.setOnTouchListener(new OnTouchListener() 
         {

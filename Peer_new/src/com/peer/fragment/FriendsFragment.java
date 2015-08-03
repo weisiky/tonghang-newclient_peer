@@ -73,23 +73,24 @@ public class FriendsFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		init();
-//		refreshhandle=new Handler(){
-//			@Override
-//			public void handleMessage(Message msg) {
-//				// TODO Auto-generated method stub
-//				if(msg.what==Constant.REFRESHHANDLE){
-//					if(list!=null){
-//						list.clear();
-//					}
+		refreshhandle=new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				if(msg.what==Constant.REFRESHHANDLE){
+					if(list!=null){
+						list.clear();
+					}
 					try {
+						pLog.i("test","发送sendComeMsg请求");
 						sendComeMsg(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-//				}
-//			}
-//		};
+				}
+			}
+		};
 			
 	}
 	
@@ -125,6 +126,7 @@ public class FriendsFragment extends pBaseFragment{
 		this.newfriendsnum=number;
 		getActivity().runOnUiThread(new Runnable() {
 			public void run() {
+				System.out.println("newfriendsnum:"+newfriendsnum);
 				if(newfriendsnum>0){
 					newnum.setText(String.valueOf(newfriendsnum));
 					newnum.show();
@@ -145,6 +147,7 @@ public class FriendsFragment extends pBaseFragment{
 		lv_friends=(ListView)getView().findViewById(R.id.lv_friends);				
 		rl_newfriends=(RelativeLayout)getView().findViewById(R.id.rl_newfriends);
 		tv_newfriends=(TextView)getView().findViewById(R.id.tv_newfriends);
+		newnum=new BadgeView(getActivity(),tv_newfriends);
 		rl_newfriends.setOnClickListener(this);
 		
 		
@@ -235,7 +238,8 @@ public class FriendsFragment extends pBaseFragment{
 								list.addAll(recommenduserbean.users);
 
 								if (adapter == null) {
-									adapter = new FriendsAdapter(getActivity(), list);
+									adapter = new FriendsAdapter(getActivity(), list
+											,recommenduserbean.getPic_server());
 									lv_friends.setAdapter(adapter);
 								}
 

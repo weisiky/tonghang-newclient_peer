@@ -11,6 +11,7 @@ import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.UserBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.pLog;
 
 import android.content.Context;
@@ -30,10 +31,12 @@ public class FriendsAdapter extends pBaseAdapter {
 	private Context mContext;
 	private List<UserBean> mlist;
 	private pBaseFragment baseFragment;
-	public FriendsAdapter(Context mContext,List<UserBean> list){
+	private String pic_server;
+	public FriendsAdapter(Context mContext,List<UserBean> list,String pic_server){
 		super(mContext);
 		this.mContext=mContext;		
 		this.mlist=list;
+		this.pic_server = pic_server;
 	}
 	@Override
 	public int getCount() {
@@ -56,6 +59,11 @@ public class FriendsAdapter extends pBaseAdapter {
 			final UserBean userbean = mlist.get(position);
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_listnike_friends,null,false);
 			ImageView im_headpic=(ImageView)convertView.findViewById(R.id.im_headpic);
+			// ImageLoader加载图片
+			ImageLoaderUtil.getInstance().showHttpImage(
+					pic_server + userbean.getImage(), im_headpic,
+					R.drawable.mini_avatar_shadow);
+			
 			TextView tv_nikename=(TextView)convertView.findViewById(R.id.tv_nikename);			
 			TextView tv_descripe=(TextView)convertView.findViewById(R.id.tv_descripe);
 			LinearLayout ll_clike=(LinearLayout)convertView.findViewById(R.id.ll_clike);

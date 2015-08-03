@@ -64,7 +64,16 @@ public class Constant {
 	public static String TAGNAME = "tagname";
 	public static String ROOMID = "roomid";
 	public static String TOPICID = "topicid";
+	
+	/** 悬浮头像设置 **/
 	public static String FROMFLOAT = "float";
+	public static String F_IMAGE = "f_image";
+	public static String F_OWNERNIKE = "f_ownernike";
+	public static String F_THEME = "f_theme";
+	public static String F_TAGNAME = "f_tagname";
+	public static String F_ROOMID = "f_roomid";
+	public static String F_TOPICID = "f_topicid";
+	public static String F_USERID = "f_userid";
 
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
     
-    <com.peer.widgetutil.RoundImageView 
+    <com.peer.utils.RoundImageView 
         android:id="@+id/float_image"
         android:clickable="true"
         android:layout_width="64dp"

@@ -515,7 +515,7 @@ public class PeerParamsUtils {
 	public static RequestParams getUserNumberParams(Context context,
 			String groupid, int page, String client_id) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
-		registerTagParams.put("topicid", groupid);
+		registerTagParams.put("topic_id", groupid);
 		registerTagParams.put("pageindex", page);
 		registerTagParams.put("client_id", client_id);
 		RequestParams params = new RequestParams();

@@ -26,6 +26,7 @@ import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
 import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
+import com.peer.bean.ChatRoomBean;
 import com.peer.service.FxService;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.HomeWatcher;
@@ -136,6 +137,24 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		super.onResume();
 		EMChatManager.getInstance().activityResumed();
 		MobclickAgent.onResume(this);
+		/*
+		 * 判断是否满足悬浮头像启动逻辑。满足——启动*/
+		System.out.println("悬浮头像是否存在："+mShareFileUtils.getBoolean(Constant.ISFLOAT, false));
+		if(ChatRoomBean.getInstance().getTopicBean() != null){
+			if(mShareFileUtils.getBoolean(Constant.ISFLOAT, false)){
+				Intent resintent = new Intent(pBaseActivity.this, FxService.class);
+				resintent.putExtra(Constant.F_IMAGE, mShareFileUtils.getString(Constant.F_IMAGE, ""));
+				resintent.putExtra(Constant.F_OWNERNIKE, mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));
+				resintent.putExtra(Constant.F_THEME, mShareFileUtils.getString(Constant.F_THEME, ""));
+				resintent.putExtra(Constant.F_TAGNAME, mShareFileUtils.getString(Constant.F_TAGNAME, ""));
+				resintent.putExtra(Constant.F_USERID, mShareFileUtils.getString(Constant.F_USERID, ""));
+				resintent.putExtra(Constant.F_ROOMID, mShareFileUtils.getString(Constant.F_ROOMID, ""));
+				resintent.putExtra(Constant.F_TOPICID,  mShareFileUtils.getString(Constant.F_TOPICID, ""));
+				resintent.putExtra(Constant.FROMFLOAT, mShareFileUtils.getString(Constant.FROMFLOAT, ""));
+				startService(resintent);
+			}
+		}
+		
 	}
 
 	@Override
@@ -143,6 +162,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onPause();
 		MobclickAgent.onPause(this);
+		Intent intent = new Intent(pBaseActivity.this, FxService.class);//悬浮头像停止运行
+		stopService(intent);
 	}
 
 	@Override
@@ -391,8 +412,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		} else if (getLocalClassNameBySelf().contains(
 				"RegisterCompleteActivity")) {
 			showToast("请完成注册", Toast.LENGTH_SHORT, false);
-		} else if (getLocalClassNameBySelf().contains("ChatRoomActivity")) {
-			startActivityRight(PersonalPageActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("Recommend_topic")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
@@ -406,6 +425,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")
+				|| getLocalClassNameBySelf().contains("ChatRoomActivity")
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
 				|| getLocalClassNameBySelf().contains("SearchResultActivity")
 				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
@@ -413,6 +433,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("AddFriendsActivity")
 				|| getLocalClassNameBySelf().contains("UpdateNikeActivity")
 				|| getLocalClassNameBySelf().contains("MySkillActivity")
+				|| getLocalClassNameBySelf().contains("ChatRoomListnikeActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
 		} else if (getLocalClassNameBySelf().contains("UpdatePasswordActivity")) {
@@ -457,11 +478,11 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		} else {
 			toast.setText(arg);
 		}
-		if (isCenter) {
-			toast.setGravity(Gravity.CENTER, 0, 0);
-		} else {
-			toast.setGravity(Gravity.BOTTOM, 0, 0);
-		}
+//		if (isCenter) {
+//			toast.setGravity(Gravity.CENTER, 0, 0);
+//		} else {
+//			toast.setGravity(Gravity.BOTTOM, 0, 0);
+//		}
 		toast.show();
 	}
 

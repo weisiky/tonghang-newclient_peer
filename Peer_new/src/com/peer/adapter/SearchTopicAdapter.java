@@ -20,15 +20,18 @@ import com.peer.activity.R;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.TopicBean;
 import com.peer.bean.UserBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.ViewHolder;
 
 public class SearchTopicAdapter extends pBaseAdapter {
 	private Context mContext;
 	private List<TopicBean> mlist;
-	public SearchTopicAdapter(Context mContext,List<TopicBean> list){
+	private String pic_server;
+	public SearchTopicAdapter(Context mContext,List<TopicBean> list,String pic_server){
 		super(mContext);
 		this.mContext=mContext;
 		this.mlist=list;
+		this.pic_server = pic_server;
 	}
 	@Override
 	public int getCount() {
@@ -57,8 +60,12 @@ public class SearchTopicAdapter extends pBaseAdapter {
 		TextView tv_skill=ViewHolder.get(convertView, R.id.tv_skill);			
 		TextView tv_topic=ViewHolder.get(convertView, R.id.tv_topic);
 		ImageView head = ViewHolder.get(convertView, R.id.head);
+		// ImageLoader加载图片
+				ImageLoaderUtil.getInstance().showHttpImage(
+						pic_server + topicbean.getImage(), head,
+						R.drawable.mini_avatar_shadow);
+				
 		LinearLayout ll_click = ViewHolder.get(convertView, R.id.ll_click);
-//		Map plist = (Map) mlist.get(position);
 		tv_time.setText(topicbean.getCreated_at());
 		tv_skill.setText(topicbean.getLabel_name());
 		tv_topic.setText(topicbean.getSubject());

@@ -37,6 +37,7 @@ import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 
@@ -110,18 +111,22 @@ public class MyFragment extends pBaseFragment {
 	}
 
 	public void getlocalMsg() {
-		im_headpic.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.mini_avatar_shadow));
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
+				+ mShareFileUtils.getString(Constant.IMAGE, "")
+				, im_headpic,
+				R.drawable.mini_avatar_shadow);
 		tv_nikename.setText(mShareFileUtils.getString(Constant.USERNAME, ""));
 		tv_email.setText(mShareFileUtils.getString(Constant.EMAIL, ""));
-		if (LoginBean.getInstance().user == null) {
-			try {
-				senduser(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if (LoginBean.getInstance().user == null) {
+//			try {
+//				senduser(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+//			} catch (UnsupportedEncodingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	@Override

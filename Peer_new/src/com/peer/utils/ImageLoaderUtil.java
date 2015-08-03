@@ -52,9 +52,11 @@ public class ImageLoaderUtil {
 
 	public void showHttpImage(String filePath, ImageView imageView,
 			int defaultImage) {
-		String iUrl = Scheme.HTTP.wrap(filePath);
+//		String iUrl = Scheme.HTTP.wrap(filePath);
+		System.out.println("传图片路径："+filePath);
+//		System.out.println("图片地址:"+iUrl);
 		init(defaultImage);
-		imageLoader.displayImage(iUrl, imageView, options);
+		imageLoader.displayImage(filePath, imageView, options);
 	}
 
 	public void showHttpsImage(String filePath, ImageView imageView,

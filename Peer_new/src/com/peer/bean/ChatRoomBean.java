@@ -9,8 +9,8 @@ package com.peer.bean;
 public class ChatRoomBean {
 	private int chatroomtype;
 	private boolean isowner;	
+	private UserBean userBean;
 	
-	private UserBean user;
 	private TopicBean topic;
 	
 	private static ChatRoomBean chatroombean;
@@ -27,15 +27,16 @@ public class ChatRoomBean {
 	public void setChatroomtype(int chatroomtype) {
 		this.chatroomtype = chatroomtype;
 	}
-
-
+	
 	public UserBean getUserBean() {
-		return user;
+		return userBean;
 	}
-	public void setUserBean(UserBean user) {
-		this.user = user;
+	public void setUserBean(UserBean userbean) {
+		this.userBean = userbean;
 	}
-	public boolean isIsowner() {
+
+
+	public boolean getIsowner() {
 		return isowner;
 	}
 	public void setIsowner(boolean isowner) {

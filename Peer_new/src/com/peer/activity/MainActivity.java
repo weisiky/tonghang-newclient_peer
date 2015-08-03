@@ -1,6 +1,13 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.os.Bundle;
+import android.os.RemoteException;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,12 +16,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.adapter.FriendsAdapter;
+import com.peer.adapter.NewfriendsAdapter;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.NewFriendBean;
+import com.peer.bean.RecommendUserBean;
 import com.peer.fragment.ComeMsgFragment;
 import com.peer.fragment.FriendsFragment;
 import com.peer.fragment.HomeFragment;
 import com.peer.fragment.MyFragment;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pIOUitls;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
+import com.readystatesoftware.viewbadger.BadgeView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -34,6 +53,8 @@ public class MainActivity extends pBaseActivity {
 
 	private int index;
 	private int currentTabIndex;
+	private int intnewfriendsnum;
+	private BadgeView unredmsg,bdnewfriendsnum;
 
 	private PageViewList pageViewaList;
 
@@ -88,6 +109,9 @@ public class MainActivity extends pBaseActivity {
 		pageViewaList.tv_find.setTextColor(getResources().getColor(
 				R.color.bottomtextblue));
 		pageViewaList.iv_backfind.setImageResource(R.drawable.peer_press);
+		
+//		unredmsg=new BadgeView(this,pageViewaList.showmessgenum);
+		bdnewfriendsnum=new BadgeView(this,pageViewaList.tv_newfriendsnum);
 
 	}
 
@@ -208,6 +232,22 @@ public class MainActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onPageStart(mPageName);
+		
+		System.out.println("进来了吗？");
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		
+//			}
+//		}).start();
 
 	}
 
@@ -221,6 +261,122 @@ public class MainActivity extends pBaseActivity {
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	
+	/**
+	 * 获取新朋友请求
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	private void sendnewfriend(String client_id) {
+		// TODO Auto-generated method stub
+
+//		 RequestParams params = null;
+//		 try {
+//		 params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
+//		 } catch (Exception e1) {
+//		 // TODO Auto-generated catch block
+//		 e1.printStackTrace();
+//		 }
+		
+		HttpUtil.post(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "responseString:"+responseString);
+						pLog.i("test", "throwable:"+throwable);
+						
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
+						
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "headers:"+headers);
+						pLog.i("test", "errorResponse:"+errorResponse);
+						pLog.i("test", "throwable:"+throwable);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+
+						pLog.i("test", "response:" + response.toString());
+
+						try {
+							NewFriendBean newfriendbean = JsonDocHelper
+									.toJSONObject(
+											response.getJSONObject("success")
+													.toString(),
+											NewFriendBean.class);
+
+							if (newfriendbean != null) {
+
+								pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+										"newfriends.etag", false, newfriendbean.getInvitationbean().toString());
+								intnewfriendsnum=newfriendbean.getInvitationbean().size();
+								System.out.println("intnewfriendsnum:"+intnewfriendsnum);
+								friendsfragment.setNewfriendsNum(intnewfriendsnum);
+								runOnUiThread(new Runnable() {
+									public void run() {
+										updatenewfriends();	
+									}
+								});
+							}
+							
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						
+
+						super.onSuccess(statusCode, headers, response);
+					}
+
+				});
+
+	}
+	
+	public void updatenewfriends(){
+		if(intnewfriendsnum>0){
+			bdnewfriendsnum.setText(String.valueOf(intnewfriendsnum)); 
+//			bdnewfriendsnum.setTextSize(11);
+//			bdnewfriendsnum.setBadgeMargin(1,1);
+			bdnewfriendsnum.show();
+		}else{
+			bdnewfriendsnum.hide();
+		}
 	}
 
 }

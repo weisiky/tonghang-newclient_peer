@@ -42,6 +42,7 @@ import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.share.ShareConfig;
 import com.peer.utils.AutoWrapRadioGroup;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ManagerActivity;
@@ -235,8 +236,7 @@ public class CreatTopicActivity extends pBaseActivity {
 								// TODO Auto-generated method stub
 								try {
 									sendCreateTopic(
-											LoginBean.getInstance().user
-													.getClient_id(),
+											mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 											pageViewaList.et_topic.getText()
 													.toString().trim(),
 											selectlabel);
@@ -251,7 +251,10 @@ public class CreatTopicActivity extends pBaseActivity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(
 									DialogInterface dialoginterface, int i) {
-
+								
+								
+								ShareConfig shareConfig=new ShareConfig(CreatTopicActivity.this);
+								shareConfig.shareSinaWeibo("测试分享", "", "测试分享~~~", "", "");
 								showToast("模拟测试", Toast.LENGTH_SHORT, false);
 
 							}
@@ -333,6 +336,7 @@ public class CreatTopicActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+						pLog.i("test", "response:"+response.toString());
 
 						try {
 							CreateToipcBean createtopicbean = JsonDocHelper
@@ -368,10 +372,10 @@ public class CreatTopicActivity extends pBaseActivity {
 								 * createtopicbean.topics.getImage
 								 * ().toString());
 								 */
+								ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
+								ChatRoomBean.getInstance().setIsowner(true);
 								ChatRoomBean.getInstance().setTopicBean(
 										createtopicbean.getTopic());
-								ChatRoomBean.getInstance().setUserBean(
-										LoginBean.getInstance().user);
 								Intent intent = new Intent();
 								startActivityForLeft(ChatRoomActivity.class,
 										intent, false);

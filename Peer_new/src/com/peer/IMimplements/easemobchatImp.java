@@ -70,7 +70,7 @@ public class easemobchatImp implements IM{
 	public void sendMessage(String content, int chattype,String targetId,String imageUrl,String userid) {
 		// TODO Auto-generated method stub
 		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-		// 如果是群聊，设置chattype,默认是单�?
+		// 如果是群聊，设置chattype,默认是单聊
 		if (chattype == Constant.MULTICHAT)
 			message.setChatType(ChatType.GroupChat);
 		TextMessageBody txtBody = new TextMessageBody(content);
@@ -81,10 +81,10 @@ public class easemobchatImp implements IM{
 		//自定义扩展消息，用于携带用户Id
 		message.setAttribute(Constant.USERID, userid);
 		
-		// 设置要发给谁,用户username或�?群聊groupid
+		// 设置要发给谁
 		message.setReceipt(targetId);		
 		try {
-		    //发�?消息
+		    //发送消息
 			EMChatManager.getInstance().sendMessage(message);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,7 +93,7 @@ public class easemobchatImp implements IM{
 	@Override
 	public void setAppInited() {
 		// TODO Auto-generated method stub
-		// 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast�?
+		// 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener
 		EMChat.getInstance().setAppInited();
 	}
 	@Override

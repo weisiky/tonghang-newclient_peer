@@ -3,11 +3,15 @@ package com.peer.adapter;
 import java.util.List;
 import java.util.Map;
 
+import com.peer.activity.ChatRoomActivity;
 import com.peer.activity.R;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
+import com.peer.bean.ChatRoomBean;
 import com.peer.bean.TopicBean;
 import com.peer.utils.ViewHolder;
+import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
 
 import android.content.Context;
 import android.content.Intent;
@@ -68,30 +72,20 @@ public class TopicAdapter extends pBaseAdapter {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub				
 				if(((pBaseActivity)mContext).isNetworkAvailable){
-/*					ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.MULTICHAT);
-					ChatRoomTypeUtil.getInstance().setTitle(topic.getLabel_name());
-					ChatRoomTypeUtil.getInstance().setTheme(topic.getSubject());
-					ChatRoomTypeUtil.getInstance().setTopicId(topic.getTopicid());
-					ChatRoomTypeUtil.getInstance().setUser(topic.getUser());
-					ChatRoomTypeUtil.getInstance().setHuanxingId(topic.getHuangxin_group_id());
-					String ownerid=null;*/
-//					try {
-//						ownerid = PeerUI.getInstance().getISessionManager().getUserId();
-//					} catch (RemoteException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}	
-//					if(topic.getUser().getUserid().equals(ownerid)){
-//						ChatRoomTypeUtil.getInstance().setIsowner(true);
-//					}else{
-//						ChatRoomTypeUtil.getInstance().setIsowner(false);
-//					}	
-//					ChatRoomTypeUtil.getInstance().setTopic(topic);
-//					Intent intent=new Intent(mContext,ChatRoomActivity.class);
-//					intent.putExtra("topicid",String.valueOf(topic.getTopicid()));
-//					mContext.startActivity(intent);
+					ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
+					ChatRoomBean.getInstance().setTopicBean(topic);
+					String ownerid=null;
+					ownerid =((pBaseActivity)mContext).mShareFileUtils.getString(Constant.CLIENT_ID, "") ;	
+					if(topic.getUser_id().equals(ownerid)){
+						ChatRoomBean.getInstance().setIsowner(true);
+					}else{
+						ChatRoomBean.getInstance().setIsowner(false);
+					}	
+					Intent intent=new Intent(mContext,ChatRoomActivity.class);
+					mContext.startActivity(intent);
 				}else{
-					Toast.makeText(mContext, mContext.getResources().getString(R.string.Broken_network_prompt), 0).show();
+					((pBaseActivity)mContext).showToast(mContext.getResources()
+							.getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
 				}
 				
 			}

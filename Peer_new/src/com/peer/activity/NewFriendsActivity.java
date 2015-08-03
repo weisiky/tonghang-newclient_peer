@@ -15,22 +15,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.InvitationBean;
 import com.peer.bean.NewFriendBean;
-import com.peer.bean.UserBean;
 import com.peer.event.NewFriensEvent;
 import com.peer.fragment.FriendsFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
-import com.peer.net.PeerParamsUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
-
 import de.greenrobot.event.EventBus;
 
 /**
@@ -39,7 +35,6 @@ import de.greenrobot.event.EventBus;
 public class NewFriendsActivity extends pBaseActivity {
 
 	private EventBus mBus;
-	private List<Object> mlist;
 	public List<InvitationBean> invitationbean = new ArrayList<InvitationBean>();
 	private NewfriendsAdapter adapter;
 	int page=1;
@@ -74,14 +69,14 @@ public class NewFriendsActivity extends pBaseActivity {
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
+		
 	}
 
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		registEventBus();
 		sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-
+		registEventBus();
 	}
 
 	@Override
@@ -133,8 +128,8 @@ public class NewFriendsActivity extends pBaseActivity {
 	}
 
 	private void getEvent(NewFriensEvent event) {
-
-		mlist.remove(event.getPosition());
+		System.out.println("position:"+event.getPosition());
+		invitationbean.remove(event.getPosition());
 		adapter.notifyDataSetChanged();
 		FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
 	}
@@ -229,7 +224,8 @@ public class NewFriendsActivity extends pBaseActivity {
 								if (adapter == null) {
 									if (invitationbean!=null&&invitationbean.size() > 0) {
 										adapter = new NewfriendsAdapter(
-												NewFriendsActivity.this, invitationbean);
+												NewFriendsActivity.this, invitationbean
+												,newfriendbean.getPic_server());
 									}
 									pageViewaList.lv_newfriends.setAdapter(adapter);
 								}

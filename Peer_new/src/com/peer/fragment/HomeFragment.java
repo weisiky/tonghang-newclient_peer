@@ -82,14 +82,7 @@ public class HomeFragment extends pBaseFragment {
 		super.onActivityCreated(savedInstanceState);
 		init();
 		setListener();
-		try {
-			sendRecommendTask(
-					mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
-
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	private void setListener() {
@@ -145,6 +138,7 @@ public class HomeFragment extends pBaseFragment {
 						}
 					}
 
+					@SuppressWarnings("static-access")
 					@Override
 					public void onPullUpToRefresh(
 							PullToRefreshBase<ListView> refreshView) {
@@ -292,36 +286,50 @@ public class HomeFragment extends pBaseFragment {
 				R.id.pull_refresh_homepage);
 		base_neterror_item = (LinearLayout) getView().findViewById(
 				R.id.base_neterror_item);
+		base_neterror_item.setVisibility(View.GONE);
 		tv_connect_errormsg = (TextView) base_neterror_item
 				.findViewById(R.id.tv_connect_errormsg);
 
 		ll_search = (LinearLayout) getView().findViewById(R.id.ll_search);
 		ll_search.setOnClickListener(this);
+		
+		if(pbaseActivity.isNetworkAvailable){
+			try {
+				sendRecommendTask(
+						mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
 
-		String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
-				"home.etag");
-
-		RecommendUserBean recommenduserbean;
-		try {
-			recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
-					RecommendUserBean.class);
-			usersList.addAll(recommenduserbean.users);
-			if (homeCount != null) {
-
-				if (adapter == null) {
-					adapter = new HomepageAdapter(getActivity(), usersList,
-							mShareFileUtils.getString(Constant.PIC_SERVER, ""));
-				}
-				// adapter.setBaseFragment(HomeFragment.this);
-				pull_refresh_homepage.setAdapter(adapter);
-
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		}else{
+			base_neterror_item.setVisibility(View.VISIBLE);
+			String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
+					"home.etag");
 
-		refresh();
+			RecommendUserBean recommenduserbean;
+			try {
+				recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
+						RecommendUserBean.class);
+				usersList.addAll(recommenduserbean.users);
+				if (homeCount != null) {
+
+					if (adapter == null) {
+						adapter = new HomepageAdapter(getActivity(), usersList,
+								mShareFileUtils.getString(Constant.PIC_SERVER, ""));
+					}
+					// adapter.setBaseFragment(HomeFragment.this);
+					pull_refresh_homepage.setAdapter(adapter);
+
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			refresh();
+		}
+		
 
 		RefreshListner();
 
@@ -334,10 +342,6 @@ public class HomeFragment extends pBaseFragment {
 		case R.id.ll_search:
 			Intent search = new Intent(getActivity(), SearchUserActivity.class);
 			startActivity(search);
-			break;
-
-		case R.id.im_headpic:
-
 			break;
 		default:
 			break;

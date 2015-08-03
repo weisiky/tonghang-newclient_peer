@@ -189,6 +189,9 @@ public class LoginActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 
 						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "responseString:"+responseString);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -198,6 +201,9 @@ public class LoginActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "responseString:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -207,6 +213,9 @@ public class LoginActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test", "statusCode:"+statusCode);
+						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "responseString:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -259,15 +268,6 @@ public class LoginActivity extends pBaseActivity {
 												Constant.PASSWORD, ""));
 								easemobchatImp.getInstance()
 										.loadConversationsandGroups();
-
-								// easemobchatImp.getInstance().login(
-								// mShareFileUtils.getString("client_id",
-								// ""),
-								// mShareFileUtils.getString("password",
-								// ""));
-								//
-								// easemobchatImp.getInstance()
-								// .loadConversationsandGroups();
 
 								startActivityForLeft(MainActivity.class,
 										intent, false);

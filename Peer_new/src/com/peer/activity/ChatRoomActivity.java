@@ -62,6 +62,7 @@ import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
@@ -93,6 +94,7 @@ public class ChatRoomActivity extends pBaseActivity {
 		private ListView lv_chat;
 		private Button btn_send;
 		private EditText et_sendmessage;
+		private LinearLayout ll_back;
 	}
 
 	private PageViewList pageViewaList;
@@ -172,6 +174,7 @@ public class ChatRoomActivity extends pBaseActivity {
 		pageViewaList.theme_chat.setOnClickListener(this);
 		pageViewaList.tv_share.setOnClickListener(this);
 		pageViewaList.btn_send.setOnClickListener(this);
+		pageViewaList.ll_back.setOnClickListener(this);
 	}
 
 	@Override
@@ -181,83 +184,100 @@ public class ChatRoomActivity extends pBaseActivity {
 		/** 判断群聊 **/
 		if (ChatRoomBean.getInstance().getChatroomtype() == Constant.MULTICHAT) {
 
-			toChatUsername = ChatRoomBean.getInstance().getTopicBean()
-					.getTopic_id();
+			
 			pageViewaList.host_imfor.setVisibility(View.VISIBLE);
+			
 
+			Intent intent = getIntent();
+			/** 判断是否从悬浮头像进入 **/
+			pLog.i("test", "Constant.FROMFLOAT:"+Constant.FROMFLOAT);
+			pLog.i("test", "FROMFLOAT:"+intent.getStringExtra(Constant.FROMFLOAT));
+			if (intent.getStringExtra(Constant.FROMFLOAT) != null
+					&& intent.getStringExtra(Constant.FROMFLOAT).equals(
+							Constant.FROMFLOAT)) {
+				toChatUsername = mShareFileUtils.getString(Constant.F_TOPICID, "");
+				pageViewaList.tv_tagname.setText(mShareFileUtils.getString(Constant.F_TAGNAME, ""));
+				pageViewaList.tv_nikename.setText(mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));
+				pageViewaList.theme_chat.setText(mShareFileUtils.getString(Constant.F_THEME, ""));
+				topicId = mShareFileUtils.getString(Constant.F_TOPICID, "");
+				// ImageLoader加载图片
+				ImageLoaderUtil.getInstance().showHttpImage(
+						mShareFileUtils.getString(Constant.PIC_SERVER, "")
+						+mShareFileUtils.getString(Constant.F_IMAGE, "")
+						, pageViewaList.host_image,
+						R.drawable.mini_avatar_shadow);
+			} else {
+				toChatUsername = ChatRoomBean.getInstance().getTopicBean()
+						.getTopic_id();
+				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
+						.getTopicBean().getLabel_name());
+				pageViewaList.tv_nikename.setText(ChatRoomBean.getInstance().getTopicBean()
+						.getUsername());
+				theme = ChatRoomBean.getInstance().getTopicBean().getSubject();
+				pageViewaList.theme_chat.setText(theme);
+				System.out.println("tv_tagname"+ChatRoomBean.getInstance()
+						.getTopicBean().getLabel_name());
+				System.out.println("tv_nikename"+ChatRoomBean.getInstance().getTopicBean()
+						.getUsername());
+				System.out.println("theme"+theme);
+				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt
+						.valueOf("END"));
+				// ImageLoader加载图片
+				ImageLoaderUtil.getInstance().showHttpImage(
+						mShareFileUtils.getString(Constant.PIC_SERVER, "")
+						+ChatRoomBean.getInstance().getTopicBean().getImage() 
+						, pageViewaList.host_image,
+						R.drawable.mini_avatar_shadow);
+				// topicId=toChatUsername;
+			}
+			/** 群聊，且为自己的房间时，退出显示头像 **/
+			Intent serviceintent = new Intent(ChatRoomActivity.this,
+					FxService.class);
+			stopService(serviceintent);
+			mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
+			
 			/** 判断属于自己的房间 **/
-			if (!ChatRoomBean.getInstance().isIsowner()) {
+			pLog.i("test", "isIsowner"+ChatRoomBean.getInstance().getIsowner());
+			if (!ChatRoomBean.getInstance().getIsowner()) {
 				titlePopup.addAction(new ActionItem(this, getResources()
 						.getString(R.string.lookformember), R.color.white));
+				
 			} else {
 				titlePopup.addAction(new ActionItem(this, getResources()
 						.getString(R.string.exitroom), R.color.white));
 				titlePopup.addAction(new ActionItem(this, getResources()
 						.getString(R.string.lookformember), R.color.white));
 			}
-
-			Intent intent = new Intent();
-			/** 判断是否从悬浮头像进入 **/
-			if (intent.getStringExtra(Constant.FROMFLOAT) != null
-					&& intent.getStringExtra(Constant.FROMFLOAT).equals(
-							Constant.FROMFLOAT)) {
-				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
-						.getTopicBean().getLabel_name());
-				pageViewaList.tv_nikename.setText(ChatRoomBean.getInstance()
-						.getUserBean().getUsername());
-				pageViewaList.theme_chat.setText(ChatRoomBean.getInstance()
-						.getTopicBean().getSubject());
-				topicId = ChatRoomBean.getInstance().getTopicBean()
-						.getTopic_id();
-			} else {
-				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
-						.getTopicBean().getLabel_name());
-				UserBean u = ChatRoomBean.getInstance().getUserBean();
-				pageViewaList.tv_nikename.setText(u.getUsername());
-				theme = ChatRoomBean.getInstance().getTopicBean().getSubject();
-				pageViewaList.theme_chat.setText(theme);
-				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt
-						.valueOf("END"));
-				// topicId=toChatUsername;
-			}
-
-			/** 群聊，且为自己的房间时，退出显示头像 **/
-			Intent serviceintent = new Intent(ChatRoomActivity.this,
-					FxService.class);
-			stopService(serviceintent);
-			mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
-
-			easemobchatImp.getInstance().joingroup(toChatUsername);
-
+			
 			/** 发送加入话题请求 **/
-			sendjoingroup(ChatRoomBean.getInstance().getUserBean()
-					.getClient_id(), ChatRoomBean.getInstance().getTopicBean()
+			sendjoingroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+					, ChatRoomBean.getInstance().getTopicBean()
 					.getTopic_id());
 
+//			easemobchatImp.getInstance().joingroup(toChatUsername);
+
 			/** 未读消息数清零 **/
-			conversation = EMChatManager.getInstance().getConversation(
-					toChatUsername);
-			conversation.resetUnreadMsgCount();
+//			conversation = EMChatManager.getInstance().getConversation(
+//					toChatUsername);
+//			conversation.resetUnreadMsgCount();
 
 		} else if (ChatRoomBean.getInstance().getChatroomtype() == Constant.SINGLECHAT) {
-			/** 单聊页面 **/
+			/** 单聊页面,主要业务，获得聊天记录 **/
 			toChatUsername = ChatRoomBean.getInstance().getUserBean()
 					.getClient_id();
-			
-			pLog.i("test", "toChatUsername:"+toChatUsername);
-			
 			
 			pageViewaList.host_imfor.setVisibility(View.GONE);
 			pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
 					.getUserBean().getUsername());
 			titlePopup.addAction(new ActionItem(this, getResources().getString(
 					R.string.deletemes), R.color.white));
+			/** 获取到与聊天人的会话对象。 **/
 			conversation = EMChatManager.getInstance().getConversation(
 					toChatUsername);
 			pLog.i("test", "conversation:"+conversation);
-			for (int i = 0; i < conversation.getMsgCount(); i++) {
+			for (int i = 0; i <  conversation.getMsgCount(); i++) {
 				EMMessage message = conversation.getMessage(i);
-
+				
 				TextMessageBody body = (TextMessageBody) message.getBody();
 				String content = body.getMessage();
 				String time = DateUtils.getTimestampString(new Date(message
@@ -275,13 +295,16 @@ public class ChatRoomActivity extends pBaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				pLog.i("test", "message.direct:"+message.direct);
+				pLog.i("test", "EMMessage.Direct.SEND:"+EMMessage.Direct.SEND);
 				if (message.direct == EMMessage.Direct.SEND) {
-					entity.setMsgType(Constant.SELF);
+					entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
 				} else {
 					entity.setMsgType(Constant.OTHER);
 				}
 				msgList.add(entity);
 			}
+			pLog.i("test", "msgList:"+msgList.toString());
 			adapter = new ChatMsgViewAdapter(this, msgList);
 			pageViewaList.lv_chat.setAdapter(adapter);
 			pageViewaList.lv_chat
@@ -317,14 +340,22 @@ public class ChatRoomActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// if (!JoinTopicBean.getInstance().getIsower()) {
-			// sendleavegroup(ChatRoomBean.getInstance().getUserBean()
-			// .getClient_id(), ChatRoomBean.getInstance()
-			// .getTopicBean().getTopic_id());
-			// backPage();
-			// } else {
+			if (ChatRoomBean.getInstance().getChatroomtype() == Constant.MULTICHAT) {
+			 if (!ChatRoomBean.getInstance().getIsowner()) {
+			 sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+					 , ChatRoomBean.getInstance()
+			 .getTopicBean().getTopic_id());
+				 pLog.i("test", "进来了，我不是群主");
+			 backPage();
+			 } else {
+				 pLog.i("test", "进来了，我是群主");
 			startfloatView();
-			// }
+			pLog.i("test", "设置悬浮头像完成");
+			 }
+			}else{
+//				conversation.resetUnreadMsgCount();
+				backPage();
+			}
 			return true;
 		} else {
 			return super.onKeyDown(keyCode, event);
@@ -349,16 +380,27 @@ public class ChatRoomActivity extends pBaseActivity {
 			titlePopup.show(v);
 			break;
 		case R.id.host_image:
-			Intent intent = new Intent();
+			
 			if (isNetworkAvailable) {
-				if (JoinTopicBean.getInstance().getIsower()) {
-					UserBean u = JoinTopicBean.getInstance().getUserbean();
+				if (ChatRoomBean.getInstance().getIsowner()) {
+					UserBean u = new UserBean();
+					ArrayList<String> labels = JsonDocHelper.toJSONArrary(
+							mShareFileUtils.getString(Constant.LABELS, ""), String.class);
+					u.setBirth(mShareFileUtils.getString(Constant.BIRTH, ""));
+					u.setCity(mShareFileUtils.getString(Constant.CITY, ""));
+					u.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+					u.setCreated_at(mShareFileUtils.getString(Constant.CREATED_AT, ""));
+					u.setEmail(mShareFileUtils.getString(Constant.EMAIL, ""));
+					u.setImage(mShareFileUtils.getString(Constant.IMAGE, ""));
+					u.setLabels(labels);
+					u.setSex(mShareFileUtils.getString(Constant.SEX, ""));
+					u.setUsername(mShareFileUtils.getString(Constant.USERNAME, ""));
 					PersonpageBean.getInstance().setUser(u);
-					startActivityForLeft(PersonalPageActivity.class, intent,
-							false);
+					Intent intent = new Intent(ChatRoomActivity.this,PersonalPageActivity.class);
+					startActivity(intent);
 				} else {
 					try {
-						senduser(JoinTopicBean.getInstance().getClient_id());
+						senduser(ChatRoomBean.getInstance().getTopicBean().getUser_id());
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -372,12 +414,29 @@ public class ChatRoomActivity extends pBaseActivity {
 		case R.id.btn_send:
 
 			/** 以前版本好像群聊走自己服务器，不走环信。具体不清楚。这里只发环信，可能出错 **/
-			// if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
-			// reply();
-			// }else{
+			 if(ChatRoomBean.getInstance().getChatroomtype()==Constant.MULTICHAT){
+//			 reply();
+			 }else{
 			sendMessage();
-			// }
+			 }
 			break;
+		case R.id.ll_back:
+			if (ChatRoomBean.getInstance().getChatroomtype() == Constant.MULTICHAT) {
+				 if (!ChatRoomBean.getInstance().getIsowner()) {
+				 sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+						 , ChatRoomBean.getInstance()
+				 .getTopicBean().getTopic_id());
+					 pLog.i("test", "进来了，我不是群主");
+				 backPage();
+				 } else {
+					 pLog.i("test", "进来了，我是群主");
+				startfloatView();
+				pLog.i("test", "设置悬浮头像完成");
+				 }
+				}else{
+//					conversation.resetUnreadMsgCount();
+					backPage();
+				}
 		default:
 			break;
 		}
@@ -389,37 +448,32 @@ public class ChatRoomActivity extends pBaseActivity {
 	 * 
 	 */
 	public void startfloatView() {
-		if (ChatRoomBean.getInstance().getChatroomtype() == Constant.MULTICHAT) {
-			if (mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
+		
+		pLog.i("test", "ISlower:"+ChatRoomBean.getInstance().getIsowner());
+		pLog.i("test", "ISFLOAT:"+mShareFileUtils.getBoolean(Constant.ISFLOAT, false));
+		if (!mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
 				Intent intentfloat = new Intent(ChatRoomActivity.this,
 						FxService.class);
-				UserBean u = ChatRoomBean.getInstance().getUserBean();
-				intentfloat.putExtra(Constant.IMAGE, ChatRoomBean.getInstance()
-						.getUserBean().getImage());
-				intentfloat.putExtra(Constant.OWNERNIKE, ChatRoomBean
-						.getInstance().getUserBean().getUsername());
-				intentfloat.putExtra(Constant.THEME, ChatRoomBean.getInstance()
+				intentfloat.putExtra(Constant.F_IMAGE, ChatRoomBean.getInstance()
+						.getTopicBean().getImage());
+				intentfloat.putExtra(Constant.F_OWNERNIKE, ChatRoomBean
+						.getInstance().getTopicBean().getUsername());
+				intentfloat.putExtra(Constant.F_THEME, ChatRoomBean.getInstance()
 						.getTopicBean().getSubject());
-				intentfloat.putExtra(Constant.TAGNAME, ChatRoomBean
+				intentfloat.putExtra(Constant.F_TAGNAME, ChatRoomBean
 						.getInstance().getTopicBean().getLabel_name());
-				intentfloat.putExtra(Constant.USERID, ChatRoomBean
-						.getInstance().getUserBean().getClient_id());
-				intentfloat.putExtra(Constant.ROOMID, ChatRoomBean
+				intentfloat.putExtra(Constant.F_USERID, ChatRoomBean
+						.getInstance().getTopicBean().getUser_id());
+				intentfloat.putExtra(Constant.F_ROOMID, ChatRoomBean
 						.getInstance().getTopicBean().getTopic_id());
-				intentfloat.putExtra(Constant.TOPICID, ChatRoomBean
+				intentfloat.putExtra(Constant.F_TOPICID, ChatRoomBean
 						.getInstance().getTopicBean().getTopic_id());
 				intentfloat.putExtra(Constant.FROMFLOAT, "float");
 				startService(intentfloat);
-				finish();
 				mShareFileUtils.setBoolean(Constant.ISFLOAT, true);
-			} else {
+				pLog.i("test", "ISFLOAT:"+mShareFileUtils.getBoolean(Constant.ISFLOAT, false));
 				finish();
-			}
-		} else if (ChatRoomBean.getInstance().getChatroomtype() == Constant.SINGLECHAT) {
-			// 把此会话的未读数置为0
-			conversation.resetUnreadMsgCount();
-			finish();
-		} else {
+			} else {
 			easemobchatImp.getInstance().exitgroup(toChatUsername);
 			finish();
 		}
@@ -518,10 +572,11 @@ public class ChatRoomActivity extends pBaseActivity {
 				} else {
 					if (item.mTitle.equals(getResources().getString(
 							R.string.exitroom))) {
-						easemobchatImp.getInstance().exitgroup(toChatUsername);
-						sendleavegroup(ChatRoomBean.getInstance().getUserBean()
-								.getClient_id(), ChatRoomBean.getInstance()
+						pLog.i("test", "退出话题了");
+						sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+								, ChatRoomBean.getInstance()
 								.getTopicBean().getTopic_id());
+//						easemobchatImp.getInstance().exitgroup(toChatUsername);
 						finish();
 					} else if (item.mTitle.equals(getResources().getString(
 							R.string.deletemes))) {
@@ -535,8 +590,7 @@ public class ChatRoomActivity extends pBaseActivity {
 								ChatRoomListnikeActivity.class);
 						intent.putExtra("groupId", ChatRoomBean.getInstance()
 								.getTopicBean().getTopic_id());
-						intent.putExtra("client_id", ChatRoomBean.getInstance()
-								.getUserBean().getClient_id());
+						intent.putExtra("client_id", mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 						startActivity(intent);
 					}
 				}
@@ -545,14 +599,20 @@ public class ChatRoomActivity extends pBaseActivity {
 		});
 	}
 
+	/**
+	 * 单聊发信
+	 */
 	private void sendMessage() {
 		// TODO Auto-generated method stub
-		if (EMChatManager.getInstance().isConnected()) {
+//		if (EMChatManager.getInstance().isConnected()) {
+			/** 消息内容 **/
 			String content = pageViewaList.et_sendmessage.getText().toString()
 					.trim();
-			String imagurl = JoinTopicBean.getInstance().getUserbean()
+			/** 发送者头像 **/
+			String imagurl = ChatRoomBean.getInstance().getUserBean()
 					.getImage();
-			String userid = JoinTopicBean.getInstance().getUserbean()
+			/** 发送者id **/
+			String userid = ChatRoomBean.getInstance().getUserBean()
 					.getClient_id();
 			// 环信发送消息，携带消息内容，自己头像，自己Id
 			easemobchatImp.getInstance().sendMessage(content,
@@ -572,10 +632,10 @@ public class ChatRoomActivity extends pBaseActivity {
 			pageViewaList.lv_chat
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			pageViewaList.et_sendmessage.setText("");
-		} else {
-			showToast(getResources().getString(R.string.broken_net),
-					Toast.LENGTH_SHORT, false);
-		}
+//		} else {
+//			showToast(getResources().getString(R.string.broken_net),
+//					Toast.LENGTH_SHORT, false);
+//		}
 	}
 
 	private void initChatListener() {
@@ -783,6 +843,7 @@ public class ChatRoomActivity extends pBaseActivity {
 
 				});
 	}
+	
 
 	/**
 	 * 获取用户信息接口
@@ -833,15 +894,19 @@ public class ChatRoomActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+						pLog.i("test","response:"+response.toString());
 						try {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
+							if(loginBean!=null){
+								PersonpageBean.getInstance().setUser(
+										loginBean.user);
+								Intent intent = new Intent(ChatRoomActivity.this,PersonalPageActivity.class);
+								startActivity(intent);
+							}
 
-							PersonpageBean.getInstance().setUser(
-									LoginBean.getInstance().user);
-							startActivityForLeft(PersonalPageActivity.class,
-									intent, false);
+							
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

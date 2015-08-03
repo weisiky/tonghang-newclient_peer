@@ -1,5 +1,6 @@
 package com.peer.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -19,7 +20,11 @@ import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.ChatMsgEntityBean;
+import com.peer.bean.ChatRoomBean;
+import com.peer.bean.PersonpageBean;
 import com.peer.bean.User;
+import com.peer.bean.UserBean;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ViewHolder;
 import com.peer.utils.pShareFileUtils;
 
@@ -28,11 +33,11 @@ import com.peer.utils.pShareFileUtils;
  * 
  */
 public class ChatMsgViewAdapter extends pBaseAdapter {
-	private List<User> list;
-	TextView tvSendTime;
-	TextView nick;
-	TextView tvContent;
-	ImageView heapic;
+	private List<UserBean> list;
+	TextView tv_sendtime;
+	TextView nickname;
+	TextView tv_chatcontent;
+	ImageView iv_ownerhead,iv_userhead;
 	
 	public static interface IMsgViewType {
 		int IMVT_COM_MSG = 1;
@@ -83,136 +88,90 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ChatMsgEntityBean entity = coll.get(position);
 		final int isComMsg = entity.getMsgType();
-		if (convertView == null) {
-			if (isComMsg==0) {
+//		if (convertView == null) {
+			if (isComMsg==0) {  //为他人的对话框时
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_left, null);
-				tvSendTime = ViewHolder.get(convertView,R.id.tv_sendtime);
-				nick=ViewHolder.get(convertView,R.id.nickname);
-				tvContent = ViewHolder.get(convertView,R.id.tv_chatcontent);
-				tvContent.setTextColor(context.getResources().getColor(R.color.white));
-				heapic=ViewHolder.get(convertView,R.id.iv_ownerhead);
 				
-			} else if(isComMsg==1){
+				 tv_sendtime = ViewHolder.get(convertView,R.id.tv_sendtime);
+				 nickname=ViewHolder.get(convertView,R.id.nickname);
+				 tv_chatcontent = ViewHolder.get(convertView,R.id.tv_chatcontent);
+				 tv_chatcontent.setTextColor(context.getResources().getColor(R.color.white));
+				 iv_ownerhead=ViewHolder.get(convertView,R.id.iv_ownerhead);
+				 final String userId=entity.getUserId();
+				 iv_ownerhead.setOnClickListener(new View.OnClickListener() {
+					 @Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							if(((pBaseActivity)context).isNetworkAvailable){
+								UserBean userbean = ChatRoomBean.getInstance().getUserBean();
+								if(userbean != null ){
+									PersonpageBean.getInstance().setUser(userbean);
+									Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
+									context.startActivity(topersonalpage);
+								}else{
+									((pBaseActivity)context).showToast("bean为空", Toast.LENGTH_SHORT, false);
+								}
+								
+							}else{
+								((pBaseActivity)context).showToast(context.getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+							}
+								
+						}
+						
+					});
+				
+			} else if(isComMsg==1){  //为自己的对话框时
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_right, null);
-				tvSendTime = ViewHolder.get(convertView,R.id.tv_sendtime);
-				nick=ViewHolder.get(convertView,R.id.nickname);
-				nick.setVisibility(View.GONE);
-				tvContent = ViewHolder.get(convertView,R.id.tv_chatcontent);
-				heapic=ViewHolder.get(convertView,R.id.iv_userhead);
-			}
-		} else {
-			convertView.getTag();
-		}
-		
-		/** 在第一次加载item时取得自己的好友列表（避免多次从server获取），以后用来判断某个用户是不是自己的好友 **/
-		if(position==1){
-//			FriendsTask task=new FriendsTask();
-//			task.execute();
-		}
-		
-//			LoadImageUtil.imageLoader.displayImage(entity.getImage(), viewHolder.heapic, LoadImageUtil.options);
-			tvSendTime.setText(entity.getDate());			
-			tvContent.setText(entity.getMessage());
-			if(entity.getName()!=null){
-				nick.setVisibility(View.VISIBLE);
-				nick.setText(entity.getName());
-			}else{
-				nick.setVisibility(View.GONE);
-			}
-			final String userId=entity.getUserId();
-			heapic.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if(((pBaseActivity)context).isNetworkAvailable){
-						if(isComMsg==0){
-							if(list==null||list.isEmpty()){
-								User user=new User();
-								user.setUserid(userId);
-								user.setIs_friends(false);
-//								PersonpageUtil.getInstance().setUser(user);
-							}else{
-								for(int i=0;i<list.size();i++){
-									if(userId.equals(list.get(i).getUserid())){
-										 list.get(i).setIs_friends(true);					 
-//										 PersonpageUtil.getInstance().setUser(list.get(i));
-										 break;
-									}else{
-										User user=new User();
-										user.setUserid(userId);
-										user.setIs_friends(false);
-//										PersonpageUtil.getInstance().setUser(user);
-									}
-								}
-//								PersonpageUtil.getInstance().setShouldRefresh(true);
+				 tv_sendtime = ViewHolder.get(convertView,R.id.tv_sendtime);
+				 nickname=ViewHolder.get(convertView,R.id.nickname);
+				 nickname.setVisibility(View.GONE);
+				 tv_chatcontent = ViewHolder.get(convertView,R.id.tv_chatcontent);
+				 iv_userhead=ViewHolder.get(convertView,R.id.iv_userhead);
+				 final String userId=entity.getUserId();
+				 iv_userhead.setOnClickListener(new View.OnClickListener() {
+					 @Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							if(((pBaseActivity)context).isNetworkAvailable){
+								UserBean user = new UserBean();
+								ArrayList<String> labels = JsonDocHelper.toJSONArrary(
+										((pBaseActivity)context).mShareFileUtils.getString(Constant.LABELS, ""), String.class);
+								user.setBirth(((pBaseActivity)context).mShareFileUtils.getString(Constant.BIRTH, ""));
+								user.setCity(((pBaseActivity)context).mShareFileUtils.getString(Constant.CITY, ""));
+								user.setClient_id(((pBaseActivity)context).mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+								user.setCreated_at(((pBaseActivity)context).mShareFileUtils.getString(Constant.CREATED_AT, ""));
+								user.setEmail(((pBaseActivity)context).mShareFileUtils.getString(Constant.EMAIL, ""));
+								user.setImage(((pBaseActivity)context).mShareFileUtils.getString(Constant.IMAGE, ""));
+								user.setLabels(labels);
+								user.setSex(((pBaseActivity)context).mShareFileUtils.getString(Constant.SEX, ""));
+								user.setUsername(((pBaseActivity)context).mShareFileUtils.getString(Constant.USERNAME, ""));
+								PersonpageBean.getInstance().setUser(user);
 								Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
 								context.startActivity(topersonalpage);
+							}else{
+								Toast.makeText(context, context.getResources().getString(R.string.Broken_network_prompt), 0).show();
 							}
-							
-						}else{
-//							ToMypersonalpage(context);
-						}	
-					}else{
-						Toast.makeText(context, context.getResources().getString(R.string.Broken_network_prompt), 0).show();
-					}
+								
+						}
 						
-				}
-			});			
+					});
+			}
+//		} else {
+//			convertView.getTag();
+//		}
+		
+//			LoadImageUtil.imageLoader.displayImage(entity.getImage(), viewHolder.heapic, LoadImageUtil.options);
+		tv_sendtime.setText(entity.getDate());			
+		tv_chatcontent.setText(entity.getMessage());
+			if(entity.getName()!=null){
+				nickname.setVisibility(View.VISIBLE);
+				nickname.setText(entity.getName());
+			}else{
+				nickname.setVisibility(View.GONE);
+			}
 		return convertView;
 	}
-//	private class FriendsTask extends AsyncTask<Void, Void, List<User>>{
-//
-//		@Override
-//		protected List<User> doInBackground(Void... arg0) {
-//			// TODO Auto-generated method stub       
-//            try {
-////            	list=PeerUI.getInstance().getISessionManager().myFriends();
-//			} catch (RemoteException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}           
-//			return list;
-//		}
-//		@Override
-//		protected void onPostExecute(List<User> result) {
-//			// TODO Auto-generated method stub
-//		}
-//	}
-//	private void ToMypersonalpage(Context context) {
-//		// TODO Auto-generated method stub
-//		String userid=null,client_id=null;
-//		List<String> labels=null;
-//		try {
-//			
-//			client_id=pShareFileUtils.getString("client_id", "");
-//	//次处未获取到标签。		labels=pShareFileUtils.getString("labels", "");
-//		} catch (RemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-///*
-////		PersonpageUtil.getInstance().setPersonpagetype(Constant.OWNPAGE);
-////		PersonpageUtil.getInstance().setPersonid(userid);
-//*/			
-//		LocalStorage.getString(context, Constant.EMAIL);
-//		UserDao userdao=new UserDao(context);
-//		UserBean userbean=userdao.findOne(LocalStorage.getString(context, Constant.EMAIL));
-//		User user=new User();
-//		user.setEmail(userbean.getEmail());
-//		user.setBirthday(userbean.getAge());
-//		user.setCity(userbean.getCity());
-//		user.setSex(userbean.getSex());
-//		user.setImage(userbean.getImage());
-//		user.setUsername(userbean.getNikename());
-//		user.setUserid(userid);
-//		user.setClient_Id(client_id);
-//		user.setLabels(labels);
-//		PersonpageUtil.getInstance().setUser(user);
-//		Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
-//		context.startActivity(topersonalpage);
-//	}
 
 }

@@ -19,15 +19,18 @@ import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.UserBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.ViewHolder;
 
 public class SeachResultAdapter extends pBaseAdapter {
 	private List<UserBean> mlist;
 	private Context mContext;
-	public SeachResultAdapter(Context mContext,List<UserBean> list){
+	private String pic_server;
+	public SeachResultAdapter(Context mContext,List<UserBean> list,String pic_server){
 		super(mContext);
 		this.mContext=mContext;
 		this.mlist=list;
+		this.pic_server = pic_server;
 	}
 	@Override
 	public int getCount() {
@@ -54,11 +57,14 @@ public class SeachResultAdapter extends pBaseAdapter {
 		convertView = LayoutInflater.from(mContext).inflate(
 				R.layout.adapter_listnike_friends, null, false);
 		ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				pic_server + userbean.getImage(), im_headpic,
+				R.drawable.mini_avatar_shadow);
+		
 		TextView tv_nikename = ViewHolder.get(convertView, R.id.tv_nikename);
 		TextView tv_descripe = ViewHolder.get(convertView, R.id.tv_descripe);
 		LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
-//		List plist = (List) mlist.get(position);
-//		Map pmap = (Map) plist.get(0);
 		tv_nikename.setText(userbean.getUsername());
 		List<String> plabels = userbean.getLabels();
 		String labels = "";

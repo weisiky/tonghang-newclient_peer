@@ -41,6 +41,7 @@ import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.Tools;
 import com.peer.utils.pLog;
@@ -105,6 +106,12 @@ public class PersonalMessageActivity extends pBaseActivity {
 				Constant.CITY, ""));
 		pageViewaList.et_nikename_personMSG.setText(mShareFileUtils.getString(
 				Constant.USERNAME, ""));
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
+				+ mShareFileUtils.getString(Constant.IMAGE, "")
+				, pageViewaList.iv_headpic_personMSG,
+				R.drawable.mini_avatar_shadow);
 		setDateTime();
 	}
 
@@ -455,6 +462,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 			params = PeerParamsUtils.getUpdateParams(
 					PersonalMessageActivity.this,client_id, tv_setbirth, tv_sex,
 					tv_setaddress, username);
+			params.put("image", new File(Constant.C_IMAGE_CACHE_PATH+"img.jpg"));
 			System.out.println(params);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

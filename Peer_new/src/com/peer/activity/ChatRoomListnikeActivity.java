@@ -195,7 +195,8 @@ public class ChatRoomListnikeActivity extends pBaseActivity{
 
 								if (adapter == null) {
 									adapter = new FriendsAdapter(
-											ChatRoomListnikeActivity.this, userlist);
+											ChatRoomListnikeActivity.this, userlist
+											,recommenduserbean.getPic_server());
 									pageViewaList.lv_listnike_chatroom.setAdapter(adapter);
 								}
 

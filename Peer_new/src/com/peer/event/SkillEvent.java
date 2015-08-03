@@ -24,7 +24,7 @@ public class SkillEvent {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public boolean isIsdelete() {
+	public boolean getIsdelete() {
 		return isdelete;
 	}
 	public void setIsdelete(boolean isdelete) {

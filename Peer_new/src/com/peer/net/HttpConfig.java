@@ -16,7 +16,6 @@ public interface HttpConfig {
 	// http://www.tonghang1.com:3000
 	 "http://192.168.23.1:8080/tonghang-serverapi";
 //	 "http://192.168.1.102:8080/tonghang-serverapi";
-	// http://114.215.143:8080/tonghangserver
 
 	/** 登入请求 **/
 	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/login.json";
@@ -35,7 +34,7 @@ public interface HttpConfig {
 	public static String LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/search/label.json";
 	/** 参与话题的用户 **/
-	public static String NUMBER_IN_URL = SERVER_ADDRESS + "/topic/number.json";
+	public static String NUMBER_IN_URL = SERVER_ADDRESS + "/topic/member.json";
 	/** 按行业搜用户 **/
 	public static String SEARCH_USER_LABEL_URL = SERVER_ADDRESS
 			+ "/user/search/label.json";

@@ -26,6 +26,7 @@ import com.peer.event.NewFriensEvent;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
@@ -51,11 +52,13 @@ public class NewfriendsAdapter extends pBaseAdapter {
 	private Context mContext;
 	private List<InvitationBean> mlist;
 	private boolean status;
+	private String pic_server;
 
-	public NewfriendsAdapter(Context mContext, List<InvitationBean> mlist) {
+	public NewfriendsAdapter(Context mContext, List<InvitationBean> mlist,String pic_server) {
 		super(mContext);
 		this.mContext = mContext;
 		this.mlist = mlist;
+		this.pic_server = pic_server;
 	}
 
 	@Override
@@ -101,6 +104,10 @@ public class NewfriendsAdapter extends pBaseAdapter {
 		System.out.println("invitation:" + invitation.toString());
 		tv_nikename.setText(invitation.getUserbean().getUsername());
 		tv_descripe.setText(invitation.getReason());
+		// ImageLoader加载图片
+		ImageLoaderUtil.getInstance().showHttpImage(
+				pic_server + invitation.getUserbean().getImage(), im_headpic,
+				R.drawable.mini_avatar_shadow);
 
 		tv_refuse.setOnClickListener(new View.OnClickListener() {
 			@Override

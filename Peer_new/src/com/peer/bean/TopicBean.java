@@ -11,7 +11,25 @@ public class TopicBean implements Serializable{
 	private String user_id;
 	private String subject;
 	private String created_at;
+	private String username;
+	private String image;
 	
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public String getLabel_name() {
 		return label_name;
@@ -54,5 +72,7 @@ public class TopicBean implements Serializable{
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	
+	
 
 }

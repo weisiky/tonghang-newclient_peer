@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -34,11 +32,9 @@ import com.peer.event.SkillEvent;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
-import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
-import com.umeng.analytics.f;
 
 import de.greenrobot.event.EventBus;
 
@@ -89,7 +85,6 @@ public class MySkillActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-		// mlist = PersonpageBean.getInstance().user.getLabels();
 		mlist = JsonDocHelper.toJSONArrary(
 				getIntent().getStringExtra("labels"), String.class);
 
@@ -347,13 +342,15 @@ public class MySkillActivity extends pBaseActivity {
 	private void getSkillEvent(final SkillEvent event) {
 		event.getPosition();
 		event.getLabel();
-		if (event.isIsdelete()) {
+		Hadtag = mlist.size();
+		if (event.getIsdelete()) {
 			if (Hadtag < 3) {
 				showToast("至少需要保留两个行业标签", Toast.LENGTH_SHORT, false);
 			} else {
-				mlist.remove(event.getPosition());
+				
 				if (isNetworkAvailable) {
 					try {
+						mlist.remove(event.getPosition());
 						senduserlabels(mShareFileUtils.getString(
 								Constant.CLIENT_ID, ""), mlist);
 						pLog.i("test", "mlist:" + mlist);
@@ -369,10 +366,11 @@ public class MySkillActivity extends pBaseActivity {
 				}
 			}
 		} else {
-			mlist.remove(event.getPosition());
-			mlist.add(event.getLabel());
+			
 			if (isNetworkAvailable) {
 				try {
+					mlist.remove(event.getPosition());
+					mlist.add(event.getLabel());
 					senduserlabels(
 							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 							mlist);

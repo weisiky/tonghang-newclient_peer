@@ -31,6 +31,7 @@ import com.peer.bean.ChatRoomBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.SearchBean;
 import com.peer.bean.UserBean;
+import com.peer.fragment.FriendsFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -307,8 +308,6 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
-				pLog.i("test","SINGLECHAT:"+Constant.SINGLECHAT);
-				pLog.i("test","Chatroomtype0:"+ChatRoomBean.getInstance().getChatroomtype());
 				ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
 						ChatRoomActivity.class);
@@ -400,9 +399,9 @@ public class PersonalPageActivity extends pBaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomTypeUtil.getInstance().setChatroomtype(
+				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
-				ChatRoomTypeUtil.getInstance().setUser(userbean);
+				ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
 						ChatRoomActivity.class);
 				startActivity(intent);
@@ -494,6 +493,7 @@ public class PersonalPageActivity extends pBaseActivity {
 							if (code.equals("ok")) {
 								showToast("好友关系已经移除！", Toast.LENGTH_SHORT,
 										false);
+								FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
 								finish();
 							} else {
 								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,

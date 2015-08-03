@@ -9,6 +9,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.peer.base.pBaseActivity;
+import com.peer.utils.BussinessUtils;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -75,7 +78,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			// exit();
+			BussinessUtils.clearUserData(((pBaseActivity)context).mShareFileUtils);
+			exit();
 			defaultUncaughtExceptionHandler.uncaughtException(thread, ex);
 		}
 	}
