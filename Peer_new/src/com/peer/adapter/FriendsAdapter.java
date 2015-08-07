@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.peer.R;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;

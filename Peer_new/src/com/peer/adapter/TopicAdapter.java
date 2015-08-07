@@ -3,8 +3,8 @@ package com.peer.adapter;
 import java.util.List;
 import java.util.Map;
 
-import com.peer.activity.ChatRoomActivity;
-import com.peer.activity.R;
+import com.peer.activity.MultiChatRoomActivity;
+import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
@@ -81,7 +81,7 @@ public class TopicAdapter extends pBaseAdapter {
 					}else{
 						ChatRoomBean.getInstance().setIsowner(false);
 					}	
-					Intent intent=new Intent(mContext,ChatRoomActivity.class);
+					Intent intent=new Intent(mContext,MultiChatRoomActivity.class);
 					mContext.startActivity(intent);
 				}else{
 					((pBaseActivity)mContext).showToast(mContext.getResources()

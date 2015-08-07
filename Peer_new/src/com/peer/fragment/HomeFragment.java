@@ -29,7 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.activity.Recommend_topic;
 import com.peer.activity.SearchUserActivity;
 import com.peer.adapter.HomepageAdapter;
@@ -295,6 +295,7 @@ public class HomeFragment extends pBaseFragment {
 		
 		if(pbaseActivity.isNetworkAvailable){
 			try {
+				showToast("数据载入中...", Toast.LENGTH_SHORT, false);
 				sendRecommendTask(
 						mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
 

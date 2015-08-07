@@ -6,7 +6,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.download.ImageDownloader.Scheme;
-import com.peer.activity.R;
+import com.peer.R;
 
 /**
  * ClassName : ImageLoaderUtil 图片加载类，对Imageloader进行封装

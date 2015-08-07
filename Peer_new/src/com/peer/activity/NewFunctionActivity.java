@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.peer.R;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 

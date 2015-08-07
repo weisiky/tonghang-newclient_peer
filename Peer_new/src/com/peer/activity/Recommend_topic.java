@@ -28,6 +28,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.adapter.Recommend_topicAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;

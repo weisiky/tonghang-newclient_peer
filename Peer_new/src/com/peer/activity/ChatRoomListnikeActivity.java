@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.adapter.FriendsAdapter;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;

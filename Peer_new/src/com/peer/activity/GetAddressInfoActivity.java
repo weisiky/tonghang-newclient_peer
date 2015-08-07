@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.peer.R;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.GetAddressUtil;
 import com.peer.utils.pLog;

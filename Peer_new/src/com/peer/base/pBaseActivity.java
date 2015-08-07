@@ -1,6 +1,12 @@
 package com.peer.base;
 
+import java.util.Calendar;
+
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -17,11 +23,13 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
 import com.peer.activity.MyAcountActivity;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.activity.RegisterAcountActivity;
 import com.peer.activity.SearchUserActivity;
 import com.peer.activity.SettingActivity;
@@ -77,6 +85,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	private OnNetworkStatusListener onNetworkStatusListener;
 	// Home键监听
 	private HomeWatcher mHomeWatcher;
+	
+	protected NotificationManager notificationManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +138,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		MobclickAgent.updateOnlineConfig(this);
 		// 友盟统计 数据加密
 		AnalyticsConfig.enableEncrypt(true);
+		
+		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 	}
 
@@ -412,7 +424,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		} else if (getLocalClassNameBySelf().contains(
 				"RegisterCompleteActivity")) {
 			showToast("请完成注册", Toast.LENGTH_SHORT, false);
-		} else if (getLocalClassNameBySelf().contains("Recommend_topic")) {
+		} else if (getLocalClassNameBySelf().contains("Recommend_topic")
+				|| getLocalClassNameBySelf().contains("ChatRoomActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
@@ -425,8 +438,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")
-				|| getLocalClassNameBySelf().contains("ChatRoomActivity")
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
+				|| getLocalClassNameBySelf().contains("OtherPageActivity")
 				|| getLocalClassNameBySelf().contains("SearchResultActivity")
 				|| getLocalClassNameBySelf().contains("NewFriendsActivity")
 				|| getLocalClassNameBySelf().contains("TopicActivity")
@@ -584,5 +597,72 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 		}
 	}
+	
+	
+	  /**
+     * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下
+     * 如果不需要，注释掉即可
+     * @param message
+     */
+    protected void notifyNewMessage(EMMessage message) {    
+        TextMessageBody txtBody = (TextMessageBody) message.getBody();
+        String ticker = txtBody.getMessage();
+     
+        Calendar c = Calendar.getInstance(); 
+	    int hours=c.get(Calendar.HOUR_OF_DAY); 
+		int munite=c.get(Calendar.MINUTE);
+	    //构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
+	    Notification notification = new Notification(R.drawable.logo,"同行",System.currentTimeMillis());	    
+	    Intent intent = new Intent(pBaseActivity.this,MainActivity.class);
+	     
+	      
+	      PendingIntent pendingIntent = PendingIntent.getActivity(pBaseActivity.this,0,intent,0);                                                                          notification.setLatestEventInfo(getApplicationContext(), "通知标题", "通知显示的内容", pendingIntent);
+	      notification.setLatestEventInfo(this, "同行",ticker, pendingIntent);	     
+	      notification.flags = Notification.FLAG_AUTO_CANCEL;//点击后自动消失
+	      ToNotifyStyle(notification);
+	      /*
+	      int starth=LocalStorage.getInt(BasicActivity.this, "starth", 22);
+	      int startm=LocalStorage.getInt(BasicActivity.this, "startm", 30);
+	      int endh=LocalStorage.getInt(BasicActivity.this, "endh", 8);
+	      int endm=LocalStorage.getInt(BasicActivity.this, "endm", 30);
+	      if(DateFormat.is24HourFormat(this)){
+				if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
+					 ToNotifyStyle(notification);
+				}
+			}else{
+				 String amorpm;
+			     if(c.get(Calendar.AM_PM)==0){
+			    	 amorpm="am";
+			    	 if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
+						 ToNotifyStyle(notification);
+					}
+			     }else{
+			    	 amorpm="pm";
+			    	 hours=hours+12;
+			    	 if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
+						 ToNotifyStyle(notification);
+					}
+			     }
+			    	
+			}	*/
+	      notificationManager.notify(1, notification);//发动通知,id由自己指定，每一个Notification对应的唯一标志           
+        
+    }
+    private void ToNotifyStyle(Notification notification) {
+		// TODO Auto-generated method stub
+    	if(mShareFileUtils.getBoolean("sound",true)&&mShareFileUtils.getBoolean("vibrate",true)){
+    		notification.defaults = Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE;
+    	}else{
+    		 if(mShareFileUtils.getBoolean("sound",true)){
+   	    	 	notification.defaults = Notification.DEFAULT_SOUND;//声音默认
+	   	     }else if(mShareFileUtils.getBoolean("vibrate",true)){
+	   	    	 notification.defaults = Notification.DEFAULT_VIBRATE;
+	   	     }	
+    	}
+		
+	}
+    
+    
+    
 
 }

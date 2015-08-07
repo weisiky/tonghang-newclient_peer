@@ -28,7 +28,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
 import com.peer.activity.NewFriendsActivity;
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.adapter.ChatHistoryAdapter;
 import com.peer.adapter.FriendsAdapter;
 import com.peer.adapter.HomepageAdapter;

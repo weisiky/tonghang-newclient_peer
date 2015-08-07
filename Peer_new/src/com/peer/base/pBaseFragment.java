@@ -57,11 +57,6 @@ public abstract class pBaseFragment extends Fragment implements OnClickListener{
 		} else {
 			toast.setText(arg);
 		}
-		if (isCenter) {
-			toast.setGravity(Gravity.CENTER, 0, 0);
-		} else {
-			toast.setGravity(Gravity.BOTTOM, 0, 0);
-		}
 		toast.show();
 	}
 	

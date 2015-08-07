@@ -22,7 +22,7 @@ import cn.jpush.android.api.JPushInterface;
  * 如果不定义这个 Receiver，则： 1) 默认用户会打开主界面 2) 接收不到自定义消息
  */
 public class MyReceiver extends BroadcastReceiver {
-	private static final String TAG = "JPush";
+	private static final String TAG = "push";
 
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();

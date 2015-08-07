@@ -1,5 +1,6 @@
 package com.peer.activity;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -25,9 +26,12 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
+import com.peer.adapter.ChatHistoryAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.ChatRoomBean;
+import com.peer.bean.LoginBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.SearchBean;
 import com.peer.bean.UserBean;
@@ -39,8 +43,10 @@ import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
 import com.peer.utils.AutoWrapRadioGroup;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.ChatRoomTypeUtil;
 import com.peer.utils.ImageLoaderUtil;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -55,7 +61,10 @@ public class PersonalPageActivity extends pBaseActivity {
 	private boolean page = true;
 	private RadioButton skill;
 
+	
+//	private static UserBean userbean;
 	final UserBean userbean = PersonpageBean.getInstance().getUser();
+	
 	
 
 	class PageViewList {
@@ -74,7 +83,6 @@ public class PersonalPageActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
@@ -99,6 +107,7 @@ public class PersonalPageActivity extends pBaseActivity {
 				startActivity(intent);
 			}
 		});
+		
 	}
 
 	@Override
@@ -115,28 +124,7 @@ public class PersonalPageActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-
-		UserBean userbean = PersonpageBean.getInstance().getUser();
-//		pageViewaList.personnike.setText(userbean.getUsername());
-//		pageViewaList.personcount.setText(userbean.getEmail());
-//		pageViewaList.city.setText(userbean.getCity());
-//		pageViewaList.sex.setText(userbean.getSex());
-//		for (int i = 0; i < userbean.getLabels().size(); i++) {
-//			String tag = userbean.getLabels().get(i);
-//
-//			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
-//					tag_container, false);
-//			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
-//			skill.setTextSize(20);
-//			skill.setTextColor(getResources().getColor(R.color.white));
-//			int pading = (int) getResources().getDimension(R.dimen.pading);
-//			skill.setText(tag);
-//			skill.setTag("" + i);
-//			tag_container.addView(skill);
-//		}
-
 		pic_server = mShareFileUtils.getString(Constant.PIC_SERVER, "");
-
 		ViewType();
 
 	}
@@ -170,6 +158,7 @@ public class PersonalPageActivity extends pBaseActivity {
 			if (isNetworkAvailable) {
 				Intent intent = new Intent(PersonalPageActivity.this,
 						TopicActivity.class);
+				intent.putExtra("client_id", userbean.getClient_id());
 				intent.putExtra("image", userbean.getImage());
 				intent.putExtra("nike", userbean.getUsername());
 				intent.putExtra("email", userbean.getEmail());
@@ -232,10 +221,20 @@ public class PersonalPageActivity extends pBaseActivity {
 				R.string.topic_owen));
 		pageViewaList.ll_personpagebottom.setVisibility(View.INVISIBLE);
 
-		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
-				pic_server + userbean.getImage(), pageViewaList.personhead,
-				R.drawable.mini_avatar_shadow);
+		
+		
+		File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+		if (file.exists()) {
+			pageViewaList.personhead.setImageBitmap(BussinessUtils.decodeFile(
+					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
+
+		} else {
+			// ImageLoader加载图片
+			ImageLoaderUtil.getInstance().showHttpImage(
+					pic_server + userbean.getImage(), pageViewaList.personhead,
+					R.drawable.mini_avatar_shadow);
+		}
+		
 
 		pageViewaList.personnike.setText(userbean.getUsername());
 		pageViewaList.personcount.setText(userbean.getEmail());
@@ -300,7 +299,25 @@ public class PersonalPageActivity extends pBaseActivity {
 			skill.setTag("" + i);
 			tag_container.addView(skill);
 		}
+		if(userbean.getHas_invitation()){
+			pageViewaList.addfriends.setText("等待中..");
+			pageViewaList.addfriends.setEnabled(false);
+		}else{
+			pageViewaList.addfriends.setOnClickListener(new View.OnClickListener() {
 
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+						Intent intent = new Intent();
+						intent.putExtra("user_client_id", userbean.getClient_id());
+						intent.putExtra("image", userbean.getImage());
+						intent.putExtra("nike", userbean.getUsername());
+						intent.putExtra("email", userbean.getEmail());
+						startActivityForLeft(AddFriendsActivity.class,
+								intent, false);
+				}
+			});
+		}
 		pageViewaList.btnSend.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -308,31 +325,14 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
-				ChatRoomBean.getInstance().setUserBean(userbean);
+//				ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
-						ChatRoomActivity.class);
+						SingleChatRoomActivity.class);
+				intent.putExtra("userbean", userbean);
 				startActivity(intent);
 			}
 		});
-		pageViewaList.addfriends.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if (!userbean.getIs_friend()) {
-					Intent intent = new Intent(PersonalPageActivity.this,
-							AddFriendsActivity.class);
-					intent.putExtra("user_client_id", userbean.getClient_id());
-					intent.putExtra("image", userbean.getImage());
-					intent.putExtra("nike", userbean.getUsername());
-					intent.putExtra("email", userbean.getEmail());
-					startActivity(intent);
-				} else {
-					showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
-				}
-
-			}
-		});
+		
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
 				R.string.deletefriends), R.color.white));
 		popupwindow();
-		if (PersonpageBean.getInstance().getUser().getSex().equals("男")) {
+		if (userbean.getSex().equals("男")) {
 			pageViewaList.tv_topic.setText(getResources().getString(
 					R.string.topic_other));
 			pageViewaList.tv_title.setText(getResources().getString(
@@ -401,9 +401,10 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
-				ChatRoomBean.getInstance().setUserBean(userbean);
+//				ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent(PersonalPageActivity.this,
-						ChatRoomActivity.class);
+						SingleChatRoomActivity.class);
+				intent.putExtra("userbean", userbean);
 				startActivity(intent);
 			}
 		});
@@ -506,6 +507,78 @@ public class PersonalPageActivity extends pBaseActivity {
 					}
 				});
 
+	}
+	
+	
+	
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+
+	private void senduser(String client_id,String o_client_id) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(PersonalPageActivity.this, client_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						pLog.i("test","response:"+response.toString());
+						try {
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							if(loginBean!=null){
+//								userbean = loginBean.user;
+							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+				});
 	}
 
 }

@@ -13,9 +13,9 @@ import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.activity.NewFriendsActivity;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.InvitationBean;
@@ -29,7 +29,6 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
 
 import de.greenrobot.event.EventBus;

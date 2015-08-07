@@ -1,6 +1,6 @@
 package com.peer.utils;
 
-import com.peer.activity.R;
+import com.peer.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

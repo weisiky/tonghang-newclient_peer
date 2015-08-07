@@ -24,6 +24,7 @@ import cn.jpush.android.api.TagAliasCallback;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -35,7 +36,6 @@ import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -279,40 +279,6 @@ public class LoginActivity extends pBaseActivity {
 							e1.printStackTrace();
 						}
 
-						/*
-						 * try { JSONObject result = response
-						 * .getJSONObject("success"); String pic_server =
-						 * result.getString("pic_server"); String sys_time =
-						 * result.getString("sys_time"); String code =
-						 * result.getString("code"); JSONObject user =
-						 * result.getJSONObject("user"); String sex =
-						 * user.getString("sex"); String image =
-						 * user.getString("image"); ArrayList<String> lab = new
-						 * ArrayList<String>(); JSONArray labels = (JSONArray)
-						 * user.get("labels"); for (int index = 0; index <
-						 * labels.length(); index++)
-						 * lab.add(labels.getString(index)); String city =
-						 * user.getString("city"); String username =
-						 * user.getString("username"); String client_id =
-						 * user.getString("client_id"); String created_at =
-						 * user.getString("created_at"); String birth =
-						 * user.getString("birth");
-						 * 
-						 * UserBean userbean = new UserBean();
-						 * userbean.setBirth(birth); userbean.setCity(city);
-						 * userbean.setCreated_at(created_at);
-						 * userbean.setEmail(pageViewaList.et_email_login
-						 * .getText().toString().trim());
-						 * userbean.setImage(image); userbean.setLabels(lab);
-						 * userbean.setSex(sex); userbean.setUsername(username);
-						 * 
-						 * loginresult.setSys_time(sys_time);
-						 * loginresult.setPic_server(pic_server);
-						 * loginresult.setUserBean(userbean);
-						 * 
-						 * } catch (JSONException e) { // TODO Auto-generated
-						 * catch block e.printStackTrace(); }
-						 */
 						super.onSuccess(statusCode, headers, response);
 
 					}

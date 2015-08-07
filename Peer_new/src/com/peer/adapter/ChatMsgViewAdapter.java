@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.peer.R;
+import com.peer.activity.OtherPageActivity;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
@@ -24,9 +25,10 @@ import com.peer.bean.ChatRoomBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.User;
 import com.peer.bean.UserBean;
+import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ViewHolder;
-import com.peer.utils.pShareFileUtils;
+import com.peer.utils.pLog;
 
 /**
  *聊天室信息 Adapter
@@ -86,9 +88,8 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ChatMsgEntityBean entity = coll.get(position);
+		final ChatMsgEntityBean entity = coll.get(position);
 		final int isComMsg = entity.getMsgType();
-//		if (convertView == null) {
 			if (isComMsg==0) {  //为他人的对话框时
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_left, null);
@@ -99,18 +100,29 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 				 tv_chatcontent.setTextColor(context.getResources().getColor(R.color.white));
 				 iv_ownerhead=ViewHolder.get(convertView,R.id.iv_ownerhead);
 				 final String userId=entity.getUserId();
+				// ImageLoader加载图片
+					ImageLoaderUtil.getInstance().showHttpImage(
+							((pBaseActivity)context).mShareFileUtils.getString(Constant.PIC_SERVER, "")
+							+entity.getImage() 
+							, iv_ownerhead,
+							R.drawable.mini_avatar_shadow);
 				 iv_ownerhead.setOnClickListener(new View.OnClickListener() {
 					 @Override
 						public void onClick(View arg0) {
 							// TODO Auto-generated method stub
 							if(((pBaseActivity)context).isNetworkAvailable){
-								UserBean userbean = ChatRoomBean.getInstance().getUserBean();
+								UserBean userbean = entity.getUserbean();
 								if(userbean != null ){
+									pLog.i("test","bean不为空"+userbean);
 									PersonpageBean.getInstance().setUser(userbean);
 									Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
 									context.startActivity(topersonalpage);
 								}else{
-									((pBaseActivity)context).showToast("bean为空", Toast.LENGTH_SHORT, false);
+									pLog.i("test","bean为空");
+									pLog.i("test","client_id:"+ entity.getUserId());
+									Intent topersonalpage=new Intent(context,OtherPageActivity.class);
+									topersonalpage.putExtra("client_id", entity.getUserId());
+									context.startActivity(topersonalpage);
 								}
 								
 							}else{
@@ -130,6 +142,12 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 				 tv_chatcontent = ViewHolder.get(convertView,R.id.tv_chatcontent);
 				 iv_userhead=ViewHolder.get(convertView,R.id.iv_userhead);
 				 final String userId=entity.getUserId();
+				// ImageLoader加载图片
+					ImageLoaderUtil.getInstance().showHttpImage(
+							((pBaseActivity)context).mShareFileUtils.getString(Constant.PIC_SERVER, "")
+							+entity.getImage() 
+							, iv_userhead,
+							R.drawable.mini_avatar_shadow);
 				 iv_userhead.setOnClickListener(new View.OnClickListener() {
 					 @Override
 						public void onClick(View arg0) {
@@ -158,11 +176,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 						
 					});
 			}
-//		} else {
-//			convertView.getTag();
-//		}
 		
-//			LoadImageUtil.imageLoader.displayImage(entity.getImage(), viewHolder.heapic, LoadImageUtil.options);
 		tv_sendtime.setText(entity.getDate());			
 		tv_chatcontent.setText(entity.getMessage());
 			if(entity.getName()!=null){

@@ -32,7 +32,7 @@ public class ShareConfig implements PlatformActionListener, Callback {
 		Platform circle = ShareSDK.getPlatform(context, WechatMoments.NAME);
 
 		cn.sharesdk.wechat.moments.WechatMoments.ShareParams sp = new cn.sharesdk.wechat.moments.WechatMoments.ShareParams();
-		sp.setShareType(Platform.SHARE_WEBPAGE);// 一定要设置分享属性
+		sp.setShareType(Platform.SHARE_TEXT);// 一定要设置分享属性
 		sp.setTitle(share_title);
 		sp.setText(share_text);
 		sp.setImageUrl(share_image);

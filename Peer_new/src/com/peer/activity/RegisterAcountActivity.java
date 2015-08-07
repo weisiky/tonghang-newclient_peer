@@ -13,9 +13,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.peer.R;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -132,9 +132,9 @@ public class RegisterAcountActivity extends pBaseActivity {
 					R.string.errornike));
 			return;
 		} else {
-			pShareFileUtils.setString("email", email);
-			pShareFileUtils.setString("password", password);
-			pShareFileUtils.setString("nikename", nikename);
+			mShareFileUtils.setString("email", email);
+			mShareFileUtils.setString("password", password);
+			mShareFileUtils.setString("nikename", nikename);
 			// ArrayList<String> baseregister_list=new ArrayList<String>();
 			//
 			// baseregister_list.add(email);

@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -45,7 +46,6 @@ import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.Tools;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -183,7 +183,8 @@ public class PersonalMessageActivity extends pBaseActivity {
 			img = getBitmapByte(photo);
 
 			if (isNetworkAvailable) {
-				sendupdateusermsg(pShareFileUtils.getString("client_id", ""),
+				showProgressBar();
+				sendupdateusermsg(mShareFileUtils.getString("client_id", ""),
 						pageViewaList.tv_setbirthday_my.getText().toString(),
 						pageViewaList.tv_sex.getText().toString(),
 						pageViewaList.tv_setaddress_my.getText().toString(),
@@ -410,7 +411,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 		Bundle extras = data.getExtras();
 		if (extras != null) {
 			photo = extras.getParcelable("data");
-
+			BussinessUtils.saveBitmapFile(photo);
 			pageViewaList.iv_headpic_personMSG.setImageBitmap(photo);
 		}
 		return photo;
@@ -447,23 +448,17 @@ public class PersonalMessageActivity extends pBaseActivity {
 			String tv_sex, String tv_setaddress, String username) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		// HttpEntity entity = null;
-		// try {
-		// entity = PeerParamsUtils.getUpdateParams(
-		// PersonalMessageActivity.this,
-		// tv_setbirth,tv_sex,tv_setaddress,username);
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getUpdateParams(
 					PersonalMessageActivity.this,client_id, tv_setbirth, tv_sex,
 					tv_setaddress, username);
-			params.put("image", new File(Constant.C_IMAGE_CACHE_PATH+"img.jpg"));
-			System.out.println(params);
+			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+			System.out.println("image图片："+file);
+			if (file.exists()) {
+				params.put("image", file);
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

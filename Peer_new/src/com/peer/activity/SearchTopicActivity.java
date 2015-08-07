@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.peer.R;
 import com.peer.activity.SearchUserActivity.PageViewList;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.R;
 import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;

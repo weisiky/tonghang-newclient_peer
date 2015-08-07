@@ -19,10 +19,12 @@ import android.widget.LinearLayout;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
+import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatService;
 import com.easemob.chat.EMGroupManager;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -70,35 +72,7 @@ public class WelComeActivity extends pBaseActivity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-//		new Thread(new Runnable() {
-//			public void run() {
-//				if (DemoHXSDKHelper.getInstance().isLogined()) {
-//					// ** 鍏嶇櫥闄嗘儏鍐�鍔犺浇鎵�湁鏈湴缇ゅ拰浼氳瘽
-//					//涓嶆槸蹇呴』鐨勶紝涓嶅姞sdk涔熶細鑷姩寮傛鍘诲姞杞�涓嶄細閲嶅鍔犺浇)锛�					//鍔犱笂鐨勮瘽淇濊瘉杩涗簡涓婚〉闈細璇濆拰缇ょ粍閮藉凡缁弆oad瀹屾瘯
-//					long start = System.currentTimeMillis();
-//					EMGroupManager.getInstance().loadAllGroups();
-//					EMChatManager.getInstance().loadAllConversations();
-//					long costTime = System.currentTimeMillis() - start;
-//					//绛夊緟sleeptime鏃堕暱
-//					if (sleepTime - costTime > 0) {
-//						try {
-//							Thread.sleep(sleepTime - costTime);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					//杩涘叆涓婚〉闈�					startActivity(new Intent(SplashActivity.this, MainActivity.class));
-//					finish();
-//				}else {
-//					try {
-//						Thread.sleep(sleepTime);
-//					} catch (InterruptedException e) {
-//					}
-//					startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-//					finish();
-//				}
-//			}
-//		}).start();
+		
 	}
 
 	@Override
@@ -158,7 +132,7 @@ public class WelComeActivity extends pBaseActivity {
 
 	private void sendSystemConfig() {
 		HttpEntity entity = null;
-		HttpUtil.post(HttpConfig.FRIEND_GET_SYSTEMCONFIG,
+		HttpUtil.post(HttpConfig.GET_SYSTEMCONFIG,
 				new JsonHttpResponseHandler() {
 
 					@SuppressWarnings("static-access")
@@ -168,9 +142,6 @@ public class WelComeActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						super.onSuccess(statusCode, headers, response);
 
-
-						// {"system":{"can_login":true,"time":"2015-07-18 09:57:50",
-						// "can_upgrade_silently":false,"can_register_user":true}}
 
 						Intent intent = new Intent();
 

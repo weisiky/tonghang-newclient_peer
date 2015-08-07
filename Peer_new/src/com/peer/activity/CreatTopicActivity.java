@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.ChatRoomBean;
@@ -251,12 +252,14 @@ public class CreatTopicActivity extends pBaseActivity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(
 									DialogInterface dialoginterface, int i) {
-								
-								
-								ShareConfig shareConfig=new ShareConfig(CreatTopicActivity.this);
-								shareConfig.shareSinaWeibo("测试分享", "", "测试分享~~~", "", "");
-								showToast("模拟测试", Toast.LENGTH_SHORT, false);
-
+								ShareConfig shareConfig = new ShareConfig(
+										CreatTopicActivity.this);
+//								shareConfig.shareWxFriend("同行话题分享", "",
+//										pageViewaList.et_topic.getText()
+//												.toString().trim(), "", "");
+								shareConfig.shareCircleFriend("", "","同行话题#"+
+										pageViewaList.et_topic.getText()
+										.toString().trim()+"#", "", "");
 							}
 						}).show();
 	}
@@ -351,33 +354,12 @@ public class CreatTopicActivity extends pBaseActivity {
 							}
 
 							if (createtopicbean.getCode().equals("ok")) {
-								/*
-								 * Map<String, Object> topicMsg = new
-								 * HashMap<String, Object>();
-								 * topicMsg.put("label_name",
-								 * createtopicbean.topics
-								 * .getLabel_name().toString());
-								 * topicMsg.put("subject",
-								 * createtopicbean.topics
-								 * .getSubject().toString());
-								 * topicMsg.put("user_id",
-								 * createtopicbean.topics
-								 * .getUser_id().toString());
-								 * topicMsg.put("topic_id",
-								 * createtopicbean.topics
-								 * .getTopic_id().toString());
-								 * topicMsg.put("sys_time",
-								 * createtopicbean.getSys_time());
-								 * topicMsg.put("image",
-								 * createtopicbean.topics.getImage
-								 * ().toString());
-								 */
 								ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
 								ChatRoomBean.getInstance().setIsowner(true);
 								ChatRoomBean.getInstance().setTopicBean(
 										createtopicbean.getTopic());
 								Intent intent = new Intent();
-								startActivityForLeft(ChatRoomActivity.class,
+								startActivityForLeft(MultiChatRoomActivity.class,
 										intent, false);
 								ManagerActivity.getAppManager().finishActivity(
 										CreatTopicActivity.this);

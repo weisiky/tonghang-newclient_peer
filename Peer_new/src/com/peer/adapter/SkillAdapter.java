@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.base.pBaseAdapter;
 import com.peer.event.SkillEvent;
 import com.peer.utils.ViewHolder;

@@ -12,11 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
+import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.service.FxService;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.ManagerActivity;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
+import com.thoughtworks.xstream.core.util.FastField;
 import com.umeng.update.UmengUpdateAgent;
 
 
@@ -161,8 +166,13 @@ public class SettingActivity extends pBaseActivity{
 		 .setPositiveButton(getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){ 
             	 BussinessUtils.clearUserData(mShareFileUtils);
-            	 ManagerActivity.getAppManager().restart(SettingActivity.this);
-            	  
+//            	 if(mShareFileUtils.getBoolean(Constant.ISFLOAT, false)){
+//            		 pLog.i("test", "退出时，把悬浮头像隐藏");
+//            		 Intent intent = new Intent(SettingActivity.this, FxService.class);//悬浮头像停止运行
+//            		 stopService(intent); 
+//            		 mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
+//            	 }
+         			ManagerActivity.getAppManager().restart(SettingActivity.this);
      	     	 easemobchatImp.getInstance().logout();
              }
 		 }).show(); 
@@ -177,7 +187,6 @@ public class SettingActivity extends pBaseActivity{
 		.setMessage(getResources().getString(R.string.todesk)) .setNegativeButton(getResources().getString(R.string.cancel), null) 
 		 .setPositiveButton(getResources().getString(R.string.sure), new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialoginterface, int i){
-            	 	
             	 ManagerActivity.getAppManager().AppExit(SettingActivity.this);       	
              }
 		 }).show();

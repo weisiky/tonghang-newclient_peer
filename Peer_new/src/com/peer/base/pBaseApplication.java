@@ -45,6 +45,8 @@ public class pBaseApplication extends Application {
 
 	private static pBaseApplication instance;
 	private BroadcastReceiver netWorkReceiver;
+	/** 控制更新参数 **/
+	public static boolean updateflag = true;
 
 	@SuppressWarnings("deprecation")
 	@Override

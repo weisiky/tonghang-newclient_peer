@@ -1,5 +1,6 @@
 package com.peer.utils;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -419,8 +420,7 @@ public class BussinessUtils {
 			pShareFileUtils mShareFileUtils) {
 		pShareFileUtils.setString(Constant.PIC_SERVER,
 				loginBean.getPic_server());
-		pShareFileUtils.setString(Constant.EMAIL,
-				loginBean.user.getEmail());
+		pShareFileUtils.setString(Constant.EMAIL, loginBean.user.getEmail());
 		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
 		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
 		pShareFileUtils.setString(Constant.USERNAME,
@@ -434,9 +434,11 @@ public class BussinessUtils {
 		pShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
 		pShareFileUtils.setString(Constant.CLIENT_ID,
 				loginBean.user.getClient_id());
-		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels().toString());
-		pShareFileUtils.setBoolean(Constant.IS_FRIEND, loginBean.user.getIs_friend());
-	
+		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
+				.toString());
+		pShareFileUtils.setBoolean(Constant.IS_FRIEND,
+				loginBean.user.getIs_friend());
+
 	}
 
 	/**
@@ -457,5 +459,24 @@ public class BussinessUtils {
 		pShareFileUtils.setString(Constant.LABELS, "");
 		pShareFileUtils.setString(Constant.EMAIL, "");
 	}
+
+	/**
+	 * Bitmap对象保存为图片文件
+	 * 
+	 * @param bitmap
+	 */
+	public static void saveBitmapFile(Bitmap bitmap) {
+		File file = new File(Constant.C_IMAGE_CACHE_PATH+"head.png");// 将要保存图片的路径
+		try {
+			BufferedOutputStream bos = new BufferedOutputStream(
+					new FileOutputStream(file));
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+			bos.flush();
+			bos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 }

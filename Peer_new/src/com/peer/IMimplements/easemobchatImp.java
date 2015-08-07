@@ -66,6 +66,9 @@ public class easemobchatImp implements IM{
 			}
 		});
 	}
+	
+	
+	
 	@Override
 	public void sendMessage(String content, int chattype,String targetId,String imageUrl,String userid) {
 		// TODO Auto-generated method stub

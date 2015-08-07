@@ -3,9 +3,14 @@ package com.peer.activity;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.Header;
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.RemoteException;
 
@@ -15,12 +20,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.util.NetUtils;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.peer.R;
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.adapter.FriendsAdapter;
 import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.base.pBaseApplication;
 import com.peer.bean.NewFriendBean;
 import com.peer.bean.RecommendUserBean;
 import com.peer.fragment.ComeMsgFragment;
@@ -29,7 +45,9 @@ import com.peer.fragment.HomeFragment;
 import com.peer.fragment.MyFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
+import com.peer.utils.ManagerActivity;
 import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
@@ -57,6 +75,8 @@ public class MainActivity extends pBaseActivity {
 	private BadgeView unredmsg,bdnewfriendsnum;
 
 	private PageViewList pageViewaList;
+	
+	private NewMessageBroadcastReceiver msgReceiver;
 
 	private String mPageName = "MainActivity";
 
@@ -75,11 +95,14 @@ public class MainActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		init();
-
+		registerEMchat();
 		// 考虑到用户流量的限制，目前我们默认在Wi-Fi接入情况下才进行自动提醒。如需要在任意网络环境下都进行更新自动提醒，
 		// 则请在update调用之前添加以下代码：
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		UmengUpdateAgent.update(this);
+		if(pBaseApplication.updateflag){
+			pBaseApplication.updateflag=false;
+			UmengUpdateAgent.update(this);
+		}
 
 		// v2.4版本以后的SDK中默认开启了集成检测功能，在调用任意的更新接口后，我们将替您自动检查上述集成过程中2、3两个步骤是否被正确完成。
 		// 如果正确完成不会出现任何提示，否则会以如下的toast提示您。
@@ -110,7 +133,7 @@ public class MainActivity extends pBaseActivity {
 				R.color.bottomtextblue));
 		pageViewaList.iv_backfind.setImageResource(R.drawable.peer_press);
 		
-//		unredmsg=new BadgeView(this,pageViewaList.showmessgenum);
+		unredmsg=new BadgeView(this,pageViewaList.showmessgenum);
 		bdnewfriendsnum=new BadgeView(this,pageViewaList.tv_newfriendsnum);
 
 	}
@@ -233,11 +256,7 @@ public class MainActivity extends pBaseActivity {
 		super.onResume();
 		MobclickAgent.onPageStart(mPageName);
 		
-		System.out.println("进来了吗？");
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
+		
 				// TODO Auto-generated method stub
 				try {
 					sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
@@ -246,8 +265,6 @@ public class MainActivity extends pBaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}		
-//			}
-//		}).start();
 
 	}
 
@@ -341,14 +358,12 @@ public class MainActivity extends pBaseActivity {
 
 							if (newfriendbean != null) {
 
-								pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
-										"newfriends.etag", false, newfriendbean.getInvitationbean().toString());
 								intnewfriendsnum=newfriendbean.getInvitationbean().size();
-								System.out.println("intnewfriendsnum:"+intnewfriendsnum);
 								friendsfragment.setNewfriendsNum(intnewfriendsnum);
 								runOnUiThread(new Runnable() {
 									public void run() {
 										updatenewfriends();	
+										updateUnreadLabel();
 									}
 								});
 							}
@@ -377,6 +392,115 @@ public class MainActivity extends pBaseActivity {
 		}else{
 			bdnewfriendsnum.hide();
 		}
+	}
+	
+	
+	/**
+	 * 环信注册监听
+	 */
+	private void registerEMchat() {
+		// TODO Auto-generated method stub		
+		if(EMChatManager.getInstance().isConnected()){
+			msgReceiver = new NewMessageBroadcastReceiver();
+			IntentFilter intentFilter = new IntentFilter(
+					EMChatManager.getInstance().getNewMessageBroadcastAction());
+			intentFilter.setPriority(3);
+			registerReceiver(msgReceiver, intentFilter);
+			EMChatManager.getInstance().addConnectionListener(new IMconnectionListner());
+			
+			EMChat.getInstance().setAppInited();
+		}		
+	}
+	
+	
+	/**
+	 * 刷新未读消息数
+	 */
+	public void updateUnreadLabel() {
+		int count = easemobchatImp.getInstance().getUnreadMesTotal();
+		System.out.println("count:"+count);
+		if (count > 0) {
+			unredmsg.setText(String.valueOf(count));
+//			unredmsg.setTextSize(11);
+//			unredmsg.setBadgeMargin(1,1);
+			unredmsg.show();
+		} else {
+			unredmsg.hide();
+		}
+	}
+	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	abortBroadcast();
+	        //消息id
+	        String msgId = intent.getStringExtra("msgid");
+	        //发消息的人的username(userid)
+	        String msgFrom = intent.getStringExtra("from");
+	        //更方便的方法是通过msgId直接获取整个message
+	        EMMessage message = EMChatManager.getInstance().getMessage(msgId);	       
+	        
+//	        if (SingleChatRoomActivity.activityInstance != null) {
+//				if (message.getChatType() == ChatType.GroupChat) {
+//					if (message.getTo().equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
+//						return;
+//				} else {
+//					if (msgFrom.equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
+//						return;
+//				}
+//			}	        
+	        updateUnreadLabel();
+	        System.out.println("监听到了");
+	        notifyNewMessage(message);
+	        if (comemsgfragment!=null) {
+	        	comemsgfragment.refresh();
+			}
+	        
+	        }
+	}
+	public class IMconnectionListner implements EMConnectionListener{
+
+		@Override
+		public void onConnected() {
+			// TODO Auto-generated method stub
+			runOnUiThread(new Runnable() {
+				public void run() {
+					homefragment.base_neterror_item.setVisibility(View.GONE);
+					pLog.i("system", "环信转态连接良好");
+				}
+			});
+		}
+
+		@Override
+		public void onDisconnected(final int error) {
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					if(error == EMError.USER_REMOVED){
+						// 显示帐号已经被移除
+						showToast("帐号已经被移除", Toast.LENGTH_SHORT, false);
+					}else if (error == EMError.CONNECTION_CONFLICT) {
+						// 显示帐号在其他设备登陆
+						showToast("帐号在其他设备登陆，请重新登入", Toast.LENGTH_LONG, false);
+						BussinessUtils.clearUserData(mShareFileUtils);
+		            	ManagerActivity.getAppManager().restart(MainActivity.this);
+					} else {
+					if (NetUtils.hasNetwork(MainActivity.this))
+						//连接不到聊天服务器
+						easemobchatImp.getInstance().login(
+								mShareFileUtils.getString(Constant.CLIENT_ID, "")
+								.replace("-", ""),
+								mShareFileUtils.getString(
+										Constant.PASSWORD, ""));
+						
+					else
+						//当前网络不可用，请检查网络设置
+						homefragment.base_neterror_item.setVisibility(View.VISIBLE);
+					}
+				}
+			});
+		}
+
 	}
 
 }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.adapter.TopicAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -92,6 +93,7 @@ public class TopicActivity extends pBaseActivity {
 		String name = intent.getStringExtra("nike");
 		String email = intent.getStringExtra("email");
 		String image = intent.getStringExtra("image");
+		String client_id = intent.getStringExtra("client_id");
 		System.out.println("name:"+name);
 		System.out.println("email:"+email);
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
@@ -103,8 +105,7 @@ public class TopicActivity extends pBaseActivity {
 				R.drawable.mini_avatar_shadow);
 
 		try {
-			sendUserTopic(PersonpageBean.getInstance().getUser().getClient_id(),
-					page);
+			sendUserTopic(client_id,page);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

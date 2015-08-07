@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;

@@ -1,8 +1,9 @@
 package com.peer.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UserBean {
+public class UserBean implements Serializable{
 
 	
 	private String sex;
@@ -13,6 +14,7 @@ public class UserBean {
 	private String image;
 	private String phone;
 	private boolean is_friend;
+	private boolean has_invitation;
 	
 	private String created_at;
 	private String client_id;
@@ -25,6 +27,14 @@ public class UserBean {
 
 	public void setIs_friend(boolean is_friend) {
 		this.is_friend = is_friend;
+	}
+	
+	public boolean getHas_invitation() {
+		return has_invitation;
+	}
+
+	public void setHas_invitation(boolean has_invitation) {
+		this.has_invitation = has_invitation;
 	}
 	
 	

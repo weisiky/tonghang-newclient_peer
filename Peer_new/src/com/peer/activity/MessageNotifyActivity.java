@@ -11,8 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.peer.R;
 import com.peer.base.pBaseActivity;
-import com.peer.utils.pShareFileUtils;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /**
@@ -49,12 +50,12 @@ public class MessageNotifyActivity extends pBaseActivity{
 		pageViewaList.cb_sound.setChecked(true);
 		pageViewaList.cb_vibrate.setChecked(true);
 		
-		if(pShareFileUtils.getBoolean("sound",true)){
+		if(mShareFileUtils.getBoolean("sound",true)){
 			pageViewaList.cb_sound.setChecked(true);
 		}else{
 			pageViewaList.cb_sound.setChecked(false);
 		}
-		if(pShareFileUtils.getBoolean("vibrate",true)){
+		if(mShareFileUtils.getBoolean("vibrate",true)){
 			pageViewaList.cb_vibrate.setChecked(true);
 		}else{
 			pageViewaList.cb_vibrate.setChecked(false);
@@ -74,9 +75,13 @@ public class MessageNotifyActivity extends pBaseActivity{
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
 				// TODO Auto-generated method stub
 				if(isChecked){
-					pShareFileUtils.setBoolean("sound", true);
+					pLog.i("test", "isChecked:"+isChecked);
+					mShareFileUtils.setBoolean("sound", true);
+					pLog.i("test", "sound:"+mShareFileUtils.getBoolean("sound", true));
 				}else{
-					pShareFileUtils.setBoolean("sound", false);
+					pLog.i("test", "isChecked:"+isChecked);
+					mShareFileUtils.setBoolean("sound", false);
+					pLog.i("test", "sound:"+mShareFileUtils.getBoolean("sound", true));
 				}
 			}
 		});
@@ -86,9 +91,9 @@ public class MessageNotifyActivity extends pBaseActivity{
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
 				// TODO Auto-generated method stub
 				if(isChecked){
-					pShareFileUtils.setBoolean("vibrate", true);
+					mShareFileUtils.setBoolean("vibrate", true);
 				}else{
-					pShareFileUtils.setBoolean("vibrate", false);
+					mShareFileUtils.setBoolean("vibrate", false);
 				}				
 			}
 		});	
@@ -160,8 +165,8 @@ public class MessageNotifyActivity extends pBaseActivity{
 	            // TODO Auto-generated method stub  
 	            starth = hourOfDay;  
 	            startm = minute; 
-	            pShareFileUtils.setInt("starth", starth);
-	            pShareFileUtils.setInt("startm", startm);
+	            mShareFileUtils.setInt("starth", starth);
+	            mShareFileUtils.setInt("startm", startm);
 	            pageViewaList.start.setText(new StringBuilder().append(starth).append(":").append(startm));
 //	            updateDisplay();  
 	        }    
@@ -173,8 +178,8 @@ public class MessageNotifyActivity extends pBaseActivity{
 		            // TODO Auto-generated method stub  
 		            endh = hourOfDay;  
 		            endm = minute;  
-		            pShareFileUtils.setInt("endh", endh);
-		            pShareFileUtils.setInt("endm", endm);
+		            mShareFileUtils.setInt("endh", endh);
+		            mShareFileUtils.setInt("endm", endm);
 		            pageViewaList.end.setText(new StringBuilder().append(endh).append(":").append(endm));
 //		            updateDisplay();  
 		        }    

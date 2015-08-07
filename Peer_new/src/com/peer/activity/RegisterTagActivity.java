@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
@@ -40,7 +41,6 @@ import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
@@ -210,9 +210,9 @@ public class RegisterTagActivity extends pBaseActivity {
 				showProgressBar();
 				try {
 					sendRegisterTagRequest(
-							pShareFileUtils.getString("email", ""),
-							pShareFileUtils.getString("password", ""),
-							pShareFileUtils.getString("nikename", ""), list);
+							mShareFileUtils.getString("email", ""),
+							mShareFileUtils.getString("password", ""),
+							mShareFileUtils.getString("nikename", ""), list);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -297,9 +297,9 @@ public class RegisterTagActivity extends pBaseActivity {
 							pLog.i("test", "loginBean:" + loginBean.toString());
 							
 							if (loginBean != null) {
-								pShareFileUtils.setString("client_id",
+								mShareFileUtils.setString("client_id",
 										loginBean.user.getClient_id());
-								pShareFileUtils.setString("username",
+								mShareFileUtils.setString("username",
 										loginBean.user.getUsername());
 
 								Intent register_tag = new Intent();

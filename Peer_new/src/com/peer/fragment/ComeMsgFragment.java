@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +30,17 @@ import com.easemob.chat.EMMessage;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
-import com.peer.activity.R;
+import com.peer.activity.PersonalPageActivity;
+import com.peer.R;
 import com.peer.adapter.ChatHistoryAdapter;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.LoginBean;
+import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendUserBean;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -51,6 +56,7 @@ public class ComeMsgFragment extends pBaseFragment {
 	private ChatHistoryAdapter adapter;
 	private List<EMConversation> list;
 	private List<Map> easemobchatusers = new ArrayList<Map>();
+	private List<UserBean> users = new ArrayList<UserBean>();
 
 	private pBaseActivity pbaseActivity;
 
@@ -85,14 +91,29 @@ public class ComeMsgFragment extends pBaseFragment {
 		list = loadConversationsWithRecentChat();
 		lv_come = (ListView) getView().findViewById(R.id.lv_come);
 		for (EMConversation em : loadConversationsWithRecentChat()) {
-			Map m = new HashMap<String, Object>();
-			m.put("username", em.getUserName());
-			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
-			m.put("is_group", em.getUserName().matches(isnumber));
-			easemobchatusers.add(m);
+			System.out.println("环信username:"+em.getUserName());
+			try {
+				senduser(em.getUserName()
+						,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			Map m = new HashMap<String, Object>();
+//			m.put("username", em.getUserName());
+//			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
+//			m.put("is_group", em.getUserName().matches(isnumber));
+//			easemobchatusers.add(m);
 		}
-		easemobchatUser users = new easemobchatUser();
-		users.setEasemobchatusers(easemobchatusers);
+//		if (adapter == null) {
+//			adapter = new ChatHistoryAdapter(getActivity(), users);
+//		}
+		// adapter.setBaseFragment(HomeFragment.this);
+//		lv_come.setAdapter(adapter);
+//		refresh1();
+	
+//		easemobchatUser users = new easemobchatUser();
+//		users.setEasemobchatusers(easemobchatusers);
 
 	}
 
@@ -101,20 +122,38 @@ public class ComeMsgFragment extends pBaseFragment {
 			list.clear();
 		}
 		list.addAll(loadConversationsWithRecentChat());
-		easemobchatusers.clear();
-		for (EMConversation em : loadConversationsWithRecentChat()) {
-			Map m = new HashMap<String, Object>();
-			m.put("username", em.getUserName());
-			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
-			m.put("is_group", em.getUserName().matches(isnumber));
-			easemobchatusers.add(m);
+		System.out.println("环信获取的会话："+list.toString());
+		System.out.println("环信获取的会话条数："+list.size());
+//		easemobchatusers.clear();
+		if(users !=null){
+			users.clear();
 		}
-		easemobchatUser users = new easemobchatUser();
-		users.setEasemobchatusers(easemobchatusers);
-		/*
-		 * try { sendComeMsg(users); } catch (UnsupportedEncodingException e) {
-		 * // TODO Auto-generated catch block e.printStackTrace(); }
-		 */
+		for (EMConversation em : loadConversationsWithRecentChat()) {
+			try {
+				System.out.println("em.getUserName:"+em.getUserName());
+				senduser(em.getUserName()
+						,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+//				for(int i = 1;users.size()==i){
+//					
+//				}
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			Map m = new HashMap<String, Object>();
+//			m.put("username", em.getUserName());
+//			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
+//			m.put("is_group", em.getUserName().matches(isnumber));
+//			easemobchatusers.add(m);
+		}
+		System.out.println("users:"+users.toString());
+		adapter = new ChatHistoryAdapter(getActivity(), users);
+		
+		// adapter.setBaseFragment(HomeFragment.this);
+		lv_come.setAdapter(adapter);
+	
+//		easemobchatUser users = new easemobchatUser();
+//		users.setEasemobchatusers(easemobchatusers);
 	}
 
 	/**
@@ -194,39 +233,30 @@ public class ComeMsgFragment extends pBaseFragment {
 	}
 
 	/**
-	 * 获取未读取消息请求
+	 * 获取用户信息接口
 	 * 
-	 * @param easemobchatUser
+	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendComeMsg(easemobchatUser users)
-			throws UnsupportedEncodingException {
+
+	private void senduser(String client_id,String o_client_id) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
-
-		// HttpEntity entity = null;
-		// try {
-		// entity = PeerParamsUtils.getComMsgParams(getActivity(), users);
-		// } catch (Exception e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-
+		final Intent intent = new Intent();
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getComMsgParams(getActivity(), users);
+			params = PeerParamsUtils.getUserParams(getActivity(), client_id);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		HttpUtil.post(getActivity(), HttpConfig.HUANXIN_URL, params,
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
 				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
+
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -235,7 +265,6 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -244,7 +273,6 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -253,29 +281,33 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
+						pLog.i("test","response:"+response.toString());
 						try {
-							JSONObject result = response
-									.getJSONObject("success");
-						} catch (JSONException e) {
+							LoginBean loginBean = JsonDocHelper.toJSONObject(
+									response.getJSONObject("success")
+											.toString(), LoginBean.class);
+							if(loginBean!=null){
+								users.add(loginBean.user);
+								System.out.println("us:"+loginBean.user.getIs_friend());
+								if(adapter == null){
+									adapter = new ChatHistoryAdapter(getActivity(), users);
+									
+									// adapter.setBaseFragment(HomeFragment.this);
+									lv_come.setAdapter(adapter);
+								}
+								refresh1();
+							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							e1.printStackTrace();
 						}
 
-						/*
-						 * if (adapter == null) { adapter = new
-						 * ChatHistoryAdapter(getActivity(), list);
-						 * ListView_come.setAdapter(adapter); }
-						 */
-
-						refresh1();
-						// adapter.setBaseFragment(HomeFragment.this);
-
 						super.onSuccess(statusCode, headers, response);
+
 					}
 
 				});
-
 	}
 
 	private void refresh1() {

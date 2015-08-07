@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -46,12 +47,10 @@ import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.Tools;
 import com.peer.utils.pLog;
-import com.peer.utils.pShareFileUtils;
 import com.peer.utils.pViewBox;
 
 /**
- * 注册第二部
- * 完善信息
+ * 注册第二部 完善信息
  * 
  */
 public class RegisterCompleteActivity extends pBaseActivity {
@@ -186,12 +185,12 @@ public class RegisterCompleteActivity extends pBaseActivity {
 	 */
 	private void CommiteToServer() {
 		showProgressBar();
-		LoginBean loginBean = new LoginBean();
-		sendUpdateRequest(pShareFileUtils.getString("client_id", ""),
+//		LoginBean loginBean = new LoginBean();
+		sendUpdateRequest(mShareFileUtils.getString("client_id", ""),
 				pageViewaList.tv_setbirth.getText().toString().trim(),
 				pageViewaList.tv_sex.getText().toString().trim(),
 				pageViewaList.tv_setaddress.getText().toString().trim(),
-				pShareFileUtils.getString("username", ""));
+				mShareFileUtils.getString("username", ""));
 
 	}
 
@@ -210,22 +209,16 @@ public class RegisterCompleteActivity extends pBaseActivity {
 			String tv_sex, String tv_setaddress, String username) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-		// HttpEntity entity = null;
-		// try {
-		// entity = PeerParamsUtils.getUpdateParams(
-		// RegisterCompleteActivity.this,
-		// tv_setbirth,tv_sex,tv_setaddress,username);
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getUpdateParams(
-					RegisterCompleteActivity.this, client_id,tv_setbirth, tv_sex,
-					tv_setaddress, username);
-			params.put("image", new File(Constant.C_IMAGE_CACHE_PATH+"img.jpg"));
+					RegisterCompleteActivity.this, client_id, tv_setbirth,
+					tv_sex, tv_setaddress, username);
+			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+			if (file.exists()) {
+				params.put("image", file);
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -279,9 +272,9 @@ public class RegisterCompleteActivity extends pBaseActivity {
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
 								easemobchatImp.getInstance().login(
-										pShareFileUtils.getString("client_id",
+										mShareFileUtils.getString("client_id",
 												""),
-										pShareFileUtils.getString("password",
+										mShareFileUtils.getString("password",
 												""));
 								easemobchatImp.getInstance()
 										.loadConversationsandGroups();
@@ -299,17 +292,17 @@ public class RegisterCompleteActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						super.onSuccess(statusCode, headers, responseString);
-						Intent login_complete = new Intent();
-						startActivityForLeft(MainActivity.class,
-								login_complete, false);
-					}
-
+//					@Override
+//					public void onSuccess(int statusCode, Header[] headers,
+//							String responseString) {
+//						// TODO Auto-generated method stub
+//						hideLoading();
+//						super.onSuccess(statusCode, headers, responseString);
+//						Intent login_complete = new Intent();
+//						startActivityForLeft(MainActivity.class,
+//								login_complete, false);
+//					}
+//
 				});
 	}
 
@@ -513,6 +506,8 @@ public class RegisterCompleteActivity extends pBaseActivity {
 		Bundle extras = data.getExtras();
 		if (extras != null) {
 			photo = extras.getParcelable("data");
+
+			BussinessUtils.saveBitmapFile(photo);
 
 			pageViewaList.iv_uploadepic_complete.setImageBitmap(photo);
 		}

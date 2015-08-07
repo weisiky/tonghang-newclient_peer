@@ -66,7 +66,8 @@ public class Constant {
 	public static String TOPICID = "topicid";
 	
 	/** 悬浮头像设置 **/
-	public static String FROMFLOAT = "float";
+	public static String FLOAT = "float";
+	public static String FROMFLOAT = "fromfloat";
 	public static String F_IMAGE = "f_image";
 	public static String F_OWNERNIKE = "f_ownernike";
 	public static String F_THEME = "f_theme";

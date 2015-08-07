@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.peer.R;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.PersonpageBean;

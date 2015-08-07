@@ -11,8 +11,8 @@ package com.peer.service;
  * 7.app异常退出，或者用户杀死该进程，悬浮头像也被杀死。
  */
 
-import com.peer.activity.ChatRoomActivity;
-import com.peer.activity.R;
+import com.peer.activity.MultiChatRoomActivity;
+import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.bean.ChatRoomBean;
 import com.peer.utils.ImageLoaderUtil;
@@ -81,7 +81,7 @@ public class FxService extends Service
 		userId=intent.getStringExtra(Constant.F_USERID);
 		topicid=intent.getStringExtra(Constant.F_TOPICID);
 		roomaddress=intent.getStringExtra(Constant.F_ROOMID);
-		fromfloat=intent.getStringExtra(Constant.FROMFLOAT);
+		fromfloat = intent.getStringExtra(Constant.FROMFLOAT);
 		mShareFileUtils.initSharePre(getApplicationContext(),
 				Constant.SHARE_NAME, 0);
 		pLog.i("test", "image:"+image);		
@@ -91,7 +91,6 @@ public class FxService extends Service
 		pLog.i("test", "userId:"+userId);		
 		pLog.i("test", "topicid:"+topicid);		
 		pLog.i("test", "roomaddress:"+roomaddress);		
-		pLog.i("test", "fromfloat:"+fromfloat);		
 		
 		mShareFileUtils.setString(Constant.F_IMAGE, image);
 		mShareFileUtils.setString(Constant.F_OWNERNIKE, ownernike);
@@ -109,7 +108,6 @@ public class FxService extends Service
 		pLog.i("test", "F_USERID:"+mShareFileUtils.getString(Constant.F_USERID, ""));		
 		pLog.i("test", "F_TOPICID:"+mShareFileUtils.getString(Constant.F_TOPICID, ""));		
 		pLog.i("test", "F_ROOMID:"+mShareFileUtils.getString(Constant.F_ROOMID, ""));		
-		pLog.i("test", "FROMFLOAT:"+mShareFileUtils.getString(Constant.FROMFLOAT, ""));
 		createFloatView();
 		super.onStart(intent, startId);
 	}
@@ -177,14 +175,14 @@ public class FxService extends Service
 	            	if(-mFloatView.getMeasuredWidth()/2<xdown-xup&&xdown-xup<mFloatView.getMeasuredWidth()/2
 	            			&&-(mFloatView.getMeasuredHeight()/2-25)<ydown-yup&&ydown-yup<(mFloatView.getMeasuredHeight()/2-25)){
 	            		ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
-	            		Intent intent=new Intent(FxService.this,ChatRoomActivity.class);
-	            		intent.putExtra(Constant.IMAGE, image);
-	            		intent.putExtra(Constant.OWNERNIKE, ownernike);
-	            		intent.putExtra(Constant.THEME, theme);			
-	            		intent.putExtra(Constant.TAGNAME, tagname);
-	            		intent.putExtra(Constant.USERID, userId);
-	            		intent.putExtra(Constant.ROOMID, roomaddress);
-	            		intent.putExtra(Constant.TOPICID, topicid);
+	            		Intent intent=new Intent(FxService.this,MultiChatRoomActivity.class);
+	            		intent.putExtra(Constant.F_IMAGE, image);
+	            		intent.putExtra(Constant.F_OWNERNIKE, ownernike);
+	            		intent.putExtra(Constant.F_THEME, theme);			
+	            		intent.putExtra(Constant.F_TAGNAME, tagname);
+	            		intent.putExtra(Constant.F_USERID, userId);
+	            		intent.putExtra(Constant.F_ROOMID, roomaddress);
+	            		intent.putExtra(Constant.F_TOPICID, topicid);
 	            		intent.putExtra(Constant.FROMFLOAT, fromfloat);
 	            		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);

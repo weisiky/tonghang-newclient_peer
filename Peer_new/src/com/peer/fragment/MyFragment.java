@@ -1,5 +1,6 @@
 package com.peer.fragment;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ import com.peer.activity.MyAcountActivity;
 import com.peer.activity.MySkillActivity;
 import com.peer.activity.PersonalMessageActivity;
 import com.peer.activity.PersonalPageActivity;
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.activity.SettingActivity;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
@@ -112,21 +113,27 @@ public class MyFragment extends pBaseFragment {
 
 	public void getlocalMsg() {
 		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
-				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
-				+ mShareFileUtils.getString(Constant.IMAGE, "")
-				, im_headpic,
-				R.drawable.mini_avatar_shadow);
+		File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+		if (file.exists()) {
+			im_headpic.setImageBitmap(BussinessUtils.decodeFile(
+					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
+
+		} else {
+			ImageLoaderUtil.getInstance().showHttpImage(
+					mShareFileUtils.getString(Constant.PIC_SERVER, "")
+							+ mShareFileUtils.getString(Constant.IMAGE, ""),
+					im_headpic, R.drawable.mini_avatar_shadow);
+		}
 		tv_nikename.setText(mShareFileUtils.getString(Constant.USERNAME, ""));
 		tv_email.setText(mShareFileUtils.getString(Constant.EMAIL, ""));
-//		if (LoginBean.getInstance().user == null) {
-//			try {
-//				senduser(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-//			} catch (UnsupportedEncodingException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		// if (LoginBean.getInstance().user == null) {
+		// try {
+		// senduser(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	@Override
@@ -144,9 +151,10 @@ public class MyFragment extends pBaseFragment {
 			startActivityForResult(personmessage, UPDATESUCESS);
 			break;
 		case R.id.ll_mytag_my:
-//			PersonpageBean.getInstance().setUser(LoginBean.getInstance().user);
+			// PersonpageBean.getInstance().setUser(LoginBean.getInstance().user);
 			Intent skillting = new Intent(getActivity(), MySkillActivity.class);
-			skillting.putExtra("labels", mShareFileUtils.getString(Constant.LABELS, ""));
+			skillting.putExtra("labels",
+					mShareFileUtils.getString(Constant.LABELS, ""));
 			startActivity(skillting);
 			break;
 		case R.id.ll_setting_my:
@@ -179,10 +187,12 @@ public class MyFragment extends pBaseFragment {
 		userBean.setBirth(mShareFileUtils.getString(Constant.BIRTH, ""));
 		userBean.setCity(mShareFileUtils.getString(Constant.CITY, ""));
 		userBean.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-		userBean.setCreated_at(mShareFileUtils.getString(Constant.CREATED_AT,""));
+		userBean.setCreated_at(mShareFileUtils.getString(Constant.CREATED_AT,
+				""));
 		userBean.setEmail(mShareFileUtils.getString(Constant.EMAIL, ""));
 		userBean.setImage(mShareFileUtils.getString(Constant.IMAGE, ""));
-		userBean.setIs_friend(mShareFileUtils.getBoolean(Constant.IS_FRIEND,true));
+		userBean.setIs_friend(mShareFileUtils.getBoolean(Constant.IS_FRIEND,
+				true));
 		ArrayList<String> labels = JsonDocHelper.toJSONArrary(
 				mShareFileUtils.getString(Constant.LABELS, ""), String.class);
 		userBean.setLabels(labels);

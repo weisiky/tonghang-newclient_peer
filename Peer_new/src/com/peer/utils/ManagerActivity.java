@@ -3,7 +3,10 @@ package com.peer.utils;
 import java.util.Stack;
 
 import com.peer.activity.LoginActivity;
+import com.peer.activity.SettingActivity;
 import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
+import com.peer.service.FxService;
 
 
 import android.app.Activity;
@@ -135,6 +138,12 @@ public class ManagerActivity {
 	 * exit application
 	 */
 	public void AppExit(Context context) {
+		if(((pBaseActivity)context).mShareFileUtils.getBoolean(Constant.ISFLOAT, false)){
+   		 pLog.i("test", "退出时，把悬浮头像隐藏");
+   		 Intent intent = new Intent(context, FxService.class);//悬浮头像停止运行
+   		((pBaseActivity)context).stopService(intent);
+   		((pBaseActivity)context).mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
+   	 }
 		try {
 			finishAllActivity();
 			 System.exit(0);
@@ -147,6 +156,12 @@ public class ManagerActivity {
 	 * @param context
 	 */
 	public void restart(Context context) {
+		if(((pBaseActivity)context).mShareFileUtils.getBoolean(Constant.ISFLOAT, false)){
+	   		 pLog.i("test", "退出时，把悬浮头像隐藏");
+	   		 Intent intent = new Intent(context, FxService.class);//悬浮头像停止运行
+	   		((pBaseActivity)context).stopService(intent);
+	   		((pBaseActivity)context).mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
+	   	 }
 
 		finishAllActivity();
 

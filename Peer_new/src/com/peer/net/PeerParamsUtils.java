@@ -18,7 +18,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
-import com.peer.activity.R;
+import com.peer.R;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 

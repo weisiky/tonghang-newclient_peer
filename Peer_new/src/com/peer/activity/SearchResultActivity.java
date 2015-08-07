@@ -25,6 +25,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.adapter.Recommend_topicAdapter;
 import com.peer.adapter.SeachResultAdapter;
 import com.peer.adapter.SearchTopicAdapter;
@@ -293,7 +294,7 @@ public class SearchResultActivity extends pBaseActivity {
 													,recommenduserbean.getPic_server());
 											lv_searchresult.setAdapter(adapter);
 										}
-										refresh();
+										
 									}
 										
 
@@ -302,7 +303,7 @@ public class SearchResultActivity extends pBaseActivity {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
-								
+								refresh();
 
 								super.onSuccess(statusCode, headers, response);
 							}
@@ -385,7 +386,7 @@ public class SearchResultActivity extends pBaseActivity {
 													,recommenduserbean.getPic_server());
 											lv_searchresult.setAdapter(adapter);
 										}
-										refresh();
+										
 
 									}
 
@@ -394,7 +395,7 @@ public class SearchResultActivity extends pBaseActivity {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
-
+								refresh();
 								super.onSuccess(statusCode, headers, response);
 							}
 
@@ -472,7 +473,7 @@ public class SearchResultActivity extends pBaseActivity {
 											lv_searchresult.setAdapter(adapter1);
 										}
 
-										refresh();
+										
 									}
 
 
@@ -481,7 +482,7 @@ public class SearchResultActivity extends pBaseActivity {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
-								
+								refresh();
 								// adapter.setBaseFragment(HomeFragment.this);
 
 								super.onSuccess(statusCode, headers, response);
@@ -563,7 +564,7 @@ public class SearchResultActivity extends pBaseActivity {
 											lv_searchresult.setAdapter(adapter1);
 										}
 
-										refresh();
+										
 									}
 
 
@@ -572,6 +573,7 @@ public class SearchResultActivity extends pBaseActivity {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
+								refresh();
 								super.onSuccess(statusCode, headers, response);
 							}
 
@@ -599,8 +601,10 @@ public class SearchResultActivity extends pBaseActivity {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
+			lv_searchresult.onRefreshComplete();
 		} else if (adapter1 != null) {
 			adapter1.notifyDataSetChanged();
+			lv_searchresult.onRefreshComplete();
 		}
 
 	}

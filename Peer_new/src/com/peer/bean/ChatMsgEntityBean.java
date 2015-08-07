@@ -13,7 +13,10 @@ public class ChatMsgEntityBean {
 	private String date;//消息日期
 	private String message;//消息内容
 	private int isComMeg;//收到哪种消息  1为我，0为其他人
+	private UserBean userbean;
 	
+	
+
 	private static ChatMsgEntityBean chatmsgentitybean;
 	
 	public static ChatMsgEntityBean getInstance(){
@@ -72,6 +75,14 @@ public class ChatMsgEntityBean {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public UserBean getUserbean() {
+		return userbean;
+	}
+
+	public void setUserbean(UserBean userbean) {
+		this.userbean = userbean;
 	}
 
 	public ChatMsgEntityBean(String name, String date, String text, int isComMsg,String userId) {

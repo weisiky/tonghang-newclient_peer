@@ -24,9 +24,11 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.peer.R;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendUserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
@@ -229,6 +231,7 @@ public class AddFriendsActivity extends pBaseActivity {
 							String code = result.getString("code");
 							if (code.equals("ok")) {
 								showToast("请求已送达！", Toast.LENGTH_SHORT, false);
+								PersonpageBean.getInstance().getUser().setHas_invitation(true);
 								finish();
 							} else {
 								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,

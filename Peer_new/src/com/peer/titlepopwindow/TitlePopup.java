@@ -2,7 +2,7 @@ package com.peer.titlepopwindow;
 
 import java.util.ArrayList;
 
-import com.peer.activity.R;
+import com.peer.R;
 
 import android.content.Context;
 import android.graphics.Rect;
