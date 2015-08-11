@@ -39,6 +39,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.DateUtils;
 import com.easemob.util.DensityUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -107,6 +108,10 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 	}
 
 	@Override
@@ -253,7 +258,38 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					.getTopic_id());
 
 			easemobchatImp.getInstance().joingroup(toChatUsername);
+			conversation = EMChatManager.getInstance().getConversation(
+					toChatUsername);
+			for (int i = 0; i <  conversation.getMsgCount(); i++) {
+				EMMessage message = conversation.getMessage(i);
+				
+				TextMessageBody body = (TextMessageBody) message.getBody();
+				String content = body.getMessage();
+				
+				
+				String time = DateUtils.getTimestampString(new Date(message
+						.getMsgTime()));
 
+				ChatMsgEntityBean entity = new ChatMsgEntityBean();
+				entity.setMessage(content);
+				entity.setDate(time);
+				entity.setUserbean(userbean);
+				try {
+					entity.setImage(message
+							.getStringAttribute(Constant.IMAGEURL));
+					entity.setUserId(message
+							.getStringAttribute(Constant.USERID));
+				} catch (EaseMobException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (message.direct == EMMessage.Direct.SEND) {
+					entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
+				} else {
+					entity.setMsgType(Constant.OTHER);
+				}
+				multichatmsgList.add(entity);
+			}
 			if(multichatadapter == null){
 				multichatadapter = new ChatMsgViewAdapter(this, multichatmsgList);
 				pageViewaList.lv_chat.setAdapter(multichatadapter);				
@@ -262,8 +298,6 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			refresh();
 			/** 未读消息数清零 **/
-			conversation = EMChatManager.getInstance().getConversation(
-					toChatUsername);
 			conversation.resetUnreadMsgCount();
 
 		
@@ -704,11 +738,22 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						try {
-							JoinTopicBean jointopicbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											JoinTopicBean.class);
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								JoinTopicBean jointopicbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												JoinTopicBean.class);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -778,8 +823,15 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							JSONObject result = response
 									.getJSONObject("success");
 							String code = (String) result.get("code");
-							if (code.equals("ok")) {
-								showToast("已退出话题", Toast.LENGTH_SHORT, false);
+							pLog.i("test", "code:"+code);
+							if (code.equals("200")) {
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -845,15 +897,27 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 						pLog.i("test","response:"+response.toString());
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if(loginBean!=null){
-								PersonpageBean.getInstance().setUser(
-										loginBean.user);
-								Intent intent = new Intent(MultiChatRoomActivity.this,PersonalPageActivity.class);
-								startActivity(intent);
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
+									PersonpageBean.getInstance().setUser(
+											loginBean.user);
+									Intent intent = new Intent(MultiChatRoomActivity.this,PersonalPageActivity.class);
+									startActivity(intent);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
+
 
 							
 

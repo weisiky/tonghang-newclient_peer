@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -215,23 +216,35 @@ public class TopicActivity extends pBaseActivity {
 						hideLoading();
 
 						try {
-							RecommendTopicBean recommendtopicbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											RecommendTopicBean.class);
-							if (recommendtopicbean != null) {
-								pLog.i("test", "user1:"
-										+ recommendtopicbean.topics.get(0)
-												.getSubject().toString());
-								list.addAll(recommendtopicbean.topics);
-								if (adapter == null) {
-									adapter = new TopicAdapter(TopicActivity.this, list);
-									pageViewaList.lv_topichistory.setAdapter(adapter);
-								}
+							JSONObject result = response.getJSONObject("success");
 
-								refresh();
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								RecommendTopicBean recommendtopicbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												RecommendTopicBean.class);
+								if (recommendtopicbean != null) {
+									pLog.i("test", "user1:"
+											+ recommendtopicbean.topics.get(0)
+											.getSubject().toString());
+									list.addAll(recommendtopicbean.topics);
+									if (adapter == null) {
+										adapter = new TopicAdapter(TopicActivity.this, list);
+										pageViewaList.lv_topichistory.setAdapter(adapter);
+									}
+									
+									refresh();
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
+
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

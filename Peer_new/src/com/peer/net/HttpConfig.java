@@ -9,12 +9,12 @@ package com.peer.net;
 public interface HttpConfig {
 
 	/** IP **/
-//	 public static String SERVER_ADDRESS =
+//	 public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
 	// "http://192.168.23.1:8080/tonghang-serverapi";
 //	public static String SERVER_ADDRESS = "http://192.168.31.192/tonghang-serverapi";
 	public static String SERVER_ADDRESS = "http://114.215.143.83:8080/tonghang-serverapi";
 	// http://www.tonghang1.com:3000
-//	 "http://192.168.23.1:8080/tonghang-serverapi";
+	 
 //	 "http://192.168.1.102:8080/tonghang-serverapi";
 
 	/** 登入请求 **/
@@ -46,6 +46,8 @@ public interface HttpConfig {
 			+ "/user/update_pwd/";
 	/** 查看用户信息 **/
 	public static String USER_IN_URL = SERVER_ADDRESS + "/user/";
+	/** 查看某话题信息 **/
+	public static String TOPIC_IN_URL = SERVER_ADDRESS + "/topics/";
 	/** 设置指定用户标签 **/
 	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/update_label/";

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -117,6 +118,10 @@ public class MyFragment extends pBaseFragment {
 		if (file.exists()) {
 			im_headpic.setImageBitmap(BussinessUtils.decodeFile(
 					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
+			ImageLoaderUtil.getInstance().showHttpImage(
+					mShareFileUtils.getString(Constant.PIC_SERVER, "")
+							+ mShareFileUtils.getString(Constant.IMAGE, ""),
+					im_headpic, R.drawable.mini_avatar_shadow);
 
 		} else {
 			ImageLoaderUtil.getInstance().showHttpImage(
@@ -162,17 +167,10 @@ public class MyFragment extends pBaseFragment {
 			startActivity(setting);
 			break;
 		case R.id.rl_ponseralpage:
-			if (pbaseActivity.isNetworkAvailable) {
-
 				PersonpageBean.getInstance().setUser(initUserBean());
 				Intent myting = new Intent(getActivity(),
 						PersonalPageActivity.class);
 				startActivity(myting);
-
-			} else {
-
-			}
-
 			break;
 		default:
 			break;
@@ -260,12 +258,23 @@ public class MyFragment extends pBaseFragment {
 					JSONObject response) {
 				// TODO Auto-generated method stub
 				try {
-					LoginBean loginBean = JsonDocHelper.toJSONObject(response
-							.getJSONObject("success").toString(),
-							LoginBean.class);
-					if (loginBean != null) {
-						BussinessUtils.saveUserData(loginBean, mShareFileUtils);
+					JSONObject result = response.getJSONObject("success");
 
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(response
+								.getJSONObject("success").toString(),
+								LoginBean.class);
+						if (loginBean != null) {
+							BussinessUtils.saveUserData(loginBean, mShareFileUtils);
+							
+						}
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
 					}
 
 				} catch (Exception e1) {

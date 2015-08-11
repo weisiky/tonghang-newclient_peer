@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
@@ -37,6 +38,7 @@ import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.JoinTopicBean;
 import com.peer.bean.LoginBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendUserBean;
@@ -55,8 +57,7 @@ public class ComeMsgFragment extends pBaseFragment {
 	private List<EMGroup> groups;
 	private ChatHistoryAdapter adapter;
 	private List<EMConversation> list;
-	private List<Map> easemobchatusers = new ArrayList<Map>();
-	private List<UserBean> users = new ArrayList<UserBean>();
+	private List<Object> objlist = new ArrayList<Object>();
 
 	private pBaseActivity pbaseActivity;
 
@@ -90,30 +91,19 @@ public class ComeMsgFragment extends pBaseFragment {
 
 		list = loadConversationsWithRecentChat();
 		lv_come = (ListView) getView().findViewById(R.id.lv_come);
+		try {
 		for (EMConversation em : loadConversationsWithRecentChat()) {
-			System.out.println("环信username:"+em.getUserName());
-			try {
-				senduser(em.getUserName()
-						,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(!em.getUserName().matches(isnumber)){
+					senduser(em.getUserName()
+							,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+			}else{
+				sendtopic(em.getUserName());
 			}
-//			Map m = new HashMap<String, Object>();
-//			m.put("username", em.getUserName());
-//			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
-//			m.put("is_group", em.getUserName().matches(isnumber));
-//			easemobchatusers.add(m);
 		}
-//		if (adapter == null) {
-//			adapter = new ChatHistoryAdapter(getActivity(), users);
-//		}
-		// adapter.setBaseFragment(HomeFragment.this);
-//		lv_come.setAdapter(adapter);
-//		refresh1();
-	
-//		easemobchatUser users = new easemobchatUser();
-//		users.setEasemobchatusers(easemobchatusers);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -125,35 +115,22 @@ public class ComeMsgFragment extends pBaseFragment {
 		System.out.println("环信获取的会话："+list.toString());
 		System.out.println("环信获取的会话条数："+list.size());
 //		easemobchatusers.clear();
-		if(users !=null){
-			users.clear();
+		if(objlist !=null){
+			objlist.clear();
 		}
-		for (EMConversation em : loadConversationsWithRecentChat()) {
-			try {
-				System.out.println("em.getUserName:"+em.getUserName());
-				senduser(em.getUserName()
-						,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-//				for(int i = 1;users.size()==i){
-//					
-//				}
+		try {
+			for (EMConversation em : loadConversationsWithRecentChat()) {
+				if(!em.getUserName().matches(isnumber)){
+						senduser(em.getUserName()
+								,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+				}else{
+					sendtopic(em.getUserName());
+				}
+			}
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//			Map m = new HashMap<String, Object>();
-//			m.put("username", em.getUserName());
-//			/* 环信的群组ID为纯数字，用正则匹配来判断是不是群组 */
-//			m.put("is_group", em.getUserName().matches(isnumber));
-//			easemobchatusers.add(m);
-		}
-		System.out.println("users:"+users.toString());
-		adapter = new ChatHistoryAdapter(getActivity(), users);
-		
-		// adapter.setBaseFragment(HomeFragment.this);
-		lv_come.setAdapter(adapter);
-	
-//		easemobchatUser users = new easemobchatUser();
-//		users.setEasemobchatusers(easemobchatusers);
 	}
 
 	/**
@@ -281,21 +258,34 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pLog.i("test","response:"+response.toString());
+						pLog.i("test", "response："+response.toString());
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if(loginBean!=null){
-								users.add(loginBean.user);
-								System.out.println("us:"+loginBean.user.getIs_friend());
-								if(adapter == null){
-									adapter = new ChatHistoryAdapter(getActivity(), users);
-									
-									// adapter.setBaseFragment(HomeFragment.this);
-									lv_come.setAdapter(adapter);
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
+									Map map = new HashMap();
+									map.put("bean", loginBean.user);
+									map.put("type", Constant.SINGLECHAT);
+									objlist.add(map);
+									if(adapter == null){
+										adapter = new ChatHistoryAdapter(getActivity(), objlist);
+										
+										// adapter.setBaseFragment(HomeFragment.this);
+										lv_come.setAdapter(adapter);
+									}
+									refresh1();
 								}
-								refresh1();
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
@@ -308,6 +298,98 @@ public class ComeMsgFragment extends pBaseFragment {
 					}
 
 				});
+	}
+	
+	
+	/**
+	 * 获取某一话题信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	
+	private void sendtopic(String topic_id) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(getActivity(), topic_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + topic_id + ".json", params,
+				new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					pLog.i("test","respons:"+response.toString());
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						JoinTopicBean comMesTopicBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success")
+								.toString(), JoinTopicBean.class);
+						if(comMesTopicBean!=null){
+							Map map = new HashMap();
+							map.put("bean", comMesTopicBean);
+							map.put("type", Constant.MULTICHAT);
+							objlist.add(map);
+							if(adapter == null){
+								adapter = new ChatHistoryAdapter(getActivity(), objlist);
+								
+								// adapter.setBaseFragment(HomeFragment.this);
+								lv_come.setAdapter(adapter);
+							}
+							refresh1();
+						}
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+				
+			}
+			
+		});
 	}
 
 	private void refresh1() {

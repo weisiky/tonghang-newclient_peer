@@ -39,6 +39,8 @@
     <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
 
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
 
     <application
         android:name="com.peer.base.pBaseApplication"
@@ -192,6 +194,7 @@
             android:name="com.peer.activity.SingleChatRoomActivity"
             android:configChanges="keyboardHidden|keyboard"
             android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.peer.activity.MultiChatRoomActivity"

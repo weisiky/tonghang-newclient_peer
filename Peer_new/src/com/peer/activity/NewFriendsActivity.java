@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.peer.R;
@@ -211,27 +212,38 @@ public class NewFriendsActivity extends pBaseActivity {
 						pLog.i("test", "response:" + response.toString());
 
 						try {
-							NewFriendBean newfriendbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											NewFriendBean.class);
+							JSONObject result = response.getJSONObject("success");
 
-							if (newfriendbean != null) {
-
-								invitationbean.addAll(newfriendbean.invitation);
-								pLog.i("test", "user1:"
-										+ invitationbean.toString());
-								if (adapter == null) {
-									if (invitationbean!=null&&invitationbean.size() > 0) {
-										adapter = new NewfriendsAdapter(
-												NewFriendsActivity.this, invitationbean
-												,newfriendbean.getPic_server());
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								NewFriendBean newfriendbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												NewFriendBean.class);
+								
+								if (newfriendbean != null) {
+									
+									invitationbean.addAll(newfriendbean.invitation);
+									pLog.i("test", "user1:"
+											+ invitationbean.toString());
+									if (adapter == null) {
+										if (invitationbean!=null&&invitationbean.size() > 0) {
+											adapter = new NewfriendsAdapter(
+													NewFriendsActivity.this, invitationbean
+													,newfriendbean.getPic_server());
+										}
+										pageViewaList.lv_newfriends.setAdapter(adapter);
 									}
-									pageViewaList.lv_newfriends.setAdapter(adapter);
+									
+									refresh();
 								}
-
-								refresh();
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

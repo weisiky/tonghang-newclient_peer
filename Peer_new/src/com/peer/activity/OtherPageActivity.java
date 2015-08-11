@@ -61,11 +61,11 @@ public class OtherPageActivity extends pBaseActivity{
 	private UserBean bean;
 	
 	class PageViewList {
-		private LinearLayout ll_back, ll_personpagebottom, contentauto;
+		private LinearLayout ll_back, ll_personpagebottom, contentauto,ll_downview;
 		private TextView tv_title, personnike, personcount, sex, city,
 				tv_topic;
 		private Button btnSend, addfriends;
-		private ImageView personhead, im_downview;
+		private ImageView personhead;
 		private RelativeLayout rl_topic;
 	}
 
@@ -93,11 +93,16 @@ public class OtherPageActivity extends pBaseActivity{
 				// TODO Auto-generated method stub
 				RadioButton tempButton = (RadioButton) findViewById(checkedId);
 				String selectlabel = tempButton.getText().toString();
-				SearchBean.getInstance().setSearchname(selectlabel);
-				SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
-				Intent intent = new Intent(OtherPageActivity.this,
-						SearchResultActivity.class);
-				startActivity(intent);
+				if(isNetworkAvailable){
+					SearchBean.getInstance().setSearchname(selectlabel);
+					SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
+					Intent intent = new Intent(OtherPageActivity.this,
+							SearchResultActivity.class);
+					startActivity(intent);
+				}else{
+					showToast(getResources().getString(R.string.Broken_network_prompt)
+							, Toast.LENGTH_SHORT, false);
+				}
 			}
 		});
 		
@@ -110,7 +115,7 @@ public class OtherPageActivity extends pBaseActivity{
 		pageViewaList.rl_topic.setOnClickListener(this);
 		pageViewaList.btnSend.setOnClickListener(this);
 		pageViewaList.addfriends.setOnClickListener(this);
-		pageViewaList.im_downview.setOnClickListener(this);
+		pageViewaList.ll_downview.setOnClickListener(this);
 
 	}
 
@@ -177,7 +182,7 @@ public class OtherPageActivity extends pBaseActivity{
 						Toast.LENGTH_SHORT, false);
 			}
 			break;
-		case R.id.im_downview:
+		case R.id.ll_downview:
 			titlePopup.show(v);
 			break;
 		default:
@@ -234,7 +239,7 @@ public class OtherPageActivity extends pBaseActivity{
 		}
 
 		pageViewaList.personnike.setText(userbean.getUsername());
-		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(
@@ -261,13 +266,18 @@ public class OtherPageActivity extends pBaseActivity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomBean.getInstance().setChatroomtype(
-						Constant.SINGLECHAT);
+//				if(isNetworkAvailable){
+					ChatRoomBean.getInstance().setChatroomtype(
+							Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-				Intent intent = new Intent(OtherPageActivity.this,
-						SingleChatRoomActivity.class);
-				intent.putExtra("userbean", userbean);
-				startActivity(intent);
+					Intent intent = new Intent(OtherPageActivity.this,
+							SingleChatRoomActivity.class);
+					intent.putExtra("userbean", userbean);
+					startActivity(intent);
+//				}else{
+//					showToast(getResources().getString(R.string.Broken_network_prompt)
+//							, Toast.LENGTH_SHORT, false);
+//				}
 			}
 		});
 		pageViewaList.addfriends.setOnClickListener(new View.OnClickListener() {
@@ -301,11 +311,11 @@ public class OtherPageActivity extends pBaseActivity{
 		params.weight = 1;
 		params.gravity = Gravity.CENTER_VERTICAL;
 
-		pageViewaList.im_downview.setVisibility(View.VISIBLE);
+		pageViewaList.ll_downview.setVisibility(View.VISIBLE);
 		pageViewaList.btnSend.setVisibility(View.GONE);
 		pageViewaList.addfriends.setVisibility(View.GONE);
 		pageViewaList.personnike.setText(userbean.getUsername());
-		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(
@@ -446,14 +456,17 @@ public class OtherPageActivity extends pBaseActivity{
 							JSONObject result = response
 									.getJSONObject("success");
 							String code = result.getString("code");
-							if (code.equals("ok")) {
-								showToast("好友关系已经移除！", Toast.LENGTH_SHORT,
-										false);
+							pLog.i("test", "code:"+code);
+							if (code.equals("200")) {
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 								FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
 								finish();
-							} else {
-								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,
-										false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -515,14 +528,24 @@ public class OtherPageActivity extends pBaseActivity{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pLog.i("test","response:"+response.toString());
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if(loginBean!=null){
-								bean = loginBean.user;
-								ViewType(bean);
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
+									bean = loginBean.user;
+									ViewType(bean);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

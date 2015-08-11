@@ -34,6 +34,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@+id/personhead"
                 android:textColor="@color/black"
+                android:text="das"
                 android:textSize="@dimen/textsize_middle" />
 
             <TextView
@@ -44,6 +45,7 @@
                 android:layout_alignLeft="@+id/personnike"
                 android:layout_toRightOf="@+id/personhead"
                 android:textColor="@color/deepgray"
+                android:visibility="gone"
                 android:textSize="@dimen/textsize_middle" />
         </RelativeLayout>
 

@@ -1,5 +1,6 @@
 package com.peer.net;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.IMimplements.easemobchatUser;
 import com.peer.R;
+import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 
@@ -36,8 +39,10 @@ public class PeerParamsUtils {
 	 * @param context
 	 * @return
 	 */
+	@SuppressWarnings("static-access")
 	public static HashMap<String, Object> getDefaultParams(Context context) {
 		HashMap<String, Object> defaultParams = new HashMap<String, Object>();
+		defaultParams.put("client_id", ((pBaseActivity)context).mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 		return defaultParams;
 	}
 
@@ -294,6 +299,25 @@ public class PeerParamsUtils {
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 获取用户信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getTopicParams(Context context, String topic_id)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("topic_id", topic_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		return params;

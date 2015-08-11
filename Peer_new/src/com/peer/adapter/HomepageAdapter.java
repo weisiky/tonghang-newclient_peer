@@ -96,7 +96,7 @@ public class HomepageAdapter extends pBaseAdapter {
 						((pBaseActivity) mContext).showToast(
 								mContext.getResources().getString(
 										R.string.Broken_network_prompt),
-								Toast.LENGTH_LONG, false);
+								Toast.LENGTH_SHORT, false);
 					} else {
 						((pBaseActivity) mContext).startActivityForLeft(
 								Recommend_topic.class, intent, false);
@@ -118,6 +118,7 @@ public class HomepageAdapter extends pBaseAdapter {
 					.get(convertView, R.id.tv_descripe);
 			LinearLayout ll_clike = ViewHolder.get(convertView, R.id.ll_clike);
 			final UserBean userbean = users.get(position);
+			
 			// ImageLoader加载图片
 			ImageLoaderUtil.getInstance().showHttpImage(
 					pic_server + userbean.getImage(), im_headpic,
@@ -140,20 +141,10 @@ public class HomepageAdapter extends pBaseAdapter {
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					if (!((pBaseActivity) mContext).isNetworkAvailable) {
-						((pBaseActivity) mContext)
-								.showToast(
-										((pBaseActivity) mContext)
-												.getResources()
-												.getString(
-														R.string.Broken_network_prompt),
-										Toast.LENGTH_LONG, false);
-					} else {
 						PersonpageBean.getInstance().setUser(userbean);
 						Intent intent = new Intent(mContext,
 								PersonalPageActivity.class);
 						mContext.startActivity(intent);
-					}
 
 				}
 			});

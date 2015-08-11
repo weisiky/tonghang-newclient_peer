@@ -26,6 +26,7 @@ import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.util.NetUtils;
@@ -271,13 +272,22 @@ public class MainActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-
+		homefragment.base_neterror_item.setVisibility(View.GONE);
+		if(EMChatManager.getInstance().isConnected()){
+			
+		}else{
+			easemobchatImp.getInstance().login(
+					mShareFileUtils.getString(Constant.CLIENT_ID, "")
+					.replace("-", ""),
+					mShareFileUtils.getString(
+							Constant.PASSWORD, ""));
+		}
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-
+		homefragment.base_neterror_item.setVisibility(View.VISIBLE);
 	}
 	
 	
@@ -418,7 +428,11 @@ public class MainActivity extends pBaseActivity {
 	 */
 	public void updateUnreadLabel() {
 		int count = easemobchatImp.getInstance().getUnreadMesTotal();
-		System.out.println("count:"+count);
+		pLog.i("test", "未读消息count:"+count);
+		EMConversation conversation = EMChatManager.getInstance()
+				.getConversation(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+		int count1 = conversation.getUnreadMsgCount();
+		pLog.i("test", "未读消息count1:"+count1);
 		if (count > 0) {
 			unredmsg.setText(String.valueOf(count));
 //			unredmsg.setTextSize(11);

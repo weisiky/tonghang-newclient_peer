@@ -172,21 +172,23 @@ public class FxService extends Service
 	            case MotionEvent.ACTION_UP:     //点击后，松开
 	            	xup=(int) event.getRawX();
 	            	yup=(int) event.getRawY();
-	            	if(-mFloatView.getMeasuredWidth()/2<xdown-xup&&xdown-xup<mFloatView.getMeasuredWidth()/2
-	            			&&-(mFloatView.getMeasuredHeight()/2-25)<ydown-yup&&ydown-yup<(mFloatView.getMeasuredHeight()/2-25)){
-	            		ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
-	            		Intent intent=new Intent(FxService.this,MultiChatRoomActivity.class);
-	            		intent.putExtra(Constant.F_IMAGE, image);
-	            		intent.putExtra(Constant.F_OWNERNIKE, ownernike);
-	            		intent.putExtra(Constant.F_THEME, theme);			
-	            		intent.putExtra(Constant.F_TAGNAME, tagname);
-	            		intent.putExtra(Constant.F_USERID, userId);
-	            		intent.putExtra(Constant.F_ROOMID, roomaddress);
-	            		intent.putExtra(Constant.F_TOPICID, topicid);
-	            		intent.putExtra(Constant.FROMFLOAT, fromfloat);
-	            		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-	            	}
+//	            	if(){
+	            		if(-mFloatView.getMeasuredWidth()/2<xdown-xup&&xdown-xup<mFloatView.getMeasuredWidth()/2
+	            				&&-(mFloatView.getMeasuredHeight()/2-25)<ydown-yup&&ydown-yup<(mFloatView.getMeasuredHeight()/2-25)){
+	            			ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
+	            			Intent intent=new Intent(FxService.this,MultiChatRoomActivity.class);
+	            			intent.putExtra(Constant.F_IMAGE, image);
+	            			intent.putExtra(Constant.F_OWNERNIKE, ownernike);
+	            			intent.putExtra(Constant.F_THEME, theme);			
+	            			intent.putExtra(Constant.F_TAGNAME, tagname);
+	            			intent.putExtra(Constant.F_USERID, userId);
+	            			intent.putExtra(Constant.F_ROOMID, roomaddress);
+	            			intent.putExtra(Constant.F_TOPICID, topicid);
+	            			intent.putExtra(Constant.FROMFLOAT, fromfloat);
+	            			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	            			startActivity(intent);
+	            		}
+//	            	}
 					if(320<(int) event.getRawX()){
 						 wmParams.x = 720;
 						 wmParams.y = (int) event.getRawY()-128;

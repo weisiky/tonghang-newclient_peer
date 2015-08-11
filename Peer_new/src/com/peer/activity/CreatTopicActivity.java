@@ -254,12 +254,20 @@ public class CreatTopicActivity extends pBaseActivity {
 									DialogInterface dialoginterface, int i) {
 								ShareConfig shareConfig = new ShareConfig(
 										CreatTopicActivity.this);
-//								shareConfig.shareWxFriend("同行话题分享", "",
-//										pageViewaList.et_topic.getText()
-//												.toString().trim(), "", "");
 								shareConfig.shareCircleFriend("", "","同行话题#"+
 										pageViewaList.et_topic.getText()
 										.toString().trim()+"#", "", "");
+								try {
+									sendCreateTopic(
+											mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+											pageViewaList.et_topic.getText()
+													.toString().trim(),
+											selectlabel);
+								} catch (UnsupportedEncodingException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
 							}
 						}).show();
 	}
@@ -342,31 +350,33 @@ public class CreatTopicActivity extends pBaseActivity {
 						pLog.i("test", "response:"+response.toString());
 
 						try {
-							CreateToipcBean createtopicbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											CreateToipcBean.class);
-							if (createtopicbean != null) {
-								pLog.i("test", "Subject:"
-										+ createtopicbean.topics.getSubject()
-												.toString());
-							}
+							JSONObject result = response.getJSONObject("success");
 
-							if (createtopicbean.getCode().equals("ok")) {
-								ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
-								ChatRoomBean.getInstance().setIsowner(true);
-								ChatRoomBean.getInstance().setTopicBean(
-										createtopicbean.getTopic());
-								Intent intent = new Intent();
-								startActivityForLeft(MultiChatRoomActivity.class,
-										intent, false);
-								ManagerActivity.getAppManager().finishActivity(
-										CreatTopicActivity.this);
-								pageViewaList.et_topic.setText("");
-							} else {
-								showToast("由于网络原因创建失败", Toast.LENGTH_SHORT,
-										false);
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								CreateToipcBean createtopicbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												CreateToipcBean.class);
+								if (createtopicbean != null) {
+										ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
+										ChatRoomBean.getInstance().setIsowner(true);
+										ChatRoomBean.getInstance().setTopicBean(
+												createtopicbean.getTopic());
+										Intent intent = new Intent();
+										startActivityForLeft(MultiChatRoomActivity.class,
+												intent, false);
+										ManagerActivity.getAppManager().finishActivity(
+												CreatTopicActivity.this);
+										pageViewaList.et_topic.setText("");
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 
 						} catch (Exception e1) {

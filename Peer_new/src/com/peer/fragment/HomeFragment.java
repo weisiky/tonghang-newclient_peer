@@ -128,13 +128,19 @@ public class HomeFragment extends pBaseFragment {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						try {
-							page = 1;
-							sendRecommendTask(mShareFileUtils.getString(
-									Constant.CLIENT_ID, ""), page);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(pbaseActivity.isNetworkAvailable){
+							try {
+								page = 1;
+								sendRecommendTask(mShareFileUtils.getString(
+										Constant.CLIENT_ID, ""), page);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							refresh();
 						}
 					}
 
@@ -151,13 +157,20 @@ public class HomeFragment extends pBaseFragment {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						try {
-							sendRecommendTask(mShareFileUtils.getString(
-									Constant.CLIENT_ID, ""), ++page);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(pbaseActivity.isNetworkAvailable){
+							try {
+								sendRecommendTask(mShareFileUtils.getString(
+										Constant.CLIENT_ID, ""), ++page);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							refresh();
 						}
+						
 					}
 				});
 	}
@@ -226,43 +239,59 @@ public class HomeFragment extends pBaseFragment {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
-
-						pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
-								"home.etag", false, response.toString());
-
-						pLog.i("test", "response:" + response);
-
+						pLog.i("test", "response:"+response.toString());
 						try {
+						JSONObject result = response.getJSONObject("success");
+
+						String code = result.getString("code");
+						pLog.i("test", "code:"+code);
+						if(code.equals("200")){
+							pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+									"home.etag", false, response.getJSONObject("success")
+									.toString());
 							RecommendUserBean recommenduserbean = JsonDocHelper
 									.toJSONObject(
 											response.getJSONObject("success")
-													.toString(),
+											.toString(),
 											RecommendUserBean.class);
 							if (recommenduserbean != null) {
-
+								
 								if (page == 1) {
 									usersList.clear();
 								}
-
+								
 								usersList.addAll(recommenduserbean.users);
-
+								
 								if (adapter == null) {
 									adapter = new HomepageAdapter(
 											getActivity(), usersList,
 											recommenduserbean.getPic_server());
 									pull_refresh_homepage.setAdapter(adapter);
 								}
-
-								refresh();
-
 							}
+						}else if(code.equals("500")){
+							
+						}else{
+							pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+									"home.etag", false, "");
+							usersList.clear();
+							pLog.i("test", "usersList:"+usersList.toString());
+							if (adapter == null) {
+								adapter = new HomepageAdapter(
+										getActivity(), usersList
+										,mShareFileUtils.getString(Constant.PIC_SERVER, ""));
+								pull_refresh_homepage.setAdapter(adapter);
+							}
+							String message = result.getString("message");
+							showToast(message, Toast.LENGTH_SHORT, false);
+						}
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-
+						refresh();
 						super.onSuccess(statusCode, headers, response);
 					}
 
@@ -286,16 +315,38 @@ public class HomeFragment extends pBaseFragment {
 				R.id.pull_refresh_homepage);
 		base_neterror_item = (LinearLayout) getView().findViewById(
 				R.id.base_neterror_item);
-		base_neterror_item.setVisibility(View.GONE);
 		tv_connect_errormsg = (TextView) base_neterror_item
 				.findViewById(R.id.tv_connect_errormsg);
 
 		ll_search = (LinearLayout) getView().findViewById(R.id.ll_search);
 		ll_search.setOnClickListener(this);
+		String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
+				"home.etag");
+		RecommendUserBean recommenduserbean;
+		try {
+			recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
+					RecommendUserBean.class);
+			usersList.addAll(recommenduserbean.users);
+			if (recommenduserbean != null) {
+
+				if (adapter == null) {
+					adapter = new HomepageAdapter(getActivity(), usersList,
+							mShareFileUtils.getString(Constant.PIC_SERVER, ""));
+				}
+				// adapter.setBaseFragment(HomeFragment.this);
+				pull_refresh_homepage.setAdapter(adapter);
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 		
 		if(pbaseActivity.isNetworkAvailable){
+			base_neterror_item.setVisibility(View.GONE);
 			try {
-				showToast("数据载入中...", Toast.LENGTH_SHORT, false);
 				sendRecommendTask(
 						mShareFileUtils.getString(Constant.CLIENT_ID, ""), page);
 
@@ -305,34 +356,14 @@ public class HomeFragment extends pBaseFragment {
 			}
 		}else{
 			base_neterror_item.setVisibility(View.VISIBLE);
-			String homeCount = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
-					"home.etag");
-
-			RecommendUserBean recommenduserbean;
-			try {
-				recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
-						RecommendUserBean.class);
-				usersList.addAll(recommenduserbean.users);
-				if (homeCount != null) {
-
-					if (adapter == null) {
-						adapter = new HomepageAdapter(getActivity(), usersList,
-								mShareFileUtils.getString(Constant.PIC_SERVER, ""));
-					}
-					// adapter.setBaseFragment(HomeFragment.this);
-					pull_refresh_homepage.setAdapter(adapter);
-
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			refresh();
+			
 		}
-		
-
+//	if(pbaseActivity.isNetworkAvailable){
 		RefreshListner();
+//	}else{
+//		showToast(getResources().getString(R.string.Broken_network_prompt)
+//				, Toast.LENGTH_LONG, false);
+//	}
 
 	}
 

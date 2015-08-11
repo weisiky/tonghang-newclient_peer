@@ -57,7 +57,7 @@ public class pBaseApplication extends Application {
 		pLog.isDebug = true;
 
 		// 程序crash处理程序。
-		CrashHandler.instance(this).init();
+//		CrashHandler.instance(this).init();
 		// 初始化图片加载程序
 		ImageLoaderUtil.getInstance();
 		// 注册网络监听器
@@ -87,7 +87,19 @@ public class pBaseApplication extends Application {
 		filter.addAction(Intent.ACTION_TIME_TICK);
 		ListenBroadcastReceiver receiver=new ListenBroadcastReceiver();
 		registerReceiver(receiver, filter);
+		
+		
+		isExitFile();
+		
 
+	}
+
+	private void isExitFile() {
+		// TODO Auto-generated method stub
+		File file=new File(Constant.DEFAULT_MAIN_DIRECTORY);
+		if(!file.exists()){
+			 file.mkdirs();  
+		}
 	}
 
 	/* 初始化环信sdk */

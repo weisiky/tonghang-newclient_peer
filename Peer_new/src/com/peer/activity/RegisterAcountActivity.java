@@ -141,8 +141,8 @@ public class RegisterAcountActivity extends pBaseActivity {
 			// baseregister_list.add(password);
 			// baseregister_list.add(nikename);
 
-			Intent intent = new Intent();
-			startActivityForLeft(RegisterTagActivity.class, intent, false);
+			Intent intent = new Intent(RegisterAcountActivity.this,RegisterTagActivity.class);
+			startActivity(intent);
 			pageViewaList.registe_remind.setText("");
 
 		}

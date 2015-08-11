@@ -302,20 +302,31 @@ public class MySkillActivity extends pBaseActivity {
 					JSONObject response) {
 				// TODO Auto-generated method stub
 				try {
-					LoginBean loginBean = JsonDocHelper.toJSONObject(response
-							.getJSONObject("success").toString(),
-							LoginBean.class);
-					PersonpageBean.getInstance().setUser(loginBean.user);
+					JSONObject result = response.getJSONObject("success");
 
-					if (loginBean.user.getLabels() != null
-							&& loginBean.user.getLabels().size() > 0) {
-						mShareFileUtils.setString(Constant.LABELS,
-								loginBean.user.getLabels().toString());
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(response
+								.getJSONObject("success").toString(),
+								LoginBean.class);
+						PersonpageBean.getInstance().setUser(loginBean.user);
+						
+						if (loginBean.user.getLabels() != null
+								&& loginBean.user.getLabels().size() > 0) {
+							mShareFileUtils.setString(Constant.LABELS,
+									loginBean.user.getLabels().toString());
+						}
+						
+						Hadtag = mlist.size();
+						adapter = new SkillAdapter(MySkillActivity.this, mlist);
+						pageViewaList.lv_myskill.setAdapter(adapter);
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
 					}
-
-					Hadtag = mlist.size();
-					adapter = new SkillAdapter(MySkillActivity.this, mlist);
-					pageViewaList.lv_myskill.setAdapter(adapter);
 
 				} catch (Exception e1) {
 					pLog.i("test", "Exception:" + e1.toString());

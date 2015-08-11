@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
@@ -167,10 +168,12 @@ public class WelComeActivity extends pBaseActivity {
 							if (response.getJSONObject("system").getBoolean(
 									"can_login")
 									&& !mShareFileUtils.getString(
-											Constant.CLIENT_ID, "").equals("")) {
-								sendRequesJpush();
-								startActivityForLeft(MainActivity.class,
-										intent, false);
+											Constant.CLIENT_ID, "").equals("")
+											&&!mShareFileUtils.getString(
+													Constant.BIRTH, "").equals("")) {
+									sendRequesJpush();
+									startActivityForLeft(MainActivity.class,
+											intent, false);
 							} else {
 								startActivityForLeft(LoginActivity.class,
 										intent, false);

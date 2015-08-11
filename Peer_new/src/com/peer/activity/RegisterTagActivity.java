@@ -1,17 +1,11 @@
 package com.peer.activity;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -28,14 +22,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
-import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -288,25 +284,39 @@ public class RegisterTagActivity extends pBaseActivity {
 						hideLoading();
 						LoginBean loginBean;
 
-						pLog.i("test", "response:" + response.toString());
 						
 						try {
-							loginBean = JsonDocHelper.toJSONObject(response
-									.getJSONObject("success").toString(),
-									LoginBean.class);
-							pLog.i("test", "loginBean:" + loginBean.toString());
-							
-							if (loginBean != null) {
-								mShareFileUtils.setString("client_id",
-										loginBean.user.getClient_id());
-								mShareFileUtils.setString("username",
-										loginBean.user.getUsername());
+							JSONObject result = response.getJSONObject("success");
 
-								Intent register_tag = new Intent();
-								startActivityForLeft(
-										RegisterCompleteActivity.class,
-										register_tag, false);
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								loginBean = JsonDocHelper.toJSONObject(response
+										.getJSONObject("success").toString(),
+										LoginBean.class);
+								
+								if (loginBean != null) {
+									mShareFileUtils.setString("client_id",
+											loginBean.user.getClient_id());
+									mShareFileUtils.setString("username",
+											loginBean.user.getUsername());
 
+									String client_id = mShareFileUtils.getString(
+											Constant.CLIENT_ID, "");
+
+									sendRequesJpush(client_id);
+
+									Intent register_tag = new Intent();
+									startActivityForLeft(
+											RegisterCompleteActivity.class,
+											register_tag, false);
+									
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -364,6 +374,29 @@ public class RegisterTagActivity extends pBaseActivity {
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
+
+	}
+	
+	/**
+	 * 注册极光跟环信
+	 */
+	@SuppressWarnings("static-access")
+	protected void sendRequesJpush(String client_id) {
+		// TODO Auto-generated method stub
+		JPushInterface.setAlias(getApplication(), client_id,
+				new TagAliasCallback() {
+					@Override
+					public void gotResult(int code, String arg1,
+							Set<String> arg2) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "code:" + code);
+						pLog.i("test", "注册极光返回的结果：" + String.valueOf(code));
+					}
+				});
+
+		easemobchatImp.getInstance().login(client_id.replace("-", ""),
+				mShareFileUtils.getString(Constant.PASSWORD, ""));
+		easemobchatImp.getInstance().loadConversationsandGroups();
 
 	}
 }

@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -158,8 +159,14 @@ public class FriendsFragment extends pBaseFragment{
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.rl_newfriends:
-			Intent newfriends = new Intent(getActivity(),NewFriendsActivity.class);
-			startActivity(newfriends);
+			if(pbaseActivity.isNetworkAvailable){
+				Intent newfriends = new Intent(getActivity(),NewFriendsActivity.class);
+				startActivity(newfriends);
+			}else{
+				pbaseActivity.showToast(getActivity().getResources().getString(
+						 R.string.Broken_network_prompt), Toast.LENGTH_LONG,
+						 false);
+			}
 			break;
 
 		default:
@@ -229,22 +236,33 @@ public class FriendsFragment extends pBaseFragment{
 						pbaseActivity.hideLoading();
 						pLog.i("test", "response:"+response.toString());
 						try{
-							RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-									.toString(), RecommendUserBean.class);
-						
-							if (recommenduserbean != null) {
-								System.out.println("recommenduserbean:"+recommenduserbean.users);
-								list.addAll(recommenduserbean.users);
+							JSONObject result = response.getJSONObject("success");
 
-								if (adapter == null) {
-									adapter = new FriendsAdapter(getActivity(), list
-											,recommenduserbean.getPic_server());
-									lv_friends.setAdapter(adapter);
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								RecommendUserBean recommenduserbean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), RecommendUserBean.class);
+								
+								if (recommenduserbean != null) {
+									System.out.println("recommenduserbean:"+recommenduserbean.users);
+									list.addAll(recommenduserbean.users);
+									
+									if (adapter == null) {
+										adapter = new FriendsAdapter(getActivity(), list
+												,recommenduserbean.getPic_server());
+										lv_friends.setAdapter(adapter);
+									}
+									
+									refresh1();
+									
 								}
-
-								refresh1();
-
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 
 					} catch (Exception e1) {

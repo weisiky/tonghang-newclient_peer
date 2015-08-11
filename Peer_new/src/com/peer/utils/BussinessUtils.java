@@ -466,6 +466,10 @@ public class BussinessUtils {
 	 * @param bitmap
 	 */
 	public static void saveBitmapFile(Bitmap bitmap) {
+		File f = new File(Constant.C_IMAGE_CACHE_PATH);
+		if(!f.exists()){
+			f.mkdirs();
+		}
 		File file = new File(Constant.C_IMAGE_CACHE_PATH+"head.png");// 将要保存图片的路径
 		try {
 			BufferedOutputStream bos = new BufferedOutputStream(

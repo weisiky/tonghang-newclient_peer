@@ -27,6 +27,7 @@ import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /*
@@ -211,16 +212,27 @@ public class UpdatePasswordActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						hideLoading();
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if (loginBean != null) {
+							JSONObject result = response.getJSONObject("success");
 
-								BussinessUtils.saveUserData(loginBean,
-										mShareFileUtils);
-								showToast("修改成功！", Toast.LENGTH_SHORT, false);
-								startActivityForLeft(MyAcountActivity.class,
-										intent, false);
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if (loginBean != null) {
+									
+									BussinessUtils.saveUserData(loginBean,
+											mShareFileUtils);
+									showToast("修改成功！", Toast.LENGTH_SHORT, false);
+									startActivityForLeft(MyAcountActivity.class,
+											intent, false);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -233,16 +245,16 @@ public class UpdatePasswordActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						super.onSuccess(statusCode, headers, responseString);
-						Intent login_complete = new Intent();
-						startActivityForLeft(MainActivity.class,
-								login_complete, false);
-					}
+//					@Override
+//					public void onSuccess(int statusCode, Header[] headers,
+//							String responseString) {
+//						// TODO Auto-generated method stub
+//						hideLoading();
+//						super.onSuccess(statusCode, headers, responseString);
+//						Intent login_complete = new Intent();
+//						startActivityForLeft(MainActivity.class,
+//								login_complete, false);
+//					}
 
 				});
 	}

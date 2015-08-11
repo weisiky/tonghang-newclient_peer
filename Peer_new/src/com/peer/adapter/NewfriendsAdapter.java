@@ -205,6 +205,7 @@ public class NewfriendsAdapter extends pBaseAdapter {
 
 				pLog.i("test", "statusCode:" + statusCode);
 				pLog.i("test", "headers:" + headers);
+				pLog.i("test", "responseString:" + responseString);
 				pLog.i("test", "throwable:" + throwable);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
@@ -228,11 +229,9 @@ public class NewfriendsAdapter extends pBaseAdapter {
 
 				try {
 					JSONObject result = response.getJSONObject("success");
-					System.out.println("result:" + result.toString());
-					if (result.get("code").equals("ok")) {
-						System.out.println(result.get("code"));
-						System.out.println("进来了");
-						System.out.println("status:" + status);
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if (code.equals("200")) {
 						if (status) {
 
 							// TODO Auto-generated method stub
@@ -250,6 +249,12 @@ public class NewfriendsAdapter extends pBaseAdapter {
 
 						}
 
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						((pBaseActivity) mContext).showToast(message
+								, Toast.LENGTH_SHORT, false);
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block

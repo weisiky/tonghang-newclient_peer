@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.Window;
@@ -92,6 +93,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.base);
@@ -419,11 +421,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, false);
-		} else if (getLocalClassNameBySelf().contains("RegisterTagActivity")) {
-			startActivityRight(RegisterAcountActivity.class, intent, false);
-		} else if (getLocalClassNameBySelf().contains(
-				"RegisterCompleteActivity")) {
-			showToast("请完成注册", Toast.LENGTH_SHORT, false);
 		} else if (getLocalClassNameBySelf().contains("Recommend_topic")
 				|| getLocalClassNameBySelf().contains("ChatRoomActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
@@ -447,6 +444,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("UpdateNikeActivity")
 				|| getLocalClassNameBySelf().contains("MySkillActivity")
 				|| getLocalClassNameBySelf().contains("ChatRoomListnikeActivity")
+				|| getLocalClassNameBySelf().contains("RegisterTagActivity")
 				|| getLocalClassNameBySelf().contains("SearchTopicActivity")) {
 			finish();
 		} else if (getLocalClassNameBySelf().contains("UpdatePasswordActivity")) {
@@ -456,7 +454,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")) {
 			startActivityRight(SettingActivity.class, intent, false);
 		} else {
-			exitApp();
+			moveTaskToBack(false);
 		}
 
 	}

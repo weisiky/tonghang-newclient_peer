@@ -5,11 +5,9 @@ import java.io.File;
 import java.util.Calendar;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -34,7 +32,6 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
-import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
@@ -181,15 +178,27 @@ public class PersonalMessageActivity extends pBaseActivity {
 		case R.id.bt_update:
 			photo = pageViewaList.iv_headpic_personMSG.getDrawingCache();
 			img = getBitmapByte(photo);
+			pLog.i("test", "图片信息"+img);
 
 			if (isNetworkAvailable) {
 				showProgressBar();
+				/*try {
+					postFile(mShareFileUtils.getString("client_id", ""),
+							pageViewaList.tv_setbirthday_my.getText().toString(),
+							pageViewaList.tv_sex.getText().toString(),
+							pageViewaList.tv_setaddress_my.getText().toString(),
+							pageViewaList.et_nikename_personMSG.getText()
+									.toString());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
 				sendupdateusermsg(mShareFileUtils.getString("client_id", ""),
 						pageViewaList.tv_setbirthday_my.getText().toString(),
 						pageViewaList.tv_sex.getText().toString(),
 						pageViewaList.tv_setaddress_my.getText().toString(),
 						pageViewaList.et_nikename_personMSG.getText()
-								.toString());
+							.toString());
 			} else {
 				showToast(
 						getResources()
@@ -399,6 +408,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 
 	public byte[] getBitmapByte(Bitmap bitmap) {
 		if (bitmap == null) {
+			pLog.i("test", "bitmap为空");
 			return null;
 		}
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -432,6 +442,34 @@ public class PersonalMessageActivity extends pBaseActivity {
 					}
 				}).show();
 	}
+	
+	/*public void postFile(String client_id, String tv_setbirth,
+			String tv_sex, String tv_setaddress, String username) throws Exception{
+		String path =Constant.C_IMAGE_CACHE_PATH + "head.png";      
+		File file = new File(path);      
+		if(file.exists() && file.length()>0){
+			AsyncHttpClient client = new AsyncHttpClient();
+			RequestParams params = new RequestParams();
+			params = PeerParamsUtils.getUpdateParams(
+					PersonalMessageActivity.this,client_id, tv_setbirth, tv_sex,
+					tv_setaddress, username);
+			params.put("image", file);
+			client.post(HttpConfig.UPDATE_IN_URL + client_id + ".json"
+					, params,new AsyncHttpResponseHandler() { 
+			@Override              
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				showToast("成功", Toast.LENGTH_SHORT, false);             
+				}                           
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					byte[] responseBody, Throwable error) {
+				showToast("失败", Toast.LENGTH_SHORT, false);             
+				}          
+			});      
+			}else{
+				Toast.makeText(this, "文件不存在", 1).show();      
+				}        
+		} */
 
 	/**
 	 * 更改用户信息请求
@@ -455,9 +493,11 @@ public class PersonalMessageActivity extends pBaseActivity {
 					PersonalMessageActivity.this,client_id, tv_setbirth, tv_sex,
 					tv_setaddress, username);
 			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
-			System.out.println("image图片："+file);
 			if (file.exists()) {
 				params.put("image", file);
+				pLog.i("test", "image图片："+file);
+			}else{
+				params.put("image", "");
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -501,15 +541,28 @@ public class PersonalMessageActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						hideLoading();
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if (loginBean != null) {
-								BussinessUtils.saveUserData(loginBean,
-										mShareFileUtils);
-								showToast("更新成功！", Toast.LENGTH_SHORT, false);
-								finish();
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if (loginBean != null) {
+									BussinessUtils.saveUserData(loginBean,
+											mShareFileUtils);
+									showToast(getResources().getString(R.string.updatemsgsuccess)
+											, Toast.LENGTH_SHORT, false);
+									finish();
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
+
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -519,17 +572,6 @@ public class PersonalMessageActivity extends pBaseActivity {
 						}
 
 						super.onSuccess(statusCode, headers, response);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						super.onSuccess(statusCode, headers, responseString);
-						Intent login_complete = new Intent();
-						startActivityForLeft(MainActivity.class,
-								login_complete, false);
 					}
 
 				});

@@ -68,11 +68,11 @@ public class PersonalPageActivity extends pBaseActivity {
 	
 
 	class PageViewList {
-		private LinearLayout ll_back, ll_personpagebottom, contentauto;
+		private LinearLayout ll_back, ll_personpagebottom, contentauto,ll_downview;
 		private TextView tv_title, personnike, personcount, sex, city,
 				tv_topic;
 		private Button btnSend, addfriends;
-		private ImageView personhead, im_downview;
+		private ImageView personhead;
 		private RelativeLayout rl_topic;
 	}
 
@@ -92,22 +92,6 @@ public class PersonalPageActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 
 		tag_container = (AutoWrapRadioGroup) findViewById(R.id.tag_container);
-
-		tag_container.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				RadioButton tempButton = (RadioButton) findViewById(checkedId);
-				String selectlabel = tempButton.getText().toString();
-				SearchBean.getInstance().setSearchname(selectlabel);
-				SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
-				Intent intent = new Intent(PersonalPageActivity.this,
-						SearchResultActivity.class);
-				startActivity(intent);
-			}
-		});
-		
 	}
 
 	@Override
@@ -117,7 +101,25 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.rl_topic.setOnClickListener(this);
 		pageViewaList.btnSend.setOnClickListener(this);
 		pageViewaList.addfriends.setOnClickListener(this);
-		pageViewaList.im_downview.setOnClickListener(this);
+		pageViewaList.ll_downview.setOnClickListener(this);
+		tag_container.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				// TODO Auto-generated method stub
+				RadioButton tempButton = (RadioButton) findViewById(checkedId);
+				String selectlabel = tempButton.getText().toString();
+				if(isNetworkAvailable){
+					SearchBean.getInstance().setSearchname(selectlabel);
+					SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
+					Intent intent = new Intent();
+					startActivityForLeft(SearchResultActivity.class, intent, false);
+				}else{
+					showToast(getResources().getString(R.string.Broken_network_prompt)
+							, Toast.LENGTH_SHORT, false);
+				}
+			}
+		});
 
 	}
 
@@ -170,7 +172,7 @@ public class PersonalPageActivity extends pBaseActivity {
 						Toast.LENGTH_SHORT, false);
 			}
 			break;
-		case R.id.im_downview:
+		case R.id.ll_downview:
 			titlePopup.show(v);
 			break;
 		default:
@@ -227,6 +229,9 @@ public class PersonalPageActivity extends pBaseActivity {
 		if (file.exists()) {
 			pageViewaList.personhead.setImageBitmap(BussinessUtils.decodeFile(
 					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
+			ImageLoaderUtil.getInstance().showHttpImage(
+					pic_server + userbean.getImage(), pageViewaList.personhead,
+					R.drawable.mini_avatar_shadow);
 
 		} else {
 			// ImageLoader加载图片
@@ -237,7 +242,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		
 
 		pageViewaList.personnike.setText(userbean.getUsername());
-		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ArrayList<String> lables = userbean.getLabels();
@@ -278,7 +283,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		}
 
 		pageViewaList.personnike.setText(userbean.getUsername());
-		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(
@@ -323,13 +328,18 @@ public class PersonalPageActivity extends pBaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomBean.getInstance().setChatroomtype(
-						Constant.SINGLECHAT);
+//				if(isNetworkAvailable){
+					ChatRoomBean.getInstance().setChatroomtype(
+							Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-				Intent intent = new Intent(PersonalPageActivity.this,
-						SingleChatRoomActivity.class);
-				intent.putExtra("userbean", userbean);
-				startActivity(intent);
+					Intent intent = new Intent(PersonalPageActivity.this,
+							SingleChatRoomActivity.class);
+					intent.putExtra("userbean", userbean);
+					startActivity(intent);
+//				}else{
+//					showToast(getResources().getString(R.string.Broken_network_prompt)
+//							, Toast.LENGTH_SHORT, false);
+//				}
 			}
 		});
 		
@@ -346,11 +356,11 @@ public class PersonalPageActivity extends pBaseActivity {
 		params.gravity = Gravity.CENTER_VERTICAL;
 		String userid = null;
 
-		pageViewaList.im_downview.setVisibility(View.VISIBLE);
+		pageViewaList.ll_downview.setVisibility(View.VISIBLE);
 		pageViewaList.btnSend.setVisibility(View.GONE);
 		pageViewaList.addfriends.setVisibility(View.GONE);
 		pageViewaList.personnike.setText(userbean.getUsername());
-		pageViewaList.personcount.setText(userbean.getEmail());
+//		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(
@@ -420,11 +430,16 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				if (item.mTitle.equals(getResources().getString(
 						R.string.deletefriends))) {
-					String client_id = mShareFileUtils.getString(
-							Constant.CLIENT_ID, "");
-					String friend_id = userbean.getClient_id();
-
-					senddeletefriend(client_id, friend_id);
+					if(isNetworkAvailable){
+						String client_id = mShareFileUtils.getString(
+								Constant.CLIENT_ID, "");
+						String friend_id = userbean.getClient_id();
+						
+						senddeletefriend(client_id, friend_id);
+					}else{
+						showToast(getResources().getString(R.id.baseProgressBarLayout)
+								, Toast.LENGTH_SHORT, false);
+					}
 				}
 			}
 		});
@@ -491,15 +506,19 @@ public class PersonalPageActivity extends pBaseActivity {
 							JSONObject result = response
 									.getJSONObject("success");
 							String code = result.getString("code");
-							if (code.equals("ok")) {
+							pLog.i("test", "code:"+code);
+							if (code.equals("200")) {
 								showToast("好友关系已经移除！", Toast.LENGTH_SHORT,
 										false);
 								FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
 								finish();
-							} else {
-								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,
-										false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
+
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -562,11 +581,22 @@ public class PersonalPageActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						pLog.i("test","response:"+response.toString());
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if(loginBean!=null){
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
 //								userbean = loginBean.user;
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

@@ -80,7 +80,7 @@ public class Constant {
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";
 	/** 获取SD */
-	public static final String SDCARD_DIR = SDCardScanner.getExtSDCardPath();
+	public static final String SDCARD_DIR = SDCardScanner.getSDPath();
 	/** SharedPreferences文件名称 */
 	public static final String SHARE_NAME = "peer";
 

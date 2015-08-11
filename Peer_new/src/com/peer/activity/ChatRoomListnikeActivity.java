@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -181,35 +182,43 @@ public class ChatRoomListnikeActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						try {
-							RecommendUserBean recommenduserbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											RecommendUserBean.class);
-							if (recommenduserbean != null) {
+							JSONObject result = response.getJSONObject("success");
 
-								if (page == 1) {
-									userlist.clear();
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								RecommendUserBean recommenduserbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												RecommendUserBean.class);
+								if (recommenduserbean != null) {
+									
+									if (page == 1) {
+										userlist.clear();
+									}
+									userlist.addAll(recommenduserbean.users);
+									
+									
+									if (adapter == null) {
+										adapter = new FriendsAdapter(
+												ChatRoomListnikeActivity.this, userlist
+												,recommenduserbean.getPic_server());
+										pageViewaList.lv_listnike_chatroom.setAdapter(adapter);
+									}
 								}
-								userlist.addAll(recommenduserbean.users);
+							}else if(code.equals("500")){
 								
-
-								if (adapter == null) {
-									adapter = new FriendsAdapter(
-											ChatRoomListnikeActivity.this, userlist
-											,recommenduserbean.getPic_server());
-									pageViewaList.lv_listnike_chatroom.setAdapter(adapter);
-								}
-
-								refresh();
-
-							
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						refresh();
 
 
 						super.onSuccess(statusCode, headers, response);

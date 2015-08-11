@@ -219,8 +219,26 @@ public class FeedBackActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						try {
+							JSONObject result = response.getJSONObject("success");
 
-						showToast("已提交，感谢你的好建议！", Toast.LENGTH_SHORT, false);
+							String code = result.getString("code");
+							if(code.equals("200")){
+								showToast(getResources().getString(R.string.commit)
+										, Toast.LENGTH_SHORT, false);
+								finish();
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+
+							} catch (Exception e1) {
+								pLog.i("test", "Exception:" + e1.toString());
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 
 						super.onSuccess(statusCode, headers, response);
 

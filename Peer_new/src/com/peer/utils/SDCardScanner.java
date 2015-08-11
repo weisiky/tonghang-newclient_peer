@@ -114,6 +114,19 @@ public class SDCardScanner {
 	}
 
 	/**
+	 * 获取SD的路径
+	 * 
+	 * @return
+	 */
+	public static String getSDPath() {
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			return Environment.getExternalStorageDirectory().getPath();
+		}
+		return "";
+	}
+
+	/**
 	 * 获取默认内存卡路径
 	 * 
 	 * @return

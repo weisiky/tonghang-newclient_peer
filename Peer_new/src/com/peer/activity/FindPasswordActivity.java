@@ -145,12 +145,19 @@ public class FindPasswordActivity extends pBaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_findpassword:
+			String format = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
 			String email = pageViewaList.et_email_find.getText().toString()
 					.trim();
 			if (isNetworkAvailable) {
+			if (!email.matches(format)) {
+				showToast(getResources().getString(
+						R.string.erroremail), Toast.LENGTH_SHORT, false);
+				return;
+			} else{
 				sendfindpasswd(email);
+			}
 			} else {
-
+				
 			}
 			break;
 
@@ -219,17 +226,34 @@ public class FindPasswordActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						Intent intent = new Intent();
-						startActivityForLeft(FindPasswordResultActivity.class,
-								intent, false);
+						try {
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+								Intent intent = new Intent();
+								startActivityForLeft(FindPasswordResultActivity.class,
+										intent, false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+
+							} catch (Exception e1) {
+								pLog.i("test", "Exception:" + e1.toString());
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 
 						super.onSuccess(statusCode, headers, response);
 					}
 
 				});
-		Intent intent = new Intent();
-		startActivityForLeft(FindPasswordResultActivity.class, intent, false);
-
 	}
 
 	@Override

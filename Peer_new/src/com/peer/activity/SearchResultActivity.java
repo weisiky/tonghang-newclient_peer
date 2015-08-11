@@ -170,14 +170,19 @@ public class SearchResultActivity extends pBaseActivity {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						try {
-							page = 1;
-							sendSearchResult(searchname, page, contanttype);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(isNetworkAvailable){
+							try {
+								page = 1;
+								sendSearchResult(searchname, page, contanttype);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							lv_searchresult.onRefreshComplete();
 						}
-						showToast("下拉", Toast.LENGTH_SHORT, false);
 					}
 
 					@Override
@@ -193,14 +198,18 @@ public class SearchResultActivity extends pBaseActivity {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						page = +1;
-						try {
-							sendSearchResult(searchname, ++page, contanttype);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(isNetworkAvailable){
+							try {
+								sendSearchResult(searchname, ++page, contanttype);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							lv_searchresult.onRefreshComplete();
 						}
-						showToast("上拉", Toast.LENGTH_SHORT, false);
 					}
 				});
 	}
@@ -213,7 +222,7 @@ public class SearchResultActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void sendSearchResult(String name, int page, String contanttype)
+	private void sendSearchResult(String name, final int page, String contanttype)
 			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
@@ -276,25 +285,35 @@ public class SearchResultActivity extends pBaseActivity {
 								// TODO Auto-generated method stub
 								hideLoading();
 								try {
-									RecommendUserBean recommenduserbean = JsonDocHelper
-											.toJSONObject(response
-													.getJSONObject("success")
-													.toString(),
-													RecommendUserBean.class);
-									if (recommenduserbean != null) {
+									JSONObject result = response.getJSONObject("success");
 
-										pLog.i("test", "user1:"
-												+ recommenduserbean.users
-														.get(0).getUsername()
-														.toString());
-										userbean.addAll(recommenduserbean.users);
-										if (adapter == null) {
-											adapter = new SeachResultAdapter(
-													SearchResultActivity.this, userbean
-													,recommenduserbean.getPic_server());
-											lv_searchresult.setAdapter(adapter);
+									String code = result.getString("code");
+									pLog.i("test", "code:"+code);
+									if(code.equals("200")){
+										RecommendUserBean recommenduserbean = JsonDocHelper
+												.toJSONObject(response
+														.getJSONObject("success")
+														.toString(),
+														RecommendUserBean.class);
+										if (recommenduserbean != null) {
+											if (page == 1) {
+												userbean.clear();
+											}
+											
+											userbean.addAll(recommenduserbean.users);
+											if (adapter == null) {
+												adapter = new SeachResultAdapter(
+														SearchResultActivity.this, userbean
+														,recommenduserbean.getPic_server());
+												lv_searchresult.setAdapter(adapter);
+											}
+											
 										}
+									}else if(code.equals("500")){
 										
+									}else{
+										String message = result.getString("message");
+										showToast(message, Toast.LENGTH_SHORT, false);
 									}
 										
 
@@ -368,26 +387,39 @@ public class SearchResultActivity extends pBaseActivity {
 								hideLoading();
 
 								try {
-									RecommendUserBean recommenduserbean = JsonDocHelper
-											.toJSONObject(response
-													.getJSONObject("success")
-													.toString(),
-													RecommendUserBean.class);
-									if (recommenduserbean != null) {
+									JSONObject result = response.getJSONObject("success");
 
-										pLog.i("test", "user1:"
-												+ recommenduserbean.users
-														.get(0).getUsername()
-														.toString());
-										userbean.addAll(recommenduserbean.users);
-										if (adapter == null) {
-											adapter = new SeachResultAdapter(
-													SearchResultActivity.this, userbean
-													,recommenduserbean.getPic_server());
-											lv_searchresult.setAdapter(adapter);
+									String code = result.getString("code");
+									pLog.i("test", "code:"+code);
+									if(code.equals("200")){
+										RecommendUserBean recommenduserbean = JsonDocHelper
+												.toJSONObject(response
+														.getJSONObject("success")
+														.toString(),
+														RecommendUserBean.class);
+										if (recommenduserbean != null) {
+											if (page == 1) {
+												userbean.clear();
+											}
+											pLog.i("test", "user1:"
+													+ recommenduserbean.users
+													.get(0).getUsername()
+													.toString());
+											userbean.addAll(recommenduserbean.users);
+											if (adapter == null) {
+												adapter = new SeachResultAdapter(
+														SearchResultActivity.this, userbean
+														,recommenduserbean.getPic_server());
+												lv_searchresult.setAdapter(adapter);
+											}
+											
+											
 										}
+									}else if(code.equals("500")){
 										
-
+									}else{
+										String message = result.getString("message");
+										showToast(message, Toast.LENGTH_SHORT, false);
 									}
 
 								} catch (Exception e1) {
@@ -455,25 +487,35 @@ public class SearchResultActivity extends pBaseActivity {
 									Header[] headers, JSONObject response) {
 								// TODO Auto-generated method stub
 								try {
-									RecommendTopicBean recommendtopicbean = JsonDocHelper
-											.toJSONObject(response
-													.getJSONObject("success")
-													.toString(),
-													RecommendTopicBean.class);
-									if (recommendtopicbean != null) {
-										pLog.i("test", "user1:"
-												+ recommendtopicbean.topics
-														.get(0).getSubject()
-														.toString());
-										topicbean.addAll(recommendtopicbean.topics);
-										if (adapter1 == null) {
-											adapter1 = new SearchTopicAdapter(
-													SearchResultActivity.this, topicbean
-													,recommendtopicbean.getPic_server());
-											lv_searchresult.setAdapter(adapter1);
-										}
+									JSONObject result = response.getJSONObject("success");
 
+									String code = result.getString("code");
+									pLog.i("test", "code:"+code);
+									if(code.equals("200")){
+										RecommendTopicBean recommendtopicbean = JsonDocHelper
+												.toJSONObject(response
+														.getJSONObject("success")
+														.toString(),
+														RecommendTopicBean.class);
+										if (recommendtopicbean != null) {
+											if (page == 1) {
+												userbean.clear();
+											}
+											topicbean.addAll(recommendtopicbean.topics);
+											if (adapter1 == null) {
+												adapter1 = new SearchTopicAdapter(
+														SearchResultActivity.this, topicbean
+														,recommendtopicbean.getPic_server());
+												lv_searchresult.setAdapter(adapter1);
+											}
+											
+											
+										}
+									}else if(code.equals("500")){
 										
+									}else{
+										String message = result.getString("message");
+										showToast(message, Toast.LENGTH_SHORT, false);
 									}
 
 
@@ -546,25 +588,38 @@ public class SearchResultActivity extends pBaseActivity {
 								// TODO Auto-generated method stub
 								hideLoading();
 								try {
-									RecommendTopicBean recommendtopicbean = JsonDocHelper
-											.toJSONObject(response
-													.getJSONObject("success")
-													.toString(),
-													RecommendTopicBean.class);
-									if (recommendtopicbean != null) {
-										pLog.i("test", "user1:"
-												+ recommendtopicbean.topics
-														.get(0).getSubject()
-														.toString());
-										topicbean.addAll(recommendtopicbean.topics);
-										if (adapter1 == null) {
-											adapter1 = new SearchTopicAdapter(
-													SearchResultActivity.this, topicbean
-													,recommendtopicbean.getPic_server());
-											lv_searchresult.setAdapter(adapter1);
-										}
+									JSONObject result = response.getJSONObject("success");
 
+									String code = result.getString("code");
+									pLog.i("test", "code:"+code);
+									if(code.equals("200")){
+										RecommendTopicBean recommendtopicbean = JsonDocHelper
+												.toJSONObject(response
+														.getJSONObject("success")
+														.toString(),
+														RecommendTopicBean.class);
+										if (recommendtopicbean != null) {
+											if (page == 1) {
+												userbean.clear();
+											}
+											pLog.i("test", "user1:"
+													+ recommendtopicbean.topics
+													.get(0).getSubject()
+													.toString());
+											topicbean.addAll(recommendtopicbean.topics);
+											if (adapter1 == null) {
+												adapter1 = new SearchTopicAdapter(
+														SearchResultActivity.this, topicbean
+														,recommendtopicbean.getPic_server());
+												lv_searchresult.setAdapter(adapter1);
+											}
+										}
 										
+									}else if(code.equals("500")){
+										
+									}else{
+										String message = result.getString("message");
+										showToast(message, Toast.LENGTH_SHORT, false);
 									}
 
 

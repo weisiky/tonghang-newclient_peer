@@ -191,6 +191,7 @@ public class LoginActivity extends pBaseActivity {
 						hideLoading();
 						pLog.i("test", "statusCode:"+statusCode);
 						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+responseString);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -203,6 +204,7 @@ public class LoginActivity extends pBaseActivity {
 						hideLoading();
 						pLog.i("test", "statusCode:"+statusCode);
 						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -215,6 +217,7 @@ public class LoginActivity extends pBaseActivity {
 						hideLoading();
 						pLog.i("test", "statusCode:"+statusCode);
 						pLog.i("test", "Header:"+headers);
+						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+errorResponse);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -226,19 +229,24 @@ public class LoginActivity extends pBaseActivity {
 							JSONObject response) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","response:"+response.toString());
 
 						try {
+							JSONObject result = response.getJSONObject("success");
+							
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+						if(code.equals("200")){
+								
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
-							if (loginBean != null) {
+							pLog.i("test","getBirth:"+loginBean.user.getBirth());
+							if (loginBean != null && 
+									loginBean.user.getBirth()!=null) {
 
 								mShareFileUtils.setString(Constant.PASSWORD,
 										password);
-								pLog.i("test",
-										"response:"
-												+ mShareFileUtils.getString(
-														Constant.PASSWORD, ""));
 
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
@@ -271,8 +279,20 @@ public class LoginActivity extends pBaseActivity {
 
 								startActivityForLeft(MainActivity.class,
 										intent, false);
+								}else{
+									showToast(getResources().getString(R.string.completemessage)
+											, Toast.LENGTH_SHORT, false);
+									mShareFileUtils.setString("client_id", loginBean.user.getClient_id());
+									mShareFileUtils.setString("username", loginBean.user.getUsername());
+									Intent intent = new Intent();
+									startActivityForLeft(RegisterCompleteActivity.class, intent, false);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
-
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block

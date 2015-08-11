@@ -53,9 +53,8 @@ public class Recommend_topic extends pBaseActivity {
 	Recommend_topicAdapter adapter;
 
 	class PageViewList {
-		private LinearLayout ll_back, ll_topic;
+		private LinearLayout ll_back, ll_topic,ll_search;
 		private TextView tv_title;
-		private ImageView im_search;
 	}
 
 	private PageViewList pageViewaList;
@@ -74,8 +73,6 @@ public class Recommend_topic extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText("话题");
 		pull_refresh_topic = (PullToRefreshListView) findViewById(R.id.pull_refresh_topic);
-		pageViewaList.ll_topic.setVisibility(View.VISIBLE);
-		pageViewaList.im_search.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -83,54 +80,10 @@ public class Recommend_topic extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.ll_topic.setOnClickListener(this);
-		pageViewaList.im_search.setOnClickListener(this);
+		pageViewaList.ll_search.setOnClickListener(this);
 		
 		RefreshListner();
 
-		/*pull_refresh_topic.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-
-				if (!isNetworkAvailable) {
-					showToast(
-							getResources().getString(
-									R.string.Broken_network_prompt),
-							Toast.LENGTH_SHORT, false);
-				} else {
-					
-					 * ChatRoomTypeUtil.getInstance().setChatroomtype(Constant.
-					 * MULTICHAT);
-					 * 
-					 * ChatRoomTypeUtil.getInstance().setHuanxingId(topic.
-					 * getHuangxin_group_id());
-					 * ChatRoomTypeUtil.getInstance().setTitle
-					 * (topic.getLabel_name());
-					 * ChatRoomTypeUtil.getInstance().setTheme
-					 * (topic.getSubject());
-					 * ChatRoomTypeUtil.getInstance().setTopicId
-					 * (topic.getTopicid());
-					 * 
-					 * User user=(User)mList.get(position).get(Constant.USER);
-					 * String ownerid=null; try { ownerid =
-					 * PeerUI.getInstance().getISessionManager().getUserId(); }
-					 * catch (RemoteException e) { // TODO Auto-generated catch
-					 * block e.printStackTrace(); }
-					 * if(user.getUserid().equals(ownerid)){
-					 * ChatRoomTypeUtil.getInstance().setIsowner(true); }else{
-					 * ChatRoomTypeUtil.getInstance().setIsowner(false); }
-					 * topic.setUser(user);
-					 * ChatRoomTypeUtil.getInstance().setTopic(topic); Intent
-					 * intent=new Intent(mContext,ChatRoomActivity.class);
-					 * mContext.startActivity(intent);
-					 
-				}
-
-			}
-		});*/
 	}
 	
 	private void RefreshListner() {
@@ -150,14 +103,21 @@ public class Recommend_topic extends pBaseActivity {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						try {
-							page = 1;
-							sendRecommendtopic(mShareFileUtils.getString(
-									Constant.CLIENT_ID, ""), page);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(isNetworkAvailable){
+							try {
+								page = 1;
+								sendRecommendtopic(mShareFileUtils.getString(
+										Constant.CLIENT_ID, ""), page);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							pull_refresh_topic.onRefreshComplete();
 						}
+						
 					}
 
 					@SuppressWarnings("static-access")
@@ -173,13 +133,20 @@ public class Recommend_topic extends pBaseActivity {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						try {
-							sendRecommendtopic(mShareFileUtils.getString(
-									Constant.CLIENT_ID, ""), ++page);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(isNetworkAvailable){
+							try {
+								sendRecommendtopic(mShareFileUtils.getString(
+										Constant.CLIENT_ID, ""), ++page);
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt)
+									, Toast.LENGTH_SHORT, false);
+							pull_refresh_topic.onRefreshComplete();
 						}
+						
 					}
 				});
 	}
@@ -202,7 +169,7 @@ public class Recommend_topic extends pBaseActivity {
 	protected View loadTopLayout() {
 		// TODO Auto-generated method stub
 		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
+		return getLayoutInflater().inflate(R.layout.topic_sealayout_title, null);
 	}
 
 	@Override
@@ -223,7 +190,7 @@ public class Recommend_topic extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
-		case R.id.im_search:
+		case R.id.ll_search:
 			Intent searchtopic = new Intent(this, SearchTopicActivity.class);
 			startActivity(searchtopic);
 			break;
@@ -328,27 +295,45 @@ public class Recommend_topic extends pBaseActivity {
 						pLog.i("test", "response:" + response.toString());
 
 						try {
-							RecommendTopicBean recommendtopicbean = JsonDocHelper
-									.toJSONObject(
-											response.getJSONObject("success")
-													.toString(),
-											RecommendTopicBean.class);
-							if (recommendtopicbean != null) {
-								pLog.i("test", "user1:"
-										+ recommendtopicbean.topics.get(0)
-												.getSubject().toString());
-								if (page == 1) {
-									list.clear();
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								RecommendTopicBean recommendtopicbean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject("success")
+												.toString(),
+												RecommendTopicBean.class);
+								if (recommendtopicbean != null) {
+									pLog.i("test", "user1:"
+											+ recommendtopicbean.topics.get(0)
+											.getSubject().toString());
+									if (page == 1) {
+										list.clear();
+									}
+									list.addAll(recommendtopicbean.topics);
+									if (adapter == null) {
+										adapter = new Recommend_topicAdapter(
+												Recommend_topic.this, list
+												,recommendtopicbean.getPic_server());
+										pull_refresh_topic.setAdapter(adapter);
+									}
+									
+									
 								}
-								list.addAll(recommendtopicbean.topics);
+							}else if(code.equals("500")){
+								
+							}else{
+								list.clear();
 								if (adapter == null) {
 									adapter = new Recommend_topicAdapter(
 											Recommend_topic.this, list
-											,recommendtopicbean.getPic_server());
+											,mShareFileUtils.getString(Constant.PIC_SERVER, ""));
 									pull_refresh_topic.setAdapter(adapter);
 								}
-
-								
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());

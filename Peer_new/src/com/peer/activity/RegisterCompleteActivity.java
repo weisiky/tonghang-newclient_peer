@@ -102,12 +102,12 @@ public class RegisterCompleteActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 		pageViewaList.tv_title.setText(getResources().getString(
 				R.string.complete));
+		pageViewaList.ll_back.setVisibility(View.GONE);
 	}
 
 	@Override
 	protected void setListener() {
 		// TODO Auto-generated method stub
-		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.ll_uploadepic.setOnClickListener(this);
 		pageViewaList.ll_setsex.setOnClickListener(this);
 		pageViewaList.bt_login_complete.setOnClickListener(this);
@@ -218,6 +218,8 @@ public class RegisterCompleteActivity extends pBaseActivity {
 			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
 			if (file.exists()) {
 				params.put("image", file);
+			}else{
+				params.put("image",file);
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -262,24 +264,40 @@ public class RegisterCompleteActivity extends pBaseActivity {
 						// TODO Auto-generated method stub
 						hideLoading();
 
-						pLog.i("test", "response:" + response);
-
 						try {
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							if (loginBean != null) {
-								BussinessUtils.saveUserData(loginBean,
-										mShareFileUtils);
-								easemobchatImp.getInstance().login(
-										mShareFileUtils.getString("client_id",
-												""),
-										mShareFileUtils.getString("password",
-												""));
-								easemobchatImp.getInstance()
-										.loadConversationsandGroups();
-								startActivityForLeft(MainActivity.class,
-										intent, false);
+							pLog.i("test","response:"+response.toString());
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if (loginBean != null) {
+									BussinessUtils.saveUserData(loginBean,
+											mShareFileUtils);
+									easemobchatImp.getInstance().login(
+											mShareFileUtils.getString("client_id",
+													""),
+													mShareFileUtils.getString("password",
+															""));
+									easemobchatImp.getInstance()
+									.loadConversationsandGroups();
+									startActivityForLeft(MainActivity.class,
+											intent, false);
+								}else if(code.equals("500")){
+									
+								}else{
+									String message = result.getString("message");
+									showToast(message, Toast.LENGTH_SHORT, false);
+								}
+								
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -506,9 +524,7 @@ public class RegisterCompleteActivity extends pBaseActivity {
 		Bundle extras = data.getExtras();
 		if (extras != null) {
 			photo = extras.getParcelable("data");
-
 			BussinessUtils.saveBitmapFile(photo);
-
 			pageViewaList.iv_uploadepic_complete.setImageBitmap(photo);
 		}
 		return photo;

@@ -225,17 +225,17 @@ public class AddFriendsActivity extends pBaseActivity {
 						JSONObject result;
 						try {
 							result = response.getJSONObject("success");
-
-							pLog.i("test", "result:" + result);
-
 							String code = result.getString("code");
-							if (code.equals("ok")) {
+							pLog.i("test", "code:"+code);
+							if (code.equals("200")) {
 								showToast("请求已送达！", Toast.LENGTH_SHORT, false);
 								PersonpageBean.getInstance().getUser().setHas_invitation(true);
 								finish();
-							} else {
-								showToast("网络繁忙，请稍后在试！", Toast.LENGTH_SHORT,
-										false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block

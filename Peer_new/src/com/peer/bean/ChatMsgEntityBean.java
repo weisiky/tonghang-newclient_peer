@@ -13,7 +13,7 @@ public class ChatMsgEntityBean {
 	private String date;//消息日期
 	private String message;//消息内容
 	private int isComMeg;//收到哪种消息  1为我，0为其他人
-	private UserBean userbean;
+	public UserBean userbean=new UserBean();
 	
 	
 
@@ -85,13 +85,13 @@ public class ChatMsgEntityBean {
 		this.userbean = userbean;
 	}
 
-	public ChatMsgEntityBean(String name, String date, String text, int isComMsg,String userId) {
-		super();
-		this.name = name;
-		this.date = date;
-		this.message = text;
-		this.isComMeg = isComMsg;
-		this.userId=userId;
-	}
+//	public ChatMsgEntityBean(String name, String date, String text, int isComMsg,String userId) {
+//		super();
+//		this.name = name;
+//		this.date = date;
+//		this.message = text;
+//		this.isComMeg = isComMsg;
+//		this.userId=userId;
+//	}
 
 }
