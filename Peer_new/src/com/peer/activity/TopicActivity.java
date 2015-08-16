@@ -28,6 +28,7 @@ import com.peer.base.pBaseActivity;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendTopicBean;
 import com.peer.bean.TopicBean;
+import com.peer.bean.UserBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -67,17 +68,6 @@ public class TopicActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		if (PersonpageBean.getInstance().getUser().getClient_id().equals(
-				mShareFileUtils.getString(Constant.CLIENT_ID, ""))) {
-			pageViewaList.tv_title.setText(getResources().getString(
-					R.string.topic_owen));
-		} else if (PersonpageBean.getInstance().getUser().getSex().equals("男")) {
-			pageViewaList.tv_title.setText(getResources().getString(
-					R.string.topic_other));
-		} else {
-			pageViewaList.tv_title.setText(getResources().getString(
-					R.string.topic_nvother));
-		}
 
 	}
 
@@ -91,10 +81,22 @@ public class TopicActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 		Intent intent = getIntent();
+		UserBean userbean = (UserBean) intent.getSerializableExtra("bean");
+		if (userbean.getClient_id().equals(
+				mShareFileUtils.getString(Constant.CLIENT_ID, ""))) {
+			pageViewaList.tv_title.setText(getResources().getString(
+					R.string.topic_owen));
+		} else if (userbean.getSex().equals("男")) {
+			pageViewaList.tv_title.setText(getResources().getString(
+					R.string.topic_other));
+		} else {
+			pageViewaList.tv_title.setText(getResources().getString(
+					R.string.topic_nvother));
+		}
 		String name = intent.getStringExtra("nike");
 		String email = intent.getStringExtra("email");
 		String image = intent.getStringExtra("image");
-		String client_id = intent.getStringExtra("client_id");
+		String client_id = userbean.getClient_id();
 		System.out.println("name:"+name);
 		System.out.println("email:"+email);
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
@@ -187,6 +189,7 @@ public class TopicActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -196,6 +199,7 @@ public class TopicActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -205,6 +209,7 @@ public class TopicActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

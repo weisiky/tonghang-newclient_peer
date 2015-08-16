@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.peer.R;
+import com.peer.activity.OtherPageActivity;
 import com.peer.activity.PersonalPageActivity;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
+import com.peer.bean.ChatRoomBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.UserBean;
 import com.peer.utils.ImageLoaderUtil;
@@ -87,9 +89,9 @@ public class FriendsAdapter extends pBaseAdapter {
 					((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(
 							R.string.Broken_network_prompt), Toast.LENGTH_LONG, false);
 				} else {
-					PersonpageBean.getInstance().setUser(userbean);
-					Intent intent=new Intent(mContext,PersonalPageActivity.class);
-					mContext.startActivity(intent);	
+					Intent intent = new Intent(mContext,OtherPageActivity.class);
+					intent.putExtra("client_id",userbean.getClient_id());
+					mContext.startActivity(intent);
 				}
 				
 			}

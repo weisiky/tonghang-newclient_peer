@@ -59,6 +59,7 @@ public class HomeFragment extends pBaseFragment {
 	private TextView tv_connect_errormsg;
 	/** 分页参数 **/
 	int page = 1;
+	public static int pageindex;
 
 	private pBaseActivity pbaseActivity;
 
@@ -159,8 +160,21 @@ public class HomeFragment extends pBaseFragment {
 								.setLastUpdatedLabel(label);
 						if(pbaseActivity.isNetworkAvailable){
 							try {
-								sendRecommendTask(mShareFileUtils.getString(
-										Constant.CLIENT_ID, ""), ++page);
+								if(page==pageindex){
+									pLog.i("test", "page:"+page);
+									pLog.i("test", "pageindex:"+pageindex);
+									
+									sendRecommendTask(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""), ++page);
+								}else{
+									pLog.i("test", "page:"+page);
+									pLog.i("test", "pageindex:"+pageindex);
+									if(pageindex == 0){
+										page = 1;
+									}
+									sendRecommendTask(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""), page);
+								}
 							} catch (UnsupportedEncodingException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -212,6 +226,7 @@ public class HomeFragment extends pBaseFragment {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -221,6 +236,7 @@ public class HomeFragment extends pBaseFragment {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -230,6 +246,7 @@ public class HomeFragment extends pBaseFragment {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						pbaseActivity.hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -249,6 +266,8 @@ public class HomeFragment extends pBaseFragment {
 							pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
 									"home.etag", false, response.getJSONObject("success")
 									.toString());
+							pageindex = page;
+							
 							RecommendUserBean recommenduserbean = JsonDocHelper
 									.toJSONObject(
 											response.getJSONObject("success")
@@ -272,9 +291,17 @@ public class HomeFragment extends pBaseFragment {
 						}else if(code.equals("500")){
 							
 						}else{
-							pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
-									"home.etag", false, "");
-							usersList.clear();
+							if(pageindex == 0){
+								
+								pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+										"home.etag", false, "");
+								usersList.clear();
+							}
+							if(page == 1){
+								pIOUitls.saveStrToSD(Constant.C_FILE_CACHE_PATH,
+										"home.etag", false, "");
+								usersList.clear();
+							}
 							pLog.i("test", "usersList:"+usersList.toString());
 							if (adapter == null) {
 								adapter = new HomepageAdapter(
@@ -282,6 +309,7 @@ public class HomeFragment extends pBaseFragment {
 										,mShareFileUtils.getString(Constant.PIC_SERVER, ""));
 								pull_refresh_homepage.setAdapter(adapter);
 							}
+							
 							String message = result.getString("message");
 							showToast(message, Toast.LENGTH_SHORT, false);
 						}
@@ -303,10 +331,18 @@ public class HomeFragment extends pBaseFragment {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
-			pull_refresh_homepage.onRefreshComplete();
+			pull_refresh_homepage.postDelayed(new Runnable() {
+
+	            @Override
+	            public void run() {
+	            	pull_refresh_homepage.onRefreshComplete();
+	            }
+	        }, 1000);
+
 		}
 
 	}
+
 
 	@SuppressWarnings("static-access")
 	private void init() {
@@ -326,9 +362,9 @@ public class HomeFragment extends pBaseFragment {
 		try {
 			recommenduserbean = JsonDocHelper.toJSONObject(homeCount,
 					RecommendUserBean.class);
-			usersList.addAll(recommenduserbean.users);
 			if (recommenduserbean != null) {
 
+				usersList.addAll(recommenduserbean.users);
 				if (adapter == null) {
 					adapter = new HomepageAdapter(getActivity(), usersList,
 							mShareFileUtils.getString(Constant.PIC_SERVER, ""));

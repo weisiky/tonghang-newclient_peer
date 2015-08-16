@@ -200,13 +200,18 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			pageViewaList.tv_tagname.setText(userbean.getUsername());
 			titlePopup.addAction(new ActionItem(this, getResources().getString(
 					R.string.deletemes), R.color.white));
-			if(isNetworkAvailable){
+			if(!isNetworkAvailable){
+				pLog.i("test", "走网络已连接");
 				/** 获取到与聊天人的会话对象。 **/
 				
 				conversation = EMChatManager.getInstance().getConversation(
 						toChatUsername);
+				pLog.i("test", "单聊conversation:"+conversation);
+				pLog.i("test", "conversation.getMsgCount():"+conversation.getMsgCount());
 				for (int i = 0; i <  conversation.getMsgCount(); i++) {
 					EMMessage message = conversation.getMessage(i);
+					pLog.i("test", "message:"+message.toString());
+					
 					
 					TextMessageBody body = (TextMessageBody) message.getBody();
 					String content = body.getMessage();
@@ -234,10 +239,18 @@ public class SingleChatRoomActivity extends pBaseActivity {
 						entity.setMsgType(Constant.OTHER);
 					}
 					singlechatmsgList.add(entity);
-//					 把此会话的未读数置为0
-					conversation.resetUnreadMsgCount();
 				}
+				if(singlechatadapter == null){
+					singlechatadapter = new ChatMsgViewAdapter(this, singlechatmsgList);
+					pageViewaList.lv_chat.setAdapter(singlechatadapter);				
+				}
+				pageViewaList.lv_chat
+				.setSelection(pageViewaList.lv_chat.getCount() - 1);
+				refresh();
+//					 把此会话的未读数置为0
+				conversation.resetUnreadMsgCount();
 			}else{
+				pLog.i("test", "走网络未连接");
 				/** 获取本地的聊天信息 **/
 				String his_message = pIOUitls.readFileByLines(Constant.C_FILE_CACHE_PATH,
 						"meg_"
@@ -259,18 +272,14 @@ public class SingleChatRoomActivity extends pBaseActivity {
 					}
 					
 				}
+				if(singlechatadapter == null){
+					singlechatadapter = new ChatMsgViewAdapter(this, singlechatmsgList);
+					pageViewaList.lv_chat.setAdapter(singlechatadapter);				
+				}
+				pageViewaList.lv_chat
+						.setSelection(pageViewaList.lv_chat.getCount() - 1);
+				refresh();
 			}
-			
-			
-			if(singlechatadapter == null){
-				singlechatadapter = new ChatMsgViewAdapter(this, singlechatmsgList);
-				pageViewaList.lv_chat.setAdapter(singlechatadapter);				
-			}
-			pageViewaList.lv_chat
-					.setSelection(pageViewaList.lv_chat.getCount() - 1);
-			refresh();
-			
-
 	}
 
 	@Override
@@ -338,7 +347,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			sendMessage();
 			break;
 		case R.id.ll_back:
-					backPage();
+			onBackPressed();
 		default:
 			break;
 		}
@@ -411,7 +420,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			/** 发送者头像 **/
 			String imagurl = mShareFileUtils.getString(Constant.IMAGE, "");
 			/** 发送者id **/
-			String userid = mShareFileUtils.getString(Constant.CLIENT_ID, "");
+//			String userid = mShareFileUtils.getString(Constant.CLIENT_ID, "");
 			SimpleDateFormat formatter = new SimpleDateFormat(
 					"yyyy年MM月dd日   HH:mm:ss     ");
 			Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
@@ -419,13 +428,13 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			ChatMsgEntityBean chat = new ChatMsgEntityBean();
 			chat.setDate(str);
 			chat.setImage(imagurl);
-			chat.setUserId(userid);
+//			chat.setUserId(userid);
 			chat.setMessage(content);
 			chat.setMsgType(Constant.SELF);
 			
 			// 环信发送消息，携带消息内容，自己头像，自己Id
 					easemobchatImp.getInstance().sendMessage(content,
-									Constant.SINGLECHAT, toChatUsername, imagurl, userid);
+									Constant.SINGLECHAT, toChatUsername, imagurl);
 					singlechatmsgList.add(chat);
 			refresh();
 			pageViewaList.lv_chat
@@ -470,15 +479,14 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			String msgid = intent.getStringExtra("msgid");
 			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
 			EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+			String from = message.getFrom();
 			// 如果是群聊消息，获取到group id
 			String image = null;
-			String fromuserid = null;
 			String nickname = null;
 			if(message.getChatType() == ChatType.Chat){
 				pLog.i("test", "单聊监听message.getChatType()："+message.getChatType());
 			try {
 				image = message.getStringAttribute(Constant.IMAGEURL);
-				fromuserid = message.getStringAttribute(Constant.USERID);
 
 			} catch (EaseMobException e) {
 				// TODO Auto-generated catch block
@@ -492,11 +500,14 @@ public class SingleChatRoomActivity extends pBaseActivity {
 					"yyyy年MM月dd日   HH:mm:ss     ");
 			Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
 			String str = formatter.format(curDate);
+
+			pLog.i("test","to:"+from);
+			pLog.i("test","toChatUsername:"+toChatUsername);
+			
+			if(from.equals(toChatUsername)){
 			ChatMsgEntityBean chat = new ChatMsgEntityBean();
 			
-			pLog.i("test","fromuserid:"+fromuserid);
-			
-			chat.setUserId(fromuserid);
+			chat.setUserId(from);
 			chat.setImage(image);
 			chat.setDate(str);
 			chat.setMessage(msg);
@@ -506,6 +517,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			singlechatadapter.notifyDataSetChanged();
 			pageViewaList.lv_chat
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
+			}
 		}
 		}
 	}

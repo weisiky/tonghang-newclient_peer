@@ -30,9 +30,11 @@ import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.event.SkillEvent;
+import com.peer.fragment.HomeFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
@@ -229,6 +231,8 @@ public class MySkillActivity extends pBaseActivity {
 				senduserlabels(
 						mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 						mlist);
+				HomeFragment.pageindex = 0;
+				Recommend_topic.pageindex = 0;
 				pLog.i("test", "mlist:" + mlist);
 				
 			} catch (UnsupportedEncodingException e) {
@@ -277,6 +281,7 @@ public class MySkillActivity extends pBaseActivity {
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
 				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 
@@ -285,6 +290,7 @@ public class MySkillActivity extends pBaseActivity {
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
 				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -293,6 +299,7 @@ public class MySkillActivity extends pBaseActivity {
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
 				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -314,8 +321,8 @@ public class MySkillActivity extends pBaseActivity {
 						
 						if (loginBean.user.getLabels() != null
 								&& loginBean.user.getLabels().size() > 0) {
-							mShareFileUtils.setString(Constant.LABELS,
-									loginBean.user.getLabels().toString());
+							BussinessUtils.saveUserData(loginBean,
+									mShareFileUtils);
 						}
 						
 						Hadtag = mlist.size();
@@ -365,6 +372,8 @@ public class MySkillActivity extends pBaseActivity {
 						mlist.remove(event.getPosition());
 						senduserlabels(mShareFileUtils.getString(
 								Constant.CLIENT_ID, ""), mlist);
+						HomeFragment.pageindex = 0;
+						Recommend_topic.pageindex = 0;
 						pLog.i("test", "mlist:" + mlist);
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
@@ -386,6 +395,8 @@ public class MySkillActivity extends pBaseActivity {
 					senduserlabels(
 							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
 							mlist);
+					HomeFragment.pageindex = 0;
+					Recommend_topic.pageindex = 0;
 					pLog.i("test", "mlist:" + mlist);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block

@@ -416,27 +416,28 @@ public class BussinessUtils {
 	/**
 	 * 保存用户数据
 	 */
+	@SuppressWarnings("static-access")
 	public static void saveUserData(LoginBean loginBean,
 			pShareFileUtils mShareFileUtils) {
-		pShareFileUtils.setString(Constant.PIC_SERVER,
+		mShareFileUtils.setString(Constant.PIC_SERVER,
 				loginBean.getPic_server());
-		pShareFileUtils.setString(Constant.EMAIL, loginBean.user.getEmail());
-		pShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
-		pShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
-		pShareFileUtils.setString(Constant.USERNAME,
+		mShareFileUtils.setString(Constant.EMAIL, loginBean.user.getEmail());
+		mShareFileUtils.setString(Constant.SYS_TIME, loginBean.getSys_time());
+		mShareFileUtils.setString(Constant.SEX, loginBean.user.getSex());
+		mShareFileUtils.setString(Constant.USERNAME,
 				loginBean.user.getUsername());
-		pShareFileUtils.setString(Constant.PHONE, loginBean.user.getPhone());
-		pShareFileUtils.setString(Constant.BIRTH, loginBean.user.getBirth());
-		pShareFileUtils.setString(Constant.USER_IMAGE,
+		mShareFileUtils.setString(Constant.PHONE, loginBean.user.getPhone());
+		mShareFileUtils.setString(Constant.BIRTH, loginBean.user.getBirth());
+		mShareFileUtils.setString(Constant.USER_IMAGE,
 				loginBean.user.getImage());
-		pShareFileUtils.setString(Constant.CREATED_AT,
+		mShareFileUtils.setString(Constant.CREATED_AT,
 				loginBean.user.getCreated_at());
-		pShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
-		pShareFileUtils.setString(Constant.CLIENT_ID,
+		mShareFileUtils.setString(Constant.CITY, loginBean.user.getCity());
+		mShareFileUtils.setString(Constant.CLIENT_ID,
 				loginBean.user.getClient_id());
-		pShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
+		mShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels()
 				.toString());
-		pShareFileUtils.setBoolean(Constant.IS_FRIEND,
+		mShareFileUtils.setBoolean(Constant.IS_FRIEND,
 				loginBean.user.getIs_friend());
 
 	}

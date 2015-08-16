@@ -47,7 +47,7 @@ public interface HttpConfig {
 	/** 查看用户信息 **/
 	public static String USER_IN_URL = SERVER_ADDRESS + "/user/";
 	/** 查看某话题信息 **/
-	public static String TOPIC_IN_URL = SERVER_ADDRESS + "/topics/";
+	public static String TOPIC_IN_URL = SERVER_ADDRESS + "/topic/";
 	/** 设置指定用户标签 **/
 	public static String USER_UPDATE_LABEL_IN_URL = SERVER_ADDRESS
 			+ "/user/update_label/";

@@ -103,7 +103,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 				// ImageLoader加载图片
 					ImageLoaderUtil.getInstance().showHttpImage(
 							((pBaseActivity)context).mShareFileUtils.getString(Constant.PIC_SERVER, "")
-							+entity.getImage() 
+							+entity.getImage() 		
 							, iv_ownerhead,
 							R.drawable.mini_avatar_shadow);
 				 iv_ownerhead.setOnClickListener(new View.OnClickListener() {
@@ -111,19 +111,25 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 						public void onClick(View arg0) {
 							// TODO Auto-generated method stub
 							if(((pBaseActivity)context).isNetworkAvailable){
-								UserBean userbean = entity.getUserbean();
-								if(userbean != null ){
-									pLog.i("test","bean不为空"+userbean);
-									PersonpageBean.getInstance().setUser(userbean);
-									Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
-									context.startActivity(topersonalpage);
-								}else{
-									pLog.i("test","bean为空");
-									pLog.i("test","client_id:"+ entity.getUserId());
+//								UserBean userbean = entity.getUserbean();
+//								pLog.i("test","用户信息："+userbean.getUsername());
+								pLog.i("test","用户信息："+entity.getUserId());
+//								pLog.i("test","用户信息："+userbean.getSex());
+//								pLog.i("test","用户信息："+userbean.getLabels());
+//								if(userbean != null ){
+//									pLog.i("test","bean不为空"+userbean);
+//									pLog.i("test","用户名："+userbean.getUsername());
+//									PersonpageBean.getInstance().setUser(userbean);
+//									
+//									Intent topersonalpage=new Intent(context,PersonalPageActivity.class);
+//									context.startActivity(topersonalpage);
+//								}else{
+//									pLog.i("test","bean为空");
+//									pLog.i("test","client_id:"+ entity.getUserId());
 									Intent topersonalpage=new Intent(context,OtherPageActivity.class);
 									topersonalpage.putExtra("client_id", entity.getUserId());
 									context.startActivity(topersonalpage);
-								}
+//								}
 								
 							}else{
 								((pBaseActivity)context).showToast(context.getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
@@ -145,7 +151,7 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 				// ImageLoader加载图片
 					ImageLoaderUtil.getInstance().showHttpImage(
 							((pBaseActivity)context).mShareFileUtils.getString(Constant.PIC_SERVER, "")
-							+entity.getImage() 
+							+ ((pBaseActivity)context).mShareFileUtils.getString(Constant.IMAGE,"")
 							, iv_userhead,
 							R.drawable.mini_avatar_shadow);
 				 iv_userhead.setOnClickListener(new View.OnClickListener() {

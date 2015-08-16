@@ -170,6 +170,7 @@ public class OtherPageActivity extends pBaseActivity{
 			if (isNetworkAvailable) {
 				Intent intent = new Intent(OtherPageActivity.this,
 						TopicActivity.class);
+				intent.putExtra("bean", bean);
 				intent.putExtra("client_id", bean.getClient_id());
 				intent.putExtra("image", bean.getImage());
 				intent.putExtra("nike", bean.getUsername());
@@ -260,7 +261,10 @@ public class OtherPageActivity extends pBaseActivity{
 			skill.setTag("" + i);
 			tag_container.addView(skill);
 		}
-
+		if(userbean.getHas_invitation()){
+			pageViewaList.addfriends.setText("等待中..");
+			pageViewaList.addfriends.setEnabled(false);
+		}else{
 		pageViewaList.btnSend.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -280,19 +284,19 @@ public class OtherPageActivity extends pBaseActivity{
 //				}
 			}
 		});
+		}
 		pageViewaList.addfriends.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				if (!userbean.getIs_friend()) {
-					Intent intent = new Intent(OtherPageActivity.this,
-							AddFriendsActivity.class);
+					Intent intent = new Intent();
 					intent.putExtra("user_client_id", userbean.getClient_id());
 					intent.putExtra("image", userbean.getImage());
 					intent.putExtra("nike", userbean.getUsername());
 					intent.putExtra("email", userbean.getEmail());
-					startActivity(intent);
+					startActivityForLeft(AddFriendsActivity.class, intent, false);
 				} else {
 					showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
 				}
@@ -318,7 +322,7 @@ public class OtherPageActivity extends pBaseActivity{
 //		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
-		ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
 
@@ -426,6 +430,7 @@ public class OtherPageActivity extends pBaseActivity{
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -435,6 +440,7 @@ public class OtherPageActivity extends pBaseActivity{
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -444,6 +450,7 @@ public class OtherPageActivity extends pBaseActivity{
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -503,7 +510,7 @@ public class OtherPageActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -512,6 +519,7 @@ public class OtherPageActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -520,6 +528,7 @@ public class OtherPageActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

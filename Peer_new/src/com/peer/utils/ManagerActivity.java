@@ -129,8 +129,10 @@ public class ManagerActivity {
 		for (int i = 0; i < activityStack.size(); i++) {
 			if (null != activityStack.get(i)) {
 				activityStack.get(i).finish();
+				pLog.i("test", "activity:"+activityStack.get(i));
 			}
 		}
+		pLog.i("test", "activity:"+activityStack.size());
 		activityStack.clear();
 	}
 
@@ -147,6 +149,7 @@ public class ManagerActivity {
 		try {
 			finishAllActivity();
 			 System.exit(0);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -172,5 +175,6 @@ public class ManagerActivity {
 				| Intent.FLAG_ACTIVITY_NEW_TASK);
 		i.putExtra(Constant.RELOGIN, Constant.RELOGIN);
 		context.startActivity(i);
+		
 	}
 }

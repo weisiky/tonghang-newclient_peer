@@ -56,7 +56,7 @@ public class pBaseApplication extends Application {
 
 		pLog.isDebug = true;
 
-		// 程序crash处理程序。
+//		 程序crash处理程序。
 //		CrashHandler.instance(this).init();
 		// 初始化图片加载程序
 		ImageLoaderUtil.getInstance();

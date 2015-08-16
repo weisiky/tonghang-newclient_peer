@@ -205,11 +205,15 @@ public class CreatTopicActivity extends pBaseActivity {
 			}
 			break;
 		case R.id.rl_mytopic:
-			PersonpageBean.getInstance().setUser(new UserBean());
-			PersonpageBean.getInstance().getUser().setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-			System.out.println("NICKNAME："+mShareFileUtils.getString(Constant.NICKNAME, ""));
+//			PersonpageBean.getInstance().setUser(new UserBean());
+//			PersonpageBean.getInstance().getUser().setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+//			System.out.println("NICKNAME："+mShareFileUtils.getString(Constant.NICKNAME, ""));
+			UserBean userbean = new UserBean();
+			userbean.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+			pLog.i("test","传过去的client_id"+userbean.getClient_id());
 			Intent mytopic = new Intent(CreatTopicActivity.this,
 					TopicActivity.class);
+			mytopic.putExtra("bean", userbean);
 			mytopic.putExtra("image", mShareFileUtils.getString(Constant.IMAGE, ""));
 			mytopic.putExtra("nike", mShareFileUtils.getString(Constant.NICKNAME, ""));
 			mytopic.putExtra("email", mShareFileUtils.getString(Constant.EMAIL, ""));
@@ -321,6 +325,7 @@ public class CreatTopicActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -330,6 +335,7 @@ public class CreatTopicActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -339,6 +345,7 @@ public class CreatTopicActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

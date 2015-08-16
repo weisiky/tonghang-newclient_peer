@@ -60,7 +60,6 @@ public class FxService extends Service
 	{
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Log.i(TAG, "oncreat");
 		pLog.i("test", "oncreat");
         //Toast.makeText(FxService.this, "create FxService", Toast.LENGTH_LONG);		
 	}
@@ -74,40 +73,26 @@ public class FxService extends Service
 	@Deprecated
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
-		image=intent.getStringExtra(Constant.F_IMAGE);
-		ownernike=intent.getStringExtra(Constant.F_OWNERNIKE);
-		theme=intent.getStringExtra(Constant.F_THEME);
-		tagname=intent.getStringExtra(Constant.F_TAGNAME);
-		userId=intent.getStringExtra(Constant.F_USERID);
-		topicid=intent.getStringExtra(Constant.F_TOPICID);
-		roomaddress=intent.getStringExtra(Constant.F_ROOMID);
+//		image=intent.getStringExtra(Constant.F_IMAGE);
+//		ownernike=intent.getStringExtra(Constant.F_OWNERNIKE);
+//		theme=intent.getStringExtra(Constant.F_THEME);
+//		tagname=intent.getStringExtra(Constant.F_TAGNAME);
+//		userId=intent.getStringExtra(Constant.F_USERID);
+//		topicid=intent.getStringExtra(Constant.F_TOPICID);
+//		roomaddress=intent.getStringExtra(Constant.F_ROOMID);
 		fromfloat = intent.getStringExtra(Constant.FROMFLOAT);
 		mShareFileUtils.initSharePre(getApplicationContext(),
 				Constant.SHARE_NAME, 0);
-		pLog.i("test", "image:"+image);		
-		pLog.i("test", "ownernike:"+ownernike);		
-		pLog.i("test", "theme:"+theme);		
-		pLog.i("test", "tagname:"+tagname);		
-		pLog.i("test", "userId:"+userId);		
-		pLog.i("test", "topicid:"+topicid);		
-		pLog.i("test", "roomaddress:"+roomaddress);		
 		
-		mShareFileUtils.setString(Constant.F_IMAGE, image);
-		mShareFileUtils.setString(Constant.F_OWNERNIKE, ownernike);
-		mShareFileUtils.setString(Constant.F_THEME, theme);
-		mShareFileUtils.setString(Constant.F_TAGNAME, tagname);
-		mShareFileUtils.setString(Constant.F_USERID, userId);
-		mShareFileUtils.setString(Constant.F_TOPICID, topicid);
-		mShareFileUtils.setString(Constant.F_ROOMID, roomaddress);
+//		mShareFileUtils.setString(Constant.F_IMAGE, image);
+//		mShareFileUtils.setString(Constant.F_OWNERNIKE, ownernike);
+//		mShareFileUtils.setString(Constant.F_THEME, theme);
+//		mShareFileUtils.setString(Constant.F_TAGNAME, tagname);
+//		mShareFileUtils.setString(Constant.F_USERID, userId);
+//		mShareFileUtils.setString(Constant.F_TOPICID, topicid);
+//		mShareFileUtils.setString(Constant.F_ROOMID, roomaddress);
 		mShareFileUtils.setString(Constant.FROMFLOAT, fromfloat);
 		
-		pLog.i("test", "F_IMAGE:"+mShareFileUtils.getString(Constant.F_IMAGE, ""));		
-		pLog.i("test", "F_OWNERNIKE:"+mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));		
-		pLog.i("test", "F_THEME:"+mShareFileUtils.getString(Constant.F_THEME, ""));		
-		pLog.i("test", "F_TAGNAME:"+mShareFileUtils.getString(Constant.F_TAGNAME, ""));		
-		pLog.i("test", "F_USERID:"+mShareFileUtils.getString(Constant.F_USERID, ""));		
-		pLog.i("test", "F_TOPICID:"+mShareFileUtils.getString(Constant.F_TOPICID, ""));		
-		pLog.i("test", "F_ROOMID:"+mShareFileUtils.getString(Constant.F_ROOMID, ""));		
 		createFloatView();
 		super.onStart(intent, startId);
 	}
@@ -147,7 +132,7 @@ public class FxService extends Service
      // ImageLoader加载图片
      		ImageLoaderUtil.getInstance().showHttpImage(
      				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
-     				+ image
+     				+ mShareFileUtils.getString(Constant.IMAGE, "")
      				, mFloatView,
      				R.drawable.mini_avatar_shadow);
        
@@ -177,13 +162,11 @@ public class FxService extends Service
 	            				&&-(mFloatView.getMeasuredHeight()/2-25)<ydown-yup&&ydown-yup<(mFloatView.getMeasuredHeight()/2-25)){
 	            			ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
 	            			Intent intent=new Intent(FxService.this,MultiChatRoomActivity.class);
-	            			intent.putExtra(Constant.F_IMAGE, image);
-	            			intent.putExtra(Constant.F_OWNERNIKE, ownernike);
-	            			intent.putExtra(Constant.F_THEME, theme);			
-	            			intent.putExtra(Constant.F_TAGNAME, tagname);
-	            			intent.putExtra(Constant.F_USERID, userId);
-	            			intent.putExtra(Constant.F_ROOMID, roomaddress);
-	            			intent.putExtra(Constant.F_TOPICID, topicid);
+	            			intent.putExtra(Constant.F_THEME, mShareFileUtils.getString(Constant.F_THEME, ""));			
+	            			intent.putExtra(Constant.F_TAGNAME, mShareFileUtils.getString(Constant.F_TAGNAME, ""));
+//	            			intent.putExtra(Constant.F_USERID, userId);
+	            			intent.putExtra(Constant.F_ROOMID, mShareFileUtils.getString(Constant.F_ROOMID, ""));
+	            			intent.putExtra(Constant.F_TOPICID, mShareFileUtils.getString(Constant.F_TOPICID, ""));
 	            			intent.putExtra(Constant.FROMFLOAT, fromfloat);
 	            			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	            			startActivity(intent);

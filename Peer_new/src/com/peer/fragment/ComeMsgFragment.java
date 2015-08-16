@@ -38,7 +38,7 @@ import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseFragment;
-import com.peer.bean.JoinTopicBean;
+import com.peer.bean.ComMesTopicBean;
 import com.peer.bean.LoginBean;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendUserBean;
@@ -93,11 +93,12 @@ public class ComeMsgFragment extends pBaseFragment {
 		lv_come = (ListView) getView().findViewById(R.id.lv_come);
 		try {
 		for (EMConversation em : loadConversationsWithRecentChat()) {
+			pLog.i("test", "环信未读消息id:"+em.getUserName());
 			if(!em.getUserName().matches(isnumber)){
 					senduser(em.getUserName()
 							,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 			}else{
-				sendtopic(em.getUserName());
+//				sendtopic(em.getUserName());
 			}
 		}
 		} catch (UnsupportedEncodingException e) {
@@ -124,7 +125,7 @@ public class ComeMsgFragment extends pBaseFragment {
 						senduser(em.getUserName()
 								,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 				}else{
-					sendtopic(em.getUserName());
+//					sendtopic(em.getUserName());
 				}
 			}
 			} catch (UnsupportedEncodingException e) {
@@ -233,7 +234,7 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -242,6 +243,7 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -250,6 +252,7 @@ public class ComeMsgFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -318,14 +321,18 @@ public class ComeMsgFragment extends pBaseFragment {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		HttpUtil.post(HttpConfig.USER_IN_URL + topic_id + ".json", params,
+		HttpUtil.post(HttpConfig.TOPIC_IN_URL + topic_id + ".json", params,
 				new JsonHttpResponseHandler() {
 			
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
-				
+				pLog.i("test","statusCode:"+statusCode);
+				pLog.i("test","headers:"+headers);
+				pLog.i("test","responseString:"+responseString);
+				pLog.i("test","throwable:"+throwable);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString,
 						throwable);
 			}
@@ -334,6 +341,11 @@ public class ComeMsgFragment extends pBaseFragment {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
+				pLog.i("test","statusCode:"+statusCode);
+				pLog.i("test","headers:"+headers);
+				pLog.i("test","throwable:"+throwable);
+				pLog.i("test","errorResponse:"+errorResponse);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable,
 						errorResponse);
 			}
@@ -342,6 +354,11 @@ public class ComeMsgFragment extends pBaseFragment {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
+				pLog.i("test","statusCode:"+statusCode);
+				pLog.i("test","headers:"+headers);
+				pLog.i("test","throwable:"+throwable);
+				pLog.i("test","errorResponse:"+errorResponse);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable,
 						errorResponse);
 			}
@@ -351,15 +368,15 @@ public class ComeMsgFragment extends pBaseFragment {
 					JSONObject response) {
 				// TODO Auto-generated method stub
 				try {
-					pLog.i("test","respons:"+response.toString());
+					pLog.i("test","sendtopic:"+response.toString());
 					JSONObject result = response.getJSONObject("success");
 					
 					String code = result.getString("code");
 					pLog.i("test", "code:"+code);
 					if(code.equals("200")){
-						JoinTopicBean comMesTopicBean = JsonDocHelper.toJSONObject(
+						ComMesTopicBean comMesTopicBean = JsonDocHelper.toJSONObject(
 								response.getJSONObject("success")
-								.toString(), JoinTopicBean.class);
+								.toString(), ComMesTopicBean.class);
 						if(comMesTopicBean!=null){
 							Map map = new HashMap();
 							map.put("bean", comMesTopicBean);
@@ -384,7 +401,7 @@ public class ComeMsgFragment extends pBaseFragment {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				 refresh1();
 				super.onSuccess(statusCode, headers, response);
 				
 			}

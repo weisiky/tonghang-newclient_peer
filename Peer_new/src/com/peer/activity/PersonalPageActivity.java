@@ -160,6 +160,7 @@ public class PersonalPageActivity extends pBaseActivity {
 			if (isNetworkAvailable) {
 				Intent intent = new Intent(PersonalPageActivity.this,
 						TopicActivity.class);
+				intent.putExtra("bean", userbean);
 				intent.putExtra("client_id", userbean.getClient_id());
 				intent.putExtra("image", userbean.getImage());
 				intent.putExtra("nike", userbean.getUsername());
@@ -224,21 +225,22 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.ll_personpagebottom.setVisibility(View.INVISIBLE);
 
 		
-		
-		File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
-		if (file.exists()) {
+			
+//		File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+//		if (file.exists()) {
 			pageViewaList.personhead.setImageBitmap(BussinessUtils.decodeFile(
 					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
 			ImageLoaderUtil.getInstance().showHttpImage(
-					pic_server + userbean.getImage(), pageViewaList.personhead,
+					pic_server + mShareFileUtils.getString(Constant.IMAGE,"")
+					, pageViewaList.personhead,
 					R.drawable.mini_avatar_shadow);
 
-		} else {
-			// ImageLoader加载图片
-			ImageLoaderUtil.getInstance().showHttpImage(
-					pic_server + userbean.getImage(), pageViewaList.personhead,
-					R.drawable.mini_avatar_shadow);
-		}
+//		} else {
+//			// ImageLoader加载图片
+//			ImageLoaderUtil.getInstance().showHttpImage(
+//					pic_server + userbean.getImage(), pageViewaList.personhead,
+//					R.drawable.mini_avatar_shadow);
+//		}
 		
 
 		pageViewaList.personnike.setText(userbean.getUsername());
@@ -476,6 +478,7 @@ public class PersonalPageActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -485,6 +488,7 @@ public class PersonalPageActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -494,6 +498,7 @@ public class PersonalPageActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -554,7 +559,7 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -563,6 +568,7 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -571,6 +577,7 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

@@ -21,14 +21,14 @@ import com.peer.utils.pViewBox;
  */
 public class MessageNotifyActivity extends pBaseActivity{
 	
-	private final int START=1,END=2; 
-	int starth=22,startm=30,endh=8,endm=30;
+//	private final int START=1,END=2; 
+//	int starth=22,startm=30,endh=8,endm=30;
 	
 	private PageViewList pageViewaList;
 	
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title,end,start;
+		private TextView tv_title;
 		private CheckBox cb_sound,cb_vibrate;
 	}
 
@@ -66,8 +66,8 @@ public class MessageNotifyActivity extends pBaseActivity{
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
-		pageViewaList.start.setOnClickListener(this);
-		pageViewaList.end.setOnClickListener(this);
+//		pageViewaList.start.setOnClickListener(this);
+//		pageViewaList.end.setOnClickListener(this);
 		
 		pageViewaList.cb_sound.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -129,12 +129,12 @@ public class MessageNotifyActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
-		case R.id.start:
-			showDialog(START);
-			break;
-		case R.id.end:
-			showDialog(END);
-			break;
+//		case R.id.start:
+//			showDialog(START);
+//			break;
+//		case R.id.end:
+//			showDialog(END);
+//			break;
 
 		default:
 			break;
@@ -148,10 +148,10 @@ public class MessageNotifyActivity extends pBaseActivity{
 	protected Dialog onCreateDialog(int id) {
 		// TODO Auto-generated method stub
 		switch (id) {
-		case START:
-			return new TimePickerDialog(this, mtimesetListener1, starth, startm, true);
-		case END:
-			return new TimePickerDialog(this, mtimesetListener2, endh, endm, true);
+//		case START:
+//			return new TimePickerDialog(this, mtimesetListener1, starth, startm, true);
+//		case END:
+//			return new TimePickerDialog(this, mtimesetListener2, endh, endm, true);
 		default:
 			break;
 		}
@@ -163,11 +163,11 @@ public class MessageNotifyActivity extends pBaseActivity{
 	        @Override  
 	        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {  
 	            // TODO Auto-generated method stub  
-	            starth = hourOfDay;  
-	            startm = minute; 
-	            mShareFileUtils.setInt("starth", starth);
-	            mShareFileUtils.setInt("startm", startm);
-	            pageViewaList.start.setText(new StringBuilder().append(starth).append(":").append(startm));
+//	            starth = hourOfDay;  
+//	            startm = minute; 
+//	            mShareFileUtils.setInt("starth", starth);
+//	            mShareFileUtils.setInt("startm", startm);
+//	            pageViewaList.start.setText(new StringBuilder().append(starth).append(":").append(startm));
 //	            updateDisplay();  
 	        }    
 	    };
@@ -176,11 +176,11 @@ public class MessageNotifyActivity extends pBaseActivity{
 		        @Override  
 		        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {  
 		            // TODO Auto-generated method stub  
-		            endh = hourOfDay;  
-		            endm = minute;  
-		            mShareFileUtils.setInt("endh", endh);
-		            mShareFileUtils.setInt("endm", endm);
-		            pageViewaList.end.setText(new StringBuilder().append(endh).append(":").append(endm));
+//		            endh = hourOfDay;  
+//		            endm = minute;  
+//		            mShareFileUtils.setInt("endh", endh);
+//		            mShareFileUtils.setInt("endm", endm);
+//		            pageViewaList.end.setText(new StringBuilder().append(endh).append(":").append(endm));
 //		            updateDisplay();  
 		        }    
 		    };

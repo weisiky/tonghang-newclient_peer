@@ -195,6 +195,7 @@ public class NewfriendsAdapter extends pBaseAdapter {
 				pLog.i("test", "headers:" + headers);
 				pLog.i("test", "throwable:" + throwable);
 				pLog.i("test", "errorResponse:" + errorResponse);
+				((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -207,6 +208,7 @@ public class NewfriendsAdapter extends pBaseAdapter {
 				pLog.i("test", "headers:" + headers);
 				pLog.i("test", "responseString:" + responseString);
 				pLog.i("test", "throwable:" + throwable);
+				((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 
@@ -219,6 +221,7 @@ public class NewfriendsAdapter extends pBaseAdapter {
 				pLog.i("test", "headers:" + headers);
 				pLog.i("test", "throwable:" + throwable);
 				pLog.i("test", "errorResponse:" + errorResponse);
+				((pBaseActivity)mContext).showToast(((pBaseActivity)mContext).getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 

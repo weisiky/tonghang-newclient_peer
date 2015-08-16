@@ -70,7 +70,7 @@ public class easemobchatImp implements IM{
 	
 	
 	@Override
-	public void sendMessage(String content, int chattype,String targetId,String imageUrl,String userid) {
+	public void sendMessage(String content, int chattype,String targetId,String imageUrl) {
 		// TODO Auto-generated method stub
 		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
 		// 如果是群聊，设置chattype,默认是单聊
@@ -82,8 +82,7 @@ public class easemobchatImp implements IM{
 		//自定义扩展消息，用于头像
 		message.setAttribute(Constant.IMAGEURL, imageUrl);
 		//自定义扩展消息，用于携带用户Id
-		message.setAttribute(Constant.USERID, userid);
-		
+//		message.setAttribute(Constant.USERID, userid);
 		// 设置要发给谁
 		message.setReceipt(targetId);		
 		try {

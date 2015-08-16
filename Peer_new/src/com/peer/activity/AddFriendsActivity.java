@@ -28,6 +28,7 @@ import com.peer.R;
 import com.peer.adapter.HomepageAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
+import com.peer.base.pBaseApplication;
 import com.peer.bean.PersonpageBean;
 import com.peer.bean.RecommendUserBean;
 import com.peer.net.HttpConfig;
@@ -61,7 +62,6 @@ public class AddFriendsActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public class AddFriendsActivity extends pBaseActivity {
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendaddfriend(String invitee_id, String reason,
+	private void sendaddfriend(final String invitee_id, String reason,
 			String client_id) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		RequestParams params = null;
@@ -196,6 +196,11 @@ public class AddFriendsActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","responseString:"+responseString);
+						pLog.i("test","throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -205,6 +210,11 @@ public class AddFriendsActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","errorResponse:"+errorResponse);
+						pLog.i("test","throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -214,6 +224,11 @@ public class AddFriendsActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						pLog.i("test","statusCode:"+statusCode);
+						pLog.i("test","headers:"+headers);
+						pLog.i("test","errorResponse:"+errorResponse);
+						pLog.i("test","throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -229,8 +244,10 @@ public class AddFriendsActivity extends pBaseActivity {
 							pLog.i("test", "code:"+code);
 							if (code.equals("200")) {
 								showToast("请求已送达！", Toast.LENGTH_SHORT, false);
-								PersonpageBean.getInstance().getUser().setHas_invitation(true);
-								finish();
+//								PersonpageBean.getInstance().getUser().setHas_invitation(true);
+								Intent intent = new Intent();
+								intent.putExtra("client_id", invitee_id);
+								startActivityForLeft(OtherPageActivity.class, intent, false);
 							}else if(code.equals("500")){
 								
 							}else{

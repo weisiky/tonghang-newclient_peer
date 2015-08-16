@@ -63,6 +63,7 @@ public class WelComeActivity extends pBaseActivity {
 		animation.setDuration(4000);
 		pageViewaList.welLin.startAnimation(animation);
 		if (isNetworkAvailable) {
+			pLog.i("test", "连网自动登录中。。。");
 			sendSystemConfig();
 		} else {
 			runNextPage();
@@ -120,7 +121,7 @@ public class WelComeActivity extends pBaseActivity {
 			public void onFinish() {
 				Intent intent = new Intent();
 				if (!mShareFileUtils.getString(Constant.CLIENT_ID, "").equals(
-						"")) {
+						"")&&!mShareFileUtils.getString(Constant.BIRTH, "").equals("")) {
 					startActivityForLeft(MainActivity.class, intent, false);
 				} else {
 					startActivityForLeft(LoginActivity.class, intent, false);
@@ -141,31 +142,40 @@ public class WelComeActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						super.onSuccess(statusCode, headers, response);
+						
 
-
+						pLog.i("test","response:"+response.toString());
 						Intent intent = new Intent();
-
+						JSONObject reasult;
 						try {
+							reasult = response.getJSONObject("success");
+						
 							mShareFileUtils.setBoolean(Constant.CAN_LOGIN,
-									response.getJSONObject("system")
+									reasult.getJSONObject("system")
 											.getBoolean("can_login"));
 							mShareFileUtils
 									.setBoolean(
 											Constant.CAN_UPGRADE_SILENTLY,
-											response.getJSONObject("system")
+											reasult.getJSONObject("system")
 													.getBoolean(
 															"can_upgrade_silently"));
 							mShareFileUtils.setBoolean(
-									Constant.CAN_REGISTER_USER, response
+									Constant.CAN_REGISTER_USER, reasult
 											.getJSONObject("system")
 											.getBoolean("can_register_user"));
 							mShareFileUtils.setString(
 									Constant.CAN_REGISTER_USER,
-									response.getJSONObject("system").getString(
+									reasult.getJSONObject("system").getString(
 											"time"));
 
-							if (response.getJSONObject("system").getBoolean(
+							pLog.i("test","CAN_UPGRADE_SILENTLY:"+reasult.getJSONObject("system")
+									.getBoolean(
+											"can_upgrade_silently"));
+							pLog.i("test","CLIENT_ID:"+mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""));
+							pLog.i("test","BIRTH:"+mShareFileUtils.getString(
+									Constant.BIRTH, ""));
+							if (reasult.getJSONObject("system").getBoolean(
 									"can_login")
 									&& !mShareFileUtils.getString(
 											Constant.CLIENT_ID, "").equals("")
@@ -185,25 +195,12 @@ public class WelComeActivity extends pBaseActivity {
 									false);
 							e.printStackTrace();
 						}
-
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						// TODO Auto-generated method stub
 						super.onSuccess(statusCode, headers, response);
 					}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							String responseString) {
-						// TODO Auto-generated method stub
-
-						super.onSuccess(statusCode, headers, responseString);
-					}
 
 				});
+		
 
 	}
 

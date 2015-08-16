@@ -1,6 +1,9 @@
 package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.tools.ant.taskdefs.Sleep;
@@ -73,12 +76,14 @@ public class MainActivity extends pBaseActivity {
 	private int index;
 	private int currentTabIndex;
 	private int intnewfriendsnum;
-	private BadgeView unredmsg,bdnewfriendsnum;
+	private BadgeView unredmsg, bdnewfriendsnum;
 
 	private PageViewList pageViewaList;
-	
+
 	private NewMessageBroadcastReceiver msgReceiver;
 
+	private String isnumber = "^\\d+$";// 正则用来匹配纯数字
+	
 	private String mPageName = "MainActivity";
 
 	class PageViewList {
@@ -95,20 +100,19 @@ public class MainActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		init();
-		registerEMchat();
+		 registerEMchat();
 		// 考虑到用户流量的限制，目前我们默认在Wi-Fi接入情况下才进行自动提醒。如需要在任意网络环境下都进行更新自动提醒，
 		// 则请在update调用之前添加以下代码：
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		if(pBaseApplication.updateflag){
-			pBaseApplication.updateflag=false;
+		if (pBaseApplication.updateflag) {
+			pBaseApplication.updateflag = false;
 			UmengUpdateAgent.update(this);
 		}
 
 		// v2.4版本以后的SDK中默认开启了集成检测功能，在调用任意的更新接口后，我们将替您自动检查上述集成过程中2、3两个步骤是否被正确完成。
 		// 如果正确完成不会出现任何提示，否则会以如下的toast提示您。
 		// 你可以通过调用UmengUpdateAgent.setUpdateCheckConfig(false)来禁用此功能。
-//		UmengUpdateAgent.setUpdateCheckConfig(false);
+		// UmengUpdateAgent.setUpdateCheckConfig(false);
 
 	}
 
@@ -133,9 +137,9 @@ public class MainActivity extends pBaseActivity {
 		pageViewaList.tv_find.setTextColor(getResources().getColor(
 				R.color.bottomtextblue));
 		pageViewaList.iv_backfind.setImageResource(R.drawable.peer_press);
-		
-		unredmsg=new BadgeView(this,pageViewaList.showmessgenum);
-		bdnewfriendsnum=new BadgeView(this,pageViewaList.tv_newfriendsnum);
+
+		unredmsg = new BadgeView(this, pageViewaList.showmessgenum);
+		bdnewfriendsnum = new BadgeView(this, pageViewaList.tv_newfriendsnum);
 
 	}
 
@@ -156,7 +160,7 @@ public class MainActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-
+		init();
 	}
 
 	@Override
@@ -256,16 +260,15 @@ public class MainActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onPageStart(mPageName);
-		
-		
-				// TODO Auto-generated method stub
-				try {
-					sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}		
+
+		// TODO Auto-generated method stub
+		try {
+			sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -273,14 +276,13 @@ public class MainActivity extends pBaseActivity {
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
 		homefragment.base_neterror_item.setVisibility(View.GONE);
-		if(EMChatManager.getInstance().isConnected()){
-			
-		}else{
+		if (EMChatManager.getInstance().isConnected()) {
+
+		} else {
 			easemobchatImp.getInstance().login(
-					mShareFileUtils.getString(Constant.CLIENT_ID, "")
-					.replace("-", ""),
-					mShareFileUtils.getString(
-							Constant.PASSWORD, ""));
+					mShareFileUtils.getString(Constant.CLIENT_ID, "").replace(
+							"-", ""),
+					mShareFileUtils.getString(Constant.PASSWORD, ""));
 		}
 	}
 
@@ -289,8 +291,7 @@ public class MainActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		homefragment.base_neterror_item.setVisibility(View.VISIBLE);
 	}
-	
-	
+
 	/**
 	 * 获取新朋友请求
 	 * 
@@ -300,14 +301,14 @@ public class MainActivity extends pBaseActivity {
 	private void sendnewfriend(String client_id) {
 		// TODO Auto-generated method stub
 
-//		 RequestParams params = null;
-//		 try {
-//		 params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
-//		 } catch (Exception e1) {
-//		 // TODO Auto-generated catch block
-//		 e1.printStackTrace();
-//		 }
-		
+		// RequestParams params = null;
+		// try {
+		// params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
 		HttpUtil.post(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
 				new JsonHttpResponseHandler() {
 
@@ -316,11 +317,13 @@ public class MainActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "responseString:"+responseString);
-						pLog.i("test", "throwable:"+throwable);
-						
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "responseString:" + responseString);
+						pLog.i("test", "throwable:" + throwable);
+//						showToast(
+//								getResources().getString(R.string.config_error),
+//								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -330,11 +333,13 @@ public class MainActivity extends pBaseActivity {
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
-						
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "errorResponse:" + errorResponse);
+						pLog.i("test", "throwable:" + throwable);
+//						showToast(
+//								getResources().getString(R.string.config_error),
+//								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -344,10 +349,13 @@ public class MainActivity extends pBaseActivity {
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "errorResponse:" + errorResponse);
+						pLog.i("test", "throwable:" + throwable);
+//						showToast(
+//								getResources().getString(R.string.config_error),
+//								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -368,23 +376,23 @@ public class MainActivity extends pBaseActivity {
 
 							if (newfriendbean != null) {
 
-								intnewfriendsnum=newfriendbean.getInvitationbean().size();
-								friendsfragment.setNewfriendsNum(intnewfriendsnum);
+								intnewfriendsnum = newfriendbean
+										.getInvitationbean().size();
+								friendsfragment
+										.setNewfriendsNum(intnewfriendsnum);
 								runOnUiThread(new Runnable() {
 									public void run() {
-										updatenewfriends();	
+										updatenewfriends();
 										updateUnreadLabel();
 									}
 								});
 							}
-							
+
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-
-						
 
 						super.onSuccess(statusCode, headers, response);
 					}
@@ -392,86 +400,120 @@ public class MainActivity extends pBaseActivity {
 				});
 
 	}
-	
-	public void updatenewfriends(){
-		if(intnewfriendsnum>0){
-			bdnewfriendsnum.setText(String.valueOf(intnewfriendsnum)); 
-//			bdnewfriendsnum.setTextSize(11);
-//			bdnewfriendsnum.setBadgeMargin(1,1);
+
+	public void updatenewfriends() {
+		if (intnewfriendsnum > 0) {
+			bdnewfriendsnum.setText(String.valueOf(intnewfriendsnum));
+			// bdnewfriendsnum.setTextSize(11);
+			// bdnewfriendsnum.setBadgeMargin(1,1);
 			bdnewfriendsnum.show();
-		}else{
+		} else {
 			bdnewfriendsnum.hide();
 		}
 	}
-	
-	
+
 	/**
 	 * 环信注册监听
 	 */
 	private void registerEMchat() {
-		// TODO Auto-generated method stub		
-		if(EMChatManager.getInstance().isConnected()){
+		// TODO Auto-generated method stub
+		if (EMChatManager.getInstance().isConnected()) {
 			msgReceiver = new NewMessageBroadcastReceiver();
-			IntentFilter intentFilter = new IntentFilter(
-					EMChatManager.getInstance().getNewMessageBroadcastAction());
+			IntentFilter intentFilter = new IntentFilter(EMChatManager
+					.getInstance().getNewMessageBroadcastAction());
 			intentFilter.setPriority(3);
 			registerReceiver(msgReceiver, intentFilter);
-			EMChatManager.getInstance().addConnectionListener(new IMconnectionListner());
-			
+			EMChatManager.getInstance().addConnectionListener(
+					new IMconnectionListner());
+
 			EMChat.getInstance().setAppInited();
-		}		
+		}
 	}
 	
+	private List<EMConversation> loadConversationsWithRecentChat() {
+		// 获取所有会话，包括陌生人
+		Hashtable<String, EMConversation> conversations = EMChatManager
+				.getInstance().getAllConversations();
+		List<EMConversation> list = new ArrayList<EMConversation>();
+		// 过滤掉messages seize为0的conversation
+		for (EMConversation conversation : conversations.values()) {
+			if (conversation.getAllMessages().size() != 0)
+				list.add(conversation);
+		}
+		// 排序
+//		sortConversationByLastChatTime(list);
+		return list;
+	}
 	
+
 	/**
 	 * 刷新未读消息数
 	 */
 	public void updateUnreadLabel() {
-		int count = easemobchatImp.getInstance().getUnreadMesTotal();
-		pLog.i("test", "未读消息count:"+count);
-		EMConversation conversation = EMChatManager.getInstance()
-				.getConversation(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-		int count1 = conversation.getUnreadMsgCount();
-		pLog.i("test", "未读消息count1:"+count1);
+		int count = 0;
+//		int count = easemobchatImp.getInstance().getUnreadMesTotal();
+//		pLog.i("test", "未读消息count:" + count);
+		for (EMConversation em : loadConversationsWithRecentChat()) {
+			if(!em.getUserName().matches(isnumber)){
+				EMConversation conversation = EMChatManager.getInstance()
+						.getConversation(em.getUserName());
+				if (conversation.getUnreadMsgCount() > 0) {				
+					count = count + conversation.getUnreadMsgCount();
+				}
+			}else{
+				
+			}
+		}
 		if (count > 0) {
-			unredmsg.setText(String.valueOf(count));
-//			unredmsg.setTextSize(11);
-//			unredmsg.setBadgeMargin(1,1);
-			unredmsg.show();
+				unredmsg.setText(String.valueOf(count));
+				// unredmsg.setTextSize(11);
+				// unredmsg.setBadgeMargin(1,1);
+				unredmsg.show();
 		} else {
 			unredmsg.hide();
 		}
 	}
-	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	    	abortBroadcast();
-	        //消息id
-	        String msgId = intent.getStringExtra("msgid");
-	        //发消息的人的username(userid)
-	        String msgFrom = intent.getStringExtra("from");
-	        //更方便的方法是通过msgId直接获取整个message
-	        EMMessage message = EMChatManager.getInstance().getMessage(msgId);	       
-	        
-//	        if (SingleChatRoomActivity.activityInstance != null) {
-//				if (message.getChatType() == ChatType.GroupChat) {
-//					if (message.getTo().equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-//						return;
-//				} else {
-//					if (msgFrom.equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-//						return;
-//				}
-//			}	        
-	        updateUnreadLabel();
-	        System.out.println("监听到了");
-	        notifyNewMessage(message);
-	        if (comemsgfragment!=null) {
-	        	comemsgfragment.refresh();
-			}
-	        
-	        }
+
+	public void refreshUnReadSum() {
+
+		if (comemsgfragment != null) {
+			comemsgfragment.refresh();
+		}
 	}
-	public class IMconnectionListner implements EMConnectionListener{
+
+	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			abortBroadcast();
+			// 消息id
+			String msgId = intent.getStringExtra("msgid");
+			// 发消息的人的username(userid)
+			String msgFrom = intent.getStringExtra("from");
+			// 更方便的方法是通过msgId直接获取整个message
+			EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+
+			// if (SingleChatRoomActivity.activityInstance != null) {
+			// if (message.getChatType() == ChatType.GroupChat) {
+			// if
+			// (message.getTo().equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
+			// return;
+			// } else {
+			// if
+			// (msgFrom.equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
+			// return;
+			// }
+			// }
+			updateUnreadLabel();
+			System.out.println("监听到了");
+			notifyNewMessage(message);
+			if (comemsgfragment != null) {
+				comemsgfragment.refresh();
+			}
+
+		}
+	}
+
+	public class IMconnectionListner implements EMConnectionListener {
 
 		@Override
 		public void onConnected() {
@@ -490,26 +532,29 @@ public class MainActivity extends pBaseActivity {
 
 				@Override
 				public void run() {
-					if(error == EMError.USER_REMOVED){
+					if (error == EMError.USER_REMOVED) {
 						// 显示帐号已经被移除
 						showToast("帐号已经被移除", Toast.LENGTH_SHORT, false);
-					}else if (error == EMError.CONNECTION_CONFLICT) {
+					} else if (error == EMError.CONNECTION_CONFLICT) {
 						// 显示帐号在其他设备登陆
-						showToast("帐号在其他设备登陆，请重新登入", Toast.LENGTH_LONG, false);
+						showToast("帐号在其他设备登陆，请重新登入", Toast.LENGTH_SHORT, false);
 						BussinessUtils.clearUserData(mShareFileUtils);
-		            	ManagerActivity.getAppManager().restart(MainActivity.this);
+						ManagerActivity.getAppManager().restart(
+								MainActivity.this);
 					} else {
-					if (NetUtils.hasNetwork(MainActivity.this))
-						//连接不到聊天服务器
-						easemobchatImp.getInstance().login(
-								mShareFileUtils.getString(Constant.CLIENT_ID, "")
-								.replace("-", ""),
-								mShareFileUtils.getString(
-										Constant.PASSWORD, ""));
-						
-					else
-						//当前网络不可用，请检查网络设置
-						homefragment.base_neterror_item.setVisibility(View.VISIBLE);
+						if (NetUtils.hasNetwork(MainActivity.this))
+							// 连接不到聊天服务器
+							easemobchatImp.getInstance().login(
+									mShareFileUtils.getString(
+											Constant.CLIENT_ID, "").replace(
+											"-", ""),
+									mShareFileUtils.getString(
+											Constant.PASSWORD, ""));
+
+						else
+							// 当前网络不可用，请检查网络设置
+							homefragment.base_neterror_item
+									.setVisibility(View.VISIBLE);
 					}
 				}
 			});

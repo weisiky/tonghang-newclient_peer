@@ -334,11 +334,12 @@ public class PeerParamsUtils {
 	 * @throws Exception
 	 */
 	public static RequestParams getJoinParams(Context context,
-			String client_id, String topic_id)
+			String client_id, String topic_id , boolean isOwner)
 			throws UnsupportedEncodingException, Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("client_id", client_id);
 		loginParams.put("topic_id", topic_id);
+		loginParams.put("isOwner", isOwner);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		return params;

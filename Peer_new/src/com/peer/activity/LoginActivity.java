@@ -193,6 +193,7 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "Header:"+headers);
 						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+responseString);
+						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -206,6 +207,7 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "Header:"+headers);
 						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+errorResponse);
+						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -219,6 +221,7 @@ public class LoginActivity extends pBaseActivity {
 						pLog.i("test", "Header:"+headers);
 						pLog.i("test", "throwable:"+throwable);
 						pLog.i("test", "responseString:"+errorResponse);
+						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

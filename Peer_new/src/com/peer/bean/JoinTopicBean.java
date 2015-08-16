@@ -8,10 +8,12 @@ public class JoinTopicBean implements Serializable {
 	private String code;
 
 	private UserBean userbean;
-
+	private String username;
+	private String image;
+	
 	private String created_at;
 	/** 创建话题者的client_id **/
-	private String client_id;
+	private String user_id;
 	private String label_name;
 	private String subject;
 	private String topic_id;
@@ -30,7 +32,7 @@ public class JoinTopicBean implements Serializable {
 	}
 
 	public boolean pdower() {
-		if (userbean.getClient_id().equals(client_id)) {
+		if (userbean.getClient_id().equals(user_id)) {
 			Isower = true;
 		} else {
 			Isower = false;
@@ -38,6 +40,23 @@ public class JoinTopicBean implements Serializable {
 
 		return Isower;
 	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 
 	public String getCreated_at() {
 		return created_at;
@@ -47,12 +66,12 @@ public class JoinTopicBean implements Serializable {
 		this.created_at = created_at;
 	}
 
-	public String getClient_id() {
-		return client_id;
+	public String getUser_id() {
+		return user_id;
 	}
 
-	public void setClient_id(String client_id) {
-		this.client_id = client_id;
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getLabel_name() {

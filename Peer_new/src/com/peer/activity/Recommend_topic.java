@@ -38,6 +38,7 @@ import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.JsonDocHelper;
+import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -50,6 +51,7 @@ public class Recommend_topic extends pBaseActivity {
 	private PullToRefreshListView pull_refresh_topic;
 	private List<TopicBean> list = new ArrayList<TopicBean>();
 	private int page = 1;
+	public static int pageindex;
 	Recommend_topicAdapter adapter;
 
 	class PageViewList {
@@ -135,8 +137,22 @@ public class Recommend_topic extends pBaseActivity {
 								.setLastUpdatedLabel(label);
 						if(isNetworkAvailable){
 							try {
-								sendRecommendtopic(mShareFileUtils.getString(
-										Constant.CLIENT_ID, ""), ++page);
+								
+								if(page==pageindex){
+									pLog.i("test", "page:"+page);
+									pLog.i("test", "pageindex:"+pageindex);
+									
+									sendRecommendtopic(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""), ++page);
+								}else{
+									pLog.i("test", "page:"+page);
+									pLog.i("test", "pageindex:"+pageindex);
+									if(pageindex == 0){
+										page = 1;
+									}
+									sendRecommendtopic(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""), page);
+								}
 							} catch (UnsupportedEncodingException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -256,6 +272,7 @@ public class Recommend_topic extends pBaseActivity {
 						pLog.i("test","headers:"+headers);
 						pLog.i("test","throwable:"+throwable);
 						pLog.i("test","throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -269,6 +286,7 @@ public class Recommend_topic extends pBaseActivity {
 						pLog.i("test","headers:"+headers);
 						pLog.i("test","throwable:"+throwable);
 						pLog.i("test","errorResponse:"+errorResponse);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -282,6 +300,7 @@ public class Recommend_topic extends pBaseActivity {
 						pLog.i("test","headers:"+headers);
 						pLog.i("test","throwable:"+throwable);
 						pLog.i("test","errorResponse:"+errorResponse);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -305,6 +324,7 @@ public class Recommend_topic extends pBaseActivity {
 												response.getJSONObject("success")
 												.toString(),
 												RecommendTopicBean.class);
+								pageindex = page;
 								if (recommendtopicbean != null) {
 									pLog.i("test", "user1:"
 											+ recommendtopicbean.topics.get(0)
@@ -325,7 +345,13 @@ public class Recommend_topic extends pBaseActivity {
 							}else if(code.equals("500")){
 								
 							}else{
-								list.clear();
+								if(pageindex == 0){
+									
+									list.clear();
+								}
+								if(page == 1){
+									list.clear();
+								}
 								if (adapter == null) {
 									adapter = new Recommend_topicAdapter(
 											Recommend_topic.this, list
@@ -353,7 +379,14 @@ public class Recommend_topic extends pBaseActivity {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
-			pull_refresh_topic.onRefreshComplete();
+			pull_refresh_topic.postDelayed(new Runnable() {
+
+	            @Override
+	            public void run() {
+	            	pull_refresh_topic.onRefreshComplete();
+	            }
+	        }, 1000);
+
 		}
 
 	}

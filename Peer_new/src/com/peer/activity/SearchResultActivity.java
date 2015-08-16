@@ -254,7 +254,7 @@ public class SearchResultActivity extends pBaseActivity {
 								// TODO Auto-generated method stub
 
 								hideLoading();
-
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers,
 										responseString, throwable);
 							}
@@ -265,6 +265,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONArray errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -275,6 +276,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONObject errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -356,6 +358,7 @@ public class SearchResultActivity extends pBaseActivity {
 								// TODO Auto-generated method stub
 
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers,
 										responseString, throwable);
 							}
@@ -366,6 +369,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONArray errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -376,6 +380,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONObject errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -458,6 +463,7 @@ public class SearchResultActivity extends pBaseActivity {
 									Throwable throwable) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers,
 										responseString, throwable);
 							}
@@ -467,7 +473,7 @@ public class SearchResultActivity extends pBaseActivity {
 									Header[] headers, Throwable throwable,
 									JSONArray errorResponse) {
 								// TODO Auto-generated method stub
-
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -478,6 +484,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONObject errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -499,7 +506,7 @@ public class SearchResultActivity extends pBaseActivity {
 														RecommendTopicBean.class);
 										if (recommendtopicbean != null) {
 											if (page == 1) {
-												userbean.clear();
+												topicbean.clear();
 											}
 											topicbean.addAll(recommendtopicbean.topics);
 											if (adapter1 == null) {
@@ -558,6 +565,7 @@ public class SearchResultActivity extends pBaseActivity {
 									Throwable throwable) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers,
 										responseString, throwable);
 							}
@@ -568,6 +576,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONArray errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -578,6 +587,7 @@ public class SearchResultActivity extends pBaseActivity {
 									JSONObject errorResponse) {
 								// TODO Auto-generated method stub
 								hideLoading();
+								showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 								super.onFailure(statusCode, headers, throwable,
 										errorResponse);
 							}
@@ -600,7 +610,7 @@ public class SearchResultActivity extends pBaseActivity {
 														RecommendTopicBean.class);
 										if (recommendtopicbean != null) {
 											if (page == 1) {
-												userbean.clear();
+												topicbean.clear();
 											}
 											pLog.i("test", "user1:"
 													+ recommendtopicbean.topics
@@ -656,11 +666,26 @@ public class SearchResultActivity extends pBaseActivity {
 
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
-			lv_searchresult.onRefreshComplete();
+			lv_searchresult.postDelayed(new Runnable() {
+
+	            @Override
+	            public void run() {
+	            	lv_searchresult.onRefreshComplete();
+	            }
+	        }, 1000);
+
 		} else if (adapter1 != null) {
 			adapter1.notifyDataSetChanged();
-			lv_searchresult.onRefreshComplete();
+			lv_searchresult.postDelayed(new Runnable() {
+
+	            @Override
+	            public void run() {
+	            	lv_searchresult.onRefreshComplete();
+	            }
+	        }, 1000);
 		}
 
 	}
+	
+	
 }

@@ -198,6 +198,7 @@ public class FriendsFragment extends pBaseFragment{
 						pLog.i("test", "headers:"+headers);
 						pLog.i("test", "responseString:"+responseString);
 						pLog.i("test", "throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -211,6 +212,7 @@ public class FriendsFragment extends pBaseFragment{
 						pLog.i("test", "headers:"+headers);
 						pLog.i("test", "errorResponse:"+errorResponse);
 						pLog.i("test", "throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -224,6 +226,7 @@ public class FriendsFragment extends pBaseFragment{
 						pLog.i("test", "headers:"+headers);
 						pLog.i("test", "errorResponse:"+errorResponse);
 						pLog.i("test", "throwable:"+throwable);
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}

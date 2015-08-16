@@ -234,6 +234,7 @@ public class MyFragment extends pBaseFragment {
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
 				pbaseActivity.hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 
@@ -242,6 +243,7 @@ public class MyFragment extends pBaseFragment {
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
 				pbaseActivity.hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -250,6 +252,7 @@ public class MyFragment extends pBaseFragment {
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
 				pbaseActivity.hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 

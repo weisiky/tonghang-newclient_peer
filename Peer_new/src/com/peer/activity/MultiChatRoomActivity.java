@@ -85,9 +85,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	String theme = null;
 	private EMConversation conversation;
 	private ChatMsgViewAdapter multichatadapter;
-	public static MultiChatRoomActivity multiactivityInstance = null;
+//	public static MultiChatRoomActivity multiactivityInstance = null;
 	private NewMessageBroadcastReceiver receiver;
-	private String topicId;
 	private UserBean userbean;
 	private int num = 1; // num用作判断用户是否点击theme_chat 0-no;1-yes
 
@@ -195,21 +194,29 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			pageViewaList.host_imfor.setVisibility(View.VISIBLE);
 			Intent intent = getIntent();
 			/** 判断是否从悬浮头像进入 **/
+			pLog.i("test", "FROMFLOAT:"+intent.getStringExtra(Constant.FROMFLOAT));
+			pLog.i("test", "FROMFLOAT:"+Constant.FROMFLOAT.equals(
+					intent.getStringExtra(Constant.FROMFLOAT)));
 			if (intent.getStringExtra(Constant.FROMFLOAT) != null
 					&& intent.getStringExtra(Constant.FROMFLOAT).equals(
 							Constant.FROMFLOAT)) {
 				toChatUsername = mShareFileUtils.getString(Constant.F_TOPICID, "");
+				pLog.i("test", "从悬浮头像进:"+toChatUsername);
 				pageViewaList.tv_tagname.setText(mShareFileUtils.getString(Constant.F_TAGNAME, ""));
-				pageViewaList.tv_nikename.setText(mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));
+				pageViewaList.tv_nikename.setText(mShareFileUtils.getString(Constant.USERNAME, ""));
 				pageViewaList.theme_chat.setText(mShareFileUtils.getString(Constant.F_THEME, ""));
-				topicId = mShareFileUtils.getString(Constant.F_TOPICID, "");
 				// ImageLoader加载图片
 				ImageLoaderUtil.getInstance().showHttpImage(
 						mShareFileUtils.getString(Constant.PIC_SERVER, "")
-						+mShareFileUtils.getString(Constant.F_IMAGE, "")
+						+mShareFileUtils.getString(Constant.IMAGE, "")
 						, pageViewaList.host_image,
 						R.drawable.mini_avatar_shadow);
 				mShareFileUtils.setBoolean(Constant.FLOAT,true);
+				
+				titlePopup.addAction(new ActionItem(this, getResources()
+						.getString(R.string.exitroom), R.color.white));
+				titlePopup.addAction(new ActionItem(this, getResources()
+						.getString(R.string.lookformember), R.color.white));
 			} else {
 				toChatUsername = ChatRoomBean.getInstance().getTopicBean()
 						.getTopic_id();
@@ -219,11 +226,6 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						.getUsername());
 				theme = ChatRoomBean.getInstance().getTopicBean().getSubject();
 				pageViewaList.theme_chat.setText(theme);
-				System.out.println("tv_tagname"+ChatRoomBean.getInstance()
-						.getTopicBean().getLabel_name());
-				System.out.println("tv_nikename"+ChatRoomBean.getInstance().getTopicBean()
-						.getUsername());
-				System.out.println("theme"+theme);
 				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt
 						.valueOf("END"));
 				// ImageLoader加载图片
@@ -233,6 +235,22 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						, pageViewaList.host_image,
 						R.drawable.mini_avatar_shadow);
 				mShareFileUtils.setBoolean(Constant.FLOAT,false);
+				
+				/** 判断属于自己的房间 **/
+				if (!ChatRoomBean.getInstance().getIsowner()) {
+					titlePopup.addAction(new ActionItem(this, getResources()
+							.getString(R.string.lookformember), R.color.white));
+				} else {
+					mShareFileUtils.setString(Constant.F_THEME, theme);
+					mShareFileUtils.setString(Constant.F_TAGNAME, ChatRoomBean.getInstance()
+						.getTopicBean().getLabel_name());
+					mShareFileUtils.setString(Constant.F_ROOMID,toChatUsername);
+					mShareFileUtils.setString(Constant.F_TOPICID,toChatUsername);
+					titlePopup.addAction(new ActionItem(this, getResources()
+							.getString(R.string.exitroom), R.color.white));
+					titlePopup.addAction(new ActionItem(this, getResources()
+							.getString(R.string.lookformember), R.color.white));
+				}
 			}
 			/** 群聊，且为自己的房间时，退出显示头像 **/
 			Intent serviceintent = new Intent(MultiChatRoomActivity.this,
@@ -240,29 +258,22 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			stopService(serviceintent);
 			mShareFileUtils.setBoolean(Constant.ISFLOAT, false);
 			
-			/** 判断属于自己的房间 **/
-			pLog.i("test", "isIsowner"+ChatRoomBean.getInstance().getIsowner());
-			if (!ChatRoomBean.getInstance().getIsowner()) {
-				titlePopup.addAction(new ActionItem(this, getResources()
-						.getString(R.string.lookformember), R.color.white));
-			} else {
-				titlePopup.addAction(new ActionItem(this, getResources()
-						.getString(R.string.exitroom), R.color.white));
-				titlePopup.addAction(new ActionItem(this, getResources()
-						.getString(R.string.lookformember), R.color.white));
-			}
-			
 			/** 发送加入话题请求 **/
 			sendjoingroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
-					, ChatRoomBean.getInstance().getTopicBean()
-					.getTopic_id());
-
+					,toChatUsername, ChatRoomBean.getInstance().getIsowner());
+			pLog.i("test", "toChatUsername:"+toChatUsername);
 			easemobchatImp.getInstance().joingroup(toChatUsername);
 			conversation = EMChatManager.getInstance().getConversation(
 					toChatUsername);
-			for (int i = 0; i <  conversation.getMsgCount(); i++) {
+			
+			//获取此会话的所有消息
+//			List<EMMessage> messages = conversation.getAllMessages();
+//			List<EMMessage> messages = conversation.loadMoreGroupMsgFromDB("1", 10);
+			pLog.i("test", "群聊conversation:"+conversation);
+			pLog.i("test", "conversation.getMsgCount():"+conversation.getMsgCount());
+			for (int i = 0; i <  conversation.getUnreadMsgCount(); i++) {
 				EMMessage message = conversation.getMessage(i);
-				
+				pLog.i("test", "message:"+message.toString());
 				TextMessageBody body = (TextMessageBody) message.getBody();
 				String content = body.getMessage();
 				
@@ -273,7 +284,6 @@ public class MultiChatRoomActivity extends pBaseActivity{
 				ChatMsgEntityBean entity = new ChatMsgEntityBean();
 				entity.setMessage(content);
 				entity.setDate(time);
-				entity.setUserbean(userbean);
 				try {
 					entity.setImage(message
 							.getStringAttribute(Constant.IMAGEURL));
@@ -333,8 +343,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			 if (!ChatRoomBean.getInstance().getIsowner()) {
 			 sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
 					 , ChatRoomBean.getInstance()
-			 .getTopicBean().getTopic_id());
+			 .getTopicBean().getTopic_id(),ChatRoomBean.getInstance().getIsowner());
 			 easemobchatImp.getInstance().exitgroup(toChatUsername);
+			 pLog.i("test","环信退出成功");
 			 backPage();
 			 } else {
 			startfloatView();
@@ -350,7 +361,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		super.onClick(v);
+//		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.theme_chat:
 			showtheme(num);
@@ -394,13 +405,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					Intent intent = new Intent(MultiChatRoomActivity.this,PersonalPageActivity.class);
 					startActivity(intent);
 				} else {
-					try {
-						senduser(ChatRoomBean.getInstance().getTopicBean().getUser_id()
-								,mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Intent intent = new Intent();
+					intent.putExtra("client_id", ChatRoomBean.getInstance().getTopicBean().getUser_id());
+					startActivityForLeft(OtherPageActivity.class, intent, false);
 				}
 			} else {
 				showToast("网络未连接", Toast.LENGTH_SHORT, false);
@@ -412,13 +419,19 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			break;
 		case R.id.ll_back:
 				 if (!ChatRoomBean.getInstance().getIsowner()) {
-				 sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
-						 , ChatRoomBean.getInstance()
-				 .getTopicBean().getTopic_id());
-				 backPage();
-				 } else {
-				startfloatView();
-				 }
+					 sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+							 , ChatRoomBean.getInstance()
+					 .getTopicBean().getTopic_id(),ChatRoomBean.getInstance().getIsowner());
+					 easemobchatImp.getInstance().exitgroup(toChatUsername);
+					 pLog.i("test","环信退出成功");
+					 backPage();
+					 pLog.i("test", "不是房主");
+//					 onBackPressed();
+					 } else {
+						 pLog.i("test", "是房主");
+					startfloatView();
+					 }
+//			onBackPressed();
 		default:
 			break;
 		}
@@ -434,27 +447,19 @@ public class MultiChatRoomActivity extends pBaseActivity{
 		if (!mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
 				Intent intentfloat = new Intent(MultiChatRoomActivity.this,
 						FxService.class);
-				intentfloat.putExtra(Constant.F_IMAGE, ChatRoomBean.getInstance()
-						.getTopicBean().getImage());
-				intentfloat.putExtra(Constant.F_OWNERNIKE, ChatRoomBean
-						.getInstance().getTopicBean().getUsername());
-				intentfloat.putExtra(Constant.F_THEME, ChatRoomBean.getInstance()
-						.getTopicBean().getSubject());
-				intentfloat.putExtra(Constant.F_TAGNAME, ChatRoomBean
-						.getInstance().getTopicBean().getLabel_name());
-				intentfloat.putExtra(Constant.F_USERID, ChatRoomBean
-						.getInstance().getTopicBean().getUser_id());
-				intentfloat.putExtra(Constant.F_ROOMID, ChatRoomBean
-						.getInstance().getTopicBean().getTopic_id());
-				intentfloat.putExtra(Constant.F_TOPICID, ChatRoomBean
-						.getInstance().getTopicBean().getTopic_id());
-				intentfloat.putExtra(Constant.FROMFLOAT, "float");
+//				intentfloat.putExtra(Constant.F_THEME
+//						, mShareFileUtils.getString(Constant.F_THEME,""));
+//				intentfloat.putExtra(Constant.F_TAGNAME
+//						, mShareFileUtils.getString(Constant.F_TAGNAME, ""));
+//				intentfloat.putExtra(Constant.F_ROOMID
+//						, mShareFileUtils.getString(Constant.F_ROOMID,""));
+//				intentfloat.putExtra(Constant.F_TOPICID
+//						, mShareFileUtils.getString(Constant.F_TOPICID, ""));
+				intentfloat.putExtra(Constant.FROMFLOAT, "fromfloat");
 				startService(intentfloat);
 				mShareFileUtils.setBoolean(Constant.ISFLOAT, true);
-				finish();
-			} else {
+			}
 			finish();
-		}
 	}
 
 	/**
@@ -552,8 +557,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							R.string.exitroom))) {
 						sendleavegroup(mShareFileUtils.getString(Constant.CLIENT_ID, "")
 								, ChatRoomBean.getInstance()
-								.getTopicBean().getTopic_id());
-						easemobchatImp.getInstance().exitgroup(toChatUsername);
+								.getTopicBean().getTopic_id()
+								,ChatRoomBean.getInstance().getIsowner());
 						finish();
 					} else if (item.mTitle.equals(getResources().getString(
 							R.string.lookformember))) {
@@ -595,8 +600,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			chat.setMsgType(Constant.SELF);
 			
 			// 环信发送消息，携带消息内容，自己头像，自己Id
-							easemobchatImp.getInstance().sendMessage(content,
-									Constant.MULTICHAT, toChatUsername, imagurl, userid);
+//							easemobchatImp.getInstance().sendMessage(content,
+//									Constant.MULTICHAT, toChatUsername, imagurl, userid);
 							multichatmsgList.add(chat);
 			refresh();
 			pageViewaList.lv_chat
@@ -641,10 +646,12 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			String msgid = intent.getStringExtra("msgid");
 			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
 			EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+			pLog.i("test", "Mul message:"+message.toString());
 			// 如果是群聊消息，获取到group id
 			String image = null;
 			String fromuserid = null;
 			String nickname = null;
+			if(message != null){
 			if(message.getChatType() == ChatType.GroupChat){
 				
 				pLog.i("test", "群聊监听message.getChatType()："+message.getChatType());
@@ -680,6 +687,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						.setSelection(pageViewaList.lv_chat.getCount() - 1);
 		}
 		}
+		}
 	}
 
 	/**
@@ -689,13 +697,13 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	 * @param topic_id
 	 * @exception UnsupportedEncodingException
 	 */
-	private void sendjoingroup(String client_id, String topic_id) {
+	private void sendjoingroup(String client_id, String topic_id , boolean isOwner) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getJoinParams(MultiChatRoomActivity.this,
-					client_id, topic_id);
+					client_id, topic_id,isOwner);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -709,7 +717,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						hideLoading();
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -719,6 +727,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -728,6 +737,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -736,6 +746,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+						pLog.i("test", "res:"+response.toString());
 
 						try {
 							JSONObject result = response.getJSONObject("success");
@@ -772,13 +783,13 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	 * @param topic_id
 	 * @exception UnsupportedEncodingException
 	 */
-	private void sendleavegroup(String client_id, String topic_id) {
+	private void sendleavegroup(String client_id, String topic_id , boolean isOwner) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getJoinParams(MultiChatRoomActivity.this,
-					client_id, topic_id);
+					client_id, topic_id,isOwner);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -792,7 +803,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						// TODO Auto-generated method stub
 
 						hideLoading();
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -802,6 +813,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -811,6 +823,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
 						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -822,11 +835,10 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						try {
 							JSONObject result = response
 									.getJSONObject("success");
-							String code = (String) result.get("code");
+							String code = String.valueOf(result.get("code"));
 							pLog.i("test", "code:"+code);
 							if (code.equals("200")) {
-								String message = result.getString("message");
-								showToast(message, Toast.LENGTH_SHORT, false);
+								showToast("话题已退出", Toast.LENGTH_SHORT, false);
 							}else if(code.equals("500")){
 								
 							}else{
@@ -851,7 +863,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	 * 
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
-	 */
+	 
 
 	private void senduser(String client_id,String o_client_id) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
@@ -870,7 +882,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -879,6 +891,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -887,6 +900,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -933,7 +947,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 
 				});
 	}
-	
+	*/
 	
 	
 	
