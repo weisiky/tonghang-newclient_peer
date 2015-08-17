@@ -4,10 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -28,9 +30,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMGroupManager;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
+import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.ChatRoomBean;
@@ -296,7 +302,7 @@ public class CreatTopicActivity extends pBaseActivity {
 	 * @param label_name
 	 * @throws UnsupportedEncodingException
 	 */
-	private void sendCreateTopic(String client_id, String subject,
+	private void sendCreateTopic(final String client_id, String subject,
 			String label_name) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 
@@ -368,6 +374,33 @@ public class CreatTopicActivity extends pBaseActivity {
 												.toString(),
 												CreateToipcBean.class);
 								if (createtopicbean != null) {
+									if (EMChatManager.getInstance().isConnected()) {
+										
+									}else{
+										easemobchatImp.getInstance().login(
+												mShareFileUtils.getString(Constant.CLIENT_ID, "")
+												.replace("-", ""),
+												mShareFileUtils.getString(
+														Constant.PASSWORD, ""));
+									}
+									//从环信服务器获取自己加入的和创建的群聊列表
+									//需异步处理
+									List<EMGroup> grouplist = EMGroupManager.getInstance().getGroupsFromServer();
+									for(int i= 0 ;i<grouplist.size();i++ ){
+										pLog.i("test","grouplist.get(0):"+grouplist.get(i));
+										pLog.i("test","getGroupId():"+grouplist.get(i).getGroupId());
+										pLog.i("test","getOwner():"+grouplist.get(i).getOwner());
+										if(client_id.equals(grouplist.get(i).getOwner())){
+											sendleavegroup(client_id
+													, grouplist.get(i).getGroupId()
+													,true);
+										}else{
+											sendleavegroup(client_id
+													 , grouplist.get(i).getGroupId()
+													 ,false);
+											easemobchatImp.getInstance().exitgroup(grouplist.get(i).getGroupId());
+										}
+									}
 										ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
 										ChatRoomBean.getInstance().setIsowner(true);
 										ChatRoomBean.getInstance().setTopicBean(
@@ -397,6 +430,82 @@ public class CreatTopicActivity extends pBaseActivity {
 
 				});
 
+	}
+	
+	
+	/**
+	 * 退出话题请求
+	 * 
+	 * @param client_id
+	 * @param topic_id
+	 * @exception UnsupportedEncodingException
+	 */
+	private void sendleavegroup(String client_id, String topic_id , boolean isOwner) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getJoinParams(CreatTopicActivity.this,
+					client_id, topic_id,isOwner);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.LEAVE_TOPIC_IN_URL, params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							JSONObject result = response
+									.getJSONObject("success");
+							String code = String.valueOf(result.get("code"));
+							pLog.i("test", "code:"+code);
+							if (code.equals("200")) {
+								showToast("正在进入新话题...", Toast.LENGTH_SHORT, false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+				});
 	}
 
 }

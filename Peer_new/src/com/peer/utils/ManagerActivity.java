@@ -135,6 +135,20 @@ public class ManagerActivity {
 		pLog.i("test", "activity:"+activityStack.size());
 		activityStack.clear();
 	}
+	
+	/**
+	 *  finishMulActivity
+	 */
+	public void finishMulActivity() {
+		for (int i = 0; i < activityStack.size(); i++) {
+			if (null != activityStack.get(i)) {
+				pLog.i("test","getName:"+activityStack.get(i).getClass().getName());
+				if(activityStack.get(i).getClass().getName().equals("com.peer.activity.MultiChatRoomActivity")){
+					activityStack.get(i).finish();
+				}
+			}
+		}
+	}
 
 	/**
 	 * exit application

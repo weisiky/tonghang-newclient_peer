@@ -491,6 +491,7 @@ public class MainActivity extends pBaseActivity {
 			String msgFrom = intent.getStringExtra("from");
 			// 更方便的方法是通过msgId直接获取整个message
 			EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+			pLog.i("test", "Main message:"+message.toString());
 
 			// if (SingleChatRoomActivity.activityInstance != null) {
 			// if (message.getChatType() == ChatType.GroupChat) {

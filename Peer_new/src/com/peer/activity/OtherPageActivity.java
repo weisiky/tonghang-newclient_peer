@@ -168,14 +168,18 @@ public class OtherPageActivity extends pBaseActivity{
 		switch (v.getId()) {
 		case R.id.rl_topic:
 			if (isNetworkAvailable) {
-				Intent intent = new Intent(OtherPageActivity.this,
-						TopicActivity.class);
-				intent.putExtra("bean", bean);
-				intent.putExtra("client_id", bean.getClient_id());
-				intent.putExtra("image", bean.getImage());
-				intent.putExtra("nike", bean.getUsername());
-				intent.putExtra("email", bean.getEmail());
-				startActivity(intent);
+				if(bean != null){
+					Intent intent = new Intent(OtherPageActivity.this,
+							TopicActivity.class);
+					intent.putExtra("bean", bean);
+					intent.putExtra("client_id", bean.getClient_id());
+					intent.putExtra("image", bean.getImage());
+					intent.putExtra("nike", bean.getUsername());
+					intent.putExtra("email", bean.getEmail());
+					startActivity(intent);
+				}else{
+					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
+				}
 			} else {
 				showToast(
 						getResources()
@@ -270,18 +274,18 @@ public class OtherPageActivity extends pBaseActivity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				if(isNetworkAvailable){
+				if(userbean != null){
 					ChatRoomBean.getInstance().setChatroomtype(
 							Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-					Intent intent = new Intent(OtherPageActivity.this,
-							SingleChatRoomActivity.class);
+					Intent intent = new Intent();
 					intent.putExtra("userbean", userbean);
-					startActivity(intent);
-//				}else{
+					startActivityForLeft(SingleChatRoomActivity.class, intent, false);
+				}else{
 //					showToast(getResources().getString(R.string.Broken_network_prompt)
 //							, Toast.LENGTH_SHORT, false);
-//				}
+					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
+				}
 			}
 		});
 		}
@@ -290,15 +294,19 @@ public class OtherPageActivity extends pBaseActivity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if (!userbean.getIs_friend()) {
-					Intent intent = new Intent();
-					intent.putExtra("user_client_id", userbean.getClient_id());
-					intent.putExtra("image", userbean.getImage());
-					intent.putExtra("nike", userbean.getUsername());
-					intent.putExtra("email", userbean.getEmail());
-					startActivityForLeft(AddFriendsActivity.class, intent, false);
-				} else {
-					showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
+				if(userbean != null){
+					if (!userbean.getIs_friend()) {
+						Intent intent = new Intent();
+						intent.putExtra("user_client_id", userbean.getClient_id());
+						intent.putExtra("image", userbean.getImage());
+						intent.putExtra("nike", userbean.getUsername());
+						intent.putExtra("email", userbean.getEmail());
+						startActivityForLeft(AddFriendsActivity.class, intent, false);
+					} else {
+						showToast("你们已经是好友了", Toast.LENGTH_SHORT, false);
+					}
+				}else{
+					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
 				}
 
 			}
@@ -368,13 +376,16 @@ public class OtherPageActivity extends pBaseActivity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomBean.getInstance().setChatroomtype(
-						Constant.SINGLECHAT);
+				if(userbean!=null){
+					ChatRoomBean.getInstance().setChatroomtype(
+							Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-				Intent intent = new Intent(OtherPageActivity.this,
-						SingleChatRoomActivity.class);
-				intent.putExtra("userbean", userbean);
-				startActivity(intent);
+					Intent intent = new Intent();
+					intent.putExtra("userbean", userbean);
+					startActivityForLeft(SingleChatRoomActivity.class, intent, false);
+				}else{
+					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
+				}
 			}
 		});
 	}
@@ -387,13 +398,17 @@ public class OtherPageActivity extends pBaseActivity{
 			@Override
 			public void onItemClick(ActionItem item, int position) {
 				// TODO Auto-generated method stub
-				if (item.mTitle.equals(getResources().getString(
-						R.string.deletefriends))) {
-					String client_id = mShareFileUtils.getString(
-							Constant.CLIENT_ID, "");
-					String friend_id = bean.getClient_id();
-
-					senddeletefriend(client_id, friend_id);
+				if(bean != null){
+					if (item.mTitle.equals(getResources().getString(
+							R.string.deletefriends))) {
+						String client_id = mShareFileUtils.getString(
+								Constant.CLIENT_ID, "");
+						String friend_id = bean.getClient_id();
+						
+						senddeletefriend(client_id, friend_id);
+					}
+				}else{
+					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
 				}
 			}
 		});

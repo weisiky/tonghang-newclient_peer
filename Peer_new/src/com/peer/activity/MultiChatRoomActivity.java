@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
@@ -89,6 +90,12 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	private NewMessageBroadcastReceiver receiver;
 	private UserBean userbean;
 	private int num = 1; // num用作判断用户是否点击theme_chat 0-no;1-yes
+	
+	//环信获取历史记录pageindex
+	private int pageindex = 20;
+	
+	
+	
 
 
 	class PageViewList {
@@ -218,6 +225,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 				titlePopup.addAction(new ActionItem(this, getResources()
 						.getString(R.string.lookformember), R.color.white));
 			} else {
+				
 				toChatUsername = ChatRoomBean.getInstance().getTopicBean()
 						.getTopic_id();
 				pageViewaList.tv_tagname.setText(ChatRoomBean.getInstance()
@@ -263,43 +271,124 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					,toChatUsername, ChatRoomBean.getInstance().getIsowner());
 			pLog.i("test", "toChatUsername:"+toChatUsername);
 			easemobchatImp.getInstance().joingroup(toChatUsername);
-			conversation = EMChatManager.getInstance().getConversation(
-					toChatUsername);
-			
+//			conversation = EMChatManager.getInstance().getConversation(
+//					toChatUsername);
+			conversation = EMChatManager.getInstance()
+					.getConversationByType(toChatUsername,EMConversationType.GroupChat);
+			 // 把此会话的未读数置为0
+	        conversation.markAllMessagesAsRead();
+
+	        // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
+	        // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
+	        final List<EMMessage> msgs = conversation.getAllMessages();
+	        pLog.i("test", "msgs:"+msgs.size());
+	        
+	        int msgCount = msgs != null ? msgs.size() : 0;
+	        
+	        pLog.i("test", "msgCount:"+msgCount);
+	        pLog.i("test", "conversation.getAllMsgCount():"+conversation.getAllMsgCount());
+//	        if (msgCount < conversation.getAllMsgCount() && msgCount < pageindex) {
+	            String msgId = null;
+	            if (msgs != null && msgs.size() > 0) {
+	                msgId = msgs.get(0).getMsgId();
+	                pLog.i("test", "msgs.get(0):"+msgs.get(0));
+	            }
+//	            List<EMMessage> messages = conversation.loadMoreGroupMsgFromDB(msgId, pageindex);
+//	            pLog.i("test", "messages.size():"+messages.size());
+//	            for (int i = 0; i <  messages.size(); i++) {
+//					EMMessage message = messages.get(i);
+//					pLog.i("test", "message:"+message.toString());
+//					TextMessageBody body = (TextMessageBody) message.getBody();
+//					String content = body.getMessage();
+//					
+//					
+//					String time = DateUtils.getTimestampString(new Date(message
+//							.getMsgTime()));
+//
+//					ChatMsgEntityBean entity = new ChatMsgEntityBean();
+//					entity.setMessage(content);
+//					entity.setDate(time);
+//					try {
+//						entity.setImage(message
+//								.getStringAttribute(Constant.IMAGEURL));
+//						entity.setUserId(message
+//								.getStringAttribute(Constant.USERID));
+//					} catch (EaseMobException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					if (message.direct == EMMessage.Direct.SEND) {
+//						entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
+//					} else {
+//						entity.setMsgType(Constant.OTHER);
+//					}
+//					multichatmsgList.add(entity);
+//				}
+	            for (int i = 0; i <  msgs.size(); i++) {
+					EMMessage message = msgs.get(i);
+					pLog.i("test", "message:"+message.toString());
+					TextMessageBody body = (TextMessageBody) message.getBody();
+					String content = body.getMessage();
+					
+					
+					String time = DateUtils.getTimestampString(new Date(message
+							.getMsgTime()));
+
+					ChatMsgEntityBean entity = new ChatMsgEntityBean();
+					entity.setMessage(content);
+					entity.setDate(time);
+					try {
+						entity.setImage(message
+								.getStringAttribute(Constant.IMAGEURL));
+						entity.setUserId(message
+								.getFrom());
+					} catch (EaseMobException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (message.direct == EMMessage.Direct.SEND) {
+						entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
+					} else {
+						entity.setMsgType(Constant.OTHER);
+					}
+					multichatmsgList.add(entity);
+				}
+	        
+	        
 			//获取此会话的所有消息
 //			List<EMMessage> messages = conversation.getAllMessages();
 //			List<EMMessage> messages = conversation.loadMoreGroupMsgFromDB("1", 10);
-			pLog.i("test", "群聊conversation:"+conversation);
-			pLog.i("test", "conversation.getMsgCount():"+conversation.getMsgCount());
-			for (int i = 0; i <  conversation.getUnreadMsgCount(); i++) {
-				EMMessage message = conversation.getMessage(i);
-				pLog.i("test", "message:"+message.toString());
-				TextMessageBody body = (TextMessageBody) message.getBody();
-				String content = body.getMessage();
-				
-				
-				String time = DateUtils.getTimestampString(new Date(message
-						.getMsgTime()));
-
-				ChatMsgEntityBean entity = new ChatMsgEntityBean();
-				entity.setMessage(content);
-				entity.setDate(time);
-				try {
-					entity.setImage(message
-							.getStringAttribute(Constant.IMAGEURL));
-					entity.setUserId(message
-							.getStringAttribute(Constant.USERID));
-				} catch (EaseMobException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (message.direct == EMMessage.Direct.SEND) {
-					entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
-				} else {
-					entity.setMsgType(Constant.OTHER);
-				}
-				multichatmsgList.add(entity);
-			}
+//			pLog.i("test", "群聊conversation:"+conversation);
+//			pLog.i("test", "conversation.getMsgCount():"+conversation.getMsgCount());
+//			for (int i = 0; i <  conversation.getUnreadMsgCount(); i++) {
+//				EMMessage message = conversation.getMessage(i);
+//				pLog.i("test", "message:"+message.toString());
+//				TextMessageBody body = (TextMessageBody) message.getBody();
+//				String content = body.getMessage();
+//				
+//				
+//				String time = DateUtils.getTimestampString(new Date(message
+//						.getMsgTime()));
+//
+//				ChatMsgEntityBean entity = new ChatMsgEntityBean();
+//				entity.setMessage(content);
+//				entity.setDate(time);
+//				try {
+//					entity.setImage(message
+//							.getStringAttribute(Constant.IMAGEURL));
+//					entity.setUserId(message
+//							.getStringAttribute(Constant.USERID));
+//				} catch (EaseMobException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				if (message.direct == EMMessage.Direct.SEND) {
+//					entity.setMsgType(Constant.SELF);  //1代表自己、0代表他人
+//				} else {
+//					entity.setMsgType(Constant.OTHER);
+//				}
+//				multichatmsgList.add(entity);
+//			}
 			if(multichatadapter == null){
 				multichatadapter = new ChatMsgViewAdapter(this, multichatmsgList);
 				pageViewaList.lv_chat.setAdapter(multichatadapter);				
@@ -307,8 +396,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			pageViewaList.lv_chat
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			refresh();
+//	       }
 			/** 未读消息数清零 **/
-			conversation.resetUnreadMsgCount();
+//			conversation.resetUnreadMsgCount();
 
 		
 
@@ -587,7 +677,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			/** 发送者头像 **/
 			String imagurl = mShareFileUtils.getString(Constant.IMAGE, "");
 			/** 发送者id **/
-			String userid = mShareFileUtils.getString(Constant.CLIENT_ID, "");
+//			String userid = mShareFileUtils.getString(Constant.CLIENT_ID, "");
 			SimpleDateFormat formatter = new SimpleDateFormat(
 					"yyyy年MM月dd日   HH:mm:ss     ");
 			Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
@@ -595,20 +685,20 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			ChatMsgEntityBean chat = new ChatMsgEntityBean();
 			chat.setDate(str);
 			chat.setImage(imagurl);
-			chat.setUserId(userid);
+//			chat.setUserId(userid);
 			chat.setMessage(content);
 			chat.setMsgType(Constant.SELF);
 			
 			// 环信发送消息，携带消息内容，自己头像，自己Id
-//							easemobchatImp.getInstance().sendMessage(content,
-//									Constant.MULTICHAT, toChatUsername, imagurl, userid);
-							multichatmsgList.add(chat);
+			easemobchatImp.getInstance().sendMessage(content,
+									Constant.MULTICHAT, toChatUsername, imagurl);
+			multichatmsgList.add(chat);
 			refresh();
 			pageViewaList.lv_chat
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			pageViewaList.et_sendmessage.setText("");
 		} else {
-			showToast("环信连接错误",
+			showToast(getResources().getString(R.string.network_wait),
 					Toast.LENGTH_SHORT, false);
 			easemobchatImp.getInstance().login(
 					mShareFileUtils.getString(Constant.CLIENT_ID, "")
@@ -650,42 +740,43 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			// 如果是群聊消息，获取到group id
 			String image = null;
 			String fromuserid = null;
-			String nickname = null;
 			if(message != null){
-			if(message.getChatType() == ChatType.GroupChat){
-				
-				pLog.i("test", "群聊监听message.getChatType()："+message.getChatType());
-			try {
-				image = message.getStringAttribute(Constant.IMAGEURL);
-				fromuserid = message.getStringAttribute(Constant.USERID);
-
-			} catch (EaseMobException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// 获取到消息
-			TextMessageBody txtBody = (TextMessageBody) message.getBody();
-			String msg = txtBody.getMessage();
-
-			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy年MM月dd日   HH:mm:ss     ");
-			Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
-			String str = formatter.format(curDate);
-			ChatMsgEntityBean chat = new ChatMsgEntityBean();
-			
-			pLog.i("test","fromuserid:"+fromuserid);
-			
-			chat.setUserId(fromuserid);
-			chat.setImage(image);
-			chat.setDate(str);
-			chat.setMessage(msg);
-			chat.setMsgType(Constant.OTHER);
-			
-			multichatmsgList.add(chat);
-			multichatadapter.notifyDataSetChanged();
-			pageViewaList.lv_chat
+				if(message.getChatType() == ChatType.GroupChat){
+						try {
+							image = message.getStringAttribute(Constant.IMAGEURL);
+						} catch (EaseMobException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						fromuserid = message.getFrom();
+						// 获取到消息
+						TextMessageBody txtBody = (TextMessageBody) message.getBody();
+						String msg = txtBody.getMessage();
+						
+						SimpleDateFormat formatter = new SimpleDateFormat(
+								"yyyy年MM月dd日   HH:mm:ss     ");
+						Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
+						String str = formatter.format(curDate);
+						ChatMsgEntityBean chat = new ChatMsgEntityBean();
+						
+//						pLog.i("test","fromuserid:"+fromuserid);
+						
+						chat.setUserId(fromuserid);
+						chat.setImage(image);
+						chat.setDate(str);
+						chat.setMessage(msg);
+						chat.setMsgType(Constant.OTHER);
+						
+						multichatmsgList.add(chat);
+						pLog.i("test","multichatmsgList:"+multichatmsgList.size());
+						if(multichatadapter == null){
+							multichatadapter = new ChatMsgViewAdapter(context, multichatmsgList);
+							pageViewaList.lv_chat.setAdapter(multichatadapter);	
+						}
+						multichatadapter.notifyDataSetChanged();
+						pageViewaList.lv_chat
 						.setSelection(pageViewaList.lv_chat.getCount() - 1);
-		}
+			}
 		}
 		}
 	}

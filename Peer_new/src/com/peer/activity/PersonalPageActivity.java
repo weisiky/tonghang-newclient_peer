@@ -334,10 +334,9 @@ public class PersonalPageActivity extends pBaseActivity {
 					ChatRoomBean.getInstance().setChatroomtype(
 							Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-					Intent intent = new Intent(PersonalPageActivity.this,
-							SingleChatRoomActivity.class);
+					Intent intent = new Intent();
 					intent.putExtra("userbean", userbean);
-					startActivity(intent);
+					startActivityForLeft(SingleChatRoomActivity.class, intent, false);
 //				}else{
 //					showToast(getResources().getString(R.string.Broken_network_prompt)
 //							, Toast.LENGTH_SHORT, false);
@@ -414,10 +413,9 @@ public class PersonalPageActivity extends pBaseActivity {
 				ChatRoomBean.getInstance().setChatroomtype(
 						Constant.SINGLECHAT);
 //				ChatRoomBean.getInstance().setUserBean(userbean);
-				Intent intent = new Intent(PersonalPageActivity.this,
-						SingleChatRoomActivity.class);
+				Intent intent = new Intent();
 				intent.putExtra("userbean", userbean);
-				startActivity(intent);
+				startActivityForLeft(SingleChatRoomActivity.class, intent, false);
 			}
 		});
 	}

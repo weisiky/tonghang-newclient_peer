@@ -34,7 +34,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@+id/personhead"
                 android:textColor="@color/black"
-                android:text="das"
+                android:text="正在加载数据..."
                 android:textSize="@dimen/textsize_middle" />
 
             <TextView

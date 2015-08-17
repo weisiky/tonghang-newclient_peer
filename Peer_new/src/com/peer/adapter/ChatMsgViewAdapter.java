@@ -5,8 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peer.R;
+import com.peer.activity.MultiChatRoomActivity;
 import com.peer.activity.OtherPageActivity;
 import com.peer.activity.PersonalPageActivity;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.bean.ChatMsgEntityBean;
-import com.peer.bean.ChatRoomBean;
 import com.peer.bean.PersonpageBean;
-import com.peer.bean.User;
 import com.peer.bean.UserBean;
 import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.JsonDocHelper;
@@ -126,6 +123,8 @@ public class ChatMsgViewAdapter extends pBaseAdapter {
 //								}else{
 //									pLog.i("test","bean为空");
 //									pLog.i("test","client_id:"+ entity.getUserId());
+								//从环信服务器获取自己加入的和创建的群聊列表
+								
 									Intent topersonalpage=new Intent(context,OtherPageActivity.class);
 									topersonalpage.putExtra("client_id", entity.getUserId());
 									context.startActivity(topersonalpage);

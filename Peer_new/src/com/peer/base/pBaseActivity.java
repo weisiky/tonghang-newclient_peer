@@ -1,5 +1,6 @@
 package com.peer.base;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import android.app.ActivityManager;
@@ -64,7 +65,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 
 public abstract class pBaseActivity extends FragmentActivity implements
-		OnClickListener {
+		OnClickListener,Serializable{
 
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
@@ -471,7 +472,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("Recommend_topic")
-				|| getLocalClassNameBySelf().contains("ChatRoomActivity")) {
+				|| getLocalClassNameBySelf().contains("MultiChatRoomActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
@@ -479,7 +480,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
-				|| getLocalClassNameBySelf().contains("MultiChatRoomActivity")
+				
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")

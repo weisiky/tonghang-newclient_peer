@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.plurals;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -219,11 +220,13 @@ public class SingleChatRoomActivity extends pBaseActivity {
 					
 					String time = DateUtils.getTimestampString(new Date(message
 							.getMsgTime()));
+					pLog.i("test", "client_id:"+message.getFrom());
 
 					ChatMsgEntityBean entity = new ChatMsgEntityBean();
 					entity.setMessage(content);
 					entity.setDate(time);
 					entity.setUserbean(userbean);
+					entity.setUserId(message.getFrom());
 					try {
 						entity.setImage(message
 								.getStringAttribute(Constant.IMAGEURL));
@@ -479,6 +482,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			String msgid = intent.getStringExtra("msgid");
 			// 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
 			EMMessage message = EMChatManager.getInstance().getMessage(msgid);
+			pLog.i("test", "Single message:"+message.toString());
 			String from = message.getFrom();
 			// 如果是群聊消息，获取到group id
 			String image = null;
