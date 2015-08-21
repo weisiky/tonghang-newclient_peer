@@ -2,21 +2,21 @@ package com.peer.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.RemoteException;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -31,28 +31,28 @@ import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.util.NetUtils;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
-import com.peer.adapter.FriendsAdapter;
-import com.peer.adapter.NewfriendsAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseApplication;
+import com.peer.bean.LoginBean;
 import com.peer.bean.NewFriendBean;
-import com.peer.bean.RecommendUserBean;
 import com.peer.fragment.ComeMsgFragment;
 import com.peer.fragment.FriendsFragment;
 import com.peer.fragment.HomeFragment;
 import com.peer.fragment.MyFragment;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ManagerActivity;
-import com.peer.utils.pIOUitls;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 import com.readystatesoftware.viewbadger.BadgeView;
@@ -417,17 +417,18 @@ public class MainActivity extends pBaseActivity {
 	 */
 	private void registerEMchat() {
 		// TODO Auto-generated method stub
-		if (EMChatManager.getInstance().isConnected()) {
+//		if (EMChatManager.getInstance().isConnected()) {
 			msgReceiver = new NewMessageBroadcastReceiver();
 			IntentFilter intentFilter = new IntentFilter(EMChatManager
 					.getInstance().getNewMessageBroadcastAction());
 			intentFilter.setPriority(3);
 			registerReceiver(msgReceiver, intentFilter);
+			pLog.i("emc", "msgReceiver");
 			EMChatManager.getInstance().addConnectionListener(
 					new IMconnectionListner());
 
 			EMChat.getInstance().setAppInited();
-		}
+//		}
 	}
 	
 	private List<EMConversation> loadConversationsWithRecentChat() {
@@ -491,27 +492,99 @@ public class MainActivity extends pBaseActivity {
 			String msgFrom = intent.getStringExtra("from");
 			// 更方便的方法是通过msgId直接获取整个message
 			EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+			if(message.getChatType() == ChatType.Chat){
+				try {
+					senduser(message.getFrom(), mShareFileUtils.getString(Constant.CLIENT_ID, ""),message);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				multinotifyNewMessage(message);
+			}
 			pLog.i("test", "Main message:"+message.toString());
-
-			// if (SingleChatRoomActivity.activityInstance != null) {
-			// if (message.getChatType() == ChatType.GroupChat) {
-			// if
-			// (message.getTo().equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-			// return;
-			// } else {
-			// if
-			// (msgFrom.equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-			// return;
-			// }
-			// }
 			updateUnreadLabel();
-			System.out.println("监听到了");
-			notifyNewMessage(message);
 			if (comemsgfragment != null) {
 				comemsgfragment.refresh();
 			}
 
 		}
+	}
+	
+	
+	/**
+	 * 单聊信息提示
+	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * @param bean
+	 * @param message
+	 */
+	protected void singlenotifyNewMessage(LoginBean bean,EMMessage message) {
+		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		String ticker = bean.user.getUsername()+" "+"对你说:"+txtBody.getMessage();
+
+		Calendar c = Calendar.getInstance();
+		int hours = c.get(Calendar.HOUR_OF_DAY);
+		int munite = c.get(Calendar.MINUTE);
+		// 构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
+		Notification notification = new Notification(R.drawable.logo, "同行",
+				System.currentTimeMillis());
+		Intent intent;
+			intent = new Intent(MainActivity.this, MainActivity.class);
+
+		PendingIntent pendingIntent = PendingIntent.getActivity(
+				MainActivity.this, 0, intent, 0);
+		notification.setLatestEventInfo(getApplicationContext(), "通知标题",
+				"通知显示的内容", pendingIntent);
+		notification.setLatestEventInfo(this, "同行", ticker, pendingIntent);
+		notification.flags = Notification.FLAG_AUTO_CANCEL;// 点击后自动消失
+		ToNotifyStyle(notification);
+		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
+
+	}
+	
+	/**
+	 * 群聊消息提示
+	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * @param message
+	 */
+	@SuppressWarnings("deprecation")
+	protected void multinotifyNewMessage(EMMessage message) {
+		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		String ticker = "话题消息："+txtBody.getMessage();
+
+		Calendar c = Calendar.getInstance();
+		int hours = c.get(Calendar.HOUR_OF_DAY);
+		int munite = c.get(Calendar.MINUTE);
+		// 构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
+		Notification notification = new Notification(R.drawable.logo, "同行",
+				System.currentTimeMillis());
+		Intent intent = new Intent();
+
+		PendingIntent pendingIntent = PendingIntent.getActivity(
+				MainActivity.this, 0, intent, 0);
+		notification.setLatestEventInfo(getApplicationContext(), "通知标题",
+				"通知显示的内容", pendingIntent);
+		notification.setLatestEventInfo(this, "同行", ticker, pendingIntent);
+		notification.flags = Notification.FLAG_AUTO_CANCEL;// 点击后自动消失
+		ToNotifyStyle(notification);
+		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
+
+	}
+
+	private void ToNotifyStyle(Notification notification) {
+		// TODO Auto-generated method stub
+		if (mShareFileUtils.getBoolean("sound", true)
+				&& mShareFileUtils.getBoolean("vibrate", true)) {
+			notification.defaults = Notification.DEFAULT_SOUND
+					| Notification.DEFAULT_VIBRATE;
+		} else {
+			if (mShareFileUtils.getBoolean("sound", true)) {
+				notification.defaults = Notification.DEFAULT_SOUND;// 声音默认
+			} else if (mShareFileUtils.getBoolean("vibrate", true)) {
+				notification.defaults = Notification.DEFAULT_VIBRATE;
+			}
+		}
+
 	}
 
 	public class IMconnectionListner implements EMConnectionListener {
@@ -561,6 +634,88 @@ public class MainActivity extends pBaseActivity {
 			});
 		}
 
+	}
+	
+	
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	private void senduser(String client_id,String o_client_id,final EMMessage message) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(MainActivity.this, client_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
+									singlenotifyNewMessage(loginBean,message);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+				});
 	}
 
 }

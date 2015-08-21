@@ -137,13 +137,17 @@ public class ManagerActivity {
 	}
 	
 	/**
-	 *  finishMulActivity
+	 *  finishMulActivity 
+	 *  关闭之前所打开的群聊activity
 	 */
 	public void finishMulActivity() {
 		for (int i = 0; i < activityStack.size(); i++) {
 			if (null != activityStack.get(i)) {
 				pLog.i("test","getName:"+activityStack.get(i).getClass().getName());
 				if(activityStack.get(i).getClass().getName().equals("com.peer.activity.MultiChatRoomActivity")){
+					activityStack.get(i).finish();
+				}
+				if(activityStack.get(i).getClass().getName().equals("com.peer.activity.SingleChatRoomActivity")){
 					activityStack.get(i).finish();
 				}
 			}

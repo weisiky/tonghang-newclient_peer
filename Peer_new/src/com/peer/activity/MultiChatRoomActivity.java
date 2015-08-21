@@ -3,6 +3,7 @@ package com.peer.activity;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -207,6 +210,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			if (intent.getStringExtra(Constant.FROMFLOAT) != null
 					&& intent.getStringExtra(Constant.FROMFLOAT).equals(
 							Constant.FROMFLOAT)) {
+				//房间信息全部存在xml里，如果进入自己的房间，就直接把房间信息存下，
+    			//控制用户是否显示悬浮头像的是由FROMFLOAT，和isfloat这两个属性判断，所以退出房间时，不同情况，这两个属性的值做设定就行。
 				toChatUsername = mShareFileUtils.getString(Constant.F_TOPICID, "");
 				pLog.i("test", "从悬浮头像进:"+toChatUsername);
 				pageViewaList.tv_tagname.setText(mShareFileUtils.getString(Constant.F_TAGNAME, ""));
@@ -495,9 +500,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 					Intent intent = new Intent(MultiChatRoomActivity.this,PersonalPageActivity.class);
 					startActivity(intent);
 				} else {
-					Intent intent = new Intent();
+					Intent intent = new Intent(MultiChatRoomActivity.this,OtherPageActivity.class);
 					intent.putExtra("client_id", ChatRoomBean.getInstance().getTopicBean().getUser_id());
-					startActivityForLeft(OtherPageActivity.class, intent, false);
+					startActivity(intent);
 				}
 			} else {
 				showToast("网络未连接", Toast.LENGTH_SHORT, false);
@@ -533,7 +538,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	 * 
 	 */
 	public void startfloatView() {
-		
+		//房间信息全部存在xml里，如果进入自己的房间，就直接把房间信息存下，
+		//控制用户是否显示悬浮头像的是由FROMFLOAT，和isfloat这两个属性判断，所以退出房间时，不同情况，这两个属性的值做设定就行。
 		if (!mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
 				Intent intentfloat = new Intent(MultiChatRoomActivity.this,
 						FxService.class);
@@ -548,6 +554,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 				intentfloat.putExtra(Constant.FROMFLOAT, "fromfloat");
 				startService(intentfloat);
 				mShareFileUtils.setBoolean(Constant.ISFLOAT, true);
+				pLog.i("test", "悬浮头像启动成功！");
 			}
 			finish();
 	}
@@ -719,7 +726,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 		IntentFilter intentFilter = new IntentFilter(EMChatManager
 				.getInstance().getNewMessageBroadcastAction());
 		// 设置广播的优先级别大于MainAcitivity,这样如果消息来的时候正好在chat页面，直接显示消息，而不是提示消息未读
-		intentFilter.setPriority(5);
+		intentFilter.setPriority(4);
 		registerReceiver(receiver, intentFilter);
 	}
 
@@ -776,10 +783,66 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						multichatadapter.notifyDataSetChanged();
 						pageViewaList.lv_chat
 						.setSelection(pageViewaList.lv_chat.getCount() - 1);
+			}else if(message.getChatType() == ChatType.Chat){
+				try {
+					senduser(message.getFrom(), mShareFileUtils.getString(Constant.CLIENT_ID, ""),message);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
+			
 		}
 		}
 	}
+	
+	/**
+	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * 
+	 * @param message
+	 */
+	protected void notifyNewMessage(LoginBean bean,EMMessage message) {
+		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		String ticker = bean.user.getUsername()+" "+"对你说:"+txtBody.getMessage();
+
+		Calendar c = Calendar.getInstance();
+		int hours = c.get(Calendar.HOUR_OF_DAY);
+		int munite = c.get(Calendar.MINUTE);
+		// 构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
+		Notification notification = new Notification(R.drawable.logo, "同行",
+				System.currentTimeMillis());
+		Intent intent;
+			intent = new Intent(MultiChatRoomActivity.this, MainActivity.class);
+
+		PendingIntent pendingIntent = PendingIntent.getActivity(
+				MultiChatRoomActivity.this, 0, intent, 0);
+		notification.setLatestEventInfo(getApplicationContext(), "通知标题",
+				"通知显示的内容", pendingIntent);
+		notification.setLatestEventInfo(this, "同行", ticker, pendingIntent);
+		notification.flags = Notification.FLAG_AUTO_CANCEL;// 点击后自动消失
+		ToNotifyStyle(notification);
+		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
+
+	}
+	
+	private void ToNotifyStyle(Notification notification) {
+		// TODO Auto-generated method stub
+		if (mShareFileUtils.getBoolean("sound", true)
+				&& mShareFileUtils.getBoolean("vibrate", true)) {
+			notification.defaults = Notification.DEFAULT_SOUND
+					| Notification.DEFAULT_VIBRATE;
+		} else {
+			if (mShareFileUtils.getBoolean("sound", true)) {
+				notification.defaults = Notification.DEFAULT_SOUND;// 声音默认
+			} else if (mShareFileUtils.getBoolean("vibrate", true)) {
+				notification.defaults = Notification.DEFAULT_VIBRATE;
+			}
+		}
+
+	}
+	
+	
 
 	/**
 	 * 加入话题请求
@@ -1063,6 +1126,89 @@ public class MultiChatRoomActivity extends pBaseActivity{
 			receiver = null;
 		} catch (Exception e) {
 		}
+	}
+	
+	
+	
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	private void senduser(String client_id,String o_client_id,final EMMessage message) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(MultiChatRoomActivity.this, client_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if(loginBean!=null){
+									notifyNewMessage(loginBean,message);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+				});
 	}
 
 

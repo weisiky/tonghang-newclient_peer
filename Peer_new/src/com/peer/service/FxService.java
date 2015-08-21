@@ -16,6 +16,7 @@ import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.bean.ChatRoomBean;
 import com.peer.utils.ImageLoaderUtil;
+import com.peer.utils.ManagerActivity;
 import com.peer.utils.RoundImageView;
 import com.peer.utils.pLog;
 import com.peer.utils.pShareFileUtils;
@@ -91,7 +92,7 @@ public class FxService extends Service
 //		mShareFileUtils.setString(Constant.F_USERID, userId);
 //		mShareFileUtils.setString(Constant.F_TOPICID, topicid);
 //		mShareFileUtils.setString(Constant.F_ROOMID, roomaddress);
-		mShareFileUtils.setString(Constant.FROMFLOAT, fromfloat);
+//		mShareFileUtils.setString(Constant.FROMFLOAT, fromfloat);
 		
 		createFloatView();
 		super.onStart(intent, startId);
@@ -128,7 +129,6 @@ public class FxService extends Service
 				View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
 				.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         	
-        System.out.println("泡泡："+image);
      // ImageLoader加载图片
      		ImageLoaderUtil.getInstance().showHttpImage(
      				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
@@ -161,12 +161,18 @@ public class FxService extends Service
 	            		if(-mFloatView.getMeasuredWidth()/2<xdown-xup&&xdown-xup<mFloatView.getMeasuredWidth()/2
 	            				&&-(mFloatView.getMeasuredHeight()/2-25)<ydown-yup&&ydown-yup<(mFloatView.getMeasuredHeight()/2-25)){
 	            			ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
+	            			
+	            			//先遍历栈，finish掉前面打开的群聊activity。以免数据显示异常。
+							ManagerActivity.getAppManager().finishMulActivity();
+							
 	            			Intent intent=new Intent(FxService.this,MultiChatRoomActivity.class);
-	            			intent.putExtra(Constant.F_THEME, mShareFileUtils.getString(Constant.F_THEME, ""));			
-	            			intent.putExtra(Constant.F_TAGNAME, mShareFileUtils.getString(Constant.F_TAGNAME, ""));
+	            			//房间信息全部存在xml里，如果进入自己的房间，就直接把房间信息存下，
+	            			//控制用户是否显示悬浮头像的是由FROMFLOAT，和isfloat这两个属性判断，所以退出房间时，不同情况，这两个属性的值做设定就行。
+//	            			intent.putExtra(Constant.F_THEME, mShareFileUtils.getString(Constant.F_THEME, ""));			
+//	            			intent.putExtra(Constant.F_TAGNAME, mShareFileUtils.getString(Constant.F_TAGNAME, ""));
 //	            			intent.putExtra(Constant.F_USERID, userId);
-	            			intent.putExtra(Constant.F_ROOMID, mShareFileUtils.getString(Constant.F_ROOMID, ""));
-	            			intent.putExtra(Constant.F_TOPICID, mShareFileUtils.getString(Constant.F_TOPICID, ""));
+//	            			intent.putExtra(Constant.F_ROOMID, mShareFileUtils.getString(Constant.F_ROOMID, ""));
+//	            			intent.putExtra(Constant.F_TOPICID, mShareFileUtils.getString(Constant.F_TOPICID, ""));
 	            			intent.putExtra(Constant.FROMFLOAT, fromfloat);
 	            			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	            			startActivity(intent);

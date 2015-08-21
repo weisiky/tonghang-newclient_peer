@@ -91,15 +91,14 @@ public class HomepageAdapter extends pBaseAdapter {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Intent intent = new Intent();
 					if (!((pBaseActivity) mContext).isNetworkAvailable) {
 						((pBaseActivity) mContext).showToast(
 								mContext.getResources().getString(
 										R.string.Broken_network_prompt),
 								Toast.LENGTH_SHORT, false);
 					} else {
-						((pBaseActivity) mContext).startActivityForLeft(
-								Recommend_topic.class, intent, false);
+						Intent intent = new Intent(mContext,Recommend_topic.class);
+						mContext.startActivity(intent);
 					}
 				}
 			});

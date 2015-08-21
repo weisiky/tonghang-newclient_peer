@@ -3,6 +3,7 @@ package com.peer.activity;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.R.plurals;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -93,7 +96,6 @@ public class SingleChatRoomActivity extends pBaseActivity {
 	private NewMessageBroadcastReceiver receiver;
 	private String topicId;
 	private UserBean userbean;
-	private int num = 1; // num用作判断用户是否点击theme_chat 0-no;1-yes
 
 
 	class PageViewList {
@@ -522,6 +524,8 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			pageViewaList.lv_chat
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			}
+		}else{
+			multinotifyNewMessage(message);
 		}
 		}
 	}
@@ -547,6 +551,52 @@ public class SingleChatRoomActivity extends pBaseActivity {
 			receiver = null;
 		} catch (Exception e) {
 		}
+	}
+	
+	
+	/**
+	 * 群聊消息提示
+	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * @param message
+	 */
+	@SuppressWarnings("deprecation")
+	protected void multinotifyNewMessage(EMMessage message) {
+		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		String ticker = "话题消息："+txtBody.getMessage();
+
+		Calendar c = Calendar.getInstance();
+		int hours = c.get(Calendar.HOUR_OF_DAY);
+		int munite = c.get(Calendar.MINUTE);
+		// 构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
+		Notification notification = new Notification(R.drawable.logo, "同行",
+				System.currentTimeMillis());
+		Intent intent = new Intent();
+
+		PendingIntent pendingIntent = PendingIntent.getActivity(
+				SingleChatRoomActivity.this, 0, intent, 0);
+		notification.setLatestEventInfo(getApplicationContext(), "通知标题",
+				"通知显示的内容", pendingIntent);
+		notification.setLatestEventInfo(this, "同行", ticker, pendingIntent);
+		notification.flags = Notification.FLAG_AUTO_CANCEL;// 点击后自动消失
+		ToNotifyStyle(notification);
+		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
+
+	}
+
+	private void ToNotifyStyle(Notification notification) {
+		// TODO Auto-generated method stub
+		if (mShareFileUtils.getBoolean("sound", true)
+				&& mShareFileUtils.getBoolean("vibrate", true)) {
+			notification.defaults = Notification.DEFAULT_SOUND
+					| Notification.DEFAULT_VIBRATE;
+		} else {
+			if (mShareFileUtils.getBoolean("sound", true)) {
+				notification.defaults = Notification.DEFAULT_SOUND;// 声音默认
+			} else if (mShareFileUtils.getBoolean("vibrate", true)) {
+				notification.defaults = Notification.DEFAULT_VIBRATE;
+			}
+		}
+
 	}
 
 }

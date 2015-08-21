@@ -54,10 +54,10 @@ public class pBaseApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
-		pLog.isDebug = true;
+		pLog.isDebug = false;
 
 //		 程序crash处理程序。
-//		CrashHandler.instance(this).init();
+		CrashHandler.instance(this).init();
 		// 初始化图片加载程序
 		ImageLoaderUtil.getInstance();
 		// 注册网络监听器

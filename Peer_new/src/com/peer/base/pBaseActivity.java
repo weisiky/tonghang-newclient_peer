@@ -14,35 +14,23 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.easemob.EMConnectionListener;
-import com.easemob.EMError;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.util.NetUtils;
-import com.peer.IMimplements.easemobchatImp;
+import com.peer.R;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
 import com.peer.activity.MyAcountActivity;
-import com.peer.activity.PersonalPageActivity;
-import com.peer.R;
-import com.peer.activity.RegisterAcountActivity;
-import com.peer.activity.SearchUserActivity;
 import com.peer.activity.SettingActivity;
-import com.peer.activity.MainActivity.IMconnectionListner;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.bean.ChatRoomBean;
 import com.peer.service.FxService;
@@ -99,9 +87,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 	protected NotificationManager notificationManager;
 
-	private NewMessageBroadcastReceiver msgReceiver;
-
-	private MainActivity mainActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,29 +142,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		AnalyticsConfig.enableEncrypt(true);
 
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-		mainActivity = new MainActivity();
 		
-//		registerEMchat();
 
-
-	}
-
-	/**
-	 * 环信注册监听
-	 */
-	private void registerEMchat() {
-		// TODO Auto-generated method stub
-		if (EMChatManager.getInstance().isConnected()) {
-			msgReceiver = new NewMessageBroadcastReceiver();
-			IntentFilter intentFilter = new IntentFilter(EMChatManager
-					.getInstance().getNewMessageBroadcastAction());
-			intentFilter.setPriority(3);
-			registerReceiver(msgReceiver, intentFilter);
-			EMChatManager.getInstance().addConnectionListener(
-					new IMconnectionListner());
-			EMChat.getInstance().setAppInited();
-		}
 	}
 
 	@Override
@@ -199,22 +163,8 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			if (mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
 				Intent resintent = new Intent(pBaseActivity.this,
 						FxService.class);
-				resintent.putExtra(Constant.F_IMAGE,
-						mShareFileUtils.getString(Constant.F_IMAGE, ""));
-				resintent.putExtra(Constant.F_OWNERNIKE,
-						mShareFileUtils.getString(Constant.F_OWNERNIKE, ""));
-				resintent.putExtra(Constant.F_THEME,
-						mShareFileUtils.getString(Constant.F_THEME, ""));
-				resintent.putExtra(Constant.F_TAGNAME,
-						mShareFileUtils.getString(Constant.F_TAGNAME, ""));
-				resintent.putExtra(Constant.F_USERID,
-						mShareFileUtils.getString(Constant.F_USERID, ""));
-				resintent.putExtra(Constant.F_ROOMID,
-						mShareFileUtils.getString(Constant.F_ROOMID, ""));
-				resintent.putExtra(Constant.F_TOPICID,
-						mShareFileUtils.getString(Constant.F_TOPICID, ""));
-				resintent.putExtra(Constant.FROMFLOAT,
-						mShareFileUtils.getString(Constant.FROMFLOAT, ""));
+				
+				resintent.putExtra(Constant.FROMFLOAT, "fromfloat");
 				startService(resintent);
 			}
 		}
@@ -471,10 +421,10 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, false);
-		} else if (getLocalClassNameBySelf().contains("Recommend_topic")
-				|| getLocalClassNameBySelf().contains("MultiChatRoomActivity")) {
+		} else if (getLocalClassNameBySelf().contains("MultiChatRoomActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
+				|| getLocalClassNameBySelf().contains("Recommend_topic")
 				|| getLocalClassNameBySelf().contains("GetAddressInfoActivity")
 				|| getLocalClassNameBySelf().contains("SettingActivity")
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
@@ -643,144 +593,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		default:
 			break;
 
-		}
-	}
-
-	/**
-	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
-	 * 
-	 * @param message
-	 */
-	protected void notifyNewMessage(EMMessage message) {
-		TextMessageBody txtBody = (TextMessageBody) message.getBody();
-		String ticker = txtBody.getMessage();
-
-		Calendar c = Calendar.getInstance();
-		int hours = c.get(Calendar.HOUR_OF_DAY);
-		int munite = c.get(Calendar.MINUTE);
-		// 构建一个通知对象(需要传递的参数有三个,分别是图标,标题和 时间)
-		Notification notification = new Notification(R.drawable.logo, "同行",
-				System.currentTimeMillis());
-		Intent intent = new Intent(pBaseActivity.this, MainActivity.class);
-
-		PendingIntent pendingIntent = PendingIntent.getActivity(
-				pBaseActivity.this, 0, intent, 0);
-		notification.setLatestEventInfo(getApplicationContext(), "通知标题",
-				"通知显示的内容", pendingIntent);
-		notification.setLatestEventInfo(this, "同行", ticker, pendingIntent);
-		notification.flags = Notification.FLAG_AUTO_CANCEL;// 点击后自动消失
-		ToNotifyStyle(notification);
-		/*
-		 * int starth=LocalStorage.getInt(BasicActivity.this, "starth", 22); int
-		 * startm=LocalStorage.getInt(BasicActivity.this, "startm", 30); int
-		 * endh=LocalStorage.getInt(BasicActivity.this, "endh", 8); int
-		 * endm=LocalStorage.getInt(BasicActivity.this, "endm", 30);
-		 * if(DateFormat.is24HourFormat(this)){
-		 * if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
-		 * ToNotifyStyle(notification); } }else{ String amorpm;
-		 * if(c.get(Calendar.AM_PM)==0){ amorpm="am";
-		 * if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
-		 * ToNotifyStyle(notification); } }else{ amorpm="pm"; hours=hours+12;
-		 * if(!((hours>starth&&munite>startm) || (hours<endh&&munite<endm))){
-		 * ToNotifyStyle(notification); } }
-		 * 
-		 * }
-		 */
-		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
-
-	}
-
-	private void ToNotifyStyle(Notification notification) {
-		// TODO Auto-generated method stub
-		if (mShareFileUtils.getBoolean("sound", true)
-				&& mShareFileUtils.getBoolean("vibrate", true)) {
-			notification.defaults = Notification.DEFAULT_SOUND
-					| Notification.DEFAULT_VIBRATE;
-		} else {
-			if (mShareFileUtils.getBoolean("sound", true)) {
-				notification.defaults = Notification.DEFAULT_SOUND;// 声音默认
-			} else if (mShareFileUtils.getBoolean("vibrate", true)) {
-				notification.defaults = Notification.DEFAULT_VIBRATE;
-			}
-		}
-
-	}
-
-	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			abortBroadcast();
-			// 消息id
-			String msgId = intent.getStringExtra("msgid");
-			// 发消息的人的username(userid)
-			String msgFrom = intent.getStringExtra("from");
-			// 更方便的方法是通过msgId直接获取整个message
-			EMMessage message = EMChatManager.getInstance().getMessage(msgId);
-
-			// if (SingleChatRoomActivity.activityInstance != null) {
-			// if (message.getChatType() == ChatType.GroupChat) {
-			// if
-			// (message.getTo().equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-			// return;
-			// } else {
-			// if
-			// (msgFrom.equals(SingleChatRoomActivity.activityInstance.getToChatUsername()))
-			// return;
-			// }
-			// }
-
-			mainActivity.updateUnreadLabel();
-			System.out.println("监听到了");
-			notifyNewMessage(message);
-
-			mainActivity.refreshUnReadSum();
-
-		}
-	}
-
-	public class IMconnectionListner implements EMConnectionListener {
-
-		@Override
-		public void onConnected() {
-			// TODO Auto-generated method stub
-			runOnUiThread(new Runnable() {
-				public void run() {
-					pLog.i("system", "环信转态连接良好");
-				}
-			});
-		}
-
-		@Override
-		public void onDisconnected(final int error) {
-			runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					if (error == EMError.USER_REMOVED) {
-						// 显示帐号已经被移除
-						showToast("帐号已经被移除", Toast.LENGTH_SHORT, false);
-					} else if (error == EMError.CONNECTION_CONFLICT) {
-						// 显示帐号在其他设备登陆
-						showToast("帐号在其他设备登陆，请重新登入", Toast.LENGTH_SHORT, false);
-						BussinessUtils.clearUserData(mShareFileUtils);
-						ManagerActivity.getAppManager().restart(
-								pBaseActivity.this);
-					} else {
-						if (NetUtils.hasNetwork(pBaseActivity.this))
-							// 连接不到聊天服务器
-							easemobchatImp.getInstance().login(
-									mShareFileUtils.getString(
-											Constant.CLIENT_ID, "").replace(
-											"-", ""),
-									mShareFileUtils.getString(
-											Constant.PASSWORD, ""));
-
-						// else
-						// 当前网络不可用，请检查网络设置
-						// homefragment.base_neterror_item.setVisibility(View.VISIBLE);
-					}
-				}
-			});
 		}
 	}
 

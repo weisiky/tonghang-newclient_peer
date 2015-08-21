@@ -126,6 +126,7 @@ public class TopicAdapter extends pBaseAdapter {
 								easemobchatImp.getInstance().exitgroup(grouplist.get(i).getGroupId());
 							}
 						}
+						//先遍历栈，finish掉前面打开的群聊activity。以免数据显示异常。
 						ManagerActivity.getAppManager().finishMulActivity();
 						Intent intent=new Intent();
 						((pBaseActivity)mContext).startActivityForLeft(MultiChatRoomActivity.class, intent, false);
