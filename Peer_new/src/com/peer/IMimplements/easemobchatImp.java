@@ -1,11 +1,14 @@
 package com.peer.IMimplements;
 
+import java.io.File;
+
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.peer.IMinterface.IM;
@@ -69,6 +72,28 @@ public class easemobchatImp implements IM{
 	
 	
 	
+	@Override
+	public void sendImgMessage(File newfile,String targetId,String imageUrl) {
+		// TODO Auto-generated method stub
+		EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+		ImageMessageBody body = new ImageMessageBody(newfile);
+		// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
+		// body.setSendOriginalImage(true);
+		// 设置消息body
+		message.addBody(body);
+		//自定义扩展消息，用于头像
+		message.setAttribute(Constant.IMAGEURL, imageUrl);
+		//自定义扩展消息，用于携带用户Id
+//		message.setAttribute(Constant.USERID, userid);
+		// 设置要发给谁
+		message.setReceipt(targetId);		
+		try {
+			//发送消息
+			EMChatManager.getInstance().sendMessage(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void sendMessage(String content, int chattype,String targetId,String imageUrl) {
 		// TODO Auto-generated method stub

@@ -121,7 +121,8 @@ public class WelComeActivity extends pBaseActivity {
 			public void onFinish() {
 				Intent intent = new Intent();
 				if (!mShareFileUtils.getString(Constant.CLIENT_ID, "").equals(
-						"")&&!mShareFileUtils.getString(Constant.BIRTH, "").equals("")) {
+						"")&&!mShareFileUtils.getString(Constant.BIRTH, "").equals("")
+						&&!mShareFileUtils.getString(Constant.LABELS, "").equals("")) {
 					startActivityForLeft(MainActivity.class, intent, false);
 				} else {
 					startActivityForLeft(LoginActivity.class, intent, false);
@@ -136,6 +137,44 @@ public class WelComeActivity extends pBaseActivity {
 		HttpEntity entity = null;
 		HttpUtil.post(HttpConfig.GET_SYSTEMCONFIG,
 				new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				pLog.i("test", "statusCode:"+statusCode);
+				pLog.i("test", "headers:"+headers);
+				pLog.i("test", "responseString:"+responseString);
+				pLog.i("test", "throwable:"+throwable);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				pLog.i("test", "statusCode:"+statusCode);
+				pLog.i("test", "headers:"+headers);
+				pLog.i("test", "errorResponse:"+errorResponse);
+				pLog.i("test", "throwable:"+throwable);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				pLog.i("test", "statusCode:"+statusCode);
+				pLog.i("test", "headers:"+headers);
+				pLog.i("test", "errorResponse:"+errorResponse);
+				pLog.i("test", "throwable:"+throwable);
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
 
 					@SuppressWarnings("static-access")
 					@Override
@@ -167,18 +206,41 @@ public class WelComeActivity extends pBaseActivity {
 									Constant.CAN_REGISTER_USER,
 									reasult.getJSONObject("system").getString(
 											"time"));
+							mShareFileUtils.setBoolean(
+									Constant.USE_ADV,
+									reasult.getJSONObject("system").getBoolean(
+											"use_adv"));
+							mShareFileUtils.setBoolean(
+									Constant.THIRD_ADV,
+									reasult.getJSONObject("system").getBoolean(
+											"third_adv"));
+							mShareFileUtils.setString(
+									Constant.SELF_ADV_URL,
+									reasult.getJSONObject("system").getString(
+											"self_adv_url"));
+							mShareFileUtils.setString(
+									Constant.SELF_IMG,
+									reasult.getJSONObject("system").getString(
+											"self_img"));
 
-							pLog.i("test","CAN_UPGRADE_SILENTLY:"+reasult.getJSONObject("system")
+							pLog.i("test","USE_ADV:"+reasult.getJSONObject("system")
 									.getBoolean(
-											"can_upgrade_silently"));
-							pLog.i("test","CLIENT_ID:"+mShareFileUtils.getString(
-									Constant.CLIENT_ID, ""));
-							pLog.i("test","BIRTH:"+mShareFileUtils.getString(
-									Constant.BIRTH, ""));
+											"use_adv"));
+							pLog.i("test","THIRD_ADV:"+reasult.getJSONObject("system")
+									.getBoolean(
+											"third_adv"));
+							pLog.i("test","SELF_ADV_URL:"+reasult.getJSONObject("system")
+									.getString(
+											"self_adv_url"));
+							pLog.i("test","SELF_IMG:"+reasult.getJSONObject("system")
+									.getString(
+											"self_img"));
 							if (reasult.getJSONObject("system").getBoolean(
 									"can_login")
 									&& !mShareFileUtils.getString(
 											Constant.CLIENT_ID, "").equals("")
+											&&!mShareFileUtils.getString(
+													Constant.LABELS, "").equals("")
 											&&!mShareFileUtils.getString(
 													Constant.BIRTH, "").equals("")) {
 									sendRequesJpush();

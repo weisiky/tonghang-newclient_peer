@@ -76,14 +76,21 @@ public class ChatHistoryAdapter extends pBaseAdapter {
 			TextView tv_nikename=(TextView)ViewHolder.get(convertView,R.id.tv_nikename);			
 			TextView tv_descripe=(TextView)ViewHolder.get(convertView,R.id.tv_descripe);
 			LinearLayout ll_clike=(LinearLayout)ViewHolder.get(convertView,R.id.ll_clike);
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(mContext,
 					((pBaseActivity)mContext).mShareFileUtils.getString(Constant.PIC_SERVER, "")
 					+user.getImage(),im_headpic,
 					R.drawable.mini_avatar_shadow);
 			tv_nikename.setText(user.getUsername());	
 			EMMessage lastMessage = conversation.getLastMessage();
-			TextMessageBody body=(TextMessageBody) lastMessage.getBody();
-			tv_descripe.setText(body.getMessage());
+			
+			if(lastMessage.getType().equals(EMMessage.Type.TXT)){
+				TextMessageBody body=(TextMessageBody) lastMessage.getBody();
+				tv_descripe.setText(body.getMessage());
+			}else if(lastMessage.getType().equals(EMMessage.Type.IMAGE)){
+				tv_descripe.setText("[图片]");
+			}
+			
+			
 			final BadgeView bd=new BadgeView(mContext, ll_clike);
 			if (conversation.getUnreadMsgCount() > 0) {				
 				bd.setText(String.valueOf(conversation.getUnreadMsgCount()));

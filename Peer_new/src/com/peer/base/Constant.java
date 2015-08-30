@@ -37,6 +37,7 @@ public class Constant {
 	public static String TOPICBYTOPIC = "topicbytopic";
 	public static String USERBYNIKE = "userbynike";
 	public static String USERBYLABEL = "userbylabel";
+	public static String BYDISTANCE = "byDistance";
 	// public String TOPICLIST="topiclist";
 	/* search int type */
 
@@ -79,6 +80,10 @@ public class Constant {
 	public static String CAN_UPGRADE_SILENTLY = "can_upgrade_silently";
 	public static String CAN_LOGIN = "can_login";
 	public static String CAN_REGISTER_USER = "can_register_user";
+	public static String USE_ADV = "use_adv";
+	public static String THIRD_ADV = "third_adv";
+	public static String SELF_ADV_URL = "self_adv_url";
+	public static String SELF_IMG = "self_img";
 	/** 获取SD */
 	public static final String SDCARD_DIR = SDCardScanner.getSDPath();
 	/** SharedPreferences文件名称 */

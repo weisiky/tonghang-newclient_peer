@@ -1,20 +1,31 @@
 package com.peer.receiver;
 
-import com.peer.activity.LoginActivity;
-import com.peer.activity.MainActivity;
-import com.peer.activity.NewFriendsActivity;
-import com.peer.base.Constant;
-import com.peer.utils.ManagerActivity;
-import com.peer.utils.pShareFileUtils;
-
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.provider.Settings.System;
 import android.util.Log;
+import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
+
+import com.peer.R;
+import com.peer.IMimplements.easemobchatImp;
+import com.peer.activity.LoginActivity;
+import com.peer.activity.MainActivity;
+import com.peer.activity.NewFriendsActivity;
+import com.peer.activity.OtherPageActivity;
+import com.peer.activity.SettingActivity;
+import com.peer.activity.SingleChatRoomActivity;
+import com.peer.base.Constant;
+import com.peer.base.pBaseActivity;
+import com.peer.bean.JpushBean;
+import com.peer.utils.JsonDocHelper;
+import com.peer.utils.ManagerActivity;
+import com.peer.utils.pLog;
+import com.peer.utils.pShareFileUtils;
 
 /**
  * 自定义接收器
@@ -24,6 +35,8 @@ import cn.jpush.android.api.JPushInterface;
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "push";
 
+	public static final String NOTIFICATION_SERVICE = "notification";
+
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
 
@@ -32,83 +45,57 @@ public class MyReceiver extends BroadcastReceiver {
 		Bundle bundle = intent.getExtras();
 		Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction()
 				+ ", extras: " + printBundle(bundle));
+		
+		mShareFileUtils.initSharePre(context,
+				Constant.SHARE_NAME, 0);
+		
+		
+		
+		pLog.i("test", "jpush:" + bundle.getString("cn.jpush.android.MESSAGE"));
+		JpushBean jpushBean = new JpushBean();
 
-		mShareFileUtils.initSharePre(context, Constant.SHARE_NAME, 0);
+		try {
+			jpushBean = JsonDocHelper.toJSONObject(
+					bundle.getString("cn.jpush.android.MESSAGE"),
+					JpushBean.class);
 
-		if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
-			String regId = bundle
-					.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-			Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
-			// send the Registration Id to your server...
+			if (jpushBean != null) {
+				pLog.i("test", "jpushBean:" + jpushBean.getType());
 
-		} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent
-				.getAction())) {
-			Log.d(TAG,
-					"[MyReceiver] 接收到推送下来的自定义消息: "
-							+ bundle.getString(JPushInterface.EXTRA_MESSAGE));
-			// processCustomMessage(context, bundle);
+				if (jpushBean.getType().equals("4")) {
+					
+					// 封号
+					exitlogin(context,mShareFileUtils);
+					
 
-		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent
-				.getAction())) {
-			Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
-			int notifactionId = bundle
-					.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-			// Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
-			String content = bundle.getString(JPushInterface.EXTRA_ALERT);
-			if (content.contains("封号") || content.contains("删除")) {
-				Log.d(TAG, "[MyReceiver] 接收到推送下来的通知" + content);
-				ManagerActivity.getAppManager().finishAllActivity();
-			}
-		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent
-				.getAction())) {
-			Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
-			String islogin = null;
-			islogin = mShareFileUtils.getString(Constant.CLIENT_ID, "");
-			if (!islogin.equals("") && islogin.length() <= 0) {
-				Intent i = new Intent(context, LoginActivity.class);
-				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-						| Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				context.startActivity(i);
-			} else {
-				String content = bundle.getString(JPushInterface.EXTRA_ALERT);
-				if (content.contains("封号") || content.contains("删除")) {
-					Log.d(TAG, "[MyReceiver] 接收到推送下来的通知" + content);
-					// ManagerActivity.getAppManager().finishAllActivity();
-				} else if (content.contains("好友")) {
-					// 打开自定义的Activity
-					Intent i = new Intent(context, NewFriendsActivity.class);
-					i.putExtras(bundle);
-					// i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-							| Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					context.startActivity(i);
-				} else {
-					Intent i = new Intent(context, MainActivity.class);
-					i.putExtras(bundle);
-					// i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-							| Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					context.startActivity(i);
+				} else if(jpushBean.getType().equals("6")){
+					//删除话题
+//					deletetopic(context,mShareFileUtils);
+				}else{
+					showNotification(context, jpushBean,
+							(int) Math.random() * 100, mShareFileUtils);
 				}
 			}
 
-		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent
-				.getAction())) {
-			Log.d(TAG,
-					"[MyReceiver] 用户收到到RICH PUSH CALLBACK: "
-							+ bundle.getString(JPushInterface.EXTRA_EXTRA));
-			// 在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity，
-			// 打开一个网页等..
-
-		} else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent
-				.getAction())) {
-			boolean connected = intent.getBooleanExtra(
-					JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-			Log.w(TAG, "[MyReceiver]" + intent.getAction()
-					+ " connected state change to " + connected);
-		} else {
-			Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+
+	private void deletetopic(Context context, pShareFileUtils mShareFileUtils) {
+		// TODO Auto-generated method stub
+		Toast.makeText(context, "话题已被删除", Toast.LENGTH_SHORT);
+		Intent intent = new Intent();
+		((pBaseActivity)context).startActivityForLeft(MainActivity.class, intent, false);
+	}
+
+	private void exitlogin(Context context,pShareFileUtils mShareFileUtils) {
+		// TODO Auto-generated method stub
+//		mShareFileUtils.setString(Constant.CLIENT_ID, "");
+		pLog.i("test","fenghao");
+		((pBaseActivity)context).showToast("您已经被封号", Toast.LENGTH_SHORT, false);
+		System.exit(0);
 	}
 
 	// 打印所有的 intent extra 数据
@@ -125,4 +112,77 @@ public class MyReceiver extends BroadcastReceiver {
 		}
 		return sb.toString();
 	}
+
+	/**
+	 * 展示推送通知
+	 * 
+	 * @param2：打开客户端进入首页
+	 * @param3：资讯详情页面
+	 * @param4：活动详情页面
+	 * @param5：互动详情页面
+	 * @param6：服务列表页面
+	 * @param7：速递服务详情页面
+	 * @param 8：速取服务详情也没有
+	 * @param pushItemBean
+	 */
+	@SuppressWarnings({ "deprecation", "static-access" })
+	public void showNotification(Context context, JpushBean jpushBean,
+			int notifyId, pShareFileUtils mShareFileUtils) {
+		mShareFileUtils.initSharePre(context, Constant.SHARE_NAME, 0);
+		Notification notification = new Notification();
+		notification.icon = R.drawable.logo; // 设置显示在手机最上边的状态栏的图标
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;// 点击通知后自动消失
+		
+		pLog.i("test","sound:"+ mShareFileUtils.getBoolean("sound", true));
+		pLog.i("test","vibrate:"+ mShareFileUtils.getBoolean("vibrate", true));
+
+		if (mShareFileUtils.getBoolean("sound", true)
+				&& mShareFileUtils.getBoolean("vibrate", true)) {
+			notification.defaults = Notification.DEFAULT_SOUND
+					| Notification.DEFAULT_VIBRATE;
+		} else {
+			if (mShareFileUtils.getBoolean("sound", true)) {
+				notification.defaults = Notification.DEFAULT_SOUND;// 声音默认
+			} else if (mShareFileUtils.getBoolean("vibrate", true)) {
+				notification.defaults = Notification.DEFAULT_VIBRATE;
+			}
+		}
+
+		Intent intent = new Intent();
+//		if (mShareFileUtils.getString(Constant.CLIENT_ID, "").length() > 0) {
+
+			if (jpushBean.getType().equals("0")) {
+				// 请求加好友
+				intent.setClass(context, NewFriendsActivity.class);
+			} else if (jpushBean.getType().equals("1")) {
+				// 同意加好友
+			} else if (jpushBean.getType().equals("2")) {
+				// 拒绝加好友
+			} else if (jpushBean.getType().equals("3")) {
+				// 推荐新人--跳转到个人主页。
+				pLog.i("test", "333");
+				intent.putExtra("client_id", jpushBean.getId());
+				intent.setClass(context, OtherPageActivity.class);
+			} else if (jpushBean.getType().equals("5")) {
+				// 解封
+				intent.setClass(context, LoginActivity.class);
+			}
+
+//		} else {
+//			// 没有注册跳转注册页面
+//			pLog.i("test","no");
+//			intent.setClass(context, LoginActivity.class);
+//		}
+
+		notification.tickerText = jpushBean.getMessage(); // 当前的notification被放到状态栏上的时候，提示内容
+		PendingIntent pt = PendingIntent.getActivity(context, notifyId, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		notification.setLatestEventInfo(context, "同行", jpushBean.getMessage(),
+				pt);
+		NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.notify(notifyId, notification);
+
+	}
+
 }

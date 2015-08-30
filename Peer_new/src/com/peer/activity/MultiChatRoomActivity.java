@@ -146,6 +146,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT, page);
 		popupwindow();
+		
+		pageViewaList.et_sendmessage.setHint(getResources().getString(
+				R.string.sendmessage));
 
 		hideKeyboard();// 软键盘
 		pageViewaList.btn_send.setEnabled(false);
@@ -218,7 +221,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 				pageViewaList.tv_nikename.setText(mShareFileUtils.getString(Constant.USERNAME, ""));
 				pageViewaList.theme_chat.setText(mShareFileUtils.getString(Constant.F_THEME, ""));
 				// ImageLoader加载图片
-				ImageLoaderUtil.getInstance().showHttpImage(
+				ImageLoaderUtil.getInstance().showHttpImage(this,
 						mShareFileUtils.getString(Constant.PIC_SERVER, "")
 						+mShareFileUtils.getString(Constant.IMAGE, "")
 						, pageViewaList.host_image,
@@ -229,6 +232,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						.getString(R.string.exitroom), R.color.white));
 				titlePopup.addAction(new ActionItem(this, getResources()
 						.getString(R.string.lookformember), R.color.white));
+//				titlePopup.addAction(new ActionItem(this, getResources()
+//						.getString(R.string.deleteroom), R.color.white));
 			} else {
 				
 				toChatUsername = ChatRoomBean.getInstance().getTopicBean()
@@ -242,7 +247,7 @@ public class MultiChatRoomActivity extends pBaseActivity{
 				pageViewaList.theme_chat.setEllipsize(TextUtils.TruncateAt
 						.valueOf("END"));
 				// ImageLoader加载图片
-				ImageLoaderUtil.getInstance().showHttpImage(
+				ImageLoaderUtil.getInstance().showHttpImage(this,
 						mShareFileUtils.getString(Constant.PIC_SERVER, "")
 						+ChatRoomBean.getInstance().getTopicBean().getImage() 
 						, pageViewaList.host_image,
@@ -263,6 +268,8 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							.getString(R.string.exitroom), R.color.white));
 					titlePopup.addAction(new ActionItem(this, getResources()
 							.getString(R.string.lookformember), R.color.white));
+//					titlePopup.addAction(new ActionItem(this, getResources()
+//							.getString(R.string.deleteroom), R.color.white));
 				}
 			}
 			/** 群聊，且为自己的房间时，退出显示头像 **/
@@ -420,13 +427,14 @@ public class MultiChatRoomActivity extends pBaseActivity{
 	@Override
 	protected View loadContentLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_chatroom, null);
+		return getLayoutInflater().inflate(R.layout.activity_multisend, null);
 	}
 
 	@Override
 	protected View loadBottomLayout() {
 		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.base_btn_send, null);
+//		return getLayoutInflater().inflate(R.layout.base_btn_send, null);
+		return null;
 	}
 
 	@SuppressWarnings("static-access")
@@ -458,6 +466,9 @@ public class MultiChatRoomActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 //		super.onClick(v);
 		switch (v.getId()) {
+		case R.id.btn_clear_search_text:
+			pageViewaList.et_sendmessage.setText("");
+			break;
 		case R.id.theme_chat:
 			showtheme(num);
 			num++;
@@ -666,6 +677,10 @@ public class MultiChatRoomActivity extends pBaseActivity{
 						intent.putExtra("client_id", mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 						startActivity(intent);
 					}
+//					}else if (item.mTitle.equals(getResources().getString(
+//							R.string.deleteroom))) {
+//						senddeletetopic(toChatUsername);
+//					}
 				}
 
 			}
@@ -1204,6 +1219,89 @@ public class MultiChatRoomActivity extends pBaseActivity{
 							e1.printStackTrace();
 						}
 
+						super.onSuccess(statusCode, headers, response);
+
+					}
+
+				});
+	}
+	
+	
+	/**
+	 * 删除话题请求
+	 * 
+	 * @param topic_id
+	 * @exception UnsupportedEncodingException
+	 */
+	private void senddeletetopic(String topic_id) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getdeletetopicParams(MultiChatRoomActivity.this,
+					 topic_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.DELETE_TOPIC_IN_URL, params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						pLog.i("test", "res:"+response.toString());
+
+						try {
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								backPage();
+								showToast("话题已删除", Toast.LENGTH_SHORT, false);
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						super.onSuccess(statusCode, headers, response);
 
 					}

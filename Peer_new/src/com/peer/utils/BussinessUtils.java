@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.app.Service;
@@ -463,6 +464,30 @@ public class BussinessUtils {
 
 	/**
 	 * Bitmap对象保存为图片文件
+	 * 发送图片，自己的图片存本地
+	 * 
+	 * @param bitmap
+	 */
+	public static void sendBitmapFile(Bitmap bitmap,String uuid) {
+		File f = new File(Constant.C_IMAGE_CACHE_PATH);
+		if(!f.exists()){
+			f.mkdirs();
+		}
+		File file = new File(Constant.C_IMAGE_CACHE_PATH
+				+ uuid+".png");// 将要保存图片的路径
+		try {
+			BufferedOutputStream bos = new BufferedOutputStream(
+					new FileOutputStream(file));
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+			bos.flush();
+			bos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Bitmap对象保存为图片文件
 	 * 
 	 * @param bitmap
 	 */
@@ -482,6 +507,13 @@ public class BussinessUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String getUUID(){
+		UUID uuid = UUID.randomUUID();
+		return uuid.toString();
+	}
+	
+	
 	
 
 }

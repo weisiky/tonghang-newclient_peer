@@ -12,6 +12,7 @@ public class ChatMsgEntityBean {
 	private String name;//消息来自
 	private String date;//消息日期
 	private String message;//消息内容
+	private String type;
 	private int isComMeg;//收到哪种消息  1为我，0为其他人
 	public UserBean userbean=new UserBean();
 	
@@ -33,6 +34,15 @@ public class ChatMsgEntityBean {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 
 	public String getName() {
 		return name;

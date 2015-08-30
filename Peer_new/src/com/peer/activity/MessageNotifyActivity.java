@@ -91,9 +91,13 @@ public class MessageNotifyActivity extends pBaseActivity{
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
 				// TODO Auto-generated method stub
 				if(isChecked){
+					pLog.i("test", "isChecked:"+isChecked);
 					mShareFileUtils.setBoolean("vibrate", true);
+					pLog.i("test", "vibrate:"+mShareFileUtils.getBoolean("vibrate", true));
 				}else{
+					pLog.i("test", "isChecked:"+isChecked);
 					mShareFileUtils.setBoolean("vibrate", false);
+					pLog.i("test", "vibrate:"+mShareFileUtils.getBoolean("vibrate", true));
 				}				
 			}
 		});	

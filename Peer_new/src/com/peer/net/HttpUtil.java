@@ -28,7 +28,7 @@ public class HttpUtil {
 	private static AsyncHttpClient client = new AsyncHttpClient();
 	static {
 		// 设置链接超时，如果不设置，默认为10s
-		client.setTimeout(11000);
+		client.setTimeout(600000);
 	}
 
 	/**

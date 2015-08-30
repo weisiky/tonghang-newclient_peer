@@ -35,6 +35,7 @@ import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
+import com.peer.utils.MD5;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -244,12 +245,13 @@ public class LoginActivity extends pBaseActivity {
 							LoginBean loginBean = JsonDocHelper.toJSONObject(
 									response.getJSONObject("success")
 											.toString(), LoginBean.class);
-							pLog.i("test","getBirth:"+loginBean.user.getBirth());
+							pLog.i("test","getBirth:"+loginBean.user.getLabels());
 							if (loginBean != null && 
-									loginBean.user.getBirth()!=null) {
-
+									loginBean.user.getBirth()!=null
+									&& loginBean.user.getLabels().size()!=0) {
+								String md5password = BussinessUtils.strMd5(password);
 								mShareFileUtils.setString(Constant.PASSWORD,
-										password);
+										md5password);
 
 								BussinessUtils.saveUserData(loginBean,
 										mShareFileUtils);
@@ -282,11 +284,21 @@ public class LoginActivity extends pBaseActivity {
 
 								startActivityForLeft(MainActivity.class,
 										intent, false);
-								}else{
+								}else if(loginBean.user.getLabels().size()==0){
 									showToast(getResources().getString(R.string.completemessage)
 											, Toast.LENGTH_SHORT, false);
-									mShareFileUtils.setString("client_id", loginBean.user.getClient_id());
-									mShareFileUtils.setString("username", loginBean.user.getUsername());
+									String md5password = BussinessUtils.strMd5(password);
+									mShareFileUtils.setString(Constant.CLIENT_ID, loginBean.user.getClient_id());
+									mShareFileUtils.setString(Constant.USERNAME, loginBean.user.getUsername());
+									mShareFileUtils.setString(Constant.PASSWORD,
+											md5password);
+									Intent intent = new Intent();
+									startActivityForLeft(RegisterTagActivity.class, intent, false);
+								}else if(loginBean.user.getBirth()==null){
+									showToast(getResources().getString(R.string.completemessage)
+											, Toast.LENGTH_SHORT, false);
+									mShareFileUtils.setString(Constant.CLIENT_ID, loginBean.user.getClient_id());
+									mShareFileUtils.setString(Constant.USERNAME, loginBean.user.getUsername());
 									Intent intent = new Intent();
 									startActivityForLeft(RegisterCompleteActivity.class, intent, false);
 								}

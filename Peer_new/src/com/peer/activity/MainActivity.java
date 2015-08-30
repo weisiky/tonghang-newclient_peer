@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -47,6 +54,7 @@ import com.peer.fragment.ComeMsgFragment;
 import com.peer.fragment.FriendsFragment;
 import com.peer.fragment.HomeFragment;
 import com.peer.fragment.MyFragment;
+import com.peer.gps.MyLocationListener;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
@@ -73,6 +81,9 @@ public class MainActivity extends pBaseActivity {
 	private MyFragment myfragment;
 	private Fragment[] fragments;
 
+	public static LocationClient mLocationClient = null;
+	public BDLocationListener myListener = new MyLocationListener();
+	
 	private int index;
 	private int currentTabIndex;
 	private int intnewfriendsnum;
@@ -101,6 +112,25 @@ public class MainActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		 registerEMchat();
+		 registerGPS();
+		 mLocationClient.start();
+//		 Timer time = new Timer();
+//		 time.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+				// TODO Auto-generated method stub
+				if(MyLocationListener.w>0&&MyLocationListener.j>0){
+					try {
+						sendgps(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+								,MyLocationListener.w,MyLocationListener.j);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+//			}
+//		},1000*8);
 		// 考虑到用户流量的限制，目前我们默认在Wi-Fi接入情况下才进行自动提醒。如需要在任意网络环境下都进行更新自动提醒，
 		// 则请在update调用之前添加以下代码：
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
@@ -431,6 +461,33 @@ public class MainActivity extends pBaseActivity {
 //		}
 	}
 	
+	/**
+	 * GPS监听
+	 */
+	private void registerGPS() {
+		 mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
+		 initLocation();
+	}
+	
+	private void initLocation(){
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationMode.Hight_Accuracy
+);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
+        int span=1000;
+        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+        option.setOpenGps(true);//可选，默认false,设置是否使用gps
+        option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
+        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+option.setIgnoreKillProcess(false);//可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
+        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+        mLocationClient.setLocOption(option);
+    }
+	
 	private List<EMConversation> loadConversationsWithRecentChat() {
 		// 获取所有会话，包括陌生人
 		Hashtable<String, EMConversation> conversations = EMChatManager
@@ -716,6 +773,88 @@ public class MainActivity extends pBaseActivity {
 					}
 
 				});
+	}
+	
+	
+	
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @param x_point
+	 * @param y_point
+	 * @throws UnsupportedEncodingException
+	 */
+	private void sendgps(String client_id,Double x_point, Double y_point) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getGPSParams(MainActivity.this, x_point,y_point);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.LOGIN_GPS_URL + client_id + ".json", params,
+				new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				pLog.i("test", "response:"+response.toString());
+				try {
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						mLocationClient.stop();
+						pLog.i("test","gps关闭");
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+				
+			}
+			
+		});
 	}
 
 }

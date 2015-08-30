@@ -62,7 +62,7 @@ public class FriendsAdapter extends pBaseAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_listnike_friends,null,false);
 			ImageView im_headpic=(ImageView)convertView.findViewById(R.id.im_headpic);
 			// ImageLoader加载图片
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(mContext,
 					pic_server + userbean.getImage(), im_headpic,
 					R.drawable.mini_avatar_shadow);
 			

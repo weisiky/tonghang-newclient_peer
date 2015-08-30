@@ -12,11 +12,16 @@
     <string name="bynike">按昵称搜</string>
     <string name="searchuser">搜用户</string>
     <string name="searchtopic">搜话题</string>
+    <string name="littleleave">离我最近</string>
+    <string name="tonghang">行业相似</string>
     <!-- 聊天室下拉选择项 -->
     <string name="deletemes">删除聊天记录</string>
     <string name="exitroom">退出</string>
+    <string name="deleteroom">删除话题</string>
     <string name="lookformember">查看成员</string>
     <string name="deletefriends">删除好友</string>
+    <string name="blacklist">加入黑名单</string>
+    <string name="sendmessage">输入内容</string>
     <string name="Broken_network_prompt">您的网络未链接，请检查网络设置！</string>
     <string name="network_wait">网络连接问题，请稍后再试！</string>
     <string name="broken_net">网络未连接，发送失败！</string>
@@ -45,6 +50,7 @@
     <string name="personalpage_nvother">她的主页</string>
     <string name="personalpage_own">我的主页</string>
     <string name="newfriends">新朋友</string>
+    <string name="blacklist">黑名单</string>
     <string name="createtopic">创建话题</string>
     <string name="chatroommember">聊天室成员</string>
     <string name="topic_other">他的话题</string>
@@ -69,6 +75,7 @@
     <string name="inputnike">昵称不能为空</string>
     <string name="sex">请点击选择</string>
     <string name="picture">设置头像</string>
+    <string name="sendimg">选择图片</string>
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
     <string name="notshare">不分享</string>

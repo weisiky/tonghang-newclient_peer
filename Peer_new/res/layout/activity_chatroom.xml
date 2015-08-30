@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
+     >
 
     <RelativeLayout
         android:id="@+id/rl_layout"
@@ -53,41 +53,11 @@
             android:paddingRight="16dp"
             android:src="@drawable/icon_chatroom_menu" />
     </RelativeLayout>
+    
+    
+		<include layout="@layout/activity_multisend"/>
 
-    <RelativeLayout
-        android:id="@+id/rl_bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/chat_input_back" >
-
-        <Button
-            android:id="@+id/btn_send"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/et_sendmessage"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/et_sendmessage"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/selector_back"
-            android:text="发送"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textsize_smallmiddle" />
-
-        <EditText
-            android:id="@+id/et_sendmessage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="8dp"
-            android:layout_toLeftOf="@+id/btn_send"
-            android:background="@drawable/input_editext"
-            android:maxLines="5"
-            android:paddingLeft="5dp"
-            android:textColor="#000000"
-            android:textSize="18sp" />
-    </RelativeLayout>
+    
 
     <ListView
         android:id="@+id/lv_chat"
@@ -95,7 +65,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/host_imfor"
-        android:background="@color/white"
+        android:background="@color/bottomback"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="5dp"

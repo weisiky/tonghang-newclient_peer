@@ -1,4 +1,7 @@
 package com.peer.IMinterface;
+
+import java.io.File;
+
 /**
  *环信 
  * 
@@ -12,6 +15,8 @@ public interface IM {
 	public void setAppInited();
 	
 	public void sendMessage(String content,int chattype,String targetId,String imageUrl);
+	
+	public void sendImgMessage(File newfile,String targetId,String imageUrl);
 	
 	public void clearConversation(String targetname);
 	

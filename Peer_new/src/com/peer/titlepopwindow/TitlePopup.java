@@ -3,6 +3,8 @@ package com.peer.titlepopwindow;
 import java.util.ArrayList;
 
 import com.peer.R;
+import com.peer.activity.MainActivity;
+import com.peer.fragment.HomeFragment;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -97,6 +100,21 @@ public class TitlePopup extends PopupWindow {
 		});
 	}
 
+	public void showgps(View view) {
+		
+		view.getLocationOnScreen(mLocation);
+		
+		mRect.set(mLocation[0], mLocation[1], mLocation[0] + view.getWidth(),
+				mLocation[1] + view.getHeight());
+		
+//		if (mIsDirty) {
+			gpspopulateActions();
+//		}
+		
+		showAtLocation(view, popupGravity, mScreenWidth - LIST_PADDING
+				- (getWidth() / 2), mRect.bottom);
+	}
+	
 	public void show(View view) {
 
 		view.getLocationOnScreen(mLocation);
@@ -137,7 +155,76 @@ public class TitlePopup extends PopupWindow {
 
 		showAtLocation(view, popupGravity, 0, mRect.bottom);
 	}
+	
 
+	private void gpspopulateActions() {
+		mIsDirty = false;
+		
+		mListView.setAdapter(new BaseAdapter() {
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				TextView textView = null;
+				
+				if (convertView == null) {
+					textView = new TextView(mContext);
+					if(position==0){
+						if(HomeFragment.byDistance){
+							textView.setTextColor(mContext.getResources().getColor(
+									android.R.color.white));
+						}else{
+							textView.setTextColor(mContext.getResources().getColor(
+									android.R.color.darker_gray));
+						}
+					}else{
+						if(HomeFragment.byDistance){
+							textView.setTextColor(mContext.getResources().getColor(
+									android.R.color.darker_gray));
+						}else{
+							textView.setTextColor(mContext.getResources().getColor(
+									android.R.color.white));
+						}
+					}
+					textView.setTextSize(16);
+					
+					textView.setGravity(Gravity.CENTER);
+					
+					textView.setPadding(10, 20, 10, 20);
+					
+					textView.setSingleLine(true);
+				} else {
+					textView = (TextView) convertView;
+				}
+				
+				ActionItem item = mActionItems.get(position);
+				
+				textView.setText(item.mTitle);
+				
+				textView.setCompoundDrawablePadding(10);
+				
+				textView.setCompoundDrawablesWithIntrinsicBounds(
+						item.mDrawable, null, null, null);
+				
+				return textView;
+			}
+			
+			@Override
+			public long getItemId(int position) {
+				return position;
+			}
+			
+			@Override
+			public Object getItem(int position) {
+				return mActionItems.get(position);
+			}
+			
+			@Override
+			public int getCount() {
+				return mActionItems.size();
+			}
+		});
+	}
+	
+	
 	private void populateActions() {
 		mIsDirty = false;
 
@@ -147,6 +234,7 @@ public class TitlePopup extends PopupWindow {
 				TextView textView = null;
 
 				if (convertView == null) {
+					
 					textView = new TextView(mContext);
 					textView.setTextColor(mContext.getResources().getColor(
 							android.R.color.white));
@@ -217,5 +305,9 @@ public class TitlePopup extends PopupWindow {
 
 	public static interface OnItemOnClickListener {
 		public void onItemClick(ActionItem item, int position);
+	}
+	
+	public void flush(){
+		
 	}
 }

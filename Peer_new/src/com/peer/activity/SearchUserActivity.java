@@ -1,5 +1,7 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +21,8 @@ import com.peer.R;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.SearchBean;
+import com.peer.fragment.HomeFragment;
+import com.peer.gps.MyLocationListener;
 import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
@@ -35,6 +39,7 @@ public class SearchUserActivity extends pBaseActivity {
 	private int USER_LABEL = 1;
 	private int USER_NICK = 2;
 	private int searchtype = USER_LABEL;// 默认按标签搜
+	
 
 	class PageViewList {
 		private LinearLayout ll_back, layout_clear_search_text,
@@ -85,7 +90,7 @@ public class SearchUserActivity extends pBaseActivity {
 		pageViewaList.et_contentsearch.setFocusable(true);
 		pageViewaList.et_contentsearch.setFocusableInTouchMode(true);
 		pageViewaList.et_contentsearch.requestFocus();
-
+		
 		imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(pageViewaList.et_contentsearch,
 				InputMethodManager.RESULT_SHOWN);
@@ -238,5 +243,7 @@ public class SearchUserActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 }

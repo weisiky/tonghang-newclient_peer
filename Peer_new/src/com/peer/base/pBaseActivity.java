@@ -419,9 +419,11 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		Intent intent = new Intent();
 
 		if (getLocalClassNameBySelf().contains("RegisterAcountActivity")
+				|| getLocalClassNameBySelf().contains("RegisterTagActivity")
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, false);
-		} else if (getLocalClassNameBySelf().contains("MultiChatRoomActivity")) {
+		} else if (getLocalClassNameBySelf().contains("MultiChatRoomActivity")
+				||getLocalClassNameBySelf().contains("WebViewActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("Recommend_topic")
@@ -451,6 +453,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			startActivityRight(MyAcountActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("NewFunctionActivity")
 				|| getLocalClassNameBySelf().contains("FeedBackActivity")
+				|| getLocalClassNameBySelf().contains("BlackListActivity")
 				|| getLocalClassNameBySelf().contains("MessageNotifyActivity")) {
 			startActivityRight(SettingActivity.class, intent, false);
 		} else {

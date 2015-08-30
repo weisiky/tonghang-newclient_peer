@@ -12,6 +12,9 @@
 
 # Add any project specific keep options here:
 
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}    
+-dontwarn com.baidu.**
 -keep class com.easemob.** {*;}
 -keep class org.jivesoftware.** {*;}
 -keep class org.apache.** {*;}

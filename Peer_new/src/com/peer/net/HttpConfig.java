@@ -12,18 +12,23 @@ public interface HttpConfig {
 //	 public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
 	// "http://192.168.23.1:8080/tonghang-serverapi";
 //	public static String SERVER_ADDRESS = "http://192.168.31.192/tonghang-serverapi";
-	public static String SERVER_ADDRESS = "http://114.215.143.83:8080/tonghang-serverapi";
-	// http://www.tonghang1.com:3000
+//	public static String SERVER_ADDRESS = "http://www.tonghang1.com:8080/tonghang-serverapi";
+	/** 测试url **/
+	public static String SERVER_ADDRESS = "http://www.tonghang1.com:8088/tonghang-serverapi";
+	
+	// http://114.215.143.83:3000
 	 
 //	 "http://192.168.1.102:8080/tonghang-serverapi";
 
 	/** 登入请求 **/
-	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/login.json";
+	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/newlogin.json";
 	/** 注册基本信息请求 **/
 	public static String REGISTTAG_IN_URL = SERVER_ADDRESS
-			+ "/user/regist.json";
+			+ "/user/newregist.json";
 	/** 更新用户信息请求 **/
 	public static String UPDATE_IN_URL = SERVER_ADDRESS + "/user/update/";
+	/** 向所有同行发送推送请求 **/
+	public static String PUSH_IN_URL = SERVER_ADDRESS + "/user/";
 	/** 忘记密码请求 **/
 	public static String FORGET_IN_URL = SERVER_ADDRESS
 			+ "/user/forget_password.json";
@@ -46,6 +51,8 @@ public interface HttpConfig {
 			+ "/user/update_pwd/";
 	/** 查看用户信息 **/
 	public static String USER_IN_URL = SERVER_ADDRESS + "/user/";
+	/** 登入时，GPS信息 **/
+	public static String LOGIN_GPS_URL = SERVER_ADDRESS + "/user/distance/";
 	/** 查看某话题信息 **/
 	public static String TOPIC_IN_URL = SERVER_ADDRESS + "/topic/";
 	/** 设置指定用户标签 **/
@@ -66,6 +73,9 @@ public interface HttpConfig {
 	/** 加入话题群聊 **/
 	public static String JOIN_TOPIC_IN_URL = SERVER_ADDRESS
 			+ "/topic/join.json";
+	/** 删除话题群聊 **/
+	public static String DELETE_TOPIC_IN_URL = SERVER_ADDRESS
+			+ "/topic/delete.json";
 	/** 退出话题群聊 **/
 	public static String LEAVE_TOPIC_IN_URL = SERVER_ADDRESS
 			+ "/topic/leave.json";
@@ -89,6 +99,12 @@ public interface HttpConfig {
 	public static String FRIEND_DELETE_URL = SERVER_ADDRESS + "/friend/delete/";
 	/** 得到某人的好友列表 **/
 	public static String FRIEND_GET_URL = SERVER_ADDRESS + "/friend/get/";
+	/** 得到某人的黑名单列表 **/
+	public static String BLACKLIST_GET_URL = SERVER_ADDRESS + "/block/";
+	/** 添加黑名单用户列表 **/
+	public static String ADDBLOCK_GET_URL = SERVER_ADDRESS + "/block/";
+	/** 从黑名单移除用户列表 **/
+	public static String DROPBLOCK_GET_URL = SERVER_ADDRESS + "/block/";
 	/** 得到系統參數 **/
 	public static String GET_SYSTEMCONFIG = SERVER_ADDRESS + "/system/system_config.json";
 }

@@ -27,6 +27,7 @@ import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
+import com.peer.utils.MD5;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
@@ -132,9 +133,10 @@ public class UpdatePasswordActivity extends pBaseActivity {
 			return;
 		} else {
 			if (isNetworkAvailable) {
+				String md5newpasws = BussinessUtils.strMd5(newpasws);
 				sendUpdatePassword(
 						mShareFileUtils.getString(Constant.CLIENT_ID, ""), old,
-						newpasws);
+						md5newpasws);
 			} else {
 				showToast(
 						getResources()
@@ -153,7 +155,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	 **/
 
 	private void sendUpdatePassword(String client_id, String oldpasswd,
-			String newpasswd) {
+			final String newpasswd) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		// HttpEntity entity = null;
@@ -226,6 +228,7 @@ public class UpdatePasswordActivity extends pBaseActivity {
 									
 									BussinessUtils.saveUserData(loginBean,
 											mShareFileUtils);
+									mShareFileUtils.setString(Constant.PASSWORD,newpasswd);
 									showToast("修改成功！", Toast.LENGTH_SHORT, false);
 									startActivityForLeft(MyAcountActivity.class,
 											intent, false);

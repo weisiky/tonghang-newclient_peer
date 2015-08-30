@@ -96,7 +96,7 @@ public class Recommend_topicAdapter extends pBaseAdapter {
 					LinearLayout ll_click = ViewHolder.get(convertView, R.id.ll_click);
 					final TopicBean topicbean =  mList.get(position);
 					// ImageLoader加载图片
-					ImageLoaderUtil.getInstance().showHttpImage(
+					ImageLoaderUtil.getInstance().showHttpImage(mContext,
 							pic_server + topicbean.getImage(), head,
 							R.drawable.mini_avatar_shadow);
 					

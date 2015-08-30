@@ -97,7 +97,7 @@ public class AddFriendsActivity extends pBaseActivity {
 
 		pic_server = mShareFileUtils.getString(Constant.PIC_SERVER, "");
 
-		ImageLoaderUtil.getInstance().showHttpImage(pic_server + image,
+		ImageLoaderUtil.getInstance().showHttpImage(this,pic_server + image,
 				pageViewaList.personhead, R.drawable.mini_avatar_shadow);
 
 		pageViewaList.personnike.setText(nike);

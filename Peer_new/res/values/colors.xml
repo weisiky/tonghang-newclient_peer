@@ -11,6 +11,7 @@
     <color name="commitcolor_press">#2b930c</color>
     
     <color name="backcolornol">#2c5096</color>
+    <color name="highlight">#f55c2e</color>
     <color name="backcolorpress">#1c2a53</color>
     
     <color name="gray">#c0c0c0</color>

@@ -212,6 +212,7 @@ public class OtherPageActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ,page);
 		params.weight = 1;
 		params.gravity = Gravity.CENTER_VERTICAL;
 		if (userbean.getIs_friend()) {
@@ -242,12 +243,15 @@ public class OtherPageActivity extends pBaseActivity{
 			pageViewaList.tv_title.setText(getResources().getString(
 					R.string.personalpage_nvother));
 		}
-
+		pageViewaList.ll_downview.setVisibility(View.VISIBLE);
 		pageViewaList.personnike.setText(userbean.getUsername());
 //		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
-		ImageLoaderUtil.getInstance().showHttpImage(
+		titlePopup.addAction(new ActionItem(this, getResources().getString(
+				R.string.blacklist), R.color.white));
+		popupwindow();
+		ImageLoaderUtil.getInstance().showHttpImage(this,
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
 		ArrayList<String> lables = userbean.getLabels();
@@ -330,7 +334,7 @@ public class OtherPageActivity extends pBaseActivity{
 //		pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(this,
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
 
@@ -349,10 +353,12 @@ public class OtherPageActivity extends pBaseActivity{
 			skill.setTag("" + i);
 			tag_container.addView(skill);
 		}
-		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ,page);	
+			
 		
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
 				R.string.deletefriends), R.color.white));
+		titlePopup.addAction(new ActionItem(this, getResources().getString(
+				R.string.blacklist), R.color.white));
 		popupwindow();
 		if (userbean.getSex().equals("男")) {
 			pageViewaList.tv_topic.setText(getResources().getString(
@@ -406,7 +412,22 @@ public class OtherPageActivity extends pBaseActivity{
 						String friend_id = bean.getClient_id();
 						
 						senddeletefriend(client_id, friend_id);
+					}else if(item.mTitle.equals(getResources().getString(
+							R.string.blacklist))){
+						if(isNetworkAvailable){
+						try {
+							sendaddblacklist(mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+									bean.getClient_id());
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						}else{
+							showToast(getResources().getString(R.string.Broken_network_prompt),Toast.LENGTH_SHORT, false);
+							
+						}
 					}
+					
 				}else{
 					showToast("数据加载中...", Toast.LENGTH_SHORT, false);
 				}
@@ -582,5 +603,85 @@ public class OtherPageActivity extends pBaseActivity{
 					}
 
 				});
+	}
+	
+	
+	/**
+	 * 加入黑名单接口
+	 * 
+	 * @param client_id
+	 * @param blocker_id
+	 * @throws UnsupportedEncodingException
+	 */
+	
+	private void sendaddblacklist(String client_id,String blocker_id) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getblacklistParams(OtherPageActivity.this);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.ADDBLOCK_GET_URL + client_id + "/blocks/"+blocker_id+".json", params,
+				new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				pLog.i("test","response:"+response.toString());
+				try {
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						showToast("已添加入黑名单", Toast.LENGTH_SHORT, false);
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+				
+			}
+			
+		});
 	}
 }

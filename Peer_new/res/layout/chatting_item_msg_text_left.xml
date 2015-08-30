@@ -54,8 +54,18 @@
             android:textSize="@dimen/textsize_middle"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"       
+            android:layout_height="wrap_content"   
+            android:visibility="gone"    
             android:background="@drawable/chatfrom_bg_pressed2" />
+        <ImageView
+            android:id="@+id/iv_image"
+            style="@style/chat_content_date_style"
+            android:textSize="@dimen/textsize_middle"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:visibility="gone"      
+             />
 </LinearLayout>
     </RelativeLayout>
 

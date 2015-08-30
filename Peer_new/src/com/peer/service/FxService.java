@@ -130,7 +130,7 @@ public class FxService extends Service
 				.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         	
      // ImageLoader加载图片
-     		ImageLoaderUtil.getInstance().showHttpImage(
+     		ImageLoaderUtil.getInstance().showHttpImage(this,
      				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
      				+ mShareFileUtils.getString(Constant.IMAGE, "")
      				, mFloatView,

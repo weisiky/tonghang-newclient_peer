@@ -7,5 +7,12 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="/ShareSDK/libs/ShareSDK-QZone-2.6.0.jar"/>
 	<classpathentry kind="lib" path="/ShareSDK/libs/ShareSDK-SinaWeibo-2.6.0.jar"/>
+	<classpathentry kind="lib" path="libs/Appems_SSPSDK.jar"/>
+	<classpathentry kind="lib" path="libs/BaiduLBS_Android.jar"/>
+	<classpathentry kind="lib" path="libs/jackson-core-2.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/jackson-mapper-asl-1.9.9.jar"/>
+	<classpathentry kind="lib" path="libs/jackson-databind-2.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/jackson-annotations-2.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/jackson-core-asl-1.9.9.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

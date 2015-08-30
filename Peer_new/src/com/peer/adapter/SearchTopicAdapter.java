@@ -83,7 +83,7 @@ public class SearchTopicAdapter extends pBaseAdapter {
 		TextView tv_topic=ViewHolder.get(convertView, R.id.tv_topic);
 		ImageView head = ViewHolder.get(convertView, R.id.head);
 		// ImageLoader加载图片
-				ImageLoaderUtil.getInstance().showHttpImage(
+				ImageLoaderUtil.getInstance().showHttpImage(mContext,
 						pic_server + topicbean.getImage(), head,
 						R.drawable.mini_avatar_shadow);
 				

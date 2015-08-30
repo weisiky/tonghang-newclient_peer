@@ -41,8 +41,10 @@ public class PeerParamsUtils {
 	 */
 	@SuppressWarnings("static-access")
 	public static HashMap<String, Object> getDefaultParams(Context context) {
+		Map<String, String> defaultmap = new HashMap<String, String>();
 		HashMap<String, Object> defaultParams = new HashMap<String, Object>();
-		defaultParams.put("client_id", ((pBaseActivity)context).mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+		defaultmap.put("client_id", ((pBaseActivity)context).mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+		defaultParams.put("token", defaultmap);
 		return defaultParams;
 	}
 
@@ -79,11 +81,12 @@ public class PeerParamsUtils {
 	 * @throws Exception
 	 */
 	public static RequestParams getSearchUserByLabelParams(Context context, String label_name,
-			int pageindex , String client_id) throws Exception {
+			int pageindex , String client_id,boolean byDistance) throws Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("label_name", label_name);
 		loginParams.put("pageindex", pageindex);
 		loginParams.put("client_id", client_id);
+		loginParams.put("byDistance", byDistance);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		pLog.i("test", "params:" + params.toString());
@@ -103,11 +106,12 @@ public class PeerParamsUtils {
 	 * @throws Exception
 	 */
 	public static RequestParams getSearchUserByNikeParams(Context context, String username,
-			int pageindex , String client_id) throws Exception {
+			int pageindex , String client_id,boolean byDistance) throws Exception {
 		Map<String, Object> loginParams = getDefaultParams(context);
 		loginParams.put("username", username);
 		loginParams.put("pageindex", pageindex);
 		loginParams.put("client_id", client_id);
+		loginParams.put("byDistance", byDistance);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		pLog.i("test", "params:" + params.toString());
@@ -246,6 +250,24 @@ public class PeerParamsUtils {
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		return params;
 	}
+	
+	
+	/**
+	 * 获取某人黑名单参数绑定
+	 * 
+	 * @param context
+	 * 
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getblacklistParams(Context context
+			) throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
+	}
 
 	/**
 	 * 获取未读取消息参数绑定
@@ -306,6 +328,27 @@ public class PeerParamsUtils {
 	
 	
 	/**
+	 * GPS参数绑定
+	 * 
+	 * @param context
+	 * @param x_point
+	 * @param y_point
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getGPSParams(Context context, Double x_point,Double y_point)
+			throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("x_point", x_point);
+		loginParams.put("y_point", y_point);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
+	}
+	
+	
+	/**
 	 * 获取用户信息参数绑定
 	 * 
 	 * @param context
@@ -340,6 +383,26 @@ public class PeerParamsUtils {
 		loginParams.put("client_id", client_id);
 		loginParams.put("topic_id", topic_id);
 		loginParams.put("isOwner", isOwner);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 加入话题参数绑定
+	 * 
+	 * @param context
+	 * @param topic_id
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws Exception
+	 */
+	public static RequestParams getdeletetopicParams(Context context,
+			 String topic_id )
+					throws UnsupportedEncodingException, Exception {
+		Map<String, Object> loginParams = getDefaultParams(context);
+		loginParams.put("huanxin_group_id", topic_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
 		return params;
@@ -400,14 +463,13 @@ public class PeerParamsUtils {
 	 * @throws Exception
 	 */
 	public static RequestParams getRegisterTagParams(Context context,
-			String email, String password, String username, List labels)
+			String email, String password, String username)
 			throws Exception {
 		RequestParams params = new RequestParams();
 		HashMap<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("email", email);
 		registerTagParams.put("password", password);
 		registerTagParams.put("username", username);
-		registerTagParams.put("labels", labels);
 		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
 		return params;
 	}
@@ -424,10 +486,11 @@ public class PeerParamsUtils {
 	 * @throws Exception
 	 */
 	public static RequestParams getHomeParams(Context context,
-			String client_id, int page) throws Exception {
+			String client_id, int page , boolean byDistance) throws Exception {
 		Map<String, Object> registerTagParams = getDefaultParams(context);
 		registerTagParams.put("client_id", client_id);
 		registerTagParams.put("pageindex", page);
+		registerTagParams.put("byDistance", byDistance);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
 		return params;
@@ -474,6 +537,116 @@ public class PeerParamsUtils {
 		registerTagParams.put("sex", tv_sex);
 		registerTagParams.put("city", tv_setaddress);
 		registerTagParams.put("username", username);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 更改用户生日信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param tv_setbirth
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getUpdateBirthParams(Context context,
+			String client_id, String tv_setbirth)
+					throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("birth", tv_setbirth);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 更改用户生日信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param tv_setaddress
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getUpdateCityParams(Context context,
+			String client_id, String tv_setaddress)
+					throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("city", tv_setaddress);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 更改用户昵称信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param username
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getUpdateUsernameParams(Context context,
+			String client_id, String username)
+					throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("username", username);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	
+	/**
+	 * 更改用户性别信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param tv_setsex
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getUpdateSexParams(Context context,
+			String client_id, String tv_setsex)
+					throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("client_id", client_id);
+		registerTagParams.put("sex", tv_setsex);
+		RequestParams params = new RequestParams();
+		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
+		return params;
+	}
+	
+	
+	
+	/**
+	 * 更改用户头像信息参数绑定
+	 * 
+	 * @param context
+	 * @param client_id
+	 * @param tv_setbirth
+	 * @return
+	 * @throws Exception
+	 */
+	public static RequestParams getUpdatePhotoParams(Context context,
+			String client_id)
+					throws Exception {
+		Map<String, Object> registerTagParams = getDefaultParams(context);
+		
+		registerTagParams.put("client_id", client_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(registerTagParams));
 		return params;

@@ -1,5 +1,6 @@
 package com.peer.activity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,18 +30,21 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
 import com.peer.IMimplements.easemobchatImp;
+import com.peer.adapter.SkillAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.LoginBean;
+import com.peer.bean.PersonpageBean;
 import com.peer.net.HttpConfig;
 import com.peer.net.HttpUtil;
 import com.peer.net.PeerParamsUtils;
+import com.peer.utils.BussinessUtils;
 import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /**
- * 注册标签页面
+ * 注册第二部标签页面
  * 
  * @author zhangzg
  * 
@@ -76,14 +80,7 @@ public class RegisterTagActivity extends pBaseActivity {
 		pageViewaList.et_tagname_2.addTextChangedListener(watcher);
 		pageViewaList.bt_registe_tag.setEnabled(false);
 
-		/** 文字加高亮色 **/
-		SpannableStringBuilder builder = new SpannableStringBuilder(
-				pageViewaList.xieyi.getText().toString());
-		ForegroundColorSpan colorspan = new ForegroundColorSpan(getResources()
-				.getColor(R.color.backcolornol));
-		builder.setSpan(colorspan, 16, 31, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		pageViewaList.xieyi.setText(builder);
-
+		
 	}
 
 	@Override
@@ -91,7 +88,6 @@ public class RegisterTagActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.bt_registe_tag.setOnClickListener(this);
-		pageViewaList.xieyi.setOnClickListener(this);
 	}
 
 	@Override
@@ -130,11 +126,7 @@ public class RegisterTagActivity extends pBaseActivity {
 
 			break;
 
-		case R.id.xieyi:
-			Intent xieyi = new Intent(RegisterTagActivity.this,
-					xieyiActivity.class);
-			startActivity(xieyi);
-			break;
+		
 		default:
 			break;
 		}
@@ -205,10 +197,8 @@ public class RegisterTagActivity extends pBaseActivity {
 				pageViewaList.tv_remind.setText("");
 				showProgressBar();
 				try {
-					sendRegisterTagRequest(
-							mShareFileUtils.getString("email", ""),
-							mShareFileUtils.getString("password", ""),
-							mShareFileUtils.getString("nikename", ""), list);
+					senduserlabels(
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""), list);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -224,114 +214,107 @@ public class RegisterTagActivity extends pBaseActivity {
 	}
 
 	/**
-	 * 注册基本信息请求
+	 * 修改当前用户标签请求
 	 * 
-	 * @param email
-	 * @param password
-	 * @throws Exception
+	 * @param client_id
+	 * @param label_name
+	 * @throws UnsupportedEncodingException
 	 */
-
-	@SuppressWarnings("unchecked")
-	private void sendRegisterTagRequest(String email, String password,
-			String nikename, List labels) {
+	private void senduserlabels(String client_id, List<String> label_name)
+			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
-
+		// HttpEntity entity = null;
+		// try {
+		// entity = PeerParamsUtils.getUserLabelsParams(this, client_id,
+		// label_name);
+		// } catch (Exception e2) {
+		// // TODO Auto-generated catch block
+		// e2.printStackTrace();
+		// }
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getRegisterTagParams(this, email,
-					password, nikename, labels);
+			params = PeerParamsUtils.getUserLabelsParams(this, client_id,
+					label_name);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		HttpUtil.post(this, HttpConfig.USER_UPDATE_LABEL_IN_URL + client_id
+				+ ".json", params, new JsonHttpResponseHandler() {
 
-		HttpUtil.post(HttpConfig.REGISTTAG_IN_URL, params,
-				new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, responseString,
-								throwable);
-					}
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
+			@SuppressWarnings("static-access")
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					JSONObject result = response.getJSONObject("success");
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONObject errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONObject response) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						LoginBean loginBean;
-
-						
-						try {
-							JSONObject result = response.getJSONObject("success");
-
-							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								loginBean = JsonDocHelper.toJSONObject(response
-										.getJSONObject("success").toString(),
-										LoginBean.class);
-								
-								if (loginBean != null) {
-									mShareFileUtils.setString("client_id",
-											loginBean.user.getClient_id());
-									mShareFileUtils.setString("username",
-											loginBean.user.getUsername());
-
-									String client_id = mShareFileUtils.getString(
-											Constant.CLIENT_ID, "");
-
-									sendRequesJpush(client_id);
-
-									Intent register_tag = new Intent();
-									startActivityForLeft(
-											RegisterCompleteActivity.class,
-											register_tag, false);
-									
-								}
-							}else if(code.equals("500")){
-								
-							}else{
-								String message = result.getString("message");
-								showToast(message, Toast.LENGTH_SHORT, false);
-							}
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							showToast("dash", Toast.LENGTH_SHORT, false);
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(response
+								.getJSONObject("success").toString(),
+								LoginBean.class);
+						sendRequesJpush(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+						if (loginBean.user.getLabels() != null
+								&& loginBean.user.getLabels().size() > 0) {
+							mShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels().toString());
+							Intent register_com = new Intent();
+							startActivityForLeft(
+									RegisterCompleteActivity.class,
+									register_com, false);
+							
 						}
-
-						super.onSuccess(statusCode, headers, response);
+						
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
 					}
 
-				});
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				super.onSuccess(statusCode, headers, response);
+
+			}
+
+		});
 	}
+
 
 	TextWatcher watcher = new TextWatcher() {
 

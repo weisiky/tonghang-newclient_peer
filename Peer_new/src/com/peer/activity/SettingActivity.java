@@ -30,7 +30,7 @@ import com.umeng.update.UmengUpdateAgent;
  */
 public class SettingActivity extends pBaseActivity{
 	class PageViewList {
-		private LinearLayout ll_back,ll_head_my,ll_setting_set,ll_newfunction_set,ll_feedback_set,ll_newversion_set,ll_clearcash_set;
+		private LinearLayout ll_back,ll_head_my,ll_setting_set,ll_newfunction_set,ll_feedback_set,ll_newversion_set,ll_clearcash_set,ll_blacklist_set;
 		private TextView tv_title,xieyi;
 		private Button bt_relogin,bt_todesk;
 	}
@@ -63,6 +63,7 @@ public class SettingActivity extends pBaseActivity{
 		pageViewaList.ll_setting_set.setOnClickListener(this);
 		pageViewaList.ll_newfunction_set.setOnClickListener(this);
 		pageViewaList.ll_feedback_set.setOnClickListener(this);
+		pageViewaList.ll_blacklist_set.setOnClickListener(this);
 		pageViewaList.xieyi.setOnClickListener(this);
 	}
 
@@ -116,6 +117,9 @@ public class SettingActivity extends pBaseActivity{
 			break;
 		case R.id.ll_clearcash_set:			
 			Clean();			
+			break;
+		case R.id.ll_blacklist_set:			
+			startActivityForLeft(BlackListActivity.class, intent, false);		
 			break;
 		case R.id.bt_relogin:
 			Relogin();

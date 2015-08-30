@@ -77,7 +77,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 		private TextView tv_title, et_nikename_personMSG, tv_sex,
 				tv_setbirthday_my, tv_setaddress_my;
 		private ImageView iv_headpic_personMSG;
-		private Button bt_update;
+//		private Button bt_update;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 		pageViewaList.et_nikename_personMSG.setText(mShareFileUtils.getString(
 				Constant.USERNAME, ""));
 		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
+		ImageLoaderUtil.getInstance().showHttpImage(this,
 				mShareFileUtils.getString(Constant.PIC_SERVER, "") 
 				+ mShareFileUtils.getString(Constant.IMAGE, "")
 				, pageViewaList.iv_headpic_personMSG,
@@ -122,7 +122,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 		pageViewaList.ll_setaddress_my.setOnClickListener(this);
 		pageViewaList.ll_updatenike.setOnClickListener(this);
 		pageViewaList.iv_headpic_personMSG.setDrawingCacheEnabled(true);
-		pageViewaList.bt_update.setOnClickListener(this);
+//		pageViewaList.bt_update.setOnClickListener(this);
 	}
 
 	@Override
@@ -175,14 +175,14 @@ public class PersonalMessageActivity extends pBaseActivity {
 					.getText().toString());
 			startActivityForResult(intent, UPDATENIKENAME);
 			break;
-		case R.id.bt_update:
+		/*case R.id.bt_update:
 			photo = pageViewaList.iv_headpic_personMSG.getDrawingCache();
 			img = getBitmapByte(photo);
 			pLog.i("test", "图片信息"+img);
 
 			if (isNetworkAvailable) {
 				showProgressBar();
-				/*try {
+				try {
 					postFile(mShareFileUtils.getString("client_id", ""),
 							pageViewaList.tv_setbirthday_my.getText().toString(),
 							pageViewaList.tv_sex.getText().toString(),
@@ -192,7 +192,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}*/
+				}
 				sendupdateusermsg(mShareFileUtils.getString("client_id", ""),
 						pageViewaList.tv_setbirthday_my.getText().toString(),
 						pageViewaList.tv_sex.getText().toString(),
@@ -205,7 +205,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 								.getString(R.string.Broken_network_prompt),
 						Toast.LENGTH_SHORT, false);
 			}
-			break;
+			break;*/
 		default:
 			break;
 		}
@@ -215,6 +215,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 	/**
 	 * ChangBirthday类
 	 */
+	
 	private void ChangBirthday() {
 		// TODO Auto-generated method stub
 		pLog.i("test", "ChangBirthday");
@@ -248,6 +249,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
+		
 		switch (id) {
 		case DATE_DIALOG_ID:
 			((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
@@ -286,6 +288,9 @@ public class PersonalMessageActivity extends pBaseActivity {
 				.append(mYear).append("-")
 				.append((mMonth + 1) < 10 ? "0" + (mMonth + 1) : (mMonth + 1))
 				.append("-").append((mDay < 10) ? "0" + mDay : mDay));
+		sendBirthday(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+				,pageViewaList.tv_setbirthday_my.getText().toString());
+		
 	}
 
 	/*
@@ -306,7 +311,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
-						case 0:
+						case 0:    //选择本地照片
 							Intent intentFromGallery = new Intent(
 									Intent.ACTION_PICK, null);
 							intentFromGallery
@@ -316,7 +321,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 							startActivityForResult(intentFromGallery,
 									IMAGE_REQUEST_CODE);
 							break;
-						case 1:
+						case 1:     //拍照
 
 							Intent intentFromCapture = new Intent(
 									MediaStore.ACTION_IMAGE_CAPTURE);
@@ -358,6 +363,8 @@ public class PersonalMessageActivity extends pBaseActivity {
 							+ "-"
 							+ data.getStringExtra("city"));
 				}
+				sendUpdatecity(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+						,pageViewaList.tv_setaddress_my.getText().toString());
 				break;
 			case UPDATENIKENAME:
 				pageViewaList.et_nikename_personMSG.setText(data
@@ -379,8 +386,9 @@ public class PersonalMessageActivity extends pBaseActivity {
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
 					Bitmap bt = getImageToView(data);
-
 					img = getBitmapByte(bt);
+				sendUpdatePhoto(
+						mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 				}
 				break;
 			}
@@ -439,6 +447,8 @@ public class PersonalMessageActivity extends pBaseActivity {
 
 					public void onClick(DialogInterface dialog, int which) {
 						pageViewaList.tv_sex.setText(items[which]);
+						sendUpdateSex(mShareFileUtils.getString(Constant.CLIENT_ID, "")
+								,pageViewaList.tv_sex.getText().toString());
 					}
 				}).show();
 	}
@@ -471,6 +481,402 @@ public class PersonalMessageActivity extends pBaseActivity {
 				}        
 		} */
 
+	/**
+	 * 更改用户生日信息请求
+	 * 
+	 * @param client_id
+	 * @param birth
+	 * @throws Exception
+	 **/
+
+	private void sendBirthday(String client_id, String tv_setbirth) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUpdateBirthParams(
+					PersonalMessageActivity.this,client_id, tv_setbirth);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		HttpUtil.post(this, HttpConfig.UPDATE_IN_URL + client_id + ".json",
+				params, new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+						try {
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if (loginBean != null) {
+									BussinessUtils.saveUserData(loginBean,
+											mShareFileUtils);
+									showToast(getResources().getString(R.string.updatemsgsuccess)
+											, Toast.LENGTH_SHORT, false);
+								}
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+					}
+
+				});
+	}
+	
+	
+	
+	/**
+	 * 更改用户所在地信息请求
+	 * 
+	 * @param client_id
+	 * @param tv_setaddress
+	 * @throws Exception
+	 **/
+	
+	private void sendUpdatecity(String client_id, String tv_setaddress) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUpdateCityParams(
+					PersonalMessageActivity.this,client_id, tv_setaddress);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		HttpUtil.post(this, HttpConfig.UPDATE_IN_URL + client_id + ".json",
+				params, new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				try {
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success")
+								.toString(), LoginBean.class);
+						if (loginBean != null) {
+							BussinessUtils.saveUserData(loginBean,
+									mShareFileUtils);
+							showToast(getResources().getString(R.string.updatemsgsuccess)
+									, Toast.LENGTH_SHORT, false);
+						}
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+			}
+			
+		});
+	}
+	
+	
+	/**
+	 * 更改用户性别信息请求
+	 * 
+	 * @param client_id
+	 * @param sex
+	 * @throws Exception
+	 **/
+	
+	private void sendUpdateSex(String client_id, String tv_setsex) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUpdateSexParams(
+					PersonalMessageActivity.this,client_id, tv_setsex);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		HttpUtil.post(this, HttpConfig.UPDATE_IN_URL + client_id + ".json",
+				params, new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				try {
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success")
+								.toString(), LoginBean.class);
+						if (loginBean != null) {
+							BussinessUtils.saveUserData(loginBean,
+									mShareFileUtils);
+							showToast(getResources().getString(R.string.updatemsgsuccess)
+									, Toast.LENGTH_SHORT, false);
+						}
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+			}
+			
+		});
+	}
+	
+	
+	/**
+	 * 更改用户头像信息请求
+	 * 
+	 * @param client_id
+	 * @throws Exception
+	 **/
+	
+	private void sendUpdatePhoto(String client_id) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUpdatePhotoParams(
+					PersonalMessageActivity.this,client_id);
+			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+			if (file.exists()) {
+				params.put("image", file);
+				pLog.i("test", "image图片："+file);
+			}else{
+				params.put("image", "");
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		HttpUtil.post(this, HttpConfig.UPDATE_IN_URL + client_id + ".json",
+				params, new JsonHttpResponseHandler() {
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString,
+						throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable,
+						errorResponse);
+			}
+			
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				hideLoading();
+				try {
+					JSONObject result = response.getJSONObject("success");
+					
+					String code = result.getString("code");
+					pLog.i("test", "code:"+code);
+					if(code.equals("200")){
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success")
+								.toString(), LoginBean.class);
+						if (loginBean != null) {
+							BussinessUtils.saveUserData(loginBean,
+									mShareFileUtils);
+							showToast(getResources().getString(R.string.updatemsgsuccess)
+									, Toast.LENGTH_SHORT, false);
+						}
+					}else if(code.equals("500")){
+						
+					}else{
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				super.onSuccess(statusCode, headers, response);
+			}
+			
+		});
+	}
+	
+	
+	
 	/**
 	 * 更改用户信息请求
 	 * 
@@ -579,6 +985,7 @@ public class PersonalMessageActivity extends pBaseActivity {
 
 				});
 	}
+	
 
 	@Override
 	public void onNetworkOn() {

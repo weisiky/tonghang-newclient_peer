@@ -58,7 +58,7 @@ public class SeachResultAdapter extends pBaseAdapter {
 				R.layout.adapter_listnike_friends, null, false);
 		ImageView im_headpic = ViewHolder.get(convertView, R.id.im_headpic);
 		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
+		ImageLoaderUtil.getInstance().showHttpImage(mContext,
 				pic_server + userbean.getImage(), im_headpic,
 				R.drawable.mini_avatar_shadow);
 		

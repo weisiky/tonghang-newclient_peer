@@ -104,7 +104,7 @@ public class NewfriendsAdapter extends pBaseAdapter {
 		tv_nikename.setText(invitation.getUserbean().getUsername());
 		tv_descripe.setText(invitation.getReason());
 		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
+		ImageLoaderUtil.getInstance().showHttpImage(mContext,
 				pic_server + invitation.getUserbean().getImage(), im_headpic,
 				R.drawable.mini_avatar_shadow);
 

@@ -2,12 +2,27 @@ package com.peer.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.content.Context;
+import android.content.Intent;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peer.R;
 import com.peer.activity.PersonalPageActivity;
 import com.peer.activity.Recommend_topic;
-import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseAdapter;
 import com.peer.base.pBaseFragment;
@@ -16,28 +31,6 @@ import com.peer.bean.UserBean;
 import com.peer.utils.ImageLoaderUtil;
 import com.peer.utils.ViewHolder;
 import com.peer.utils.pLog;
-import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
-
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.os.RemoteException;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class HomepageAdapter extends pBaseAdapter {
 	private boolean hasMesure = false;
@@ -119,22 +112,50 @@ public class HomepageAdapter extends pBaseAdapter {
 			final UserBean userbean = users.get(position);
 			
 			// ImageLoader加载图片
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(mContext,
 					pic_server + userbean.getImage(), im_headpic,
 					R.drawable.mini_avatar_shadow);
 
 			tv_nikename.setText(userbean.getUsername());
 			ArrayList<String> plabels = userbean.getLabels();
 			String labels = "";
-
+//			int count
 			for (String s : plabels) {
-				if (labels.equals("")) {
-					labels = s;
-				} else {
-					labels = labels + " | " + s;
+				if(s.contains("\t\t")){
+					
+					pLog.i("label",s+"高亮标签"+s.length());
+					
+					s=replaceBlank(s);
+					pLog.i("label",s+"高亮标签"+s.length());
+					
+					if (labels.equals("")) {
+						labels ="<font color=#f55c2e>"+s+"</font>";
+//						labels =s;
+					} else {
+						labels = labels + " | " + "<font color=#f55c2e>"+s+"</font>";
+//						labels = labels + " | " + s;
+					}
+				}else{
+					if (labels.equals("")) {
+						labels = s;
+					} else {
+						labels = labels + " | " + s;
+					}
+					
+					
 				}
 			}
-			tv_descripe.setText(labels);
+			/** 文字加高亮色 **/
+			SpannableStringBuilder builder = new SpannableStringBuilder(
+					labels);
+			ForegroundColorSpan colorspan = new ForegroundColorSpan(mContext.getResources()
+					.getColor(R.color.highlight));
+			builder.setSpan(colorspan, 0, labels.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			
+			pLog.i("test","labels："+labels);
+//			tv_descripe.setText(Html.fromHtml("<font color=#FF0000>"+awdfadsf+"</font>"));
+			tv_descripe.setText(Html.fromHtml(labels));
+			
 			ll_clike.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -151,6 +172,17 @@ public class HomepageAdapter extends pBaseAdapter {
 
 		return convertView;
 	}
+	
+	/** 正则表达式去制表符 **/
+	 public static String replaceBlank(String str) {
+		  String dest = "";
+		  if (str!=null) {
+		   Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+		   Matcher m = p.matcher(str);
+		   dest = m.replaceAll("");
+		  }
+		  return dest;
+		 }
 
 	/**
 	 * 设置页面fragment

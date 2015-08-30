@@ -102,7 +102,7 @@ public class TopicActivity extends pBaseActivity {
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
 		pageViewaList.email.setText(intent.getStringExtra("email"));
 		// ImageLoader加载图片
-		ImageLoaderUtil.getInstance().showHttpImage(
+		ImageLoaderUtil.getInstance().showHttpImage(this,
 				mShareFileUtils.getString(Constant.PIC_SERVER, "") + image
 				, pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);

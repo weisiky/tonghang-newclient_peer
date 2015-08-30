@@ -118,13 +118,13 @@ public class MyFragment extends pBaseFragment {
 		if (file.exists()) {
 			im_headpic.setImageBitmap(BussinessUtils.decodeFile(
 					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(getActivity(),
 					mShareFileUtils.getString(Constant.PIC_SERVER, "")
 							+ mShareFileUtils.getString(Constant.IMAGE, ""),
 					im_headpic, R.drawable.mini_avatar_shadow);
 
 		} else {
-			ImageLoaderUtil.getInstance().showHttpImage(
+			ImageLoaderUtil.getInstance().showHttpImage(getActivity(),
 					mShareFileUtils.getString(Constant.PIC_SERVER, "")
 							+ mShareFileUtils.getString(Constant.IMAGE, ""),
 					im_headpic, R.drawable.mini_avatar_shadow);

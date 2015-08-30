@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
@@ -50,7 +51,7 @@ import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
 /**
- * 注册第二部 完善信息
+ * 注册第三部 完善信息
  * 
  */
 public class RegisterCompleteActivity extends pBaseActivity {
@@ -190,7 +191,7 @@ public class RegisterCompleteActivity extends pBaseActivity {
 				pageViewaList.tv_setbirth.getText().toString().trim(),
 				pageViewaList.tv_sex.getText().toString().trim(),
 				pageViewaList.tv_setaddress.getText().toString().trim(),
-				mShareFileUtils.getString("username", ""));
+				mShareFileUtils.getString(Constant.USERNAME, ""));
 
 	}
 
@@ -279,6 +280,9 @@ public class RegisterCompleteActivity extends pBaseActivity {
 								if (loginBean != null) {
 									BussinessUtils.saveUserData(loginBean,
 											mShareFileUtils);
+									if(EMChatManager.getInstance().isConnected()){
+										pLog.i("huanxin", "环信已登录");
+									}else{
 									easemobchatImp.getInstance().login(
 											mShareFileUtils.getString("client_id",
 													""),
@@ -286,6 +290,12 @@ public class RegisterCompleteActivity extends pBaseActivity {
 															""));
 									easemobchatImp.getInstance()
 									.loadConversationsandGroups();
+									}
+									
+									/** 向已注册用户推荐我 **/
+									sendpushme(mShareFileUtils.getString("client_id",
+											""));
+									
 									startActivityForLeft(MainActivity.class,
 											intent, false);
 								}else if(code.equals("500")){
@@ -323,6 +333,103 @@ public class RegisterCompleteActivity extends pBaseActivity {
 //								login_complete, false);
 //					}
 //
+				});
+	}
+	
+	
+	/**
+	 * 向已注册用户推荐我请求
+	 * 
+	 * @param client_id
+	 * @throws Exception
+	 **/
+
+	private void sendpushme(String client_id) {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getblacklistParams(
+					RegisterCompleteActivity.this);
+			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
+			if (file.exists()) {
+				params.put("image", file);
+			}else{
+				params.put("image",file);
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		HttpUtil.post(this, HttpConfig.PUSH_IN_URL + client_id + "/push.json",
+				params, new JsonHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONObject response) {
+						// TODO Auto-generated method stub
+						hideLoading();
+
+						try {
+							pLog.i("test","response:"+response.toString());
+							JSONObject result = response.getJSONObject("success");
+
+							String code = result.getString("code");
+							pLog.i("test", "code:"+code);
+							if(code.equals("200")){
+								LoginBean loginBean = JsonDocHelper.toJSONObject(
+										response.getJSONObject("success")
+										.toString(), LoginBean.class);
+								if (loginBean != null) {
+									pLog.i("test","send push ok");
+								}else if(code.equals("500")){
+									
+								}else{
+									String message = result.getString("message");
+									showToast(message, Toast.LENGTH_SHORT, false);
+								}
+								
+							}else if(code.equals("500")){
+								
+							}else{
+								String message = result.getString("message");
+								showToast(message, Toast.LENGTH_SHORT, false);
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						super.onSuccess(statusCode, headers, response);
+					}
+
 				});
 	}
 
