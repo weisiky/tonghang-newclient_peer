@@ -3,14 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-  
-    
+
+    <include
+        android:id="@+id/incTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/topic_sealayout_title" />
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-       android:background="@color/white"
         android:id="@+id/pull_refresh_topic"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/incTop"
+        android:background="@color/white"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0.5dp"
@@ -18,8 +23,6 @@
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:smoothScrollbar="true"
-        android:layout_below="@+id/rl1"
-        />
+        android:smoothScrollbar="true" />
 
 </RelativeLayout>

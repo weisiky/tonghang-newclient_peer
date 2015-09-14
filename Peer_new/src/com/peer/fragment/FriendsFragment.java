@@ -193,11 +193,6 @@ public class FriendsFragment extends pBaseFragment{
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "responseString:"+responseString);
-						pLog.i("test", "throwable:"+throwable);
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -207,11 +202,6 @@ public class FriendsFragment extends pBaseFragment{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -221,11 +211,6 @@ public class FriendsFragment extends pBaseFragment{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -236,8 +221,6 @@ public class FriendsFragment extends pBaseFragment{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
-						pLog.i("test", "response:"+response.toString());
 						try{
 							JSONObject result = response.getJSONObject("success");
 

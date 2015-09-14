@@ -45,7 +45,10 @@ public class FeedBackActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_feedback);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -73,25 +76,6 @@ public class FeedBackActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_feedback, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
@@ -99,11 +83,16 @@ public class FeedBackActivity extends pBaseActivity {
 		case R.id.commite_feedback:
 
 			if (isNetworkAvailable) {
-				pLog.i("test", "CLIENT_ID:"+mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+				pLog.i("test",
+						"CLIENT_ID:"
+								+ mShareFileUtils.getString(Constant.CLIENT_ID,
+										""));
 				try {
-					
-					sendfeedback(mShareFileUtils.getString(Constant.CLIENT_ID, ""),pageViewaList.et_feedback_content.getText()
-							.toString().trim());
+
+					sendfeedback(
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							pageViewaList.et_feedback_content.getText()
+									.toString().trim());
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -177,7 +166,8 @@ public class FeedBackActivity extends pBaseActivity {
 
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getFeedParams(FeedBackActivity.this, client_id, content);
+			params = PeerParamsUtils.getFeedParams(FeedBackActivity.this,
+					client_id, content);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -189,9 +179,9 @@ public class FeedBackActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -200,8 +190,9 @@ public class FeedBackActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -210,8 +201,9 @@ public class FeedBackActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -220,27 +212,29 @@ public class FeedBackActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							if(code.equals("200")){
-								showToast(getResources().getString(R.string.commit)
-										, Toast.LENGTH_SHORT, false);
+							if (code.equals("200")) {
+								showToast(
+										getResources().getString(
+												R.string.commit),
+										Toast.LENGTH_SHORT, false);
 								finish();
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 
-							} catch (Exception e1) {
-								pLog.i("test", "Exception:" + e1.toString());
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 						super.onSuccess(statusCode, headers, response);
 

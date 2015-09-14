@@ -5,7 +5,10 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
-    
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,17 +42,17 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="8dp"
-                    android:gravity="center_vertical"                   
+                    android:gravity="center_vertical"
                     android:textColor="@color/lightgray"
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
         </LinearLayout>
 
         <View
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@color/lightgray" />
 
         <LinearLayout
@@ -58,49 +61,47 @@
             android:layout_height="40dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:background="@drawable/selector_presseffect"
             android:clickable="true"
             android:gravity="center"
-            android:orientation="horizontal" 
-            android:background="@drawable/selector_presseffect">
-		<RelativeLayout 
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical"
-                android:text="修改密码"
-                android:textColor="@color/black"
-                android:textSize="@dimen/textsize_middle" />
+            android:orientation="horizontal" >
 
-            <ImageView
-                android:layout_marginRight="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/icon_enter" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="修改密码"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_middle" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/icon_enter" />
             </RelativeLayout>
         </LinearLayout>
 
         <View
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@color/lightgray" />
     </LinearLayout>
 
-    
-
     <View
-         android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@color/lightgray" />
 
 </LinearLayout>

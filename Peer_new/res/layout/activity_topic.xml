@@ -2,9 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/white">
-    
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -25,8 +29,7 @@
                 android:id="@+id/personhead"
                 android:layout_width="60.0dip"
                 android:layout_height="60.0dip"
-                android:layout_gravity="center"
-                 />
+                android:layout_gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,9 +46,8 @@
 
                 <TextView
                     android:id="@+id/email"
-                   
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"                   
+                    android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
 
@@ -54,19 +56,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"                    
+                    android:layout_alignParentLeft="true"
                     android:textColor="@color/deepgray"
-                    
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-    <ListView 
+
+    <ListView
         android:id="@+id/lv_topichistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        ></ListView>
-    
+        android:divider="@null" >
+    </ListView>
 
 </LinearLayout>

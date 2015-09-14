@@ -28,17 +28,16 @@ import com.peer.utils.JsonDocHelper;
 import com.peer.utils.pLog;
 import com.peer.utils.pViewBox;
 
-
 /**
  * 更改昵称
  */
-public class UpdateNikeActivity extends pBaseActivity{
+public class UpdateNikeActivity extends pBaseActivity {
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
 		private EditText et_updatenike;
 		private Button bt_nikename;
-	
+
 	}
 
 	private PageViewList pageViewaList;
@@ -47,7 +46,10 @@ public class UpdateNikeActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.activity_updatenike);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -55,8 +57,9 @@ public class UpdateNikeActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.updatenike));
-		Intent t=getIntent();
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.updatenike));
+		Intent t = getIntent();
 		pageViewaList.et_updatenike.setText(t.getStringExtra("nikename"));
 	}
 
@@ -74,56 +77,41 @@ public class UpdateNikeActivity extends pBaseActivity{
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_updatenike, null);
-	}
-	
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.bt_nikename:
-			if(pageViewaList.et_updatenike.getText().toString().trim().equals("")){
-				showToast(getResources().getString(R.string.inputnike), Toast.LENGTH_LONG, false);
-			}else{
-				sendUpdateNike(mShareFileUtils.getString(Constant.CLIENT_ID, "")
-						,pageViewaList.et_updatenike.getText().toString());
-				
+			if (pageViewaList.et_updatenike.getText().toString().trim()
+					.equals("")) {
+				showToast(getResources().getString(R.string.inputnike),
+						Toast.LENGTH_LONG, false);
+			} else {
+				sendUpdateNike(
+						mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+						pageViewaList.et_updatenike.getText().toString());
+
 			}
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	/**
 	 * 更改用户生日信息请求
 	 * 
@@ -139,7 +127,7 @@ public class UpdateNikeActivity extends pBaseActivity{
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getUpdateUsernameParams(
-					UpdateNikeActivity.this,client_id,username);
+					UpdateNikeActivity.this, client_id, username);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -153,8 +141,9 @@ public class UpdateNikeActivity extends pBaseActivity{
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -163,8 +152,9 @@ public class UpdateNikeActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -173,8 +163,9 @@ public class UpdateNikeActivity extends pBaseActivity{
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -183,29 +174,37 @@ public class UpdateNikeActivity extends pBaseActivity{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
+								LoginBean loginBean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject(
+														"success").toString(),
+												LoginBean.class);
 								if (loginBean != null) {
 									BussinessUtils.saveUserData(loginBean,
 											mShareFileUtils);
-									showToast(getResources().getString(R.string.updatemsgsuccess)
-											, Toast.LENGTH_SHORT, false);
-									Intent t=getIntent();
-									t.putExtra("newnikename", pageViewaList.et_updatenike.getText().toString());
-									setResult(PersonalMessageActivity.UPDATENIKENAME, t);
+									showToast(
+											getResources().getString(
+													R.string.updatemsgsuccess),
+											Toast.LENGTH_SHORT, false);
+									Intent t = getIntent();
+									t.putExtra("newnikename",
+											pageViewaList.et_updatenike
+													.getText().toString());
+									setResult(
+											PersonalMessageActivity.UPDATENIKENAME,
+											t);
 									finish();
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}

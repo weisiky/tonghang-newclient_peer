@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-     >
+    android:layout_height="fill_parent" >
 
     <RelativeLayout
         android:id="@+id/rl_layout"
@@ -10,6 +9,7 @@
         android:layout_height="48dp"
         android:background="@color/title_backcolor"
         android:orientation="horizontal" >
+
         <LinearLayout
             android:id="@+id/ll_back"
             android:layout_width="wrap_content"
@@ -54,20 +54,20 @@
             android:paddingRight="16dp"
             android:src="@drawable/icon_chatroom_menu" />
     </RelativeLayout>
-    
-    
-	<RelativeLayout 
+
+    <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white" >
-         <View
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/deepgray" />
-         
-         <Button
+
+        <Button
             android:id="@+id/sendphoto"
             android:layout_width="38dp"
             android:layout_height="wrap_content"
@@ -77,9 +77,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/sendphoto"
-            />
-         
+            android:background="@drawable/sendphoto" />
+
         <Button
             android:id="@+id/btn_send"
             android:layout_width="48dp"
@@ -106,25 +105,24 @@
             android:paddingLeft="5dp"
             android:textColor="@color/black"
             android:textSize="@dimen/textsize_middle" />
-         <!-- 清空搜索文字按钮 -->
-			       <LinearLayout 
-			           android:id="@+id/layout_clear_search_text"
-			           android:layout_width="fill_parent"
-			           android:layout_height="fill_parent"
-			          android:visibility="gone"
-			           android:orientation="horizontal">
-			       <Button
-			           android:gravity="center" 
-			           android:id="@+id/btn_clear_search_text"
-			           android:layout_width="20dp"
-			           android:layout_height="20dp"
-			           android:layout_gravity="right|center_vertical"
-			           android:background="@drawable/selector_search_clear"
-			         />
-			        </LinearLayout>
- </RelativeLayout>
+        <!-- 清空搜索文字按钮 -->
 
-    
+        <LinearLayout
+            android:id="@+id/layout_clear_search_text"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/btn_clear_search_text"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/selector_search_clear"
+                android:gravity="center" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_chat"
@@ -138,6 +136,4 @@
         android:dividerHeight="5dp"
         android:scrollbars="none" />
 
-
 </RelativeLayout>
-

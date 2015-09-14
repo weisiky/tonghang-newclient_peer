@@ -2,283 +2,299 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-     >
+    android:background="@color/white" >
+
+    <include
+        android:id="@+id/incTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
     <LinearLayout
         android:id="@+id/ll_head_my"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        
+        android:layout_below="@id/incTop"
         android:orientation="vertical" >
 
-       
-
-        <LinearLayout 
+        <LinearLayout
             android:id="@+id/ll_setting_set"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
             android:background="@drawable/selector_presseffect"
-            >
+            android:clickable="true"
+            android:orientation="horizontal" >
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
+
                 <TextView
-                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
                     android:text="消息提醒"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />
+                    android:background="@drawable/icon_enter" />
             </RelativeLayout>
         </LinearLayout>
+
         <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" 
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-         <LinearLayout
-             android:id="@+id/ll_newfunction_set" 
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
+            android:id="@+id/ll_newfunction_set"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
             android:background="@drawable/selector_presseffect"
-            >
+            android:clickable="true"
+            android:orientation="horizontal" >
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />                
+                    android:background="@drawable/icon_enter" />
+
                 <TextView
-                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
                     android:text="新功能介绍"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
         </LinearLayout>
-       <View
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"  
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-           <LinearLayout 
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
             android:id="@+id/ll_feedback_set"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
             android:background="@drawable/selector_presseffect"
-            >
+            android:clickable="true"
+            android:orientation="horizontal" >
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />
+                    android:background="@drawable/icon_enter" />
+
                 <TextView
-                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
                     android:text="问题反馈"
-                   android:textColor="@color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
         </LinearLayout>
-        <View 
-             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" 
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-           <LinearLayout 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
             android:id="@+id/ll_newversion_set"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
             android:background="@drawable/selector_presseffect"
-            >
+            android:clickable="true"
+            android:orientation="horizontal" >
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
-               <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />
-                
-                <TextView
-                    android:layout_marginLeft="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="版本更新"                
-                   android:textColor="@color/black"
-                    android:textSize="@dimen/textsize_middle" />
-            </RelativeLayout>
-        </LinearLayout>
-       <View 
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" 
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-       
-           <LinearLayout 
-            android:id="@+id/ll_blacklist_set"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:background="@drawable/selector_presseffect"
-            >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-               <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />
-                
-                <TextView
-                    android:layout_marginLeft="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="黑名单"                
-                   android:textColor="@color/black"
-                    android:textSize="@dimen/textsize_middle" />
-            </RelativeLayout>
-        </LinearLayout>
-       <View 
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" 
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-       
-       
-       
-           <LinearLayout
-            android:id="@+id/ll_clearcash_set" 
-            android:background="@drawable/selector_presseffect"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:clickable="true"
-            >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="16dp"
-                    android:background="@drawable/icon_enter"
-                    />
+                    android:background="@drawable/icon_enter" />
+
                 <TextView
-                    android:layout_marginLeft="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="版本更新"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_middle" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
+            android:id="@+id/ll_blacklist_set"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_presseffect"
+            android:clickable="true"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/icon_enter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="黑名单"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_middle" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
+            android:id="@+id/ll_clearcash_set"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_presseffect"
+            android:clickable="true"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/icon_enter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
                     android:text="清除缓存"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_middle" />
             </RelativeLayout>
         </LinearLayout>
-        <View 
-             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" 
-          android:background="@color/lightgray"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"/>
-                <LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	   android:layout_margin="8dp"
-	    >
-	<TextView
-	    android:id="@+id/xieyi"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="《同行科技许可协议和服务条款》"
-	    android:textColor="@color/backcolornol" 
-	    android:layout_gravity="center_horizontal"
-	    android:clickable="true"/>
 
-	</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/lightgray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/xieyi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:text="《同行科技许可协议和服务条款》"
+                android:textColor="@color/backcolornol" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout 
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        >
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical" >
+
         <Button
-            android:background="@drawable/selector_back"
-            android:textColor="@color/white"
-            android:id="@+id/bt_relogin" 
+            android:id="@+id/bt_relogin"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:textSize="@dimen/textsize_large"
+            android:background="@drawable/selector_back"
             android:text="退出登录"
-            />
-        <Button 
-            android:background="@drawable/selector_back"
             android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large" />
+
+        <Button
             android:id="@+id/bt_todesk"
-            android:textSize="@dimen/textsize_large"
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_back"
             android:text="关闭"
-            />
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large" />
     </LinearLayout>
+
 </RelativeLayout>

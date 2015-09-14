@@ -1,7 +1,12 @@
 package com.peer.base;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -13,6 +18,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,18 +32,29 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.R;
+import com.peer.IMController.ShowNotification;
 import com.peer.activity.LoginActivity;
 import com.peer.activity.MainActivity;
 import com.peer.activity.MyAcountActivity;
 import com.peer.activity.SettingActivity;
 import com.peer.base.pBaseApplication.OnNetworkStatusListener;
 import com.peer.bean.ChatRoomBean;
+import com.peer.bean.LoginBean;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
 import com.peer.service.FxService;
 import com.peer.utils.BussinessUtils;
 import com.peer.utils.HomeWatcher;
 import com.peer.utils.HomeWatcher.OnHomePressedListener;
+import com.peer.utils.JsonDocHelper;
 import com.peer.utils.ManagerActivity;
 import com.peer.utils.pLog;
 import com.peer.utils.pNetUitls;
@@ -53,7 +71,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 
 public abstract class pBaseActivity extends FragmentActivity implements
-		OnClickListener,Serializable{
+		OnClickListener, EMEventListener {
 
 	/** 共享文件工具类 **/
 	public pShareFileUtils mShareFileUtils = new pShareFileUtils();
@@ -61,20 +79,20 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	private long mExitTime;
 	/** 提示条 **/
 	public Toast toast;
-	/** 中间布局 **/
-	private RelativeLayout contentLayout;
-	/** 顶部布局 **/
-	private RelativeLayout topLayout;
-	/** 底部布局 **/
-	private RelativeLayout bottomLayout;
+//	/** 中间布局 **/
+//	private RelativeLayout contentLayout;
+//	/** 顶部布局 **/
+//	private RelativeLayout topLayout;
+//	/** 底部布局 **/
+//	private RelativeLayout bottomLayout;
 	/** 灰色布局 **/
-	private LinearLayout shadeBg;
+//	private LinearLayout shadeBg;
 	/** 当前页面的名称 **/
 	public String currentPageName = null;
 	/** 蒙板渐变动画 **/
 	public Animation alphaAnimation;
 	/** 首次进入页面的loading圈圈 **/
-	public RelativeLayout baseProgressBarLayout;
+//	public RelativeLayout baseProgressBarLayout;
 	// 网络状态
 	public boolean isNetworkAvailable;
 	public pBaseApplication application;
@@ -85,8 +103,10 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	// Home键监听
 	private HomeWatcher mHomeWatcher;
 
-	protected NotificationManager notificationManager;
+	public NotificationManager notificationManager;
+	protected ShowNotification showNotification;
 
+	private static final int UPDATE_NEW_MESSAGE_TEXT = 102;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +116,14 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.base);
+//		setContentView(R.layout.base);
 
 		// 当前页面名称
 		currentPageName = getLocalClassNameBySelf();
 		// 获取手机屏幕跨度，图片适配使用
 		Constant.S_SCREEN_WIDHT_VALUE = pSysInfoUtils.getDisplayMetrics(this).widthPixels
 				+ "";
-		findGlobalViewById();
+//		findGlobalViewById();
 		// 初始化ShareUtiles
 		initShareUtils();
 		// 友盟统计 发送策略
@@ -113,9 +133,6 @@ public abstract class pBaseActivity extends FragmentActivity implements
 
 		ManagerActivity.getAppManager().addActivity(this);
 
-		this.findViewById();
-		this.setListener();
-		this.processBiz();
 
 		application = (pBaseApplication) getApplication();
 
@@ -142,8 +159,9 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		AnalyticsConfig.enableEncrypt(true);
 
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		showNotification = new ShowNotification(notificationManager);
 		
-
+		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
 	}
 
 	@Override
@@ -152,8 +170,13 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		super.onResume();
 		EMChatManager.getInstance().activityResumed();
 		MobclickAgent.onResume(this);
-		
-		
+		EMChatManager.getInstance().registerEventListener(
+				this,
+				new EMNotifierEvent.Event[] {
+						EMNotifierEvent.Event.EventNewMessage,
+						EMNotifierEvent.Event.EventOfflineMessage,
+						EMNotifierEvent.Event.EventDeliveryAck,
+						EMNotifierEvent.Event.EventReadAck });
 		/*
 		 * 判断是否满足悬浮头像启动逻辑。满足——启动
 		 */
@@ -163,7 +186,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			if (mShareFileUtils.getBoolean(Constant.ISFLOAT, false)) {
 				Intent resintent = new Intent(pBaseActivity.this,
 						FxService.class);
-				
+
 				resintent.putExtra(Constant.FROMFLOAT, "fromfloat");
 				startService(resintent);
 			}
@@ -198,49 +221,46 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	/**
 	 * 获取全局页面控件对象
 	 */
-	@SuppressWarnings("deprecation")
-	protected void findGlobalViewById() {
-		topLayout = (RelativeLayout) findViewById(R.id.topLayout);
-		contentLayout = (RelativeLayout) findViewById(R.id.contentLayout);
-		bottomLayout = (RelativeLayout) findViewById(R.id.bottomLayout);
-		shadeBg = (LinearLayout) findViewById(R.id.shadeBg);
-
-		RelativeLayout.LayoutParams layoutParamsContent = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.FILL_PARENT,
-				RelativeLayout.LayoutParams.FILL_PARENT);
-		RelativeLayout.LayoutParams layoutParamsTop = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.FILL_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		RelativeLayout.LayoutParams layoutParamsBottom = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.FILL_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		View topView = loadTopLayout();
-		if (topView == null) {
-			topLayout.setVisibility(View.GONE);
-		} else {
-			topLayout.setVisibility(View.VISIBLE);
-			topLayout.addView(topView, layoutParamsTop);
-		}
-		View contentView = loadContentLayout();
-		if (contentView == null) {
-			contentLayout.setVisibility(View.GONE);
-		} else {
-			contentLayout.setVisibility(View.VISIBLE);
-			contentLayout.addView(contentView, layoutParamsContent);
-		}
-		View bottomView = loadBottomLayout();
-		if (bottomView == null) {
-			bottomLayout.setVisibility(View.GONE);
-		} else {
-			bottomLayout.setVisibility(View.VISIBLE);
-			bottomLayout.addView(bottomView, layoutParamsTop);
-		}
-
-		baseProgressBarLayout = (RelativeLayout) findViewById(R.id.baseProgressBarLayout);
-
-		alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.shade_alpha);
-
-	}
+//	@SuppressWarnings("deprecation")
+//	protected void findGlobalViewById() {
+//		topLayout = (RelativeLayout) findViewById(R.id.topLayout);
+//		contentLayout = (RelativeLayout) findViewById(R.id.contentLayout);
+//		bottomLayout = (RelativeLayout) findViewById(R.id.bottomLayout);
+//		shadeBg = (LinearLayout) findViewById(R.id.shadeBg);
+//
+//		RelativeLayout.LayoutParams layoutParamsContent = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.FILL_PARENT,
+//				RelativeLayout.LayoutParams.FILL_PARENT);
+//		RelativeLayout.LayoutParams layoutParamsTop = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.FILL_PARENT,
+//				RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		RelativeLayout.LayoutParams layoutParamsBottom = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.FILL_PARENT,
+//				RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		View topView = loadTopLayout();
+//		if (topView == null) {
+//			topLayout.setVisibility(View.GONE);
+//		} else {
+//			topLayout.setVisibility(View.VISIBLE);
+//			topLayout.addView(topView, layoutParamsTop);
+//		}
+//		View contentView = loadContentLayout();
+//		if (contentView == null) {
+//			contentLayout.setVisibility(View.GONE);
+//		} else {
+//			contentLayout.setVisibility(View.VISIBLE);
+//			contentLayout.addView(contentView, layoutParamsContent);
+//		}
+//		View bottomView = loadBottomLayout();
+//		if (bottomView == null) {
+//			bottomLayout.setVisibility(View.GONE);
+//		} else {
+//			bottomLayout.setVisibility(View.VISIBLE);
+//			bottomLayout.addView(bottomView, layoutParamsTop);
+//		}
+//
+//		baseProgressBarLayout = (RelativeLayout) findViewById(R.id.baseProgressBarLayout);
+//	}
 
 	/**
 	 * 网络连通后回调该函数
@@ -267,22 +287,22 @@ public abstract class pBaseActivity extends FragmentActivity implements
 	 */
 	protected abstract void processBiz();
 
-	/**
-	 * 获取顶部布局
-	 */
-	protected abstract View loadTopLayout();
-
-	/**
-	 * 获取中间布局
-	 * 
-	 */
-	protected abstract View loadContentLayout();
-
-	/**
-	 * 获取底部布局
-	 * 
-	 */
-	protected abstract View loadBottomLayout();
+//	/**
+//	 * 获取顶部布局
+//	 */
+//	protected abstract View loadTopLayout();
+//
+//	/**
+//	 * 获取中间布局
+//	 * 
+//	 */
+//	protected abstract View loadContentLayout();
+//
+//	/**
+//	 * 获取底部布局
+//	 * 
+//	 */
+//	protected abstract View loadBottomLayout();
 
 	/**
 	 * 页面左侧进入
@@ -423,7 +443,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("FindPasswordActivity")) {
 			startActivityRight(LoginActivity.class, intent, false);
 		} else if (getLocalClassNameBySelf().contains("MultiChatRoomActivity")
-				||getLocalClassNameBySelf().contains("WebViewActivity")) {
+				|| getLocalClassNameBySelf().contains("WebViewActivity")) {
 			startActivityRight(MainActivity.class, intent, true);
 		} else if (getLocalClassNameBySelf().contains("xieyiActivity")
 				|| getLocalClassNameBySelf().contains("Recommend_topic")
@@ -432,7 +452,7 @@ public abstract class pBaseActivity extends FragmentActivity implements
 				|| getLocalClassNameBySelf().contains("SearchUserActivity")
 				|| getLocalClassNameBySelf().contains("CreatTopicActivity")
 				|| getLocalClassNameBySelf().contains("MyAcountActivity")
-				
+
 				|| getLocalClassNameBySelf()
 						.contains("PersonalMessageActivity")
 				|| getLocalClassNameBySelf().contains("PersonalPageActivity")
@@ -515,38 +535,38 @@ public abstract class pBaseActivity extends FragmentActivity implements
 		return lClssName;
 	}
 
-	/**
-	 * 显示loading圈圈
-	 */
-	public void showProgressBar() {
-		showAlphaBg();
-		baseProgressBarLayout.setVisibility(View.VISIBLE);
-	}
-
-	/**
-	 * 隐藏dialog
-	 */
-	public void hideLoading() {
-		hidAlphaBg();
-		shadeBg.clearAnimation();
-		baseProgressBarLayout.setVisibility(View.GONE);
-	}
-
-	/**
-	 * 显示渐变背景
-	 */
-	public void showAlphaBg() {
-		shadeBg.setOnClickListener(this);
-		shadeBg.setVisibility(View.VISIBLE);
-		shadeBg.startAnimation(alphaAnimation);
-	}
-
-	/**
-	 * 显示渐变背景
-	 */
-	public void hidAlphaBg() {
-		shadeBg.setVisibility(View.GONE);
-	}
+//	/**
+//	 * 显示loading圈圈
+//	 */
+//	public void showProgressBar() {
+//		showAlphaBg();
+//		baseProgressBarLayout.setVisibility(View.VISIBLE);
+//	}
+//
+//	/**
+//	 * 隐藏dialog
+//	 */
+//	public void hideLoading() {
+//		hidAlphaBg();
+//		shadeBg.clearAnimation();
+//		baseProgressBarLayout.setVisibility(View.GONE);
+//	}
+//
+//	/**
+//	 * 显示渐变背景
+//	 */
+//	public void showAlphaBg() {
+//		shadeBg.setOnClickListener(this);
+//		shadeBg.setVisibility(View.VISIBLE);
+//		shadeBg.startAnimation(alphaAnimation);
+//	}
+//
+//	/**
+//	 * 显示渐变背景
+//	 */
+//	public void hidAlphaBg() {
+//		shadeBg.setVisibility(View.GONE);
+//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -597,6 +617,160 @@ public abstract class pBaseActivity extends FragmentActivity implements
 			break;
 
 		}
+	}
+
+	/**
+	 * 环信聊天监听
+	 */
+
+	@SuppressWarnings({ "incomplete-switch", "static-access" })
+	@Override
+	public void onEvent(EMNotifierEvent event) {
+		// TODO Auto-generated method stub
+		switch (event.getEvent()) {
+		case EventNewMessage: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			Message message1 = new Message();
+			message1.what = UPDATE_NEW_MESSAGE_TEXT;
+			message1.obj=message;
+			handler.sendMessage(message1);
+
+			break;
+		}
+		case EventDeliveryAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventReadAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventOfflineMessage: {
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	Handler handler = new Handler() {
+		@SuppressWarnings("static-access")
+		@Override
+		public void handleMessage(android.os.Message message) {
+			switch (message.what) {
+			case UPDATE_NEW_MESSAGE_TEXT:
+				// MainActivity.updateUnreadLabel();
+				EMMessage msg =(EMMessage) message.obj;
+				try {
+					senduser(msg.getFrom(),
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							msg);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		EMChatManager.getInstance().unregisterEventListener(this);
+	}
+
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	@SuppressWarnings("unused")
+	private void senduser(String client_id, String o_client_id,
+			final EMMessage message) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(pBaseActivity.this,
+					client_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="
+				+ o_client_id, params, new JsonHttpResponseHandler() {
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					JSONObject result = response.getJSONObject("success");
+					String code = result.getString("code");
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
+								LoginBean.class);
+						if (loginBean != null) {
+							// singlenotifyNewMessage(loginBean, message);
+							showNotification.sendNotification(
+									pBaseActivity.this, message,
+									mShareFileUtils, false,
+									loginBean.user.getUsername());
+						}
+					} else if (code.equals("500")) {
+
+					} else {
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				super.onSuccess(statusCode, headers, response);
+
+			}
+
+		});
 	}
 
 }

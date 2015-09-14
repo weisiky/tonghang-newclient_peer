@@ -11,14 +11,11 @@ import com.peer.R;
 import com.peer.base.pBaseActivity;
 import com.peer.utils.pViewBox;
 
-
-
 /**
- * 找回密码结果页。
- * 只显示结果，不做处理 
+ * 找回密码结果页。 只显示结果，不做处理
  */
-public class FindPasswordResultActivity extends pBaseActivity{
-	
+public class FindPasswordResultActivity extends pBaseActivity {
+
 	class PageViewList {
 		private LinearLayout ll_back;
 		private TextView tv_title;
@@ -31,7 +28,10 @@ public class FindPasswordResultActivity extends pBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.activity_findpasswordresult);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -39,7 +39,8 @@ public class FindPasswordResultActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		pageViewaList = new PageViewList();
 		pViewBox.viewBox(this, pageViewaList);
-		pageViewaList.tv_title.setText(getResources().getString(R.string.findpassword));
+		pageViewaList.tv_title.setText(getResources().getString(
+				R.string.findpassword));
 	}
 
 	@Override
@@ -56,31 +57,13 @@ public class FindPasswordResultActivity extends pBaseActivity{
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_findpasswordresult, null);
-	}
-	
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.back:
-			Intent back = new Intent(FindPasswordResultActivity.this,LoginActivity.class);
+			Intent back = new Intent(FindPasswordResultActivity.this,
+					LoginActivity.class);
 			startActivity(back);
 			finish();
 			break;
@@ -88,19 +71,19 @@ public class FindPasswordResultActivity extends pBaseActivity{
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

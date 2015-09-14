@@ -65,7 +65,10 @@ public class MySkillActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_my_myskill);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -98,25 +101,6 @@ public class MySkillActivity extends pBaseActivity {
 		pageViewaList.lv_myskill.setAdapter(adapter);
 		registEventBus();
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_my_myskill, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -234,7 +218,7 @@ public class MySkillActivity extends pBaseActivity {
 				HomeFragment.pageindex = 0;
 				Recommend_topic.pageindex = 0;
 				pLog.i("test", "mlist:" + mlist);
-				
+
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -280,8 +264,8 @@ public class MySkillActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 
@@ -289,8 +273,8 @@ public class MySkillActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -298,8 +282,8 @@ public class MySkillActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -312,25 +296,25 @@ public class MySkillActivity extends pBaseActivity {
 					JSONObject result = response.getJSONObject("success");
 
 					String code = result.getString("code");
-					pLog.i("test", "code:"+code);
-					if(code.equals("200")){
-						LoginBean loginBean = JsonDocHelper.toJSONObject(response
-								.getJSONObject("success").toString(),
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
 								LoginBean.class);
 						PersonpageBean.getInstance().setUser(loginBean.user);
-						
+
 						if (loginBean.user.getLabels() != null
 								&& loginBean.user.getLabels().size() > 0) {
 							BussinessUtils.saveUserData(loginBean,
 									mShareFileUtils);
 						}
-						
+
 						Hadtag = mlist.size();
 						adapter = new SkillAdapter(MySkillActivity.this, mlist);
 						pageViewaList.lv_myskill.setAdapter(adapter);
-					}else if(code.equals("500")){
-						
-					}else{
+					} else if (code.equals("500")) {
+
+					} else {
 						String message = result.getString("message");
 						showToast(message, Toast.LENGTH_SHORT, false);
 					}
@@ -366,7 +350,7 @@ public class MySkillActivity extends pBaseActivity {
 			if (Hadtag < 3) {
 				showToast("至少需要保留两个行业标签", Toast.LENGTH_SHORT, false);
 			} else {
-				
+
 				if (isNetworkAvailable) {
 					try {
 						mlist.remove(event.getPosition());
@@ -387,7 +371,7 @@ public class MySkillActivity extends pBaseActivity {
 				}
 			}
 		} else {
-			
+
 			if (isNetworkAvailable) {
 				try {
 					mlist.remove(event.getPosition());

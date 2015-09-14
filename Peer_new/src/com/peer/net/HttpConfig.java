@@ -9,16 +9,20 @@ package com.peer.net;
 public interface HttpConfig {
 
 	/** IP **/
-//	 public static String SERVER_ADDRESS = "http://192.168.23.1:8080/tonghang-serverapi";
+	// public static String SERVER_ADDRESS =
 	// "http://192.168.23.1:8080/tonghang-serverapi";
-//	public static String SERVER_ADDRESS = "http://192.168.31.192/tonghang-serverapi";
-//	public static String SERVER_ADDRESS = "http://www.tonghang1.com:8080/tonghang-serverapi";
+	// "http://192.168.23.1:8080/tonghang-serverapi";
+	// public static String SERVER_ADDRESS =
+	// "http://192.168.31.192/tonghang-serverapi";
+	// public static String SERVER_ADDRESS =
+	// "http://www.tonghang1.com:8080/tonghang-serverapi";
 	/** 测试url **/
-	public static String SERVER_ADDRESS = "http://www.tonghang1.com:8088/tonghang-serverapi";
-	
+//	public static String SERVER_ADDRESS = "http://www.tonghang1.com:8088/tonghang-serverapi";
+	public static String SERVER_ADDRESS = "http://114.215.143.83:8088/tonghang-serverapi";
+
 	// http://114.215.143.83:3000
-	 
-//	 "http://192.168.1.102:8080/tonghang-serverapi";
+
+	// "http://192.168.1.102:8080/tonghang-serverapi";
 
 	/** 登入请求 **/
 	public static String LONIN_IN_URL = SERVER_ADDRESS + "/user/newlogin.json";
@@ -106,5 +110,6 @@ public interface HttpConfig {
 	/** 从黑名单移除用户列表 **/
 	public static String DROPBLOCK_GET_URL = SERVER_ADDRESS + "/block/";
 	/** 得到系統參數 **/
-	public static String GET_SYSTEMCONFIG = SERVER_ADDRESS + "/system/system_config.json";
+	public static String GET_SYSTEMCONFIG = SERVER_ADDRESS
+			+ "/system/system_config.json";
 }

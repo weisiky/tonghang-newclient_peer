@@ -39,7 +39,7 @@ public class NewFriendsActivity extends pBaseActivity {
 	private EventBus mBus;
 	public List<InvitationBean> invitationbean = new ArrayList<InvitationBean>();
 	private NewfriendsAdapter adapter;
-	int page=1;
+	int page = 1;
 
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -55,7 +55,10 @@ public class NewFriendsActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_newfriends);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class NewFriendsActivity extends pBaseActivity {
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
-		
+
 	}
 
 	@Override
@@ -79,25 +82,6 @@ public class NewFriendsActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
 		registEventBus();
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_newfriends, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -130,7 +114,7 @@ public class NewFriendsActivity extends pBaseActivity {
 	}
 
 	private void getEvent(NewFriensEvent event) {
-		System.out.println("position:"+event.getPosition());
+		System.out.println("position:" + event.getPosition());
 		invitationbean.remove(event.getPosition());
 		adapter.notifyDataSetChanged();
 		FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
@@ -152,27 +136,23 @@ public class NewFriendsActivity extends pBaseActivity {
 	private void sendnewfriend(String client_id) {
 		// TODO Auto-generated method stub
 
-//		 RequestParams params = null;
-//		 try {
-//		 params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
-//		 } catch (Exception e1) {
-//		 // TODO Auto-generated catch block
-//		 e1.printStackTrace();
-//		 }
-		
+		// RequestParams params = null;
+		// try {
+		// params = PeerParamsUtils.getNewFriendsParams(this, pageindex++);
+		// } catch (Exception e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
 		HttpUtil.post(HttpConfig.FRIEND_INVITATION_URL + client_id + ".json",
 				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "responseString:"+responseString);
-						pLog.i("test", "throwable:"+throwable);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -181,12 +161,9 @@ public class NewFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -195,12 +172,9 @@ public class NewFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "headers:"+headers);
-						pLog.i("test", "errorResponse:"+errorResponse);
-						pLog.i("test", "throwable:"+throwable);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -213,36 +187,43 @@ public class NewFriendsActivity extends pBaseActivity {
 						pLog.i("test", "response:" + response.toString());
 
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								NewFriendBean newfriendbean = JsonDocHelper
 										.toJSONObject(
-												response.getJSONObject("success")
-												.toString(),
+												response.getJSONObject(
+														"success").toString(),
 												NewFriendBean.class);
-								
+
 								if (newfriendbean != null) {
-									
-									invitationbean.addAll(newfriendbean.invitation);
-									pLog.i("test", "user1:"
-											+ invitationbean.toString());
+
+									invitationbean
+											.addAll(newfriendbean.invitation);
+									pLog.i("test",
+											"user1:"
+													+ invitationbean.toString());
 									if (adapter == null) {
-										if (invitationbean!=null&&invitationbean.size() > 0) {
+										if (invitationbean != null
+												&& invitationbean.size() > 0) {
 											adapter = new NewfriendsAdapter(
-													NewFriendsActivity.this, invitationbean
-													,newfriendbean.getPic_server());
+													NewFriendsActivity.this,
+													invitationbean,
+													newfriendbean
+															.getPic_server());
 										}
-										pageViewaList.lv_newfriends.setAdapter(adapter);
+										pageViewaList.lv_newfriends
+												.setAdapter(adapter);
 									}
-									
+
 									refresh();
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -252,7 +233,6 @@ public class NewFriendsActivity extends pBaseActivity {
 							e1.printStackTrace();
 						}
 
-						
 						// adapter.setBaseFragment(HomeFragment.this);
 
 						super.onSuccess(statusCode, headers, response);

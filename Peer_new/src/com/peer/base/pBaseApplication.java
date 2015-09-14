@@ -48,6 +48,7 @@ public class pBaseApplication extends Application {
 	/** 控制更新参数 **/
 	public static boolean updateflag = true;
 
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate() {
@@ -56,8 +57,8 @@ public class pBaseApplication extends Application {
 
 		pLog.isDebug = true;
 
-//		 程序crash处理程序。
-//		CrashHandler.instance(this).init();
+		// 程序crash处理程序。
+		// CrashHandler.instance(this).init();
 		// 初始化图片加载程序
 		ImageLoaderUtil.getInstance();
 		// 注册网络监听器
@@ -82,23 +83,21 @@ public class pBaseApplication extends Application {
 		JPushInterface.init(this);
 		// ShareSDK初始化
 		ShareSDK.initSDK(this);
-		
-		IntentFilter filter=new IntentFilter();
+
+		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_TIME_TICK);
-		ListenBroadcastReceiver receiver=new ListenBroadcastReceiver();
+		ListenBroadcastReceiver receiver = new ListenBroadcastReceiver();
 		registerReceiver(receiver, filter);
-		
-		
+
 		isExitFile();
-		
 
 	}
 
 	private void isExitFile() {
 		// TODO Auto-generated method stub
-		File file=new File(Constant.DEFAULT_MAIN_DIRECTORY);
-		if(!file.exists()){
-			 file.mkdirs();  
+		File file = new File(Constant.DEFAULT_MAIN_DIRECTORY);
+		if (!file.exists()) {
+			file.mkdirs();
 		}
 	}
 

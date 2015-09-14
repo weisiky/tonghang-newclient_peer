@@ -56,7 +56,7 @@ public class Recommend_topic extends pBaseActivity {
 	Recommend_topicAdapter adapter;
 
 	class PageViewList {
-		private LinearLayout ll_back, ll_topic,ll_search;
+		private LinearLayout ll_back, ll_topic, ll_search;
 		private TextView tv_title;
 	}
 
@@ -66,8 +66,16 @@ public class Recommend_topic extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+		setContentView(R.layout.activity_recommend_topic);
+		findViewById();
+		setListener();
+		processBiz();
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+				.detectDiskReads().detectDiskWrites().detectNetwork()
+				.penaltyLog().build());
+		StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+				.detectLeakedSqlLiteObjects().detectLeakedClosableObjects()
+				.penaltyLog().penaltyDeath().build());
 
 	}
 
@@ -86,11 +94,11 @@ public class Recommend_topic extends pBaseActivity {
 		pageViewaList.ll_back.setOnClickListener(this);
 		pageViewaList.ll_topic.setOnClickListener(this);
 		pageViewaList.ll_search.setOnClickListener(this);
-		
+
 		RefreshListner();
 
 	}
-	
+
 	private void RefreshListner() {
 		// TODO Auto-generated method stub
 		pull_refresh_topic
@@ -100,15 +108,15 @@ public class Recommend_topic extends pBaseActivity {
 					public void onPullDownToRefresh(
 							PullToRefreshBase<ListView> refreshView) {
 						// TODO Auto-generated method stub
-						String label = DateUtils.formatDateTime(Recommend_topic.this
-								.getApplicationContext(), System
-								.currentTimeMillis(),
+						String label = DateUtils.formatDateTime(
+								Recommend_topic.this.getApplicationContext(),
+								System.currentTimeMillis(),
 								DateUtils.FORMAT_SHOW_TIME
 										| DateUtils.FORMAT_SHOW_DATE
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						if(isNetworkAvailable){
+						if (isNetworkAvailable) {
 							try {
 								page = 1;
 								sendRecommendtopic(mShareFileUtils.getString(
@@ -117,12 +125,14 @@ public class Recommend_topic extends pBaseActivity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}else{
-							showToast(getResources().getString(R.string.Broken_network_prompt)
-									, Toast.LENGTH_SHORT, false);
+						} else {
+							showToast(
+									getResources().getString(
+											R.string.Broken_network_prompt),
+									Toast.LENGTH_SHORT, false);
 							pull_refresh_topic.onRefreshComplete();
 						}
-						
+
 					}
 
 					@SuppressWarnings("static-access")
@@ -130,46 +140,49 @@ public class Recommend_topic extends pBaseActivity {
 					public void onPullUpToRefresh(
 							PullToRefreshBase<ListView> refreshView) {
 						// TODO Auto-generated method stub
-						String label = DateUtils.formatDateTime(Recommend_topic.this
-								.getApplicationContext(), System
-								.currentTimeMillis(),
+						String label = DateUtils.formatDateTime(
+								Recommend_topic.this.getApplicationContext(),
+								System.currentTimeMillis(),
 								DateUtils.FORMAT_SHOW_TIME
 										| DateUtils.FORMAT_SHOW_DATE
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						if(isNetworkAvailable){
+						if (isNetworkAvailable) {
 							try {
-								
-								if(page==pageindex){
-									pLog.i("test", "page:"+page);
-									pLog.i("test", "pageindex:"+pageindex);
-									
-									sendRecommendtopic(mShareFileUtils.getString(
-											Constant.CLIENT_ID, ""), ++page);
-								}else{
-									pLog.i("test", "page:"+page);
-									pLog.i("test", "pageindex:"+pageindex);
-									if(pageindex == 0){
+
+								if (page == pageindex) {
+									pLog.i("test", "page:" + page);
+									pLog.i("test", "pageindex:" + pageindex);
+
+									sendRecommendtopic(mShareFileUtils
+											.getString(Constant.CLIENT_ID, ""),
+											++page);
+								} else {
+									pLog.i("test", "page:" + page);
+									pLog.i("test", "pageindex:" + pageindex);
+									if (pageindex == 0) {
 										page = 1;
 									}
-									sendRecommendtopic(mShareFileUtils.getString(
-											Constant.CLIENT_ID, ""), page);
+									sendRecommendtopic(mShareFileUtils
+											.getString(Constant.CLIENT_ID, ""),
+											page);
 								}
 							} catch (UnsupportedEncodingException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}else{
-							showToast(getResources().getString(R.string.Broken_network_prompt)
-									, Toast.LENGTH_SHORT, false);
+						} else {
+							showToast(
+									getResources().getString(
+											R.string.Broken_network_prompt),
+									Toast.LENGTH_SHORT, false);
 							pull_refresh_topic.onRefreshComplete();
 						}
-						
+
 					}
 				});
 	}
-	
 
 	@Override
 	protected void processBiz() {
@@ -182,26 +195,6 @@ public class Recommend_topic extends pBaseActivity {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.topic_sealayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_recommend_topic,
-				null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -270,12 +263,14 @@ public class Recommend_topic extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","throwable:"+throwable);
-						pLog.i("test","throwable:"+throwable);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "throwable:" + throwable);
+						pLog.i("test", "throwable:" + throwable);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -284,12 +279,14 @@ public class Recommend_topic extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","throwable:"+throwable);
-						pLog.i("test","errorResponse:"+errorResponse);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "throwable:" + throwable);
+						pLog.i("test", "errorResponse:" + errorResponse);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -298,12 +295,14 @@ public class Recommend_topic extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","throwable:"+throwable);
-						pLog.i("test","errorResponse:"+errorResponse);
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						pLog.i("test", "statusCode:" + statusCode);
+						pLog.i("test", "headers:" + headers);
+						pLog.i("test", "throwable:" + throwable);
+						pLog.i("test", "errorResponse:" + errorResponse);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -312,53 +311,54 @@ public class Recommend_topic extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 
 						pLog.i("test", "response:" + response.toString());
 
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								RecommendTopicBean recommendtopicbean = JsonDocHelper
 										.toJSONObject(
-												response.getJSONObject("success")
-												.toString(),
+												response.getJSONObject(
+														"success").toString(),
 												RecommendTopicBean.class);
 								pageindex = page;
 								if (recommendtopicbean != null) {
 									pLog.i("test", "user1:"
 											+ recommendtopicbean.topics.get(0)
-											.getSubject().toString());
+													.getSubject().toString());
 									if (page == 1) {
 										list.clear();
 									}
 									list.addAll(recommendtopicbean.topics);
 									if (adapter == null) {
 										adapter = new Recommend_topicAdapter(
-												Recommend_topic.this, list
-												,recommendtopicbean.getPic_server());
+												Recommend_topic.this, list,
+												recommendtopicbean
+														.getPic_server());
 										pull_refresh_topic.setAdapter(adapter);
 									}
-									
-									
+
 								}
-							}else if(code.equals("500")){
-								
-							}else{
-								if(pageindex == 0){
-									
+							} else if (code.equals("500")) {
+
+							} else {
+								if (pageindex == 0) {
+
 									list.clear();
 								}
-								if(page == 1){
+								if (page == 1) {
 									list.clear();
 								}
 								if (adapter == null) {
 									adapter = new Recommend_topicAdapter(
-											Recommend_topic.this, list
-											,mShareFileUtils.getString(Constant.PIC_SERVER, ""));
+											Recommend_topic.this, list,
+											mShareFileUtils.getString(
+													Constant.PIC_SERVER, ""));
 									pull_refresh_topic.setAdapter(adapter);
 								}
 								String message = result.getString("message");
@@ -373,7 +373,6 @@ public class Recommend_topic extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-
 				});
 
 	}
@@ -384,11 +383,11 @@ public class Recommend_topic extends pBaseActivity {
 			adapter.notifyDataSetChanged();
 			pull_refresh_topic.postDelayed(new Runnable() {
 
-	            @Override
-	            public void run() {
-	            	pull_refresh_topic.onRefreshComplete();
-	            }
-	        }, 1000);
+				@Override
+				public void run() {
+					pull_refresh_topic.onRefreshComplete();
+				}
+			}, 1000);
 
 		}
 

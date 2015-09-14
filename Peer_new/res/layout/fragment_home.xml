@@ -31,8 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_toRightOf="@+id/tag_tv"
                 android:layout_toLeftOf="@+id/ll_downview"
+                android:layout_toRightOf="@+id/tag_tv"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -44,41 +44,41 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/biankuangwai"
                     android:clickable="false"
-                    android:paddingLeft="5dip"
                     android:drawableLeft="@drawable/searchicon32"
                     android:gravity="center_vertical"
                     android:hint="  按行业，搜人脉"
+                    android:paddingLeft="5dip"
                     android:textSize="@dimen/textsize_smallmiddle" />
             </RelativeLayout>
 
             <LinearLayout
-            android:id="@+id/ll_downview"
-            android:layout_width="@dimen/widgeheight"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/selector_back"
-            android:clickable="true"
-            android:gravity="center"
-            android:layout_alignBottom="@+id/left"
-            android:orientation="horizontal" >
+                android:id="@+id/ll_downview"
+                android:layout_width="@dimen/widgeheight"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/left"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal" >
 
-           <ImageView
-                android:id="@+id/tag_img_menu"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/top_rightmenu" />
-        </LinearLayout>
-            
+                <ImageView
+                    android:id="@+id/tag_img_menu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/top_rightmenu" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
-    
-    <!-- 横幅广告  -->
-     <FrameLayout
-        android:layout_width="fill_parent"
+
+    <!-- 横幅广告 -->
+
+    <FrameLayout
         android:id="@+id/banner_view"
-        android:layout_below="@+id/ll_head_homepage"
+        android:layout_width="fill_parent"
         android:layout_height="60dp"
+        android:layout_below="@+id/ll_head_homepage"
         android:gravity="right"
         android:visibility="visible" >
 
@@ -88,11 +88,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/spacer"
             android:visibility="gone" />
+
         <ImageView
             android:id="@+id/self_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/abc"
+            android:scaleType="fitXY"
             android:visibility="visible" />
 
         <ImageView
@@ -100,10 +101,9 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dip"
             android:background="@drawable/img_cancel"
-            android:visibility="gone"
-            android:layout_marginRight="10dip" />
-
+            android:visibility="gone" />
     </FrameLayout>
 
     <LinearLayout

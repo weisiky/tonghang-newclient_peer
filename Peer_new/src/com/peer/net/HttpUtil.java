@@ -73,8 +73,6 @@ public class HttpUtil {
 	 */
 	public static void post(String urlString, RequestParams params,
 			AsyncHttpResponseHandler res) {
-		pLog.i("test", "urlString:" + urlString);
-		pLog.i("test", "params:" + params.toString());
 		client.post(urlString, params, res);
 	}
 
@@ -87,8 +85,6 @@ public class HttpUtil {
 	public static void post(Context context, String urlString,
 			RequestParams params, JsonHttpResponseHandler res) {
 
-		pLog.i("test", "urlString:" + urlString);
-		pLog.i("test", "params:" + params.toString());
 
 		client.post(urlString, params, res);
 	}
@@ -111,7 +107,6 @@ public class HttpUtil {
 	 */
 	public static void post(String urlString, JsonHttpResponseHandler res) {
 
-		pLog.i("test", "urlString:" + urlString);
 
 		client.post(urlString, res);
 	}

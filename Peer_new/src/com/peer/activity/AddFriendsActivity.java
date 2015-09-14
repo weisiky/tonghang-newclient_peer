@@ -62,6 +62,10 @@ public class AddFriendsActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_addfriends);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -105,24 +109,24 @@ public class AddFriendsActivity extends pBaseActivity {
 
 	}
 
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_addfriends, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	protected View loadTopLayout() {
+//		// TODO Auto-generated method stub
+//		// return getLayoutInflater().inflate(R.layout.top_layout, null);
+//		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
+//	}
+//
+//	@Override
+//	protected View loadContentLayout() {
+//		// TODO Auto-generated method stub
+//		return getLayoutInflater().inflate(R.layout.activity_addfriends, null);
+//	}
+//
+//	@Override
+//	protected View loadBottomLayout() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -195,11 +199,7 @@ public class AddFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","responseString:"+responseString);
-						pLog.i("test","throwable:"+throwable);
+//						hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -209,11 +209,7 @@ public class AddFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","errorResponse:"+errorResponse);
-						pLog.i("test","throwable:"+throwable);
+//						hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -223,11 +219,7 @@ public class AddFriendsActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","statusCode:"+statusCode);
-						pLog.i("test","headers:"+headers);
-						pLog.i("test","errorResponse:"+errorResponse);
-						pLog.i("test","throwable:"+throwable);
+//						hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);

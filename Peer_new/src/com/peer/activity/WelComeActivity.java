@@ -56,25 +56,17 @@ public class WelComeActivity extends pBaseActivity {
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
-		
-		// 全屏显示
-
-		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
-		animation.setDuration(4000);
-		pageViewaList.welLin.startAnimation(animation);
-		if (isNetworkAvailable) {
-			pLog.i("test", "连网自动登录中。。。");
-			sendSystemConfig();
-		} else {
-			runNextPage();
-		}
+		setContentView(R.layout.activity_welcome);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		
+
 	}
 
 	@Override
@@ -108,11 +100,19 @@ public class WelComeActivity extends pBaseActivity {
 	@Override
 	protected void processBiz() {
 		// TODO Auto-generated method stub
-
+//		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
+//		animation.setDuration(4000);
+//		pageViewaList.welLin.startAnimation(animation);
+		if (isNetworkAvailable) {
+			pLog.i("test", "连网自动登录中。。。");
+			sendSystemConfig();
+		} else {
+			runNextPage();
+		}
 	}
 
 	private void runNextPage() {
-		new CountDownTimer(5000, 1000) {
+		new CountDownTimer(3000, 1000) {
 			public void onTick(long millisUntilFinished) {
 
 			}
@@ -121,8 +121,11 @@ public class WelComeActivity extends pBaseActivity {
 			public void onFinish() {
 				Intent intent = new Intent();
 				if (!mShareFileUtils.getString(Constant.CLIENT_ID, "").equals(
-						"")&&!mShareFileUtils.getString(Constant.BIRTH, "").equals("")
-						&&!mShareFileUtils.getString(Constant.LABELS, "").equals("")) {
+						"")
+						&& !mShareFileUtils.getString(Constant.BIRTH, "")
+								.equals("")
+						&& !mShareFileUtils.getString(Constant.LABELS, "")
+								.equals("")) {
 					startActivityForLeft(MainActivity.class, intent, false);
 				} else {
 					startActivityForLeft(LoginActivity.class, intent, false);
@@ -137,61 +140,54 @@ public class WelComeActivity extends pBaseActivity {
 		HttpEntity entity = null;
 		HttpUtil.post(HttpConfig.GET_SYSTEMCONFIG,
 				new JsonHttpResponseHandler() {
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					String responseString, Throwable throwable) {
-				// TODO Auto-generated method stub
-				pLog.i("test", "statusCode:"+statusCode);
-				pLog.i("test", "headers:"+headers);
-				pLog.i("test", "responseString:"+responseString);
-				pLog.i("test", "throwable:"+throwable);
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, responseString,
-						throwable);
-			}
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, responseString,
+								throwable);
+					}
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONArray errorResponse) {
-				// TODO Auto-generated method stub
-				pLog.i("test", "statusCode:"+statusCode);
-				pLog.i("test", "headers:"+headers);
-				pLog.i("test", "errorResponse:"+errorResponse);
-				pLog.i("test", "throwable:"+throwable);
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
-			}
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONObject errorResponse) {
-				// TODO Auto-generated method stub
-				pLog.i("test", "statusCode:"+statusCode);
-				pLog.i("test", "headers:"+headers);
-				pLog.i("test", "errorResponse:"+errorResponse);
-				pLog.i("test", "throwable:"+throwable);
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
-			}
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
+						super.onFailure(statusCode, headers, throwable,
+								errorResponse);
+					}
 
 					@SuppressWarnings("static-access")
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						
 
-						pLog.i("test","response:"+response.toString());
 						Intent intent = new Intent();
 						JSONObject reasult;
 						try {
 							reasult = response.getJSONObject("success");
-						
-							mShareFileUtils.setBoolean(Constant.CAN_LOGIN,
-									reasult.getJSONObject("system")
-											.getBoolean("can_login"));
+
+							mShareFileUtils.setBoolean(
+									Constant.CAN_LOGIN,
+									reasult.getJSONObject("system").getBoolean(
+											"can_login"));
 							mShareFileUtils
 									.setBoolean(
 											Constant.CAN_UPGRADE_SILENTLY,
@@ -222,34 +218,23 @@ public class WelComeActivity extends pBaseActivity {
 									Constant.SELF_IMG,
 									reasult.getJSONObject("system").getString(
 											"self_img"));
-
-							pLog.i("test","USE_ADV:"+reasult.getJSONObject("system")
-									.getBoolean(
-											"use_adv"));
-							pLog.i("test","THIRD_ADV:"+reasult.getJSONObject("system")
-									.getBoolean(
-											"third_adv"));
-							pLog.i("test","SELF_ADV_URL:"+reasult.getJSONObject("system")
-									.getString(
-											"self_adv_url"));
-							pLog.i("test","SELF_IMG:"+reasult.getJSONObject("system")
-									.getString(
-											"self_img"));
 							if (reasult.getJSONObject("system").getBoolean(
 									"can_login")
 									&& !mShareFileUtils.getString(
 											Constant.CLIENT_ID, "").equals("")
-											&&!mShareFileUtils.getString(
-													Constant.LABELS, "").equals("")
-											&&!mShareFileUtils.getString(
-													Constant.BIRTH, "").equals("")) {
-									sendRequesJpush();
-									startActivityForLeft(MainActivity.class,
-											intent, false);
+									&& !mShareFileUtils.getString(
+											Constant.LABELS, "").equals("")
+									&& !mShareFileUtils.getString(
+											Constant.BIRTH, "").equals("")) {
+								sendRequesJpush();
+//								startActivityForLeft(MainActivity.class,
+//										intent, false);
 							} else {
-								startActivityForLeft(LoginActivity.class,
-										intent, false);
+//								startActivityForLeft(LoginActivity.class,
+//										intent, false);
 							}
+							
+							runNextPage();
 
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -260,9 +245,7 @@ public class WelComeActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-
 				});
-		
 
 	}
 
@@ -285,40 +268,23 @@ public class WelComeActivity extends pBaseActivity {
 				});
 
 		String client_id = mShareFileUtils.getString(Constant.CLIENT_ID, "");
-		
-		
-		pLog.i("test","client_id:"+ client_id.replace("-", ""));
-		
-//		07-21 22:18:31.226: I/test(15270): client_id:5f7f29537bb240b9b5ec45f151e06d8d
-//		07-21 22:18:31.226: I/test(15270): PASSWORD:5f7f2953-7bb2-40b9-b5ec-45f151e06d8d
 
-		
-		pLog.i("test","PASSWORD:"+ mShareFileUtils.getString(Constant.PASSWORD, ""));
-		
+		pLog.i("test", "client_id:" + client_id.replace("-", ""));
+
+		// 07-21 22:18:31.226: I/test(15270):
+		// client_id:5f7f29537bb240b9b5ec45f151e06d8d
+		// 07-21 22:18:31.226: I/test(15270):
+		// PASSWORD:5f7f2953-7bb2-40b9-b5ec-45f151e06d8d
+
+		pLog.i("test",
+				"PASSWORD:" + mShareFileUtils.getString(Constant.PASSWORD, ""));
+
 		easemobchatImp.getInstance().login(client_id.replace("-", ""),
 				mShareFileUtils.getString(Constant.PASSWORD, ""));
 		easemobchatImp.getInstance().loadConversationsandGroups();
-		
-		pLog.i("test", "EMChatManager:"+EMChatManager.getInstance().isConnected());
-	}
 
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return null;
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_welcome, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
+		pLog.i("test", "EMChatManager:"
+				+ EMChatManager.getInstance().isConnected());
 	}
 
 	@Override

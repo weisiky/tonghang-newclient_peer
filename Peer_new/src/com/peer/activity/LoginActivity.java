@@ -64,7 +64,10 @@ public class LoginActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_login);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -93,25 +96,6 @@ public class LoginActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return null;
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_login, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent();
@@ -124,7 +108,6 @@ public class LoginActivity extends pBaseActivity {
 
 			if (isNetworkAvailable) {
 
-				showProgressBar();
 				try {
 					sendLoginRequest(email, password);
 				} catch (UnsupportedEncodingException e) {
@@ -187,14 +170,9 @@ public class LoginActivity extends pBaseActivity {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
-
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "Header:"+headers);
-						pLog.i("test", "throwable:"+throwable);
-						pLog.i("test", "responseString:"+responseString);
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -202,13 +180,9 @@ public class LoginActivity extends pBaseActivity {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "Header:"+headers);
-						pLog.i("test", "throwable:"+throwable);
-						pLog.i("test", "responseString:"+errorResponse);
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -216,13 +190,9 @@ public class LoginActivity extends pBaseActivity {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:"+statusCode);
-						pLog.i("test", "Header:"+headers);
-						pLog.i("test", "throwable:"+throwable);
-						pLog.i("test", "responseString:"+errorResponse);
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -231,80 +201,100 @@ public class LoginActivity extends pBaseActivity {
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test","response:"+response.toString());
-
 						try {
-							JSONObject result = response.getJSONObject("success");
-							
+							JSONObject result = response
+									.getJSONObject("success");
+
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-						if(code.equals("200")){
-								
-							LoginBean loginBean = JsonDocHelper.toJSONObject(
-									response.getJSONObject("success")
-											.toString(), LoginBean.class);
-							pLog.i("test","getBirth:"+loginBean.user.getLabels());
-							if (loginBean != null && 
-									loginBean.user.getBirth()!=null
-									&& loginBean.user.getLabels().size()!=0) {
-								String md5password = BussinessUtils.strMd5(password);
-								mShareFileUtils.setString(Constant.PASSWORD,
-										md5password);
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 
-								BussinessUtils.saveUserData(loginBean,
-										mShareFileUtils);
+								LoginBean loginBean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject(
+														"success").toString(),
+												LoginBean.class);
+								pLog.i("test",
+										"getBirth:"
+												+ loginBean.user.getLabels());
+								if (loginBean != null
+										&& loginBean.user.getBirth() != null
+										&& loginBean.user.getLabels().size() != 0) {
+									String md5password = BussinessUtils
+											.strMd5(password);
+									mShareFileUtils.setString(
+											Constant.PASSWORD, md5password);
 
-								// 注册极光
-								JPushInterface.setAlias(getApplication(),
-										loginBean.user.getClient_id(),
-										new TagAliasCallback() {
-											@Override
-											public void gotResult(int code,
-													String arg1,
-													Set<String> arg2) {
-												// TODO Auto-generated method
-												// stub
-												System.out.println("code"
-														+ code);
-												pLog.i("注册极光结果放回",
-														String.valueOf(code));
-											}
-										});
+									BussinessUtils.saveUserData(loginBean,
+											mShareFileUtils);
 
-								String client_id = mShareFileUtils.getString(
-										Constant.CLIENT_ID, "");
-								easemobchatImp.getInstance().login(
-										client_id.replace("-", ""),
-										mShareFileUtils.getString(
-												Constant.PASSWORD, ""));
-								easemobchatImp.getInstance()
-										.loadConversationsandGroups();
+									// 注册极光
+									JPushInterface.setAlias(getApplication(),
+											loginBean.user.getClient_id(),
+											new TagAliasCallback() {
+												@Override
+												public void gotResult(int code,
+														String arg1,
+														Set<String> arg2) {
+													// TODO Auto-generated
+													// method
+													// stub
+													System.out.println("code"
+															+ code);
+													pLog.i("注册极光结果放回", String
+															.valueOf(code));
+												}
+											});
 
-								startActivityForLeft(MainActivity.class,
-										intent, false);
-								}else if(loginBean.user.getLabels().size()==0){
-									showToast(getResources().getString(R.string.completemessage)
-											, Toast.LENGTH_SHORT, false);
-									String md5password = BussinessUtils.strMd5(password);
-									mShareFileUtils.setString(Constant.CLIENT_ID, loginBean.user.getClient_id());
-									mShareFileUtils.setString(Constant.USERNAME, loginBean.user.getUsername());
-									mShareFileUtils.setString(Constant.PASSWORD,
-											md5password);
+									String client_id = mShareFileUtils
+											.getString(Constant.CLIENT_ID, "");
+									easemobchatImp.getInstance().login(
+											client_id.replace("-", ""),
+											mShareFileUtils.getString(
+													Constant.PASSWORD, ""));
+									easemobchatImp.getInstance()
+											.loadConversationsandGroups();
+
+									startActivityForLeft(MainActivity.class,
+											intent, false);
+								} else if (loginBean.user.getLabels().size() == 0) {
+									showToast(
+											getResources().getString(
+													R.string.completemessage),
+											Toast.LENGTH_SHORT, false);
+									String md5password = BussinessUtils
+											.strMd5(password);
+									mShareFileUtils.setString(
+											Constant.CLIENT_ID,
+											loginBean.user.getClient_id());
+									mShareFileUtils.setString(
+											Constant.USERNAME,
+											loginBean.user.getUsername());
+									mShareFileUtils.setString(
+											Constant.PASSWORD, md5password);
 									Intent intent = new Intent();
-									startActivityForLeft(RegisterTagActivity.class, intent, false);
-								}else if(loginBean.user.getBirth()==null){
-									showToast(getResources().getString(R.string.completemessage)
-											, Toast.LENGTH_SHORT, false);
-									mShareFileUtils.setString(Constant.CLIENT_ID, loginBean.user.getClient_id());
-									mShareFileUtils.setString(Constant.USERNAME, loginBean.user.getUsername());
+									startActivityForLeft(
+											RegisterTagActivity.class, intent,
+											false);
+								} else if (loginBean.user.getBirth() == null) {
+									showToast(
+											getResources().getString(
+													R.string.completemessage),
+											Toast.LENGTH_SHORT, false);
+									mShareFileUtils.setString(
+											Constant.CLIENT_ID,
+											loginBean.user.getClient_id());
+									mShareFileUtils.setString(
+											Constant.USERNAME,
+											loginBean.user.getUsername());
 									Intent intent = new Intent();
-									startActivityForLeft(RegisterCompleteActivity.class, intent, false);
+									startActivityForLeft(
+											RegisterCompleteActivity.class,
+											intent, false);
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}

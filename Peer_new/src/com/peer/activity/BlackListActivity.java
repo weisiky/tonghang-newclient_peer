@@ -47,14 +47,15 @@ import de.greenrobot.event.EventBus;
 
 /**
  * 黑名单功能类
+ * 
  * @author weisiky
- *
+ * 
  */
-public class BlackListActivity extends pBaseActivity{
+public class BlackListActivity extends pBaseActivity {
 	private EventBus mBus;
 	public List<UserBean> blacklistbean = new ArrayList<UserBean>();
 	private BlacklistAdapter adapter;
-	int page=1;
+	int page = 1;
 
 	class PageViewList {
 		private LinearLayout ll_back;
@@ -71,6 +72,11 @@ public class BlackListActivity extends pBaseActivity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
+		setContentView(R.layout.activity_blacklist);
+		findViewById();
+		setListener();
+		processBiz();
+
 	}
 
 	@Override
@@ -86,7 +92,7 @@ public class BlackListActivity extends pBaseActivity{
 	protected void setListener() {
 		// TODO Auto-generated method stub
 		pageViewaList.ll_back.setOnClickListener(this);
-		
+
 	}
 
 	@Override
@@ -96,24 +102,24 @@ public class BlackListActivity extends pBaseActivity{
 		registEventBus();
 	}
 
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_blacklist, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	// @Override
+	// protected View loadTopLayout() {
+	// // TODO Auto-generated method stub
+	// // return getLayoutInflater().inflate(R.layout.top_layout, null);
+	// return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
+	// }
+	//
+	// @Override
+	// protected View loadContentLayout() {
+	// // TODO Auto-generated method stub
+	// return getLayoutInflater().inflate(R.layout.activity_blacklist, null);
+	// }
+	//
+	// @Override
+	// protected View loadBottomLayout() {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 	@Override
 	public void onClick(View v) {
@@ -145,7 +151,7 @@ public class BlackListActivity extends pBaseActivity{
 	}
 
 	private void getEvent(NewFriensEvent event) {
-		System.out.println("position:"+event.getPosition());
+		System.out.println("position:" + event.getPosition());
 		blacklistbean.remove(event.getPosition());
 		adapter.notifyDataSetChanged();
 	}
@@ -157,7 +163,6 @@ public class BlackListActivity extends pBaseActivity{
 		mBus.unregister(this);
 	}
 
-
 	private void refresh() {
 
 		if (adapter != null) {
@@ -165,8 +170,7 @@ public class BlackListActivity extends pBaseActivity{
 		}
 
 	}
-	
-	
+
 	/**
 	 * 获取用户黑名单请求
 	 * 
@@ -182,77 +186,72 @@ public class BlackListActivity extends pBaseActivity{
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this, HttpConfig.BLACKLIST_GET_URL + client_id + "/blacklist.json",
-				params, new JsonHttpResponseHandler() {
+		HttpUtil.post(this, HttpConfig.BLACKLIST_GET_URL + client_id
+				+ "/blacklist.json", params, new JsonHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, responseString,
-								throwable);
-					}
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONObject errorResponse) {
-						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONObject response) {
-						// TODO Auto-generated method stub
-						try {
-							JSONObject result = response
-									.getJSONObject("success");
-							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if (code.equals("200")) {
-								RecommendUserBean recommenduserbean = JsonDocHelper
-										.toJSONObject(
-												response.getJSONObject("success")
-												.toString(),
-												RecommendUserBean.class);
-								if (recommenduserbean != null) {
-									blacklistbean.addAll(recommenduserbean.users);
-									
-									if (adapter == null) {
-										adapter = new BlacklistAdapter(
-												BlackListActivity.this, blacklistbean
-												,mShareFileUtils.getString(Constant.PIC_SERVER, ""));
-										pageViewaList.lv_blacklist.setAdapter(adapter);
-									}
-								}
-							}else if(code.equals("500")){
-								
-							}else{
-								String message = result.getString("message");
-								showToast(message, Toast.LENGTH_SHORT, false);
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					JSONObject result = response.getJSONObject("success");
+					String code = result.getString("code");
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						RecommendUserBean recommenduserbean = JsonDocHelper
+								.toJSONObject(response.getJSONObject("success")
+										.toString(), RecommendUserBean.class);
+						if (recommenduserbean != null) {
+							blacklistbean.addAll(recommenduserbean.users);
+
+							if (adapter == null) {
+								adapter = new BlacklistAdapter(
+										BlackListActivity.this, blacklistbean,
+										mShareFileUtils.getString(
+												Constant.PIC_SERVER, ""));
+								pageViewaList.lv_blacklist.setAdapter(adapter);
 							}
-
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
+					} else if (code.equals("500")) {
+
+					} else {
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
 					}
-				});
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 
 	}
 

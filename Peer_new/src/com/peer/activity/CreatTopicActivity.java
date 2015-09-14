@@ -80,7 +80,10 @@ public class CreatTopicActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_creattopic);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -93,7 +96,7 @@ public class CreatTopicActivity extends pBaseActivity {
 
 		tag_container = (AutoWrapRadioGroup) findViewById(R.id.tag_container);
 		ArrayList<String> labels = JsonDocHelper.toJSONArrary(
-				mShareFileUtils.getString(Constant.LABELS, ""), String.class);		
+				mShareFileUtils.getString(Constant.LABELS, ""), String.class);
 		for (int i = 0; i < labels.size(); i++) {
 			RadioButton rb = (RadioButton) getLayoutInflater().inflate(
 					R.layout.skillradio, tag_container, false);
@@ -102,7 +105,6 @@ public class CreatTopicActivity extends pBaseActivity {
 			rb.setTextSize(18);
 			tag_container.addView(rb);
 		}
-		
 
 		pageViewaList.bt_creattopic.setEnabled(false);
 
@@ -177,25 +179,6 @@ public class CreatTopicActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_creattopic, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
@@ -211,18 +194,24 @@ public class CreatTopicActivity extends pBaseActivity {
 			}
 			break;
 		case R.id.rl_mytopic:
-//			PersonpageBean.getInstance().setUser(new UserBean());
-//			PersonpageBean.getInstance().getUser().setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-//			System.out.println("NICKNAME："+mShareFileUtils.getString(Constant.NICKNAME, ""));
+			// PersonpageBean.getInstance().setUser(new UserBean());
+			// PersonpageBean.getInstance().getUser().setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID,
+			// ""));
+			// System.out.println("NICKNAME："+mShareFileUtils.getString(Constant.NICKNAME,
+			// ""));
 			UserBean userbean = new UserBean();
-			userbean.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
-			pLog.i("test","传过去的client_id"+userbean.getClient_id());
+			userbean.setClient_id(mShareFileUtils.getString(Constant.CLIENT_ID,
+					""));
+			pLog.i("test", "传过去的client_id" + userbean.getClient_id());
 			Intent mytopic = new Intent(CreatTopicActivity.this,
 					TopicActivity.class);
 			mytopic.putExtra("bean", userbean);
-			mytopic.putExtra("image", mShareFileUtils.getString(Constant.IMAGE, ""));
-			mytopic.putExtra("nike", mShareFileUtils.getString(Constant.NICKNAME, ""));
-			mytopic.putExtra("email", mShareFileUtils.getString(Constant.EMAIL, ""));
+			mytopic.putExtra("image",
+					mShareFileUtils.getString(Constant.IMAGE, ""));
+			mytopic.putExtra("nike",
+					mShareFileUtils.getString(Constant.NICKNAME, ""));
+			mytopic.putExtra("email",
+					mShareFileUtils.getString(Constant.EMAIL, ""));
 			startActivity(mytopic);
 			break;
 		default:
@@ -246,8 +235,8 @@ public class CreatTopicActivity extends pBaseActivity {
 									DialogInterface dialoginterface, int i) {
 								// TODO Auto-generated method stub
 								try {
-									sendCreateTopic(
-											mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+									sendCreateTopic(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""),
 											pageViewaList.et_topic.getText()
 													.toString().trim(),
 											selectlabel);
@@ -264,12 +253,13 @@ public class CreatTopicActivity extends pBaseActivity {
 									DialogInterface dialoginterface, int i) {
 								ShareConfig shareConfig = new ShareConfig(
 										CreatTopicActivity.this);
-								shareConfig.shareCircleFriend("", "","同行话题#"+
-										pageViewaList.et_topic.getText()
-										.toString().trim()+"#", "", "");
+								shareConfig.shareCircleFriend("", "", "同行话题#"
+										+ pageViewaList.et_topic.getText()
+												.toString().trim() + "#", "",
+										"");
 								try {
-									sendCreateTopic(
-											mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+									sendCreateTopic(mShareFileUtils.getString(
+											Constant.CLIENT_ID, ""),
 											pageViewaList.et_topic.getText()
 													.toString().trim(),
 											selectlabel);
@@ -277,7 +267,7 @@ public class CreatTopicActivity extends pBaseActivity {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								
+
 							}
 						}).show();
 	}
@@ -324,14 +314,16 @@ public class CreatTopicActivity extends pBaseActivity {
 			e1.printStackTrace();
 		}
 
-		HttpUtil.post(this,HttpConfig.TOPIC_CREATE_URL,params, new JsonHttpResponseHandler() {
+		HttpUtil.post(this, HttpConfig.TOPIC_CREATE_URL, params,
+				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -340,8 +332,9 @@ public class CreatTopicActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -350,8 +343,9 @@ public class CreatTopicActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -360,61 +354,76 @@ public class CreatTopicActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pLog.i("test", "response:"+response.toString());
+						pLog.i("test", "response:" + response.toString());
 
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								CreateToipcBean createtopicbean = JsonDocHelper
 										.toJSONObject(
-												response.getJSONObject("success")
-												.toString(),
+												response.getJSONObject(
+														"success").toString(),
 												CreateToipcBean.class);
 								if (createtopicbean != null) {
-									if (EMChatManager.getInstance().isConnected()) {
-										
-									}else{
+									if (EMChatManager.getInstance()
+											.isConnected()) {
+
+									} else {
 										easemobchatImp.getInstance().login(
-												mShareFileUtils.getString(Constant.CLIENT_ID, "")
-												.replace("-", ""),
+												mShareFileUtils.getString(
+														Constant.CLIENT_ID, "")
+														.replace("-", ""),
 												mShareFileUtils.getString(
 														Constant.PASSWORD, ""));
 									}
-									//从环信服务器获取自己加入的和创建的群聊列表
-									//需异步处理
-									List<EMGroup> grouplist = EMGroupManager.getInstance().getGroupsFromServer();
-									for(int i= 0 ;i<grouplist.size();i++ ){
-										pLog.i("test","grouplist.get(0):"+grouplist.get(i));
-										pLog.i("test","getGroupId():"+grouplist.get(i).getGroupId());
-										pLog.i("test","getOwner():"+grouplist.get(i).getOwner());
-										if(client_id.equals(grouplist.get(i).getOwner())){
-											sendleavegroup(client_id
-													, grouplist.get(i).getGroupId()
-													,true);
-										}else{
-											sendleavegroup(client_id
-													 , grouplist.get(i).getGroupId()
-													 ,false);
-											easemobchatImp.getInstance().exitgroup(grouplist.get(i).getGroupId());
+									// 从环信服务器获取自己加入的和创建的群聊列表
+									// 需异步处理
+									List<EMGroup> grouplist = EMGroupManager
+											.getInstance()
+											.getGroupsFromServer();
+									for (int i = 0; i < grouplist.size(); i++) {
+										pLog.i("test", "grouplist.get(0):"
+												+ grouplist.get(i));
+										pLog.i("test", "getGroupId():"
+												+ grouplist.get(i).getGroupId());
+										pLog.i("test", "getOwner():"
+												+ grouplist.get(i).getOwner());
+										if (client_id.equals(grouplist.get(i)
+												.getOwner())) {
+											sendleavegroup(client_id, grouplist
+													.get(i).getGroupId(), true);
+										} else {
+											sendleavegroup(client_id, grouplist
+													.get(i).getGroupId(), false);
+											easemobchatImp
+													.getInstance()
+													.exitgroup(
+															grouplist
+																	.get(i)
+																	.getGroupId());
 										}
 									}
-										ChatRoomBean.getInstance().setChatroomtype(Constant.MULTICHAT);
-										ChatRoomBean.getInstance().setIsowner(true);
-										ChatRoomBean.getInstance().setTopicBean(
-												createtopicbean.getTopic());
-										Intent intent = new Intent();
-										startActivityForLeft(MultiChatRoomActivity.class,
-												intent, false);
-										ManagerActivity.getAppManager().finishActivity(
-												CreatTopicActivity.this);
-										pageViewaList.et_topic.setText("");
+									ChatRoomBean.getInstance().setChatroomtype(
+											Constant.MULTICHAT);
+									ChatRoomBean.getInstance().setIsowner(true);
+									ChatRoomBean.getInstance().setTopicBean(
+											createtopicbean.getTopic());
+									Intent intent = new Intent();
+									startActivityForLeft(
+											MultiChatRoomActivity.class,
+											intent, false);
+									ManagerActivity.getAppManager()
+											.finishActivity(
+													CreatTopicActivity.this);
+									pageViewaList.et_topic.setText("");
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -431,8 +440,7 @@ public class CreatTopicActivity extends pBaseActivity {
 				});
 
 	}
-	
-	
+
 	/**
 	 * 退出话题请求
 	 * 
@@ -440,13 +448,14 @@ public class CreatTopicActivity extends pBaseActivity {
 	 * @param topic_id
 	 * @exception UnsupportedEncodingException
 	 */
-	private void sendleavegroup(String client_id, String topic_id , boolean isOwner) {
+	private void sendleavegroup(String client_id, String topic_id,
+			boolean isOwner) {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = null;
 		try {
 			params = PeerParamsUtils.getJoinParams(CreatTopicActivity.this,
-					client_id, topic_id,isOwner);
+					client_id, topic_id, isOwner);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -487,12 +496,13 @@ public class CreatTopicActivity extends pBaseActivity {
 							JSONObject result = response
 									.getJSONObject("success");
 							String code = String.valueOf(result.get("code"));
-							pLog.i("test", "code:"+code);
+							pLog.i("test", "code:" + code);
 							if (code.equals("200")) {
-								showToast("正在进入新话题...", Toast.LENGTH_SHORT, false);
-							}else if(code.equals("500")){
-								
-							}else{
+								showToast("正在进入新话题...", Toast.LENGTH_SHORT,
+										false);
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}

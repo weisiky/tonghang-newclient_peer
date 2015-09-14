@@ -54,7 +54,10 @@ public class FindPasswordActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_findpassword);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -119,26 +122,6 @@ public class FindPasswordActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater()
-				.inflate(R.layout.activity_findpassword, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
@@ -149,15 +132,15 @@ public class FindPasswordActivity extends pBaseActivity {
 			String email = pageViewaList.et_email_find.getText().toString()
 					.trim();
 			if (isNetworkAvailable) {
-			if (!email.matches(format)) {
-				showToast(getResources().getString(
-						R.string.erroremail), Toast.LENGTH_SHORT, false);
-				return;
-			} else{
-				sendfindpasswd(email);
-			}
+				if (!email.matches(format)) {
+					showToast(getResources().getString(R.string.erroremail),
+							Toast.LENGTH_SHORT, false);
+					return;
+				} else {
+					sendfindpasswd(email);
+				}
 			} else {
-				
+
 			}
 			break;
 
@@ -175,7 +158,6 @@ public class FindPasswordActivity extends pBaseActivity {
 	 */
 	private void sendfindpasswd(String email) {
 		// TODO Auto-generated method stub
-		showProgressBar();
 		// HttpEntity entity = null;
 		// try {
 		// entity = PeerParamsUtils.getFindPassWordParams(this, email);
@@ -198,8 +180,9 @@ public class FindPasswordActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -208,8 +191,9 @@ public class FindPasswordActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -218,8 +202,9 @@ public class FindPasswordActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -228,30 +213,31 @@ public class FindPasswordActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 								Intent intent = new Intent();
-								startActivityForLeft(FindPasswordResultActivity.class,
+								startActivityForLeft(
+										FindPasswordResultActivity.class,
 										intent, false);
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
 
-							} catch (Exception e1) {
-								pLog.i("test", "Exception:" + e1.toString());
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+						} catch (Exception e1) {
+							pLog.i("test", "Exception:" + e1.toString());
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 						super.onSuccess(statusCode, headers, response);
 					}

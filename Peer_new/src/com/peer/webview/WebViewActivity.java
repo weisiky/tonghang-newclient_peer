@@ -36,12 +36,13 @@ public class WebViewActivity extends pBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.web_view);
 	}
 
-	@Override
-	protected View loadContentLayout() {
-		return getLayoutInflater().inflate(R.layout.web_view, null);
-	}
+//	@Override
+//	protected View loadContentLayout() {
+//		return getLayoutInflater().inflate(R.layout.web_view, null);
+//	}
 
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
@@ -63,9 +64,9 @@ public class WebViewActivity extends pBaseActivity {
 			public void onProgressChanged(WebView view, int newProgress) {
 				super.onProgressChanged(view, newProgress);
 				if (newProgress == 100) {
-					hideLoading(); // 隐藏进度条
+//					hideLoading(); // 隐藏进度条
 				} else if (newProgress == 10) {
-					showProgressBar();
+//					showProgressBar();
 				}
 			}
 
@@ -83,7 +84,7 @@ public class WebViewActivity extends pBaseActivity {
 
 	@Override
 	protected void processBiz() {
-		showProgressBar();
+//		showProgressBar();
 		pageViewaList.webView.loadUrl("http://"+mShareFileUtils.getString(Constant.SELF_ADV_URL, ""));
 //		pageViewaList.webView.loadUrl("http://baidu.com");
 		 //设置Web视图  
@@ -91,15 +92,15 @@ public class WebViewActivity extends pBaseActivity {
 	}
 
 
-	@Override
-	protected View loadTopLayout() {
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		return null;
-	}
+//	@Override
+//	protected View loadTopLayout() {
+//		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
+//	}
+//
+//	@Override
+//	protected View loadBottomLayout() {
+//		return null;
+//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

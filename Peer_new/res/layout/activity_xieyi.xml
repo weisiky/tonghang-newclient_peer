@@ -4,19 +4,25 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical" >
-  
-     <ScrollView 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <RelativeLayout 
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-    <TextView
-        android:layout_margin="8dp" 
-        android:layout_width="match_parent"
+
+    <include
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="特别提示
+        layout="@layout/base_toplayout_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="特别提示
 
 公司全名（以下简称“公司名”）在此特别提醒您（用户）在注册成为用户之前，请认真阅读本《用户协议》（以下简称“协议”），确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。除非您接受本协议所有条款，否则您无权注册、登录或使用本协议所涉服务。您的注册、登录、使用等行为将视为对本协议的接受，并同意接受本协议各项条款的约束。
 
@@ -225,6 +231,7 @@
 3、本协议的任何条款无论因何种原因无效或不具可执行性，其余条款仍有效，对双方具有约束力。
 
 " />
-    </RelativeLayout>   
-</ScrollView>  
+        </RelativeLayout>
+    </ScrollView>
+
 </LinearLayout>

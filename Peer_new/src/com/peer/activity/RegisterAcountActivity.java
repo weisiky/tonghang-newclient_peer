@@ -50,7 +50,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 
 	class PageViewList {
 		private LinearLayout ll_back;
-		private TextView tv_title, registe_remind,xieyi;
+		private TextView tv_title, registe_remind, xieyi;
 		private EditText et_email_regist, et_password_registe,
 				et_repassword_registe, et_nike_registe;
 		private Button bt_registe_next;
@@ -62,7 +62,10 @@ public class RegisterAcountActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_register_acount);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -77,7 +80,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 		pageViewaList.et_nike_registe.addTextChangedListener(textwatcher);
 		pageViewaList.et_password_registe.addTextChangedListener(textwatcher);
 		pageViewaList.et_repassword_registe.addTextChangedListener(textwatcher);
-		
+
 		/** 文字加高亮色 **/
 		SpannableStringBuilder builder = new SpannableStringBuilder(
 				pageViewaList.xieyi.getText().toString());
@@ -85,7 +88,6 @@ public class RegisterAcountActivity extends pBaseActivity {
 				.getColor(R.color.backcolornol));
 		builder.setSpan(colorspan, 16, 31, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		pageViewaList.xieyi.setText(builder);
-
 
 	}
 
@@ -101,25 +103,6 @@ public class RegisterAcountActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_register_acount,
-				null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -172,7 +155,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 			return;
 		} else {
 			String md5password = BussinessUtils.strMd5(password);
-			sendRegister(email,md5password,nikename);
+			sendRegister(email, md5password, nikename);
 			pageViewaList.registe_remind.setText("");
 
 		}
@@ -235,8 +218,7 @@ public class RegisterAcountActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 
 	}
-	
-	
+
 	/**
 	 * 注册基本信息请求
 	 * 
@@ -268,8 +250,10 @@ public class RegisterAcountActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(
+										R.string.config_registe),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -278,8 +262,11 @@ public class RegisterAcountActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(
+										R.string.config_registe),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -288,8 +275,11 @@ public class RegisterAcountActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_registe), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(
+										R.string.config_registe),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -298,37 +288,42 @@ public class RegisterAcountActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
+
 						LoginBean loginBean;
 
-						pLog.i("test","response:"+response.toString());
+						pLog.i("test", "response:" + response.toString());
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								loginBean = JsonDocHelper.toJSONObject(response
 										.getJSONObject("success").toString(),
 										LoginBean.class);
-								
+
 								if (loginBean != null) {
-									String md5password = BussinessUtils.strMd5(password);
-									mShareFileUtils.setString(Constant.CLIENT_ID,
+									String md5password = BussinessUtils
+											.strMd5(password);
+									mShareFileUtils.setString(
+											Constant.CLIENT_ID,
 											loginBean.user.getClient_id());
-									mShareFileUtils.setString(Constant.USERNAME,
+									mShareFileUtils.setString(
+											Constant.USERNAME,
 											loginBean.user.getUsername());
-									mShareFileUtils.setString(Constant.PASSWORD, md5password);
+									mShareFileUtils.setString(
+											Constant.PASSWORD, md5password);
 
 									Intent register_tag = new Intent();
 									startActivityForLeft(
 											RegisterTagActivity.class,
 											register_tag, false);
-									
+
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -343,6 +338,5 @@ public class RegisterAcountActivity extends pBaseActivity {
 
 				});
 	}
-	
-	
+
 }

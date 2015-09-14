@@ -6,6 +6,11 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
     <LinearLayout
         android:id="@+id/ll_uploadepic"
         android:layout_width="match_parent"

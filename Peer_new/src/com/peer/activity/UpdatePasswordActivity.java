@@ -50,7 +50,10 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_changpassword);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -79,26 +82,6 @@ public class UpdatePasswordActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_changpassword,
-				null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -184,8 +167,9 @@ public class UpdatePasswordActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -194,8 +178,9 @@ public class UpdatePasswordActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -204,8 +189,9 @@ public class UpdatePasswordActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -214,28 +200,33 @@ public class UpdatePasswordActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
+								LoginBean loginBean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject(
+														"success").toString(),
+												LoginBean.class);
 								if (loginBean != null) {
-									
+
 									BussinessUtils.saveUserData(loginBean,
 											mShareFileUtils);
-									mShareFileUtils.setString(Constant.PASSWORD,newpasswd);
-									showToast("修改成功！", Toast.LENGTH_SHORT, false);
-									startActivityForLeft(MyAcountActivity.class,
-											intent, false);
+									mShareFileUtils.setString(
+											Constant.PASSWORD, newpasswd);
+									showToast("修改成功！", Toast.LENGTH_SHORT,
+											false);
+									startActivityForLeft(
+											MyAcountActivity.class, intent,
+											false);
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -250,16 +241,16 @@ public class UpdatePasswordActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-//					@Override
-//					public void onSuccess(int statusCode, Header[] headers,
-//							String responseString) {
-//						// TODO Auto-generated method stub
-//						hideLoading();
-//						super.onSuccess(statusCode, headers, responseString);
-//						Intent login_complete = new Intent();
-//						startActivityForLeft(MainActivity.class,
-//								login_complete, false);
-//					}
+					// @Override
+					// public void onSuccess(int statusCode, Header[] headers,
+					// String responseString) {
+					// // TODO Auto-generated method stub
+					// hideLoading();
+					// super.onSuccess(statusCode, headers, responseString);
+					// Intent login_complete = new Intent();
+					// startActivityForLeft(MainActivity.class,
+					// login_complete, false);
+					// }
 
 				});
 	}

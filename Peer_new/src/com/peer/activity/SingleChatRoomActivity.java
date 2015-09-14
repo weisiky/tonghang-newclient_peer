@@ -1,11 +1,16 @@
 package com.peer.activity;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -19,10 +24,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TimeUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -37,22 +45,37 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.EMChatRoomChangeListener;
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
+import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
+import com.easemob.util.EMLog;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.peer.R;
+import com.peer.IMController.HXSDKHelper;
+import com.peer.IMController.ShowNotification;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.adapter.ChatMsgViewAdapter;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.bean.ChatMsgEntityBean;
+import com.peer.bean.LoginBean;
 import com.peer.bean.UserBean;
 import com.peer.bean.singlechatmsgListBean;
+import com.peer.net.HttpConfig;
+import com.peer.net.HttpUtil;
+import com.peer.net.PeerParamsUtils;
 import com.peer.titlepopwindow.ActionItem;
 import com.peer.titlepopwindow.TitlePopup;
 import com.peer.titlepopwindow.TitlePopup.OnItemOnClickListener;
@@ -67,6 +90,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 一对一聊天室 进入单聊就两种方式：1.通过个人主页点击发信进入。2、通过“来信页面”，点击进入。
  */
+@SuppressWarnings("serial")
 public class SingleChatRoomActivity extends pBaseActivity {
 
 	private TitlePopup titlePopup;
@@ -106,10 +130,17 @@ public class SingleChatRoomActivity extends pBaseActivity {
 
 	private PageViewList pageViewaList;
 
+	private static final int EVENT_NEW_MESSAGE = 100;
+	private static final int EVENT_NEW_OTHER_MESSAGE = 101;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_singlesend);
+		findViewById();
+		setListener();
+		processBiz();
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -122,6 +153,21 @@ public class SingleChatRoomActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onPageStart(mPageName);
+		// register the event listener when enter the foreground
+		EMChatManager.getInstance().registerEventListener(
+				this,
+				new EMNotifierEvent.Event[] {
+						EMNotifierEvent.Event.EventNewMessage,
+						EMNotifierEvent.Event.EventOfflineMessage,
+						EMNotifierEvent.Event.EventDeliveryAck,
+						EMNotifierEvent.Event.EventReadAck });
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		EMChatManager.getInstance().unregisterEventListener(this);
 	}
 
 	@Override
@@ -186,7 +232,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 		pageViewaList.btn_send.setOnClickListener(this);
 		pageViewaList.sendphoto.setOnClickListener(this);
 		pageViewaList.ll_back.setOnClickListener(this);
-		initChatListener();
+		// initChatListener();
 	}
 
 	@Override
@@ -247,14 +293,14 @@ public class SingleChatRoomActivity extends pBaseActivity {
 					pLog.i("test", "图片消息");
 					ImageMessageBody body = (ImageMessageBody) message
 							.getBody();
-					String 	content;
+					String content;
 					if (message.direct == EMMessage.Direct.SEND) {
-						 	content = body.getLocalUrl();
-					}else{
-					    	content = body.getRemoteUrl();
+						content = body.getLocalUrl();
+					} else {
+						content = body.getRemoteUrl();
 					}
-					pLog.i("type", "body:"+content);
-					
+					pLog.i("type", "body:" + content);
+
 					String time = DateUtils.getTimestampString(new Date(message
 							.getMsgTime()));
 
@@ -323,28 +369,73 @@ public class SingleChatRoomActivity extends pBaseActivity {
 					.setSelection(pageViewaList.lv_chat.getCount() - 1);
 			refresh();
 		}
+
+		onConversationInit();
 	}
 
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.base_toplayout_title,
-		// null);
-		return null;
+	protected void onConversationInit() {
+
+		EMChatManager.getInstance().getConversationByType(toChatUsername,
+				EMConversationType.Chat);
+
+		EMChatManager.getInstance().addChatRoomChangeListener(
+				new EMChatRoomChangeListener() {
+
+					@Override
+					public void onChatRoomDestroyed(String roomId,
+							String roomName) {
+						if (roomId.equals(toChatUsername)) {
+							finish();
+						}
+					}
+
+					@Override
+					public void onMemberJoined(String roomId, String participant) {
+					}
+
+					@Override
+					public void onMemberExited(String roomId, String roomName,
+							String participant) {
+
+					}
+
+					@Override
+					public void onMemberKicked(String roomId, String roomName,
+							String participant) {
+						if (roomId.equals(toChatUsername)) {
+							String curUser = EMChatManager.getInstance()
+									.getCurrentUser();
+							if (curUser.equals(participant)) {
+								EMChatManager.getInstance().leaveChatRoom(
+										toChatUsername);
+								finish();
+							}
+						}
+					}
+
+				});
 	}
 
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_singlesend, null);
-	}
+//	@Override
+//	protected View loadTopLayout() {
+//		// TODO Auto-generated method stub
+//		// return getLayoutInflater().inflate(R.layout.base_toplayout_title,
+//		// null);
+//		return null;
+//	}
 
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.base_btn_send, null);
-		return null;
-	}
+//	@Override
+//	protected View loadContentLayout() {
+//		// TODO Auto-generated method stub
+//		return getLayoutInflater().inflate(R.layout.activity_singlesend, null);
+//	}
+
+//	@Override
+//	protected View loadBottomLayout() {
+//		// TODO Auto-generated method stub
+//		// return getLayoutInflater().inflate(R.layout.base_btn_send, null);
+//		return null;
+//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -495,6 +586,30 @@ public class SingleChatRoomActivity extends pBaseActivity {
 							"-", ""),
 					mShareFileUtils.getString(Constant.PASSWORD, ""));
 		}
+
+		EMChatManager.getInstance().joinChatRoom(toChatUsername,
+				new EMValueCallBack<EMChatRoom>() {
+
+					@Override
+					public void onSuccess(EMChatRoom value) {
+						// TODO Auto-generated method stub
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								EMChatManager.getInstance().getChatRoom(
+										toChatUsername);
+							}
+						});
+					}
+
+					@Override
+					public void onError(final int error, String errorMsg) {
+						// TODO Auto-generated method stub
+						pLog.i("zzg", "error:" + error);
+						pLog.i("zzg", "errorMsg:" + errorMsg);
+						// finish();
+					}
+				});
 	}
 
 	/**
@@ -637,7 +752,7 @@ public class SingleChatRoomActivity extends pBaseActivity {
 				// 获取到消息
 				ImageMessageBody body = (ImageMessageBody) message.getBody();
 				String content = body.getRemoteUrl();
-				pLog.i("type","监听："+body.getRemoteUrl());
+				pLog.i("type", "监听：" + body.getRemoteUrl());
 
 				SimpleDateFormat formatter = new SimpleDateFormat(
 						"yyyy年MM月dd日   HH:mm:ss     ");
@@ -807,11 +922,11 @@ public class SingleChatRoomActivity extends pBaseActivity {
 		startActivityForResult(intent, RESULT_REQUEST_CODE);
 	}
 
-	public Bitmap getImageToView(Intent data,String uuid) {
+	public Bitmap getImageToView(Intent data, String uuid) {
 		Bundle extras = data.getExtras();
 		if (extras != null) {
 			photo = extras.getParcelable("data");
-			BussinessUtils.sendBitmapFile(photo,uuid);
+			BussinessUtils.sendBitmapFile(photo, uuid);
 		}
 		return photo;
 
@@ -837,12 +952,12 @@ public class SingleChatRoomActivity extends pBaseActivity {
 				break;
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
-					String uuidstr = BussinessUtils.getUUID();    
-					Bitmap bt = getImageToView(data,uuidstr);
-					File file = new File(Constant.C_IMAGE_CACHE_PATH
-							+ uuidstr+".png");
-					pLog.i("type", "File路径："+Constant.C_IMAGE_CACHE_PATH
-							+uuidstr+".png");
+					String uuidstr = BussinessUtils.getUUID();
+					Bitmap bt = getImageToView(data, uuidstr);
+					File file = new File(Constant.C_IMAGE_CACHE_PATH + uuidstr
+							+ ".png");
+					pLog.i("type", "File路径：" + Constant.C_IMAGE_CACHE_PATH
+							+ uuidstr + ".png");
 					if (file.exists()) {
 						pLog.i("type", "文件存在");
 						sendImgMessage(file);
@@ -854,4 +969,218 @@ public class SingleChatRoomActivity extends pBaseActivity {
 		}
 	}
 
+	/**
+	 * 环信聊天监听
+	 */
+
+	@SuppressWarnings("incomplete-switch")
+	@Override
+	public void onEvent(EMNotifierEvent event) {
+		// TODO Auto-generated method stub
+		switch (event.getEvent()) {
+		case EventNewMessage: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			String username = message.getFrom();
+
+			Message message1 = new Message();
+
+			// 如果是当前会话的消息，刷新聊天页面
+			if (username.equals(getToChatUsername())) {
+
+				String from = message.getFrom();
+				String image = null;
+				String msg = null;
+				String str = BussinessUtils.getSysTime();
+
+				ChatMsgEntityBean chat = new ChatMsgEntityBean();
+
+				try {
+					image = message.getStringAttribute(Constant.IMAGEURL);
+				} catch (EaseMobException e) {
+					e.printStackTrace();
+				}
+
+				switch (message.getType()) {
+				case IMAGE: // 图片
+
+					// 获取到消息
+					ImageMessageBody body = (ImageMessageBody) message
+							.getBody();
+					String content = body.getRemoteUrl();
+					chat.setType("IMAGE");
+					chat.setMessage(content);
+
+					break;
+
+				case TXT: // 文本
+
+					// 获取到消息
+					TextMessageBody txtBody = (TextMessageBody) message
+							.getBody();
+					msg = txtBody.getMessage();
+					chat.setType("TXT");
+					chat.setMessage(msg);
+					break;
+				}
+				chat.setUserId(from);
+				chat.setImage(image);
+				chat.setDate(str);
+				chat.setMsgType(Constant.OTHER);
+				chat.setUserbean(userbean);
+
+				singlechatmsgList.add(chat);
+
+				message1.what = EVENT_NEW_MESSAGE;
+
+				// 声音和震动提示有新消息
+
+				// showNotification.sendNotification(SingleChatRoomActivity.this,
+				// message, mShareFileUtils, true);
+			} else {
+				// 如果消息不是和当前聊天ID的消息
+
+				message1.what = EVENT_NEW_OTHER_MESSAGE;
+				message1.obj = message;
+
+			}
+
+			handler.sendMessage(message1);
+
+			break;
+		}
+		case EventDeliveryAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventReadAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventOfflineMessage: {
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	Handler handler = new Handler() {
+		@SuppressWarnings("static-access")
+		@Override
+		public void handleMessage(android.os.Message message) {
+			switch (message.what) {
+			case EVENT_NEW_MESSAGE:
+				singlechatadapter.notifyDataSetChanged();
+				pageViewaList.lv_chat.setSelection(pageViewaList.lv_chat
+						.getCount() - 1);
+				break;
+
+			case EVENT_NEW_OTHER_MESSAGE:
+				try {
+					EMMessage msg = (EMMessage) message.obj;
+					senduser(msg.getFrom(),
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							msg);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @throws UnsupportedEncodingException
+	 */
+	@SuppressWarnings("unused")
+	private void senduser(String client_id, String o_client_id,
+			final EMMessage message) throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getUserParams(SingleChatRoomActivity.this,
+					client_id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="
+				+ o_client_id, params, new JsonHttpResponseHandler() {
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					JSONObject result = response.getJSONObject("success");
+
+					String code = result.getString("code");
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
+								LoginBean.class);
+						if (loginBean != null) {
+							// singlenotifyNewMessage(loginBean, message);
+							showNotification.sendNotification(
+									SingleChatRoomActivity.this, message,
+									mShareFileUtils, false,
+									loginBean.user.getUsername());
+						}
+					} else if (code.equals("500")) {
+
+					} else {
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				super.onSuccess(statusCode, headers, response);
+
+			}
+
+		});
+	}
 }

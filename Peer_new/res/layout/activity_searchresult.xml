@@ -2,21 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:background="@color/white"
-    >
-     
-     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/lv_searchresult" 
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_searchresult"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        >        
-    </com.handmark.pulltorefresh.library.PullToRefreshListView>   
-   <!-- <ListView 
+        android:divider="@null" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    <!--
+        <ListView 
         android:id="@+id/abs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"></ListView>-->
+        android:divider="@null"></ListView>
+    -->
 
 </LinearLayout>

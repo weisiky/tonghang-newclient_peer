@@ -251,7 +251,6 @@ public class HomeFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
@@ -261,7 +260,6 @@ public class HomeFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -271,7 +269,6 @@ public class HomeFragment extends pBaseFragment {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
 						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
@@ -281,8 +278,6 @@ public class HomeFragment extends pBaseFragment {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						pbaseActivity.hideLoading();
-						pLog.i("test", "response:"+response.toString());
 						try {
 						JSONObject result = response.getJSONObject("success");
 
@@ -426,6 +421,10 @@ public class HomeFragment extends pBaseFragment {
 //						mShareFileUtils.getString(Constant.PIC_SERVER, "") 
 //						+ mShareFileUtils.getString(Constant.SELF_IMG, ""), self_view,
 //						R.drawable.spacer);
+				
+				pLog.i("ban","SELF_IMG:"+mShareFileUtils.getString(Constant.SELF_IMG, ""));
+				
+				
 				ImageLoaderUtil.getInstance().showHttpImage(getActivity(),
 					mShareFileUtils.getString(Constant.SELF_IMG, ""), self_view,
 						R.drawable.spacer);
@@ -573,7 +572,6 @@ public class HomeFragment extends pBaseFragment {
 					}
 					 
 				    	usersList.clear();
-				    	pbaseActivity.showProgressBar();
 				    	if (adapter == null) {
 							adapter = new HomepageAdapter(
 									getActivity(), usersList
@@ -589,7 +587,6 @@ public class HomeFragment extends pBaseFragment {
 					byDistance = false;
 					
 					usersList.clear();
-			    	pbaseActivity.showProgressBar();
 			    	if (adapter == null) {
 						adapter = new HomepageAdapter(
 								getActivity(), usersList

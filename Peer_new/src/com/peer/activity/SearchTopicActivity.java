@@ -32,7 +32,7 @@ public class SearchTopicActivity extends pBaseActivity {
 
 	public static int TOPIC_LABEL = 1;
 	public static int TOPIC_TOPICKEY = 2;
-	private int searchtype = TOPIC_LABEL;	//默认按标签搜
+	private int searchtype = TOPIC_LABEL; // 默认按标签搜
 	private TitlePopup tagPopup;
 	private InputMethodManager imm;
 	boolean page = false;
@@ -52,6 +52,10 @@ public class SearchTopicActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_search);
+		findViewById();
+		setListener();
+		processBiz();
 		popupwindow();
 	}
 
@@ -115,25 +119,6 @@ public class SearchTopicActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_search, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -234,12 +219,12 @@ public class SearchTopicActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -34,20 +36,26 @@ import android.widget.Toast;
 
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.peer.R;
+import com.peer.IMController.ShowNotification;
 import com.peer.IMimplements.easemobchatImp;
 import com.peer.base.Constant;
 import com.peer.base.pBaseActivity;
 import com.peer.base.pBaseApplication;
+import com.peer.bean.ChatMsgEntityBean;
 import com.peer.bean.LoginBean;
 import com.peer.bean.NewFriendBean;
 import com.peer.fragment.ComeMsgFragment;
@@ -83,19 +91,21 @@ public class MainActivity extends pBaseActivity {
 
 	public static LocationClient mLocationClient = null;
 	public BDLocationListener myListener = new MyLocationListener();
-	
+
 	private int index;
 	private int currentTabIndex;
 	private int intnewfriendsnum;
-	private BadgeView unredmsg, bdnewfriendsnum;
+	private static BadgeView unredmsg;
+	private BadgeView bdnewfriendsnum;
 
 	private PageViewList pageViewaList;
 
 	private NewMessageBroadcastReceiver msgReceiver;
 
-	private String isnumber = "^\\d+$";// 正则用来匹配纯数字
-	
+	private static String isnumber = "^\\d+$";// 正则用来匹配纯数字
+
 	private String mPageName = "MainActivity";
+	private static final int UPDATE_NEW_MESSAGE_TEXT = 100;
 
 	class PageViewList {
 		/* bottom layout */
@@ -111,26 +121,30 @@ public class MainActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		 registerEMchat();
-		 registerGPS();
-		 mLocationClient.start();
-//		 Timer time = new Timer();
-//		 time.schedule(new TimerTask() {
-//			@Override
-//			public void run() {
-				// TODO Auto-generated method stub
-				if(MyLocationListener.w>0&&MyLocationListener.j>0){
-					try {
-						sendgps(mShareFileUtils.getString(Constant.CLIENT_ID, "")
-								,MyLocationListener.w,MyLocationListener.j);
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-//			}
-//		},1000*8);
+		setContentView(R.layout.activity_frabottom);
+		findViewById();
+		setListener();
+		processBiz();
+		registerEMchat();
+		registerGPS();
+		mLocationClient.start();
+		// Timer time = new Timer();
+		// time.schedule(new TimerTask() {
+		// @Override
+		// public void run() {
+		// TODO Auto-generated method stub
+		if (MyLocationListener.w > 0 && MyLocationListener.j > 0) {
+			try {
+				sendgps(mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+						MyLocationListener.w, MyLocationListener.j);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		// }
+		// },1000*8);
 		// 考虑到用户流量的限制，目前我们默认在Wi-Fi接入情况下才进行自动提醒。如需要在任意网络环境下都进行更新自动提醒，
 		// 则请在update调用之前添加以下代码：
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
@@ -193,24 +207,24 @@ public class MainActivity extends pBaseActivity {
 		init();
 	}
 
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return null;
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_frabottom, null);
-	}
+	// @Override
+	// protected View loadTopLayout() {
+	// // TODO Auto-generated method stub
+	// // return getLayoutInflater().inflate(R.layout.top_layout, null);
+	// return null;
+	// }
+	//
+	// @Override
+	// protected View loadContentLayout() {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
+	//
+	// @Override
+	// protected View loadBottomLayout() {
+	// // TODO Auto-generated method stub
+	// return getLayoutInflater().inflate(R.layout.activity_frabottom, null);
+	// }
 
 	@Override
 	public void onClick(View v) {
@@ -291,6 +305,14 @@ public class MainActivity extends pBaseActivity {
 		super.onResume();
 		MobclickAgent.onPageStart(mPageName);
 
+		EMChatManager.getInstance().registerEventListener(
+				this,
+				new EMNotifierEvent.Event[] {
+						EMNotifierEvent.Event.EventNewMessage,
+						EMNotifierEvent.Event.EventOfflineMessage,
+						EMNotifierEvent.Event.EventDeliveryAck,
+						EMNotifierEvent.Event.EventReadAck });
+
 		// TODO Auto-generated method stub
 		try {
 			sendnewfriend(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
@@ -346,14 +368,10 @@ public class MainActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:" + statusCode);
-						pLog.i("test", "headers:" + headers);
-						pLog.i("test", "responseString:" + responseString);
-						pLog.i("test", "throwable:" + throwable);
-//						showToast(
-//								getResources().getString(R.string.config_error),
-//								Toast.LENGTH_SHORT, false);
+						// hideLoading();
+						// showToast(
+						// getResources().getString(R.string.config_error),
+						// Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -362,14 +380,10 @@ public class MainActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:" + statusCode);
-						pLog.i("test", "headers:" + headers);
-						pLog.i("test", "errorResponse:" + errorResponse);
-						pLog.i("test", "throwable:" + throwable);
-//						showToast(
-//								getResources().getString(R.string.config_error),
-//								Toast.LENGTH_SHORT, false);
+						// hideLoading();
+						// showToast(
+						// getResources().getString(R.string.config_error),
+						// Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -378,14 +392,10 @@ public class MainActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						pLog.i("test", "statusCode:" + statusCode);
-						pLog.i("test", "headers:" + headers);
-						pLog.i("test", "errorResponse:" + errorResponse);
-						pLog.i("test", "throwable:" + throwable);
-//						showToast(
-//								getResources().getString(R.string.config_error),
-//								Toast.LENGTH_SHORT, false);
+						// hideLoading();
+						// showToast(
+						// getResources().getString(R.string.config_error),
+						// Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -394,9 +404,6 @@ public class MainActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-
-						pLog.i("test", "response:" + response.toString());
-
 						try {
 							NewFriendBean newfriendbean = JsonDocHelper
 									.toJSONObject(
@@ -447,48 +454,47 @@ public class MainActivity extends pBaseActivity {
 	 */
 	private void registerEMchat() {
 		// TODO Auto-generated method stub
-//		if (EMChatManager.getInstance().isConnected()) {
-			msgReceiver = new NewMessageBroadcastReceiver();
-			IntentFilter intentFilter = new IntentFilter(EMChatManager
-					.getInstance().getNewMessageBroadcastAction());
-			intentFilter.setPriority(3);
-			registerReceiver(msgReceiver, intentFilter);
-			pLog.i("emc", "msgReceiver");
-			EMChatManager.getInstance().addConnectionListener(
-					new IMconnectionListner());
+		// if (EMChatManager.getInstance().isConnected()) {
+		msgReceiver = new NewMessageBroadcastReceiver();
+		IntentFilter intentFilter = new IntentFilter(EMChatManager
+				.getInstance().getNewMessageBroadcastAction());
+		intentFilter.setPriority(3);
+		registerReceiver(msgReceiver, intentFilter);
+		pLog.i("emc", "msgReceiver");
+		EMChatManager.getInstance().addConnectionListener(
+				new IMconnectionListner());
 
-			EMChat.getInstance().setAppInited();
-//		}
+		EMChat.getInstance().setAppInited();
+		// }
 	}
-	
+
 	/**
 	 * GPS监听
 	 */
 	private void registerGPS() {
-		 mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-		 mLocationClient.registerLocationListener( myListener );    //注册监听函数
-		 initLocation();
+		mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
+		mLocationClient.registerLocationListener(myListener); // 注册监听函数
+		initLocation();
 	}
-	
-	private void initLocation(){
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationMode.Hight_Accuracy
-);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span=1000;
-        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//可选，默认false,设置是否使用gps
-        option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-option.setIgnoreKillProcess(false);//可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
-        mLocationClient.setLocOption(option);
-    }
-	
-	private List<EMConversation> loadConversationsWithRecentChat() {
+
+	private void initLocation() {
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(LocationMode.Hight_Accuracy);// 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+		option.setCoorType("bd09ll");// 可选，默认gcj02，设置返回的定位结果坐标系
+		int span = 1000;
+		option.setScanSpan(span);// 可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+		option.setIsNeedAddress(true);// 可选，设置是否需要地址信息，默认不需要
+		option.setOpenGps(true);// 可选，默认false,设置是否使用gps
+		option.setLocationNotify(true);// 可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
+		option.setIsNeedLocationDescribe(true);// 可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+		option.setIsNeedLocationPoiList(true);// 可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+		option.setIgnoreKillProcess(false);// 可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
+		option.SetIgnoreCacheException(false);// 可选，默认false，设置是否收集CRASH信息，默认收集
+		option.setEnableSimulateGps(false);// 可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+		mLocationClient.setLocOption(option);
+	}
+
+	private static List<EMConversation> loadConversationsWithRecentChat() {
 		// 获取所有会话，包括陌生人
 		Hashtable<String, EMConversation> conversations = EMChatManager
 				.getInstance().getAllConversations();
@@ -499,37 +505,8 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 				list.add(conversation);
 		}
 		// 排序
-//		sortConversationByLastChatTime(list);
+		// sortConversationByLastChatTime(list);
 		return list;
-	}
-	
-
-	/**
-	 * 刷新未读消息数
-	 */
-	public void updateUnreadLabel() {
-		int count = 0;
-//		int count = easemobchatImp.getInstance().getUnreadMesTotal();
-//		pLog.i("test", "未读消息count:" + count);
-		for (EMConversation em : loadConversationsWithRecentChat()) {
-			if(!em.getUserName().matches(isnumber)){
-				EMConversation conversation = EMChatManager.getInstance()
-						.getConversation(em.getUserName());
-				if (conversation.getUnreadMsgCount() > 0) {				
-					count = count + conversation.getUnreadMsgCount();
-				}
-			}else{
-				
-			}
-		}
-		if (count > 0) {
-				unredmsg.setText(String.valueOf(count));
-				// unredmsg.setTextSize(11);
-				// unredmsg.setBadgeMargin(1,1);
-				unredmsg.show();
-		} else {
-			unredmsg.hide();
-		}
 	}
 
 	public void refreshUnReadSum() {
@@ -549,17 +526,19 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 			String msgFrom = intent.getStringExtra("from");
 			// 更方便的方法是通过msgId直接获取整个message
 			EMMessage message = EMChatManager.getInstance().getMessage(msgId);
-			if(message.getChatType() == ChatType.Chat){
+			if (message.getChatType() == ChatType.Chat) {
 				try {
-					senduser(message.getFrom(), mShareFileUtils.getString(Constant.CLIENT_ID, ""),message);
+					senduser(message.getFrom(),
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							message);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else{
+			} else {
 				multinotifyNewMessage(message);
 			}
-			pLog.i("test", "Main message:"+message.toString());
+			pLog.i("test", "Main message:" + message.toString());
 			updateUnreadLabel();
 			if (comemsgfragment != null) {
 				comemsgfragment.refresh();
@@ -567,17 +546,17 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 
 		}
 	}
-	
-	
+
 	/**
-	 * 单聊信息提示
-	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * 单聊信息提示 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * 
 	 * @param bean
 	 * @param message
 	 */
-	protected void singlenotifyNewMessage(LoginBean bean,EMMessage message) {
+	protected void singlenotifyNewMessage(LoginBean bean, EMMessage message) {
 		TextMessageBody txtBody = (TextMessageBody) message.getBody();
-		String ticker = bean.user.getUsername()+" "+"对你说:"+txtBody.getMessage();
+		String ticker = bean.user.getUsername() + " " + "对你说:"
+				+ txtBody.getMessage();
 
 		Calendar c = Calendar.getInstance();
 		int hours = c.get(Calendar.HOUR_OF_DAY);
@@ -586,7 +565,7 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 		Notification notification = new Notification(R.drawable.logo, "同行",
 				System.currentTimeMillis());
 		Intent intent;
-			intent = new Intent(MainActivity.this, MainActivity.class);
+		intent = new Intent(MainActivity.this, MainActivity.class);
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(
 				MainActivity.this, 0, intent, 0);
@@ -598,16 +577,16 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 		notificationManager.notify(1, notification);// 发动通知,id由自己指定，每一个Notification对应的唯一标志
 
 	}
-	
+
 	/**
-	 * 群聊消息提示
-	 * 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * 群聊消息提示 当应用在前台时，如果当前消息不是属于当前会话，在状态栏提示一下 如果不需要，注释掉即可
+	 * 
 	 * @param message
 	 */
 	@SuppressWarnings("deprecation")
 	protected void multinotifyNewMessage(EMMessage message) {
 		TextMessageBody txtBody = (TextMessageBody) message.getBody();
-		String ticker = "话题消息："+txtBody.getMessage();
+		String ticker = "话题消息：" + txtBody.getMessage();
 
 		Calendar c = Calendar.getInstance();
 		int hours = c.get(Calendar.HOUR_OF_DAY);
@@ -690,34 +669,133 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 				}
 			});
 		}
-
 	}
-	
-	
+
 	/**
 	 * 获取用户信息接口
 	 * 
 	 * @param client_id
 	 * @throws UnsupportedEncodingException
 	 */
-	private void senduser(String client_id,String o_client_id,final EMMessage message) throws UnsupportedEncodingException {
+	private void senduser(String client_id, String o_client_id,
+			final EMMessage message) throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
+
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getUserParams(MainActivity.this, client_id);
+			params = PeerParamsUtils
+					.getUserParams(MainActivity.this, client_id);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="
+				+ o_client_id, params, new JsonHttpResponseHandler() {
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				try {
+					JSONObject result = response.getJSONObject("success");
+
+					pLog.i("zzg", "result:" + result.toString());
+
+					String code = result.getString("code");
+
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
+								LoginBean.class);
+						if (loginBean != null) {
+							// singlenotifyNewMessage(loginBean, message);
+
+							pLog.i("zzg",
+									"getUsername:"
+											+ loginBean.user.getUsername());
+
+							showNotification.sendNotification(
+									MainActivity.this, message,
+									mShareFileUtils, false,
+									loginBean.user.getUsername());
+						}
+					} else if (code.equals("500")) {
+
+					} else {
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				super.onSuccess(statusCode, headers, response);
+
+			}
+
+		});
+	}
+
+	/**
+	 * 获取用户信息接口
+	 * 
+	 * @param client_id
+	 * @param x_point
+	 * @param y_point
+	 * @throws UnsupportedEncodingException
+	 */
+	private void sendgps(String client_id, Double x_point, Double y_point)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils.getGPSParams(MainActivity.this, x_point,
+					y_point);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.LOGIN_GPS_URL + client_id + ".json", params,
 				new JsonHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -726,7 +804,9 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -735,7 +815,9 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -744,21 +826,19 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
+						pLog.i("test", "response:" + response.toString());
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
-								if(loginBean!=null){
-									singlenotifyNewMessage(loginBean,message);
-								}
-							}else if(code.equals("500")){
-								
-							}else{
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
+								mLocationClient.stop();
+								pLog.i("test", "gps关闭");
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -774,87 +854,110 @@ option.setEnableSimulateGps(false);//可选，默认false，设置是否需要�
 
 				});
 	}
-	
-	
-	
+
 	/**
-	 * 获取用户信息接口
-	 * 
-	 * @param client_id
-	 * @param x_point
-	 * @param y_point
-	 * @throws UnsupportedEncodingException
+	 * 环信聊天监听
 	 */
-	private void sendgps(String client_id,Double x_point, Double y_point) throws UnsupportedEncodingException {
+
+	@SuppressWarnings({ "incomplete-switch", "static-access" })
+	@Override
+	public void onEvent(EMNotifierEvent event) {
 		// TODO Auto-generated method stub
-		final Intent intent = new Intent();
-		RequestParams params = null;
-		try {
-			params = PeerParamsUtils.getGPSParams(MainActivity.this, x_point,y_point);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		switch (event.getEvent()) {
+		case EventNewMessage: {
+			// 获取到message
+			EMMessage eMessage = (EMMessage) event.getData();
+
+			// try {
+			// senduser(message.getFrom(),
+			// mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+			// message);
+			// } catch (UnsupportedEncodingException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+
+			Message message1 = new Message();
+			message1.what = UPDATE_NEW_MESSAGE_TEXT;
+			message1.obj = eMessage;
+			handler.sendMessage(message1);
+
+			break;
 		}
-		HttpUtil.post(HttpConfig.LOGIN_GPS_URL + client_id + ".json", params,
-				new JsonHttpResponseHandler() {
-			
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					String responseString, Throwable throwable) {
-				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, responseString,
-						throwable);
-			}
-			
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONArray errorResponse) {
-				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
-			}
-			
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONObject errorResponse) {
-				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
-			}
-			
-			@Override
-			public void onSuccess(int statusCode, Header[] headers,
-					JSONObject response) {
-				// TODO Auto-generated method stub
-				pLog.i("test", "response:"+response.toString());
-				try {
-					JSONObject result = response.getJSONObject("success");
-					
-					String code = result.getString("code");
-					pLog.i("test", "code:"+code);
-					if(code.equals("200")){
-						mLocationClient.stop();
-						pLog.i("test","gps关闭");
-					}else if(code.equals("500")){
-						
-					}else{
-						String message = result.getString("message");
-						showToast(message, Toast.LENGTH_SHORT, false);
-					}
-				} catch (Exception e1) {
-					pLog.i("test", "Exception:" + e1.toString());
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+		case EventDeliveryAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventReadAck: {
+			// 获取到message
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		case EventOfflineMessage: {
+			EMMessage message = (EMMessage) event.getData();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 刷新未读消息数
+	 */
+	public static void updateUnreadLabel() {
+		int count = 0;
+		// int count = easemobchatImp.getInstance().getUnreadMesTotal();
+		for (EMConversation em : loadConversationsWithRecentChat()) {
+			if (!em.getUserName().matches(isnumber)) {
+				EMConversation conversation = EMChatManager.getInstance()
+						.getConversation(em.getUserName());
+				if (conversation.getUnreadMsgCount() > 0) {
+					count = count + conversation.getUnreadMsgCount();
 				}
-				
-				super.onSuccess(statusCode, headers, response);
-				
+			} else {
+
 			}
-			
-		});
+		}
+		if (count > 0) {
+			unredmsg.setText(String.valueOf(count));
+			// unredmsg.setTextSize(11);
+			// unredmsg.setBadgeMargin(1,1);
+			unredmsg.show();
+		} else {
+			unredmsg.hide();
+		}
+	}
+
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(android.os.Message message) {
+			switch (message.what) {
+			case UPDATE_NEW_MESSAGE_TEXT:
+				EMMessage msg = (EMMessage) message.obj;
+				pLog.i("zzg", "msg:" + msg.getFrom());
+				try {
+					senduser(msg.getFrom(),
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							msg);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				updateUnreadLabel();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		EMChatManager.getInstance().unregisterEventListener(this);
 	}
 
 }

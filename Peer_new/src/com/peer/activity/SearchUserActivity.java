@@ -39,7 +39,6 @@ public class SearchUserActivity extends pBaseActivity {
 	private int USER_LABEL = 1;
 	private int USER_NICK = 2;
 	private int searchtype = USER_LABEL;// 默认按标签搜
-	
 
 	class PageViewList {
 		private LinearLayout ll_back, layout_clear_search_text,
@@ -56,6 +55,10 @@ public class SearchUserActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_search);
+		findViewById();
+		setListener();
+		processBiz();
 		popupwindow();
 	}
 
@@ -90,7 +93,7 @@ public class SearchUserActivity extends pBaseActivity {
 		pageViewaList.et_contentsearch.setFocusable(true);
 		pageViewaList.et_contentsearch.setFocusableInTouchMode(true);
 		pageViewaList.et_contentsearch.requestFocus();
-		
+
 		imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(pageViewaList.et_contentsearch,
 				InputMethodManager.RESULT_SHOWN);
@@ -122,25 +125,6 @@ public class SearchUserActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_search, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
@@ -153,17 +137,20 @@ public class SearchUserActivity extends pBaseActivity {
 			userPopup.showonserchuser(v);
 			break;
 		case R.id.im_search_search:
-			 if(isNetworkAvailable){
-			String searchtaget = pageViewaList.et_contentsearch.getText()
-					.toString().trim();
-			if (TextUtils.isEmpty(searchtaget)) {
-				showToast("搜索框不能为空", Toast.LENGTH_SHORT, false);
+			if (isNetworkAvailable) {
+				String searchtaget = pageViewaList.et_contentsearch.getText()
+						.toString().trim();
+				if (TextUtils.isEmpty(searchtaget)) {
+					showToast("搜索框不能为空", Toast.LENGTH_SHORT, false);
+				} else {
+					Search(searchtaget);
+				}
 			} else {
-				Search(searchtaget);
+				showToast(
+						getResources()
+								.getString(R.string.Broken_network_prompt),
+						Toast.LENGTH_SHORT, false);
 			}
-			 }else{
-			 showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
-			 }
 			break;
 		default:
 			break;
@@ -235,15 +222,13 @@ public class SearchUserActivity extends pBaseActivity {
 	@Override
 	public void onNetworkOn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNetWorkOff() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

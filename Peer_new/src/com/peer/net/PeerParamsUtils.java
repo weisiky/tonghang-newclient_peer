@@ -65,7 +65,6 @@ public class PeerParamsUtils {
 		loginParams.put("password", password);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 	
@@ -89,7 +88,6 @@ public class PeerParamsUtils {
 		loginParams.put("byDistance", byDistance);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 	
@@ -114,7 +112,6 @@ public class PeerParamsUtils {
 		loginParams.put("byDistance", byDistance);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 
@@ -137,7 +134,6 @@ public class PeerParamsUtils {
 		loginParams.put("client_id", client_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 	
@@ -160,7 +156,6 @@ public class PeerParamsUtils {
 		loginParams.put("client_id", client_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 	
@@ -180,7 +175,6 @@ public class PeerParamsUtils {
 		loginParams.put("invitee_id", client_id);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 	
@@ -737,7 +731,6 @@ public class PeerParamsUtils {
 		loginParams.put("content", content);
 		RequestParams params = new RequestParams();
 		params.put("mapstr", JsonDocHelper.toJSONString(loginParams));
-		pLog.i("test", "params:" + params.toString());
 		return params;
 	}
 

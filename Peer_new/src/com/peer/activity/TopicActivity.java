@@ -59,7 +59,10 @@ public class TopicActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_topic);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@SuppressWarnings("static-access")
@@ -97,42 +100,22 @@ public class TopicActivity extends pBaseActivity {
 		String email = intent.getStringExtra("email");
 		String image = intent.getStringExtra("image");
 		String client_id = userbean.getClient_id();
-		System.out.println("name:"+name);
-		System.out.println("email:"+email);
+		System.out.println("name:" + name);
+		System.out.println("email:" + email);
 		pageViewaList.personnike.setText(intent.getStringExtra("nike"));
 		pageViewaList.email.setText(intent.getStringExtra("email"));
 		// ImageLoader加载图片
 		ImageLoaderUtil.getInstance().showHttpImage(this,
-				mShareFileUtils.getString(Constant.PIC_SERVER, "") + image
-				, pageViewaList.personhead,
-				R.drawable.mini_avatar_shadow);
+				mShareFileUtils.getString(Constant.PIC_SERVER, "") + image,
+				pageViewaList.personhead, R.drawable.mini_avatar_shadow);
 
 		try {
-			sendUserTopic(client_id,page);
+			sendUserTopic(client_id, page);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_topic, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -188,8 +171,9 @@ public class TopicActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -198,8 +182,9 @@ public class TopicActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -208,8 +193,9 @@ public class TopicActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -218,45 +204,44 @@ public class TopicActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
-
 						try {
-							JSONObject result = response.getJSONObject("success");
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
 								RecommendTopicBean recommendtopicbean = JsonDocHelper
 										.toJSONObject(
-												response.getJSONObject("success")
-												.toString(),
+												response.getJSONObject(
+														"success").toString(),
 												RecommendTopicBean.class);
 								if (recommendtopicbean != null) {
 									pLog.i("test", "user1:"
 											+ recommendtopicbean.topics.get(0)
-											.getSubject().toString());
+													.getSubject().toString());
 									list.addAll(recommendtopicbean.topics);
 									if (adapter == null) {
-										adapter = new TopicAdapter(TopicActivity.this, list);
-										pageViewaList.lv_topichistory.setAdapter(adapter);
+										adapter = new TopicAdapter(
+												TopicActivity.this, list);
+										pageViewaList.lv_topichistory
+												.setAdapter(adapter);
 									}
-									
+
 									refresh();
 								}
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
-
 
 						} catch (Exception e1) {
 							pLog.i("test", "Exception:" + e1.toString());
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						
 
 						super.onSuccess(statusCode, headers, response);
 					}

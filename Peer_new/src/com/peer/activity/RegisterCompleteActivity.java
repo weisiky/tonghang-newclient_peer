@@ -90,6 +90,10 @@ public class RegisterCompleteActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_register_complete);
+		findViewById();
+		setListener();
+		processBiz();
 		items = getResources().getStringArray(R.array.pictrue);
 		pageViewaList.iv_uploadepic_complete.setDrawingCacheEnabled(true);
 		setDateTime();
@@ -121,26 +125,6 @@ public class RegisterCompleteActivity extends pBaseActivity {
 	protected void processBiz() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater().inflate(R.layout.activity_register_complete,
-				null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -185,8 +169,7 @@ public class RegisterCompleteActivity extends pBaseActivity {
 	 * commit
 	 */
 	private void CommiteToServer() {
-		showProgressBar();
-//		LoginBean loginBean = new LoginBean();
+		// LoginBean loginBean = new LoginBean();
 		sendUpdateRequest(mShareFileUtils.getString("client_id", ""),
 				pageViewaList.tv_setbirth.getText().toString().trim(),
 				pageViewaList.tv_sex.getText().toString().trim(),
@@ -219,8 +202,8 @@ public class RegisterCompleteActivity extends pBaseActivity {
 			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
 			if (file.exists()) {
 				params.put("image", file);
-			}else{
-				params.put("image",file);
+			} else {
+				params.put("image", file);
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -235,8 +218,9 @@ public class RegisterCompleteActivity extends pBaseActivity {
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
 
-						hideLoading();
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -245,8 +229,10 @@ public class RegisterCompleteActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -255,8 +241,10 @@ public class RegisterCompleteActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_login), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(R.string.config_login),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -265,49 +253,54 @@ public class RegisterCompleteActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 
 						try {
-							pLog.i("test","response:"+response.toString());
-							JSONObject result = response.getJSONObject("success");
+							pLog.i("test", "response:" + response.toString());
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
+								LoginBean loginBean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject(
+														"success").toString(),
+												LoginBean.class);
 								if (loginBean != null) {
 									BussinessUtils.saveUserData(loginBean,
 											mShareFileUtils);
-									if(EMChatManager.getInstance().isConnected()){
+									if (EMChatManager.getInstance()
+											.isConnected()) {
 										pLog.i("huanxin", "环信已登录");
-									}else{
-									easemobchatImp.getInstance().login(
-											mShareFileUtils.getString("client_id",
-													""),
-													mShareFileUtils.getString("password",
-															""));
-									easemobchatImp.getInstance()
-									.loadConversationsandGroups();
+									} else {
+										easemobchatImp.getInstance().login(
+												mShareFileUtils.getString(
+														"client_id", ""),
+												mShareFileUtils.getString(
+														"password", ""));
+										easemobchatImp.getInstance()
+												.loadConversationsandGroups();
 									}
-									
+
 									/** 向已注册用户推荐我 **/
-									sendpushme(mShareFileUtils.getString("client_id",
-											""));
-									
+									sendpushme(mShareFileUtils.getString(
+											"client_id", ""));
+
 									startActivityForLeft(MainActivity.class,
 											intent, false);
-								}else if(code.equals("500")){
-									
-								}else{
-									String message = result.getString("message");
-									showToast(message, Toast.LENGTH_SHORT, false);
+								} else if (code.equals("500")) {
+
+								} else {
+									String message = result
+											.getString("message");
+									showToast(message, Toast.LENGTH_SHORT,
+											false);
 								}
-								
-							}else if(code.equals("500")){
-								
-							}else{
+
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -322,21 +315,20 @@ public class RegisterCompleteActivity extends pBaseActivity {
 						super.onSuccess(statusCode, headers, response);
 					}
 
-//					@Override
-//					public void onSuccess(int statusCode, Header[] headers,
-//							String responseString) {
-//						// TODO Auto-generated method stub
-//						hideLoading();
-//						super.onSuccess(statusCode, headers, responseString);
-//						Intent login_complete = new Intent();
-//						startActivityForLeft(MainActivity.class,
-//								login_complete, false);
-//					}
-//
+					// @Override
+					// public void onSuccess(int statusCode, Header[] headers,
+					// String responseString) {
+					// // TODO Auto-generated method stub
+					//
+					// super.onSuccess(statusCode, headers, responseString);
+					// Intent login_complete = new Intent();
+					// startActivityForLeft(MainActivity.class,
+					// login_complete, false);
+					// }
+					//
 				});
 	}
-	
-	
+
 	/**
 	 * 向已注册用户推荐我请求
 	 * 
@@ -350,13 +342,13 @@ public class RegisterCompleteActivity extends pBaseActivity {
 
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getblacklistParams(
-					RegisterCompleteActivity.this);
+			params = PeerParamsUtils
+					.getblacklistParams(RegisterCompleteActivity.this);
 			File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
 			if (file.exists()) {
 				params.put("image", file);
-			}else{
-				params.put("image",file);
+			} else {
+				params.put("image", file);
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -395,30 +387,34 @@ public class RegisterCompleteActivity extends pBaseActivity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONObject response) {
 						// TODO Auto-generated method stub
-						hideLoading();
 
 						try {
-							pLog.i("test","response:"+response.toString());
-							JSONObject result = response.getJSONObject("success");
+							pLog.i("test", "response:" + response.toString());
+							JSONObject result = response
+									.getJSONObject("success");
 
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
+							pLog.i("test", "code:" + code);
+							if (code.equals("200")) {
+								LoginBean loginBean = JsonDocHelper
+										.toJSONObject(
+												response.getJSONObject(
+														"success").toString(),
+												LoginBean.class);
 								if (loginBean != null) {
-									pLog.i("test","send push ok");
-								}else if(code.equals("500")){
-									
-								}else{
-									String message = result.getString("message");
-									showToast(message, Toast.LENGTH_SHORT, false);
+									pLog.i("test", "send push ok");
+								} else if (code.equals("500")) {
+
+								} else {
+									String message = result
+											.getString("message");
+									showToast(message, Toast.LENGTH_SHORT,
+											false);
 								}
-								
-							}else if(code.equals("500")){
-								
-							}else{
+
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}

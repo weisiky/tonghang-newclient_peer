@@ -162,27 +162,27 @@ public final class R {
 		public static final int title_shadow = 0x7f0200f4;
 	}
 	public static final class id {
-		public static final int actionbarLayout = 0x7f0600df;
-		public static final int atDescTextView = 0x7f0600eb;
-		public static final int atLayout = 0x7f0600e6;
-		public static final int atTextView = 0x7f0600ea;
-		public static final int backImageView = 0x7f0600ee;
-		public static final int checkedImageView = 0x7f0600f3;
-		public static final int closeImageView = 0x7f0600e3;
-		public static final int divider = 0x7f0600e4;
-		public static final int gridView = 0x7f0600f0;
-		public static final int hScrollView = 0x7f0600e8;
-		public static final int imageRemoveBtn = 0x7f0600ed;
-		public static final int imageView = 0x7f0600ec;
-		public static final int imagesLinearLayout = 0x7f0600e9;
-		public static final int logoImageView = 0x7f0600f1;
-		public static final int mainRelLayout = 0x7f0600e0;
-		public static final int nameTextView = 0x7f0600f2;
-		public static final int okImageView = 0x7f0600ef;
-		public static final int textCounterTextView = 0x7f0600e7;
-		public static final int textEditText = 0x7f0600e5;
-		public static final int titleEditText = 0x7f0600e2;
-		public static final int titleLayout = 0x7f0600e1;
+		public static final int actionbarLayout = 0x7f0700e0;
+		public static final int atDescTextView = 0x7f0700ec;
+		public static final int atLayout = 0x7f0700e7;
+		public static final int atTextView = 0x7f0700eb;
+		public static final int backImageView = 0x7f0700ef;
+		public static final int checkedImageView = 0x7f0700f4;
+		public static final int closeImageView = 0x7f0700e4;
+		public static final int divider = 0x7f0700e5;
+		public static final int gridView = 0x7f0700f1;
+		public static final int hScrollView = 0x7f0700e9;
+		public static final int imageRemoveBtn = 0x7f0700ee;
+		public static final int imageView = 0x7f0700ed;
+		public static final int imagesLinearLayout = 0x7f0700ea;
+		public static final int logoImageView = 0x7f0700f2;
+		public static final int mainRelLayout = 0x7f0700e1;
+		public static final int nameTextView = 0x7f0700f3;
+		public static final int okImageView = 0x7f0700f0;
+		public static final int textCounterTextView = 0x7f0700e8;
+		public static final int textEditText = 0x7f0700e6;
+		public static final int titleEditText = 0x7f0700e3;
+		public static final int titleLayout = 0x7f0700e2;
 	}
 	public static final class layout {
 		public static final int skyblue_editpage = 0x7f030039;

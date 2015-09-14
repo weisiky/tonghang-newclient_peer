@@ -5,6 +5,11 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
     <RelativeLayout
         android:id="@+id/rl_mytopic"
         android:layout_width="match_parent"

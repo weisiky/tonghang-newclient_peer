@@ -61,14 +61,12 @@ public class PersonalPageActivity extends pBaseActivity {
 	private boolean page = true;
 	private RadioButton skill;
 
-	
-//	private static UserBean userbean;
+	// private static UserBean userbean;
 	final UserBean userbean = PersonpageBean.getInstance().getUser();
-	
-	
 
 	class PageViewList {
-		private LinearLayout ll_back, ll_personpagebottom, contentauto,ll_downview;
+		private LinearLayout ll_back, ll_personpagebottom, contentauto,
+				ll_downview;
 		private TextView tv_title, personnike, personcount, sex, city,
 				tv_topic;
 		private Button btnSend, addfriends;
@@ -83,6 +81,10 @@ public class PersonalPageActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_personalpage);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		pViewBox.viewBox(this, pageViewaList);
 
 		tag_container = (AutoWrapRadioGroup) findViewById(R.id.tag_container);
-		
+
 	}
 
 	@Override
@@ -110,14 +112,18 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				RadioButton tempButton = (RadioButton) findViewById(checkedId);
 				String selectlabel = tempButton.getText().toString();
-				if(isNetworkAvailable){
+				if (isNetworkAvailable) {
 					SearchBean.getInstance().setSearchname(selectlabel);
-					SearchBean.getInstance().setSearchtype(Constant.USERBYLABEL);
+					SearchBean.getInstance()
+							.setSearchtype(Constant.USERBYLABEL);
 					Intent intent = new Intent();
-					startActivityForLeft(SearchResultActivity.class, intent, false);
-				}else{
-					showToast(getResources().getString(R.string.Broken_network_prompt)
-							, Toast.LENGTH_SHORT, false);
+					startActivityForLeft(SearchResultActivity.class, intent,
+							false);
+				} else {
+					showToast(
+							getResources().getString(
+									R.string.Broken_network_prompt),
+							Toast.LENGTH_SHORT, false);
 				}
 			}
 		});
@@ -130,26 +136,6 @@ public class PersonalPageActivity extends pBaseActivity {
 		pic_server = mShareFileUtils.getString(Constant.PIC_SERVER, "");
 		ViewType();
 
-	}
-
-	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater()
-				.inflate(R.layout.activity_personalpage, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -201,7 +187,8 @@ public class PersonalPageActivity extends pBaseActivity {
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		params.weight = 1;
 		params.gravity = Gravity.CENTER_VERTICAL;
-		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ,page);
+		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT, page);
 		String userclient_id = mShareFileUtils
 				.getString(Constant.CLIENT_ID, "");
 
@@ -226,34 +213,31 @@ public class PersonalPageActivity extends pBaseActivity {
 				R.string.topic_owen));
 		pageViewaList.ll_personpagebottom.setVisibility(View.INVISIBLE);
 
-		
-			
-//		File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");// 将要保存图片的路径
-//		if (file.exists()) {
-			pageViewaList.personhead.setImageBitmap(BussinessUtils.decodeFile(
-					Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
-			ImageLoaderUtil.getInstance().showHttpImage(this,
-					pic_server + mShareFileUtils.getString(Constant.IMAGE,"")
-					, pageViewaList.personhead,
-					R.drawable.mini_avatar_shadow);
+		// File file = new File(Constant.C_IMAGE_CACHE_PATH + "head.png");//
+		// 将要保存图片的路径
+		// if (file.exists()) {
+		pageViewaList.personhead.setImageBitmap(BussinessUtils.decodeFile(
+				Constant.C_IMAGE_CACHE_PATH + "head.png", 100));
+		ImageLoaderUtil.getInstance().showHttpImage(this,
+				pic_server + mShareFileUtils.getString(Constant.IMAGE, ""),
+				pageViewaList.personhead, R.drawable.mini_avatar_shadow);
 
-//		} else {
-//			// ImageLoader加载图片
-//			ImageLoaderUtil.getInstance().showHttpImage(
-//					pic_server + userbean.getImage(), pageViewaList.personhead,
-//					R.drawable.mini_avatar_shadow);
-//		}
-		
+		// } else {
+		// // ImageLoader加载图片
+		// ImageLoaderUtil.getInstance().showHttpImage(
+		// pic_server + userbean.getImage(), pageViewaList.personhead,
+		// R.drawable.mini_avatar_shadow);
+		// }
 
 		pageViewaList.personnike.setText(userbean.getUsername());
-//		pageViewaList.personcount.setText(userbean.getEmail());
+		// pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ArrayList<String> lables = userbean.getLabels();
-		
+
 		for (int i = 0; i < lables.size(); i++) {
 			String tag = lables.get(i);
-			pLog.i("test", "tag:"+tag);
+			pLog.i("test", "tag:" + tag);
 			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
 					tag_container, false);
 			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
@@ -285,10 +269,10 @@ public class PersonalPageActivity extends pBaseActivity {
 			pageViewaList.tv_title.setText(getResources().getString(
 					R.string.personalpage_nvother));
 		}
-		
+
 		pageViewaList.ll_downview.setVisibility(View.VISIBLE);
 		pageViewaList.personnike.setText(userbean.getUsername());
-//		pageViewaList.personcount.setText(userbean.getEmail());
+		// pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
@@ -298,10 +282,10 @@ public class PersonalPageActivity extends pBaseActivity {
 				pic_server + userbean.getImage(), pageViewaList.personhead,
 				R.drawable.mini_avatar_shadow);
 		ArrayList<String> lables = userbean.getLabels();
-		
+
 		for (int i = 0; i < lables.size(); i++) {
 			String tag = lables.get(i);
-			pLog.i("test", "tag:"+tag);
+			pLog.i("test", "tag:" + tag);
 			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
 					tag_container, false);
 			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
@@ -312,44 +296,46 @@ public class PersonalPageActivity extends pBaseActivity {
 			skill.setTag("" + i);
 			tag_container.addView(skill);
 		}
-		if(userbean.getHas_invitation()){
+		if (userbean.getHas_invitation()) {
 			pageViewaList.addfriends.setText("等待中..");
 			pageViewaList.addfriends.setEnabled(false);
-		}else{
-			pageViewaList.addfriends.setOnClickListener(new View.OnClickListener() {
+		} else {
+			pageViewaList.addfriends
+					.setOnClickListener(new View.OnClickListener() {
 
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-						Intent intent = new Intent();
-						intent.putExtra("user_client_id", userbean.getClient_id());
-						intent.putExtra("image", userbean.getImage());
-						intent.putExtra("nike", userbean.getUsername());
-						intent.putExtra("email", userbean.getEmail());
-						startActivityForLeft(AddFriendsActivity.class,
-								intent, false);
-				}
-			});
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent();
+							intent.putExtra("user_client_id",
+									userbean.getClient_id());
+							intent.putExtra("image", userbean.getImage());
+							intent.putExtra("nike", userbean.getUsername());
+							intent.putExtra("email", userbean.getEmail());
+							startActivityForLeft(AddFriendsActivity.class,
+									intent, false);
+						}
+					});
 		}
 		pageViewaList.btnSend.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				if(isNetworkAvailable){
-					ChatRoomBean.getInstance().setChatroomtype(
-							Constant.SINGLECHAT);
-//				ChatRoomBean.getInstance().setUserBean(userbean);
-					Intent intent = new Intent();
-					intent.putExtra("userbean", userbean);
-					startActivityForLeft(SingleChatRoomActivity.class, intent, false);
-//				}else{
-//					showToast(getResources().getString(R.string.Broken_network_prompt)
-//							, Toast.LENGTH_SHORT, false);
-//				}
+				// if(isNetworkAvailable){
+				ChatRoomBean.getInstance().setChatroomtype(Constant.SINGLECHAT);
+				// ChatRoomBean.getInstance().setUserBean(userbean);
+				Intent intent = new Intent();
+				intent.putExtra("userbean", userbean);
+				startActivityForLeft(SingleChatRoomActivity.class, intent,
+						false);
+				// }else{
+				// showToast(getResources().getString(R.string.Broken_network_prompt)
+				// , Toast.LENGTH_SHORT, false);
+				// }
 			}
 		});
-		
+
 	}
 
 	/**
@@ -367,7 +353,7 @@ public class PersonalPageActivity extends pBaseActivity {
 		pageViewaList.btnSend.setVisibility(View.GONE);
 		pageViewaList.addfriends.setVisibility(View.GONE);
 		pageViewaList.personnike.setText(userbean.getUsername());
-//		pageViewaList.personcount.setText(userbean.getEmail());
+		// pageViewaList.personcount.setText(userbean.getEmail());
 		pageViewaList.city.setText(userbean.getCity());
 		pageViewaList.sex.setText(userbean.getSex());
 		ImageLoaderUtil.getInstance().showHttpImage(this,
@@ -375,10 +361,10 @@ public class PersonalPageActivity extends pBaseActivity {
 				R.drawable.mini_avatar_shadow);
 
 		ArrayList<String> lables = userbean.getLabels();
-		
+
 		for (int i = 0; i < lables.size(); i++) {
 			String tag = lables.get(i);
-			pLog.i("test", "tag:"+tag);
+			pLog.i("test", "tag:" + tag);
 			skill = (RadioButton) getLayoutInflater().inflate(R.layout.skill,
 					tag_container, false);
 			skill.setHeight((int) getResources().getDimension(R.dimen.hight));
@@ -389,8 +375,7 @@ public class PersonalPageActivity extends pBaseActivity {
 			skill.setTag("" + i);
 			tag_container.addView(skill);
 		}
-		
-		
+
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
 				R.string.deletefriends), R.color.white));
 		titlePopup.addAction(new ActionItem(this, getResources().getString(
@@ -418,12 +403,12 @@ public class PersonalPageActivity extends pBaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ChatRoomBean.getInstance().setChatroomtype(
-						Constant.SINGLECHAT);
-//				ChatRoomBean.getInstance().setUserBean(userbean);
+				ChatRoomBean.getInstance().setChatroomtype(Constant.SINGLECHAT);
+				// ChatRoomBean.getInstance().setUserBean(userbean);
 				Intent intent = new Intent();
 				intent.putExtra("userbean", userbean);
-				startActivityForLeft(SingleChatRoomActivity.class, intent, false);
+				startActivityForLeft(SingleChatRoomActivity.class, intent,
+						false);
 			}
 		});
 	}
@@ -438,28 +423,34 @@ public class PersonalPageActivity extends pBaseActivity {
 				// TODO Auto-generated method stub
 				if (item.mTitle.equals(getResources().getString(
 						R.string.deletefriends))) {
-					if(isNetworkAvailable){
+					if (isNetworkAvailable) {
 						String client_id = mShareFileUtils.getString(
 								Constant.CLIENT_ID, "");
 						String friend_id = userbean.getClient_id();
-						
+
 						senddeletefriend(client_id, friend_id);
-					}else{
-						showToast(getResources().getString(R.id.baseProgressBarLayout)
-								, Toast.LENGTH_SHORT, false);
+					} else {
+						showToast(
+								getResources().getString(
+										R.id.baseProgressBarLayout),
+								Toast.LENGTH_SHORT, false);
 					}
-				}else if(item.mTitle.equals(getResources().getString(
-						R.string.blacklist))){
-					if(isNetworkAvailable){
-					try {
-						sendaddblacklist(mShareFileUtils.getString(Constant.CLIENT_ID, ""),
-								userbean.getClient_id());
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					}else{
-						showToast(getResources().getString(R.string.Broken_network_prompt), Toast.LENGTH_SHORT, false);
+				} else if (item.mTitle.equals(getResources().getString(
+						R.string.blacklist))) {
+					if (isNetworkAvailable) {
+						try {
+							sendaddblacklist(mShareFileUtils.getString(
+									Constant.CLIENT_ID, ""), userbean
+									.getClient_id());
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						showToast(
+								getResources().getString(
+										R.string.Broken_network_prompt),
+								Toast.LENGTH_SHORT, false);
 					}
 				}
 			}
@@ -496,8 +487,10 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							String responseString, Throwable throwable) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, responseString,
 								throwable);
 					}
@@ -506,8 +499,10 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONArray errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -516,8 +511,10 @@ public class PersonalPageActivity extends pBaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							Throwable throwable, JSONObject errorResponse) {
 						// TODO Auto-generated method stub
-						hideLoading();
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+						showToast(
+								getResources().getString(R.string.config_error),
+								Toast.LENGTH_SHORT, false);
 						super.onFailure(statusCode, headers, throwable,
 								errorResponse);
 					}
@@ -530,15 +527,16 @@ public class PersonalPageActivity extends pBaseActivity {
 							JSONObject result = response
 									.getJSONObject("success");
 							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
+							pLog.i("test", "code:" + code);
 							if (code.equals("200")) {
 								showToast("好友关系已经移除！", Toast.LENGTH_SHORT,
 										false);
-								FriendsFragment.refreshhandle.sendEmptyMessage(Constant.REFRESHHANDLE);
+								FriendsFragment.refreshhandle
+										.sendEmptyMessage(Constant.REFRESHHANDLE);
 								finish();
-							}else if(code.equals("500")){
-								
-							}else{
+							} else if (code.equals("500")) {
+
+							} else {
 								String message = result.getString("message");
 								showToast(message, Toast.LENGTH_SHORT, false);
 							}
@@ -551,9 +549,7 @@ public class PersonalPageActivity extends pBaseActivity {
 				});
 
 	}
-	
-	
-	
+
 	/**
 	 * 获取用户信息接口
 	 * 
@@ -561,147 +557,68 @@ public class PersonalPageActivity extends pBaseActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	private void senduser(String client_id,String o_client_id) throws UnsupportedEncodingException {
+	private void senduser(String client_id, String o_client_id)
+			throws UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		final Intent intent = new Intent();
 		RequestParams params = null;
 		try {
-			params = PeerParamsUtils.getUserParams(PersonalPageActivity.this, client_id);
+			params = PeerParamsUtils.getUserParams(PersonalPageActivity.this,
+					client_id);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="+o_client_id, params,
-				new JsonHttpResponseHandler() {
+		HttpUtil.post(HttpConfig.USER_IN_URL + client_id + ".json?client_id="
+				+ o_client_id, params, new JsonHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							String responseString, Throwable throwable) {
-						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, responseString,
-								throwable);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONObject errorResponse) {
-						// TODO Auto-generated method stub
-						showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-						super.onFailure(statusCode, headers, throwable,
-								errorResponse);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONObject response) {
-						// TODO Auto-generated method stub
-						pLog.i("test","response:"+response.toString());
-						try {
-							JSONObject result = response.getJSONObject("success");
-
-							String code = result.getString("code");
-							pLog.i("test", "code:"+code);
-							if(code.equals("200")){
-								LoginBean loginBean = JsonDocHelper.toJSONObject(
-										response.getJSONObject("success")
-										.toString(), LoginBean.class);
-								if(loginBean!=null){
-//								userbean = loginBean.user;
-								}
-							}else if(code.equals("500")){
-								
-							}else{
-								String message = result.getString("message");
-								showToast(message, Toast.LENGTH_SHORT, false);
-							}
-						} catch (Exception e1) {
-							pLog.i("test", "Exception:" + e1.toString());
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-						super.onSuccess(statusCode, headers, response);
-
-					}
-
-				});
-	}
-	
-	
-	
-	/**
-	 * 加入黑名单接口
-	 * 
-	 * @param client_id
-	 * @param blocker_id
-	 * @throws UnsupportedEncodingException
-	 */
-	
-	private void sendaddblacklist(String client_id,String blocker_id) throws UnsupportedEncodingException {
-		// TODO Auto-generated method stub
-		final Intent intent = new Intent();
-		RequestParams params = null;
-		try {
-			params = PeerParamsUtils.getblacklistParams(PersonalPageActivity.this);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		HttpUtil.post(HttpConfig.ADDBLOCK_GET_URL + client_id + "/blocks/"+blocker_id+".json", params,
-				new JsonHttpResponseHandler() {
-			
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, responseString,
-						throwable);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
 			}
-			
+
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
-			
+
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
-				super.onFailure(statusCode, headers, throwable,
-						errorResponse);
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
-			
+
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,
 					JSONObject response) {
 				// TODO Auto-generated method stub
-				pLog.i("test","response:"+response.toString());
+				pLog.i("test", "response:" + response.toString());
 				try {
 					JSONObject result = response.getJSONObject("success");
-					
+
 					String code = result.getString("code");
-					pLog.i("test", "code:"+code);
-					if(code.equals("200")){
-						showToast("已添加入黑名单", Toast.LENGTH_SHORT, false);
-					}else if(code.equals("500")){
-						
-					}else{
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
+								LoginBean.class);
+						if (loginBean != null) {
+							// userbean = loginBean.user;
+						}
+					} else if (code.equals("500")) {
+
+					} else {
 						String message = result.getString("message");
 						showToast(message, Toast.LENGTH_SHORT, false);
 					}
@@ -710,11 +627,92 @@ public class PersonalPageActivity extends pBaseActivity {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 				super.onSuccess(statusCode, headers, response);
-				
+
 			}
-			
+
+		});
+	}
+
+	/**
+	 * 加入黑名单接口
+	 * 
+	 * @param client_id
+	 * @param blocker_id
+	 * @throws UnsupportedEncodingException
+	 */
+
+	private void sendaddblacklist(String client_id, String blocker_id)
+			throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		final Intent intent = new Intent();
+		RequestParams params = null;
+		try {
+			params = PeerParamsUtils
+					.getblacklistParams(PersonalPageActivity.this);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HttpUtil.post(HttpConfig.ADDBLOCK_GET_URL + client_id + "/blocks/"
+				+ blocker_id + ".json", params, new JsonHttpResponseHandler() {
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				// TODO Auto-generated method stub
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					JSONObject response) {
+				// TODO Auto-generated method stub
+				pLog.i("test", "response:" + response.toString());
+				try {
+					JSONObject result = response.getJSONObject("success");
+
+					String code = result.getString("code");
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						showToast("已添加入黑名单", Toast.LENGTH_SHORT, false);
+					} else if (code.equals("500")) {
+
+					} else {
+						String message = result.getString("message");
+						showToast(message, Toast.LENGTH_SHORT, false);
+					}
+				} catch (Exception e1) {
+					pLog.i("test", "Exception:" + e1.toString());
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				super.onSuccess(statusCode, headers, response);
+
+			}
+
 		});
 	}
 

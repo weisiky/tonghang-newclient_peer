@@ -66,7 +66,10 @@ public class RegisterTagActivity extends pBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_register_tag);
+		findViewById();
+		setListener();
+		processBiz();
 	}
 
 	@Override
@@ -80,7 +83,6 @@ public class RegisterTagActivity extends pBaseActivity {
 		pageViewaList.et_tagname_2.addTextChangedListener(watcher);
 		pageViewaList.bt_registe_tag.setEnabled(false);
 
-		
 	}
 
 	@Override
@@ -97,26 +99,6 @@ public class RegisterTagActivity extends pBaseActivity {
 	}
 
 	@Override
-	protected View loadTopLayout() {
-		// TODO Auto-generated method stub
-		// return getLayoutInflater().inflate(R.layout.top_layout, null);
-		return getLayoutInflater().inflate(R.layout.base_toplayout_title, null);
-	}
-
-	@Override
-	protected View loadContentLayout() {
-		// TODO Auto-generated method stub
-		return getLayoutInflater()
-				.inflate(R.layout.activity_register_tag, null);
-	}
-
-	@Override
-	protected View loadBottomLayout() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
@@ -126,7 +108,6 @@ public class RegisterTagActivity extends pBaseActivity {
 
 			break;
 
-		
 		default:
 			break;
 		}
@@ -195,10 +176,10 @@ public class RegisterTagActivity extends pBaseActivity {
 
 			if (!sameTag && !Tolong) {
 				pageViewaList.tv_remind.setText("");
-				showProgressBar();
 				try {
 					senduserlabels(
-							mShareFileUtils.getString(Constant.CLIENT_ID, ""), list);
+							mShareFileUtils.getString(Constant.CLIENT_ID, ""),
+							list);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -247,8 +228,9 @@ public class RegisterTagActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, responseString, throwable);
 			}
 
@@ -256,8 +238,9 @@ public class RegisterTagActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONArray errorResponse) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -265,8 +248,9 @@ public class RegisterTagActivity extends pBaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					Throwable throwable, JSONObject errorResponse) {
 				// TODO Auto-generated method stub
-				hideLoading();
-				showToast(getResources().getString(R.string.config_error), Toast.LENGTH_SHORT, false);
+
+				showToast(getResources().getString(R.string.config_error),
+						Toast.LENGTH_SHORT, false);
 				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 
@@ -279,25 +263,27 @@ public class RegisterTagActivity extends pBaseActivity {
 					JSONObject result = response.getJSONObject("success");
 
 					String code = result.getString("code");
-					pLog.i("test", "code:"+code);
-					if(code.equals("200")){
-						LoginBean loginBean = JsonDocHelper.toJSONObject(response
-								.getJSONObject("success").toString(),
+					pLog.i("test", "code:" + code);
+					if (code.equals("200")) {
+						LoginBean loginBean = JsonDocHelper.toJSONObject(
+								response.getJSONObject("success").toString(),
 								LoginBean.class);
-						sendRequesJpush(mShareFileUtils.getString(Constant.CLIENT_ID, ""));
+						sendRequesJpush(mShareFileUtils.getString(
+								Constant.CLIENT_ID, ""));
 						if (loginBean.user.getLabels() != null
 								&& loginBean.user.getLabels().size() > 0) {
-							mShareFileUtils.setString(Constant.LABELS, loginBean.user.getLabels().toString());
+							mShareFileUtils.setString(Constant.LABELS,
+									loginBean.user.getLabels().toString());
 							Intent register_com = new Intent();
 							startActivityForLeft(
 									RegisterCompleteActivity.class,
 									register_com, false);
-							
+
 						}
-						
-					}else if(code.equals("500")){
-						
-					}else{
+
+					} else if (code.equals("500")) {
+
+					} else {
 						String message = result.getString("message");
 						showToast(message, Toast.LENGTH_SHORT, false);
 					}
@@ -314,7 +300,6 @@ public class RegisterTagActivity extends pBaseActivity {
 
 		});
 	}
-
 
 	TextWatcher watcher = new TextWatcher() {
 
@@ -362,7 +347,7 @@ public class RegisterTagActivity extends pBaseActivity {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
 	 * 注册极光跟环信
 	 */

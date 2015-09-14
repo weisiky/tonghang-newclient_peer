@@ -6,6 +6,11 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
     <LinearLayout
         android:id="@+id/ll_headpic"
         android:layout_width="match_parent"
@@ -206,7 +211,8 @@
         android:layout_marginRight="8dp"
         android:background="@color/lightgray" />
 
-    <!-- <LinearLayout
+    <!--
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -221,6 +227,7 @@
             android:background="@drawable/selector_back"
             android:text="修改"
             android:textColor="@color/white" />
-    </LinearLayout> -->
+    </LinearLayout>
+    -->
 
 </LinearLayout>
