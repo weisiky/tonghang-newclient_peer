@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/new_gray_bg"
+    >
+    <RelativeLayout
+        android:id="@+id/incTop"
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/title_backcolor" >
+
+        <RelativeLayout
+            android:id="@+id/ll_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/copyselector_back"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+            
+            <ImageView
+                android:id="@+id/img_othericon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/up_fire"
+                 />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:text="王二胖的名片"
+            android:textSize="@dimen/textsize_large" />
+
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/card_one"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_margin="8dp"
+        android:layout_below="@id/incTop"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical" >
+        
+        <RelativeLayout 
+            android:id="@+id/rl_head"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            >
+            <com.peer.utils.RoundImageView
+            android:id="@+id/personhead"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/find_label_press"
+            />
+            
+            <TextView 
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/personhead"
+                android:layout_alignTop="@+id/personhead"
+                android:textSize="20dp"
+                android:textColor="@color/new_yellow_view"
+                android:text="王二胖"
+                />
+            
+            <TextView
+                android:id="@+id/tv_position" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_name"
+                android:layout_alignBottom="@+id/tv_name"
+                android:layout_marginLeft="16dp"
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:text="UI设计师"
+                />
+            
+             <TextView 
+                android:id="@+id/tv_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/personhead"
+                android:layout_alignBottom="@+id/personhead"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:text="天津xxxxxxxxxxxx有限公司"
+                />
+            
+        </RelativeLayout>
+
+    </LinearLayout>
+    
+    
+   
+        
+        <RelativeLayout 
+            android:id="@+id/card_two"
+	        android:layout_width="fill_parent"
+	        android:layout_height="150dp"
+	        android:layout_marginLeft="8dp"
+	        android:layout_marginRight="8dp"
+	        android:layout_below="@id/card_one"
+	        android:background="@drawable/card_bg">
+            
+            <ImageView 
+                android:id="@+id/img_work"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="24dp"
+                android:src="@drawable/work"/>
+            
+            <TextView 
+                android:id="@+id/tv_work"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:text="天津xxxxxxxxxxxx有限公司"
+                android:layout_toRightOf="@+id/img_work"
+                android:layout_alignBottom="@+id/img_work"
+                android:layout_marginLeft="16dp"/>
+            
+            
+            <TextView 
+                android:id="@+id/tv_worktime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:text="2014.4-今"
+                android:layout_toRightOf="@+id/tv_work"
+                android:layout_alignBottom="@+id/tv_work"
+                android:layout_marginLeft="16dp"/>
+            
+            
+            <ImageView 
+                android:id="@+id/img_study"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_work"
+                android:layout_alignLeft="@+id/img_work"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/study"/>
+            
+            
+            <TextView 
+                android:id="@+id/tv_school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:text="清华大学"
+                android:layout_toRightOf="@+id/img_study"
+                android:layout_alignBottom="@+id/img_study"
+                android:layout_marginLeft="16dp"/>
+            
+            <TextView 
+                android:id="@+id/tv_major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                
+                android:layout_toRightOf="@+id/tv_school"
+                android:layout_alignBottom="@+id/tv_school"
+                android:layout_marginLeft="8dp"/>
+            
+            
+            <TextView 
+                android:id="@+id/tv_study"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:layout_toRightOf="@+id/tv_major"
+                android:layout_alignBottom="@+id/tv_major"
+                android:layout_marginLeft="8dp"/>
+            
+            <TextView 
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_small"
+                android:textColor="@color/white"
+                android:text="2009-2013"
+                android:layout_toRightOf="@+id/tv_study"
+                android:layout_alignBottom="@+id/tv_study"
+                android:layout_marginLeft="8dp"/>
+            
+            
+            <RelativeLayout 
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+                
+                <TextView 
+                    android:id="@+id/tv_change_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/new_yellow_view"
+                    android:textSize="@dimen/textsize_large"
+                    android:layout_marginLeft="32dp"
+                    />
+                
+                <TextView 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="与TA交换了名片"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textsize_verysmall"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@+id/tv_change_card"
+                    android:layout_alignBottom="@+id/tv_change_card"
+                    />
+                
+                <RelativeLayout
+                    android:id="@+id/rl_line" 
+	                android:layout_width="fill_parent"
+	                android:layout_height="20dp"
+	                android:gravity="center_horizontal"
+	               	>
+	                <View
+			            android:layout_width="1dp"
+			            android:layout_height="match_parent"
+			            android:background="@color/white" />
+                </RelativeLayout>
+                
+                
+                <TextView 
+                    android:id="@+id/tv_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="与TA交换名片后继续沟通"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textsize_verysmall"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:layout_alignBottom="@+id/tv_change_card"
+                    />
+                
+                <TextView 
+                    android:id="@+id/tv_chat_after"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/new_yellow_view"
+                    android:textSize="@dimen/textsize_large"
+                    android:layout_marginRight="4dp"
+                    android:layout_toLeftOf="@+id/tv_chat"
+                    />
+                
+            </RelativeLayout>
+            
+            
+        </RelativeLayout>
+    
+        <View
+          	android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_above="@+id/ll_cardpagebottom"
+            android:background="@color/new_gray_view" />
+    
+        <LinearLayout
+	        android:id="@+id/ll_cardpagebottom"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/widgeheight"
+	        android:layout_alignParentBottom="true"
+	        android:orientation="horizontal" >
+
+	        <Button
+	            android:id="@+id/btnSend"
+	            android:layout_width="match_parent"
+	            android:layout_height="@dimen/widgeheight"
+	            android:background="@drawable/select_personal"
+	            android:text="找TA聊聊"
+	            android:textColor="@color/new_yellow_view" />
+
+    </LinearLayout>
+    
+    
+
+</RelativeLayout>

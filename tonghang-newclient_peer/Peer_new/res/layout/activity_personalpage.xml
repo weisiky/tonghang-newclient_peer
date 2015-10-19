@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bottomback"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/incTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/incTop"
+        android:orientation="horizontal" >
+
+        <include layout="@layout/layout_personal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_personpagebottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widgeheight"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_backcolor"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/widgeheight"
+            android:layout_weight="1"
+            android:background="@drawable/select_personal"
+            android:text="发信"
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <Button
+            android:id="@+id/addfriends"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/widgeheight"
+            android:layout_weight="1"
+            android:background="@drawable/select_personal"
+            android:text="加好友"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

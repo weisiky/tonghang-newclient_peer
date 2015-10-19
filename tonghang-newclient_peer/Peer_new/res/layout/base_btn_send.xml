@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/chat_input_back" >
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/selector_back"
+            android:textSize="@dimen/textsize_smallmiddle"
+            android:textColor="@color/white"
+            android:layout_alignBottom="@+id/et_sendmessage"
+            android:layout_alignTop="@+id/et_sendmessage"
+            android:text="发送" />
+
+        <EditText
+            android:id="@+id/et_sendmessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:layout_toLeftOf="@+id/btn_send"
+            android:background="@drawable/input_editext"                       
+            android:maxLines="5"
+            android:paddingLeft="5dp"
+            android:textSize="18sp" >
+     	<requestFocus />
+    </EditText>
+        
+    </RelativeLayout>
+
+</RelativeLayout>

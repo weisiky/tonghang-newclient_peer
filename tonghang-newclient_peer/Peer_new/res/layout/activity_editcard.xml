@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_edit_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bottomback"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+    
+    <TextView 
+        android:id="@+id/tv_warn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="您还没有名片，请在交换前填写您的名片"
+        android:textColor="@color/red"
+        android:visibility="gone"/>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="手机: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="邮箱: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+    
+    
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="真实姓名: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_3"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="公司: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_4"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+      <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="职位: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_5"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+      <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="工作时间: "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_tagname_6"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="学校: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_7"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="学历: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_8"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:textColor="@color/red" />
+    </LinearLayout>
+     <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="专业: "
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_tagname_9"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            
+            android:singleLine="true"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:textColor="@color/red" />
+    </LinearLayout>
+     <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/deepgray" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="入学时间: "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_tagname_10"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@color/white"
+            android:textSize="@dimen/textsize_middle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2.3"
+            android:gravity="center_vertical"
+            android:text="必填"
+            android:textColor="@color/red" />
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/bt_change_card"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/selector_back"
+            android:text="交换"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large" />
+    </LinearLayout>
+    
+    
+
+</LinearLayout>

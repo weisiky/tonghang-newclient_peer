@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
+    <RelativeLayout
+        android:id="@+id/rl_mytopic"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/selector_presseffect"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dp"
+            android:text="已创建话题"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textsize_middle" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/icon_enter" />
+
+            <TextView
+                android:id="@+id/tv_newfriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widgeheight"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:text="请为您要创建的话题选择所属行业"
+        android:textColor="@color/bottomtextgray"
+        android:textSize="@dimen/textsize_small" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
+    <com.peer.utils.AutoWrapRadioGroup
+        android:id="@+id/tag_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:id="@+id/ll_inputtopic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <EditText
+            android:id="@+id/et_topic"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/border"
+            android:gravity="top"
+            android:hint="请输入话题"
+            android:paddingLeft="4dp"
+            android:paddingTop="4dp"
+            android:textSize="@dimen/textsize_middle" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/bt_creattopic"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/selector_back"
+            android:text="创建"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large" />
+    </LinearLayout>
+
+</LinearLayout>

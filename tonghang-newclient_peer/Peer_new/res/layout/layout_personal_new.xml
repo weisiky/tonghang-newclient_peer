@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5.0dip"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="8dip"
+        android:layout_marginTop="8dip"
+        android:paddingRight="5.0dip"
+        android:paddingTop="5.0dip" >
+
+        <com.peer.utils.RoundImageView
+            android:id="@+id/personhead"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:layout_gravity="center"
+            android:background="@drawable/find_label_press" />
+
+        <TextView
+            android:id="@+id/personnike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/personhead"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/personhead"
+            android:text="正在加载数据..."
+            android:textColor="@color/new_name"
+            android:textSize="@dimen/textsize_large" />
+
+        <ImageView
+            android:id="@+id/img_sex_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/personnike"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/personnike"
+            android:src="@drawable/sex_b"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_sex_w"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/personnike"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/personnike"
+            android:src="@drawable/sex_w"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_personcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/personhead"
+            android:layout_alignLeft="@+id/personnike"
+            android:layout_toRightOf="@+id/personhead"
+            android:src="@drawable/personcount" />
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_personcount"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/img_personcount"
+            android:textColor="@color/new_name_small"
+            android:textSize="@dimen/textsize_small"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/contentauto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/personhead"
+            android:layout_below="@+id/personhead"
+            android:orientation="vertical" >
+
+            <com.peer.utils.AutoWrapRadioGroup
+                android:id="@+id/tag_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

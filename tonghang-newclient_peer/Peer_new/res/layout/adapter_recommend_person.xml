@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" 
+    >
+    <LinearLayout
+        android:orientation="vertical" 
+        android:layout_width="match_parent"
+        android:layout_height="80dp" 
+        android:id="@+id/ll_clike"
+        android:clickable="true" 
+        android:background="@drawable/selector_presseffect"         
+        >
+    <RelativeLayout
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:id="@+id/im_headpic"
+            android:layout_width="@dimen/widgeheight_max"
+            android:layout_height="@dimen/widgeheight_max"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/mini_avatar_shadow"
+             />
+	<LinearLayout
+	    android:layout_marginLeft="8dp"
+	    android:orientation="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_toRightOf="@+id/im_headpic" 
+	    android:layout_marginRight="8dp"
+	    >
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	        >
+	    <TextView 
+	        android:id="@+id/tv_nikename"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/textsize_middle"
+	        android:lines="1"
+	        android:ellipsize="end"
+	        android:textColor="@color/black"
+			android:layout_marginTop="8dp"
+	        android:text="汉江度舞蝶"
+	        />
+
+	    <TextView
+	        android:id="@+id/tv_descripe"
+	        android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_nikename"
+	        android:layout_alignParentLeft="true"
+	        android:textSize="@dimen/textsize_smallmiddle"
+	        android:textColor="@color/deepgray"
+	        android:lines="2"
+	        android:ellipsize="end"
+	       
+	        
+	       
+	        />
+
+	    
+	</RelativeLayout>	
+	</LinearLayout>
+    </RelativeLayout>
+    </LinearLayout>
+	<View
+	    android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        />
+</LinearLayout>

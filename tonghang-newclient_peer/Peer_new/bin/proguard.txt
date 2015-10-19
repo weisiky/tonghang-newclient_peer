@@ -1,0 +1,214 @@
+# view AndroidManifest.xml #generated:578
+-keep class cn.jpush.android.service.AlarmReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:519
+-keep class cn.jpush.android.service.DownloadService { <init>(...); }
+
+# view AndroidManifest.xml #generated:540
+-keep class cn.jpush.android.service.PushReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:526
+-keep class cn.jpush.android.service.PushService { <init>(...); }
+
+# view AndroidManifest.xml #generated:507
+-keep class cn.jpush.android.ui.PushActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:589
+-keep class cn.sharesdk.framework.ShareSDKUIShell { <init>(...); }
+
+# view AndroidManifest.xml #generated:488
+-keep class com.baidu.location.f { <init>(...); }
+
+# view AndroidManifest.xml #generated:352
+-keep class com.easemob.chat.EMChatService { <init>(...); }
+
+# view AndroidManifest.xml #generated:319
+-keep class com.easemob.chat.EMGCMBroadcastReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:330
+-keep class com.easemob.chat.EMGCMListenerService { <init>(...); }
+
+# view AndroidManifest.xml #generated:354
+-keep class com.easemob.chat.EMMonitorReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:309
+-keep class com.easemob.chat.StartServiceReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:341
+-keep class com.easemob.chatuidemo.receiver.GCMPushBroadCast { <init>(...); }
+
+# view res/layout/activity_recommend_topic.xml #generated:13
+# view res/layout/activity_searchresult.xml #generated:13
+# view res/layout/fragment_home.xml #generated:156
+-keep class com.handmark.pulltorefresh.library.PullToRefreshListView { <init>(...); }
+
+# view AndroidManifest.xml #generated:604
+-keep class com.mob.tools.MobUIShell { <init>(...); }
+
+# view AndroidManifest.xml #generated:269
+-keep class com.peer.activity.AddFriendsActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:131
+-keep class com.peer.activity.BlackListActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:107
+-keep class com.peer.activity.CardActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:263
+-keep class com.peer.activity.ChatRoomListnikeActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:227
+-keep class com.peer.activity.CreatTopicActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:143
+-keep class com.peer.activity.EditCardActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:137
+-keep class com.peer.activity.FeedBackActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:113
+-keep class com.peer.activity.FindPasswordActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:125
+-keep class com.peer.activity.FindPasswordResultActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:101
+-keep class com.peer.activity.GetAddressInfoActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:77
+-keep class com.peer.activity.LoginActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:64
+-keep class com.peer.activity.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:149
+-keep class com.peer.activity.MessageNotifyActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:257
+-keep class com.peer.activity.MultiChatRoomActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:155
+-keep class com.peer.activity.MyAcountActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:161
+-keep class com.peer.activity.MySkillActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:119
+-keep class com.peer.activity.NewCardChange { <init>(...); }
+
+# view AndroidManifest.xml #generated:221
+-keep class com.peer.activity.NewFriendsActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:167
+-keep class com.peer.activity.NewFunctionActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:245
+-keep class com.peer.activity.OtherPageActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:179
+-keep class com.peer.activity.PersonalMessageActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:233
+-keep class com.peer.activity.PersonalPageActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:275
+-keep class com.peer.activity.Recommend_topic { <init>(...); }
+
+# view AndroidManifest.xml #generated:71
+-keep class com.peer.activity.RegisterAcountActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:83
+-keep class com.peer.activity.RegisterCompleteActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:89
+-keep class com.peer.activity.RegisterTagActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:203
+-keep class com.peer.activity.SearchResultActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:209
+-keep class com.peer.activity.SearchTopicActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:215
+-keep class com.peer.activity.SearchUserActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:185
+-keep class com.peer.activity.SettingActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:250
+-keep class com.peer.activity.SingleChatRoomActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:239
+-keep class com.peer.activity.TopicActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:191
+-keep class com.peer.activity.UpdateNikeActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:197
+-keep class com.peer.activity.UpdatePasswordActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:54
+-keep class com.peer.activity.WelComeActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:95
+-keep class com.peer.activity.xieyiActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:47
+-keep class com.peer.base.pBaseApplication { <init>(...); }
+
+# view AndroidManifest.xml #generated:561
+-keep class com.peer.receiver.MyReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:335
+-keep class com.peer.service.CompleteReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:640
+-keep class com.peer.service.FxService { <init>(...); }
+
+# view AndroidManifest.xml #generated:651
+-keep class com.peer.service.ReceiveMessageReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:643
+-keep class com.peer.service.ReceiveMessageServices { <init>(...); }
+
+# view AndroidManifest.xml #generated:658
+-keep class com.peer.service.UpdateVerServices { <init>(...); }
+
+# view res/layout/activity_creattopic.xml #generated:72
+# view res/layout/layout_personal.xml #generated:122
+# view res/layout/layout_personal_new.xml #generated:83
+-keep class com.peer.utils.AutoWrapRadioGroup { <init>(...); }
+
+# view res/layout/activity_card.xml #generated:63
+# view res/layout/adapter_come_listtopic.xml #generated:25
+# view res/layout/float_layout.xml #generated:7
+# view res/layout/layout_personal_new.xml #generated:17
+-keep class com.peer.utils.RoundImageView { <init>(...); }
+
+# view AndroidManifest.xml #generated:173
+-keep class com.peer.webview.WebViewActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:633
+-keep class com.peer.wxapi.WXEntryActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:501
+-keep class com.umeng.update.UpdateDialogActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:495
+-keep class com.umeng.update.net.DownloadingService { <init>(...); }
+
+# view AndroidManifest.xml #generated:284
+-keep class net.youmi.android.AdBrowser { <init>(...); }
+
+# view AndroidManifest.xml #generated:293
+-keep class net.youmi.android.AdReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:289
+-keep class net.youmi.android.AdService { <init>(...); }
+
+# onClick res/layout/activity_frabottom.xml #generated:101
+# onClick res/layout/activity_frabottom.xml #generated:153
+# onClick res/layout/activity_frabottom.xml #generated:19
+# onClick res/layout/activity_frabottom.xml #generated:46
+-keepclassmembers class * { *** onTabClicked(...); }
+

@@ -1,0 +1,668 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.peer"
+    android:versionCode="5"
+    android:versionName="1.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="22" />
+
+    <!-- 极光推送 -->
+    <permission
+        android:name="com.peer.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.peer.permission.JPUSH_MESSAGE" />
+
+    <!-- Required  一些系统要求的权限，如访问网络等 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- Optional for location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
+
+    <application
+        android:name="com.peer.base.pBaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:persistent="true"
+        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        <activity
+            android:name="com.peer.activity.WelComeActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 主页面 -->
+        <activity
+            android:name="com.peer.activity.MainActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 注册基本必要信息类 -->
+        <activity
+            android:name="com.peer.activity.RegisterAcountActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.LoginActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.RegisterCompleteActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.RegisterTagActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.xieyiActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.GetAddressInfoActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.CardActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.FindPasswordActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.NewCardChange"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.FindPasswordResultActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.BlackListActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.FeedBackActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.EditCardActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.MessageNotifyActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.MyAcountActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.MySkillActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.NewFunctionActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.webview.WebViewActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.PersonalMessageActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.SettingActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.UpdateNikeActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.UpdatePasswordActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.SearchResultActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.SearchTopicActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.SearchUserActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.NewFriendsActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.CreatTopicActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.PersonalPageActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.TopicActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.OtherPageActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.peer.activity.SingleChatRoomActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.peer.activity.MultiChatRoomActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.ChatRoomListnikeActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.AddFriendsActivity"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.peer.activity.Recommend_topic"
+            android:configChanges="keyboardHidden|keyboard"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        
+        
+        <!-- 有米广告 -->
+        <activity
+		    android:name="net.youmi.android.AdBrowser"
+		    android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+		    android:theme="@android:style/Theme.Light.NoTitleBar" >
+		</activity>
+		<service
+		    android:name="net.youmi.android.AdService"
+		    android:exported="false" >
+		</service>
+		<receiver
+		    android:name="net.youmi.android.AdReceiver" >
+		    <intent-filter>
+		        <action android:name="android.intent.action.PACKAGE_ADDED" />
+		        <data android:scheme="package" />
+		    </intent-filter>
+		</receiver>
+        
+        
+        
+
+        <!-- 设置环信应用的appkey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="tonghang#tonghang" />
+        <!-- 开机自启动服务 -->
+        <receiver android:name="com.easemob.chat.StartServiceReceiver" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <!-- gcm start -->
+        <receiver
+            android:name="com.easemob.chat.EMGCMBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.easemob.chatuidemo" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.easemob.chat.EMGCMListenerService"
+            android:exported="false" >
+        </service>
+
+        <receiver android:name="com.peer.service.CompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.easemob.chatuidemo.receiver.GCMPushBroadCast"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.easemob.sdk.push" />
+
+                <category android:name="com.easemob.chatuidemo" />
+            </intent-filter>
+        </receiver>
+        <!-- gcm end -->
+        <!-- 声明sdk所需的service -->
+        <service android:name="com.easemob.chat.EMChatService" />
+        <!-- 声明sdk所需的receiver -->
+        <receiver android:name="com.easemob.chat.EMMonitorReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 友盟自动升级 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5476bf42fd98c5bf59000ae5" >
+        </meta-data>
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="tenxun" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="baidu" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="360" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="wandoujia" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="xiaomi" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="91zhushou" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="umeng" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="oppo" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="vivo" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="lianxiang" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="anzhi" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="huawei" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="meizu" >
+        </meta-data>
+        -->
+
+
+        <!--
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="anzhuoshichang" >
+        </meta-data>
+        -->
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="vQkXKxwEzBHIG0eYlPwugMWm" />
+
+        <!-- 百度地图 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+
+        <!-- 友盟自动更新 -->
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+
+        <!-- 友盟自动更新 -->
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <!-- 极光推送  Required SDK核心功能 -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.peer" />
+            </intent-filter>
+        </activity>
+        <!-- Required  SDK核心功能 -->
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
+        <!-- Required SDK 核心功能 -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:enabled="true"
+            android:exported="false"
+            android:process="com.peer.pushservice" >
+            <intent-filter android:priority="1000" >
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service>
+
+        <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true" >
+            <intent-filter android:priority="1000" >
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required  显示通知栏 -->
+                <category android:name="com.peer" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name="com.peer.receiver.MyReceiver"
+            android:enabled="true"
+            android:process="com.peer.pushservice" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.peer" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required SDK核心功能 -->
+        <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+
+        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="eb4e79c4ab182d725ec2ff15" />
+
+        <!-- sharesdk 分享activity -->
+        <activity
+            android:name="cn.sharesdk.framework.ShareSDKUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+
+            <!--
+            	AuthorizeAdapter表示一个继承自cn.sharesdk.framework.authorize.AuthorizeAdapter
+            	的类，这个类可以监听到页面的生命周期，也可以获取授权页面的各种UI控件。 
+            	开发者可以通过继承AuthorizeAdapter，重写其方法，并获取各种UI来自定义这个页面的行为。
+            -->
+            <meta-data
+                android:name="AuthorizeAdapter"
+                android:value="cn.sharesdk.demo.MyAdapter" />
+            <!--
+            	如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW
+            	事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，
+            	则分享结束以后不能得到正确的回调
+            -->
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <!-- 微信分享回调 -->
+        <activity
+            android:name="com.peer.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service android:name="com.peer.service.FxService" />
+
+        <!-- 接收环信消息服务 -->
+        <service
+            android:name="com.peer.service.ReceiveMessageServices"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.peer.service.ReceiveMessageServices" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.peer.service.ReceiveMessageReceiver" >
+            <intent-filter>
+                <action android:name="com.peer.service.ReceiveMessageReceiver" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <!-- 版本更新服务 -->
+        <service
+            android:name="com.peer.service.UpdateVerServices"
+            android:exported="false"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.peer.service.UpdateVerServices" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <!--这个是未选中的状态样式  图片大家可以叫美工给 -->
+    <item         
+	android:state_checked="false" 
+	android:drawable="@drawable/border" /> 
+ <!--  这个是选中的状态样式  图片大家可以叫美工给 -->
+    <item 
+        android:state_checked="true" 
+		android:drawable="@drawable/skillback"
+        ></item>
+
+</selector>

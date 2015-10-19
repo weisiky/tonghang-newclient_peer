@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">同行</string>
+    <string name="action_settings">Settings</string>
+    <string name="config_login">由于服务器原因！暂时无法登录</string>
+    <string name="config_registe">由于服务器原因！暂时无法注册</string>
+    <string name="config_error">服务器无法访问，请稍后再试</string>
+    <!-- 搜索也下拉选择项 -->
+    <string name="bytopic">按话题搜</string>
+    <string name="bytag">按行业搜</string>
+    <string name="bynike">按昵称搜</string>
+    <string name="searchuser">搜用户</string>
+    <string name="searchtopic">搜话题</string>
+    <string name="littleleave">离我最近</string>
+    <string name="tonghang">行业相似</string>
+    <!-- 聊天室下拉选择项 -->
+    <string name="deletemes">删除聊天记录</string>
+    <string name="exitroom">退出</string>
+    <string name="deleteroom">删除话题</string>
+    <string name="lookformember">查看成员</string>
+    <string name="deletefriends">删除好友</string>
+    <string name="blacklist">加入黑名单</string>
+    <string name="sendmessage">输入内容</string>
+    <string name="Broken_network_prompt">您的网络未链接，请检查网络设置！</string>
+    <string name="network_wait">网络连接问题，请稍后再试！</string>
+    <string name="broken_net">网络未连接，发送失败！</string>
+    <!-- activity的标题显示文字 -->
+    <string name="register_acount">注册账号</string>
+    <string name="xieyi">行动科技使用协议</string>
+    <string name="register_tag">创建行业标签</string>
+    <string name="complete">完善信息</string>
+    <string name="findpassword">找回密码</string>
+    <string name="mycount">我的账号</string>
+    <string name="myskill">行业标签</string>
+    <string name="personalmessage">个人信息</string>
+    <string name="editskill">编辑技能</string>
+    <string name="editcard">编辑名片</string>
+    <string name="setting">设置</string>
+    <string name="notify">消息提醒</string>
+    <string name="newfunction">新功能介绍</string>
+    <string name="feedback">问题反馈</string>
+    <string name="updatepassword">修改密码</string>
+    <string name="address">居住地址</string>
+    <string name="updatenike">修改昵称</string>
+    <string name="search_null">未搜索到您想搜索的内容</string>
+    <string name="updatesuccess">修改成功</string>
+    <string name="jiazaishuju">数据正在加载中...</string>
+    <string name="searchresult">搜索结果</string>
+    <string name="personalpage">TA的主页</string>
+    <string name="personalpage_other">他的主页</string>
+    <string name="personalpage_nvother">她的主页</string>
+    <string name="personalpage_own">我的主页</string>
+    <string name="newfriends">新朋友</string>
+    <string name="newcardchange">交换名片</string>
+    <string name="blacklist">黑名单</string>
+    <string name="createtopic">创建话题</string>
+    <string name="chatroommember">聊天室成员</string>
+    <string name="topic_other">他的话题</string>
+    <string name="topic_nvother">她的话题</string>
+    <string name="topic_owen">我的话题</string>
+    <string name="checkfriends">添加好友</string>
+    <string name="chatmsg">聊天记录</string>
+    <!-- 提示用语 -->
+    <string name="remind_login">用户名或密码错误</string>
+    <string name="remind_forgetpass">您输入的邮箱不存在</string>
+    <string name="exit_eamil">输入邮箱已存在</string>
+    <string name="regist_fail">注册失败</string>
+    <string name="updatemsgsuccess">更新成功</string>
+    <string name="updatemsgfail">更新失败</string>
+    <string name="erroroldpsw">旧密码不正确</string>
+    <string name="errorpswformat">密码格式不正确</string>
+    <string name="notmatchpsw">密码不一致</string>
+    <string name="oldnewnot">新密码与确认密码不一致</string>
+    <string name="errornike">昵称长度不得超过十个字</string>
+    <string name="updatepasw">密码更新成功</string>
+    <string name="inputnike">昵称不能为空</string>
+    <string name="sex">请点击选择</string>
+    <string name="picture">设置头像</string>
+    <string name="sendimg">选择图片</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
+    <string name="notshare">不分享</string>
+    <string name="sharecancle">确定</string>
+    <string name="sharesure">分享</string>
+    <string name="isshare">是否分享话题</string>
+    <string name="sharedailog">创建或创建并分享</string>
+    <string name="sdcard">未找到存储卡，无法存储照片！</string>
+    <string name="commit">提交成功</string>
+    <string name="addfriendssuccess">发送成功</string>
+    <string name="addfriendfail">发送失败</string>
+    <string name="skillname">行业标签不能超过六个个字符</string>
+    <string name="skillmax">最多六个字符</string>
+    <string name="repetskill">行业标签不可重复</string>
+    <string name="skillnull">标签1和标签2不能为空</string>
+    <string name="cleancash">缓存清理成功</string>
+    <string name="exitlogin">退出登录</string>
+    <string name="relogin">是否重新登录</string>
+    <string name="close">关闭</string>
+    <string name="todesk">是否回到桌面</string>
+    <string name="clean">清除缓存</string>
+    <string name="clearcash">是否清楚缓存</string>
+    <string name="sendmsg">发信</string>
+    <string name="addfriends">加好友</string>
+    <string name="deletechatmsg">聊天记录已删除</string>
+    <string name="deletethisskill">是否删除该行业标签</string>
+    <string name="deleteskill">是否删除该行业标签</string>
+    <string name="updateskill">修改行业标签</string>
+    <string name="selectsex">请选择性别</string>
+    <string name="selectbirthday">请选择出生日期</string>
+    <string name="committing">提交中请稍候。。。</string>
+    <string name="download">当前版本无法使用，请重启升级！</string>
+    
+    <string name="errornumber">请填写正确的手机号码</string>
+    <string name="erroremail">请填写正确格式的邮箱</string>
+    <string name="errorcompany">请填写所在公司名</string>
+    <string name="errorposition">请填写职位</string>
+    <string name="errorworktime">请填写入职时间</string>
+    <string name="errorschool">请填写毕业的学校名</string>
+    <string name="erroradmissiontime">请填写入学时间</string>
+    
+    
+    <!-- 新增文本 -->
+    <string name="completemessage">请完善个人信息</string>
+
+    <!-- 网络请求连接 -->
+
+    <string name="login">http://127.0.0.1:8080/tonghang-serverapi/user/login.json</string>
+
+</resources>

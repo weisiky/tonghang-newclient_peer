@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/new_gray_bg"
+    >
+     <include
+        android:id="@+id/incTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/base_toplayout_title" />
+
+     <LinearLayout
+        android:id="@+id/personal_new"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/incTop"
+        android:orientation="horizontal" >
+
+        <include layout="@layout/layout_personal_new" />
+    </LinearLayout>
+    
+      <LinearLayout
+        android:id="@+id/contentauto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/personal_new"
+        android:background="@color/white"
+        android:layout_marginTop="8.0dip"
+        android:orientation="horizontal" >
+        <LinearLayout 
+            android:id="@+id/ch_card"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16.0dip"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            >
+            <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:src="@drawable/card"/>
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="换名片"
+                android:textColor="@color/new_change_small"
+                android:textSize="@dimen/textsize_small"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/new_gray_view" />
+        
+       <LinearLayout 
+            android:id="@+id/ch_salary"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16.0dip"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            >
+            <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:src="@drawable/salary"/>
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="换薪水"
+                android:textColor="@color/new_change_small"
+                android:textSize="@dimen/textsize_small"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        
+       <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/new_gray_view" />
+        
+       <LinearLayout 
+            android:id="@+id/ch_secret"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16.0dip"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            >
+             <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/secret"/>
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="换商业秘密"
+                android:textColor="@color/new_change_small"
+                android:textSize="@dimen/textsize_small"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+       
+    </LinearLayout>
+    
+      <View
+          	android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_above="@+id/ll_personpagebottom"
+            android:background="@color/new_gray_view" />
+      
+      <LinearLayout
+        android:id="@+id/ll_personpagebottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widgeheight"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/widgeheight"
+            android:layout_weight="1"
+            android:background="@drawable/select_personal"
+            android:text="发信"
+            android:textColor="@color/new_text" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@color/new_yellow_view" />
+
+        <Button
+            android:id="@+id/addfriends"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/widgeheight"
+            android:layout_weight="1"
+            android:background="@drawable/select_personal"
+            android:text="加好友"
+            android:textColor="@color/new_text" />
+    </LinearLayout>
+
+</RelativeLayout>

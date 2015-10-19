@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:id="@+id/ll_head_homepage"
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:background="@color/title_backcolor"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tag_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="同行"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textsize_large" />
+
+            <RelativeLayout
+                android:id="@+id/rl_search"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/tag_tv"
+                android:layout_toLeftOf="@+id/ll_downview"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/tv_search_homepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/biankuangwai"
+                    android:clickable="false"
+                    android:paddingLeft="5dip"
+                    android:drawableLeft="@drawable/searchicon32"
+                    android:gravity="center_vertical"
+                    android:hint="  按行业，搜人脉"
+                    android:textSize="@dimen/textsize_smallmiddle" />
+            </RelativeLayout>
+
+            <LinearLayout
+            android:id="@+id/ll_downview"
+            android:layout_width="@dimen/widgeheight"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/copyselector_back"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+           <ImageView
+                android:id="@+id/tag_img_menu"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/top_rightmenu" />
+        </LinearLayout>
+            
+        </RelativeLayout>
+    </LinearLayout>
+    
+    <!-- 横幅广告  -->
+     <FrameLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/banner_view"
+        android:layout_below="@+id/base_neterror_item"
+        android:layout_height="60dp"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <!-- <com.appems.AppemsSSP.AppemsBanner
+            android:id="@+id/qbanner_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spacer"
+            android:visibility="gone" /> -->
+            <LinearLayout
+			    android:id="@+id/adLayout"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:gravity="center_horizontal">
+			</LinearLayout>
+        
+			
+        <ImageView
+            android:id="@+id/self_view"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/img_cancel"
+            android:visibility="gone"
+            android:layout_marginRight="10dip" />
+
+    </FrameLayout>
+    
+    
+	<!-- 网络未连接提示  -->
+    <LinearLayout
+        android:id="@+id/base_neterror_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_head_homepage"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:visibility="gone" >
+        <RelativeLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="50dp"
+		    android:background="@drawable/chat_error_item_bg"
+		    android:clickable="true"
+		    android:orientation="vertical" >
+    
+		    <ImageView 
+		        android:layout_marginLeft="9dp"
+		        android:id="@+id/iv_neterror"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/login_error_icon"
+		        android:layout_centerVertical="true"
+		        />
+		    <TextView
+		        android:id="@+id/tv_connect_errormsg" 
+		        android:layout_marginLeft="4dp"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="您的网络未链接，请检查网络设置！"
+		        android:textColor="#000"
+		        android:layout_centerVertical="true"
+		        android:layout_toRightOf="@id/iv_neterror"
+		        />
+		</RelativeLayout>
+    </LinearLayout>
+    
+    
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/pull_refresh_homepage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/banner_view"
+        android:background="@color/white"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="0.5dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true" />
+
+</RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="new_name">#585858</color>
+    <color name="new_name_small">#79808f</color>
+    <color name="new_change_small">#60697b</color>
+    <color name="new_gray_bg">#edf0f5</color>
+    <color name="new_gray_view">#ccd2e0</color>
+    <color name="new_yellow_view">#ffc412</color>
+    <color name="new_text">#2c5096</color>
+    
+    
+    
+    <color name="red">#ff0000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="loginred_nol">#f44444</color>
+    <color name="loginred_press">#b41e23</color>
+    <color name="title_backcolor">#2c5096</color>
+    <color name="chatroom_bag">#A2ABB4</color>
+    <color name="commitcolor_nol">#00cd00</color>
+    <color name="commitcolor_press">#2b930c</color>
+    
+    <color name="backcolornol">#2c5096</color>
+    <color name="highlight">#f55c2e</color>
+    <color name="backcolorpress">#1c2a53</color>
+    
+    <color name="gray">#c0c0c0</color>
+    <color name="lightgray">#e4e6e5</color>
+    <color name="deepgray">#696969</color>
+    <color name="bottomback">#F5F6F8</color>
+    <color name="bottomtextgray">#929292</color>
+    <color name="bottomtextblue">#007aff</color>
+    
+    <color name="seachbluetext">#4a6daf</color>
+    <color name="chat_input_back">#dddddd</color>
+    
+    <color name="error_item_color">#F6EBE6</color>
+    
+    <color name="testcolor">#83D2FB</color>
+    
+    <color name="perpule">#ac92ec</color>
+    
+    <color name="personal_nol">#5d9cec</color>
+ <!--   <color name="personal_press">#4a89dc</color> --> 
+    <color name="personal_press">#3b83ff</color>
+   <color name="disenable">#e4e6e5</color>
+    <color name="midblue">#00ff00</color>
+    
+     <!-- 自定义颜色 -->
+    <drawable name="chatroom_button">#6E727B</drawable>
+    <drawable name="chatroom_button_press">#FFFFFF</drawable>
+</resources>
